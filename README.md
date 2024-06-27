@@ -18,25 +18,29 @@ Our e-commerce web application server, developed by Team Ninjas, facilitates smo
 
 1. Clone the repository
 
-```sh git clone https://github.com/atlp-rwanda/e-commerce-ninjas-fe 
+```sh 
+git clone https://github.com/atlp-rwanda/e-commerce-ninjas-fe 
 ```
 
 2. Install the dependencies
 
-```sh npm install 
+```sh 
+npm install 
 ```
 
 
 4. Start the server - it will run on [http://localhost:5000/](http://localhost:5000/)
 
-```sh npm run dev 
+```sh 
+npm run dev 
 ```
 
 ## StoryBook
 
 To run storybook for documentation, use command
 
-```sh npm run storybook 
+```sh 
+npm run storybook 
 ```
 
 ## Folder strucuture

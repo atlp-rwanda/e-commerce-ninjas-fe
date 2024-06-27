@@ -44,7 +44,20 @@
       {
         "namedComponents": "arrow-function"
       }
-    ]
+    ],
+    "eol-last": ["warn", "always"],
+    "@typescript-eslint/comma-dangle": ["warn", {
+      "arrays": "only-multiline",
+      "objects": "only-multiline",
+      "imports": "only-multiline",
+      "exports": "only-multiline",
+      "functions": "only-multiline"
+    }],
+    "linebreak-style": ["warn", "unix"],
+    "no-param-reassign": "off",
+    "arrow-body-style": ["warn", "as-needed"],
+    "jsx-a11y/no-static-element-interactions": "off",
+    "max-len": "off"
   },
   "settings": {
     "react": {

@@ -1,9 +1,9 @@
 import React from 'react';
-import ReduxSample from './pages/ReduxSample';
+import LandingPage from './pages/LandingPage';
 
 const App: React.FC = () => (
   <div>
-    <ReduxSample />
+    <LandingPage />
   </div>
 );
 

@@ -1,13 +1,10 @@
 import React from 'react';
-import Add from './components/Add';
-import List from './components/List';
+import ReduxSample from './pages/ReduxSample';
 
 const App: React.FC = () => (
-  <>
-    <h1>E-Commerce Ninjas FrontEnd</h1>
-    <Add />
-    <List />
-  </>
+  <div>
+    <ReduxSample />
+  </div>
 );
 
 export default App;

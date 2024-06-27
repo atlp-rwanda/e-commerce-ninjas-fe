@@ -1,6 +1,6 @@
 import React from 'react';
-import { addProduct } from '../store/features/cartSlice';
-import { useAppDispatch } from '../store/store';
+import { addProduct } from '../../store/features/cartSlice';
+import { useAppDispatch } from '../../store/store';
 
 const Add = () => {
   const dispatch = useAppDispatch();

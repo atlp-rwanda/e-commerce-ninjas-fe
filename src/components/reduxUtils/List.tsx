@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAppSelector } from '../store/store';
+import { useAppSelector } from '../../store/store';
 
 const List = () => {
   const products = useAppSelector((state) => state.cart.products);

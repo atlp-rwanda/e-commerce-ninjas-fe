@@ -30,10 +30,10 @@ Our e-commerce web application server, developed by Team Ninjas, facilitates smo
   ```bash
   npm run dev
   ```
-
+     
 ## StoryBook
 
-To run storybook for documentation, use command
+To run storybook for documentation, use this command
 
 ```sh 
 npm run storybook 

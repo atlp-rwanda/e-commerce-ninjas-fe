@@ -9,7 +9,7 @@ const Footer: React.FC = () => (
       &copy;
       {getYear()}
       {' '}
-      Your E-commerce Site
+      Ninja E-Commerce Store
     </p>
   </footer>
 );

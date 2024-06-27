@@ -56,7 +56,7 @@ const config: Configuration = {
   ],
   devtool: "inline-source-map",
   devServer: {
-    static: path.join(__dirname, "build"),
+    static: path.join(__dirname, "dist"),
     historyApiFallback: true,
     port: 5000,
     open: true,

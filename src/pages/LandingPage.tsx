@@ -3,6 +3,9 @@ import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { loadWelcomeMessage } from '../store/features/welcomeSlice';
 import { IWelcomeMessage } from '../utils/types/store';
+import Header from "../components/layout/Header"
+import Footer from "../components/layout/Footer"
+
 
 const LandingPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -13,9 +16,13 @@ const LandingPage: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <div>
+    <>
+      <Header/>
+      <main>
       {welcomeMessage.message}
-    </div>
+      </main>
+      <Footer />
+    </>
   );
 };
 

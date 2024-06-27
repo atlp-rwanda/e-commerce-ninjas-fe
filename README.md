@@ -4,6 +4,11 @@ Our e-commerce web application server, developed by Team Ninjas, facilitates smo
 
 ## FRONTEND HOSTED URL
 
+[https://e-commerce-ninjas-fn-staging.netlify.app/](https://e-commerce-ninjas-fn-staging.netlify.app/)
+
+## FIGMA DESIGN LINK
+
+[https://www.figma.com/design/xc3vu5tgf5MtheSSRqYw80/E-Commerce-Ninjas?node-id=663-583&t=0jVstnZPISEuqtNg-1](https://www.figma.com/design/xc3vu5tgf5MtheSSRqYw80/E-Commerce-Ninjas?node-id=663-583&t=0jVstnZPISEuqtNg-1)
 
 ## GITHUB REPOSITORY
 

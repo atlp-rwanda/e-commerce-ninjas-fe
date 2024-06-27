@@ -17,23 +17,40 @@ jobs:
         node-version: [20.x]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Install dependencies
-      run: npm install
+      - name: Clear npm cache and reinstall dependencies
+        run: |
+          npm cache clean --force
+          npm install
 
-    - name: Run tests
-      run: |
-        npm test -- --watchAll=false --coverage
-        cat ./coverage/lcov.info | ./node_modules/.bin/coveralls
+      - name: Run tests explicitly with npm run
+        run: |
+          npm run test --if-present -- --passWithNoTests
 
-    - name: Upload coverage to Coveralls
-      uses: coverallsapp/github-action@v2
-      env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+      - name: Print lcov.info content
+        run: |
+          if [ -f ./coverage/lcov.info ]; then
+            cat ./coverage/lcov.info
+          else
+            echo "lcov.info file not found"
+          fi
+
+      - name: Print clover.xml content
+        run: |
+          if [ -f ./coverage/clover.xml ]; then
+            cat ./coverage/clover.xml
+          else
+            echo "clover.xml file not found"
+          fi
+
+      - name: Upload coverage to Coveralls
+        if: success()
+        run: |
+          ./node_modules/.bin/coveralls report

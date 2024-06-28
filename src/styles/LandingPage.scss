@@ -1,0 +1,18 @@
+$primary-color: #FF6D18;
+
+@mixin center-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.landingPage {
+  background: $primary-color;
+  color: white; 
+  padding: 20px;
+
+  h1 {
+    font-size: 2em;
+    margin-bottom: 10px;
+  }
+}

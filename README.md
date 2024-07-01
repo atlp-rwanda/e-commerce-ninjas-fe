@@ -16,6 +16,7 @@ Our e-commerce web application server, developed by Team Ninjas, facilitates smo
 [![Test Coverage](https://api.codeclimate.com/v1/badges/a7dce016f123cdcc9042/test_coverage)](https://codeclimate.com/github/atlp-rwanda/e-commerce-ninjas-fe/test_coverage)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/a3ed5a75-a862-4f3b-ba21-8369180cf3e6/deploy-status)](https://app.netlify.com/sites/e-commerce-ninja-fn-staging/deploys)
 [![Coverage Status](https://coveralls.io/repos/github/atlp-rwanda/e-commerce-ninjas-fe/badge.svg)](https://coveralls.io/github/atlp-rwanda/e-commerce-ninjas-fe)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/atlp-rwanda/e-commerce-ninjas-fe/tree/develop.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/atlp-rwanda/e-commerce-ninjas-fe/tree/develop)
 
 ## Completed features
 - Setup empty react

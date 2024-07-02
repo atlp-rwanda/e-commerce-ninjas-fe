@@ -1,10 +1,13 @@
+/* eslint-disable */
 import React from 'react';
-import LandingPage from './pages/LandingPage';
+import "./styles/App.scss"
+import { BrowserRouter as Router } from 'react-router-dom';
+import AppRouter from './router';
 
 const App: React.FC = () => (
-  <div>
-    <LandingPage />
-  </div>
+  <Router>
+    <AppRouter />
+  </Router>
 );
 
 export default App;

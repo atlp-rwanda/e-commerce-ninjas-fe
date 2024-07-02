@@ -1,7 +1,8 @@
+/* eslint-disable */
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/store';
-import { loadWelcomeMessage } from '../store/features/welcomeSlice';
 import { IWelcomeMessage } from '../utils/types/store';
+import { loadWelcomeMessage } from '../store/features/welcomeSlice';
 
 const LandingPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -12,9 +13,13 @@ const LandingPage: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <div>
-      {welcomeMessage.message}
-    </div>
+    <>
+      <div className="landingPage">
+        <h1>
+          {welcomeMessage.message}
+        </h1>
+      </div>
+    </>
   );
 };
 

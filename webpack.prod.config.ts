@@ -1,18 +1,20 @@
-import path from "path";
-import { Configuration } from "webpack";
-import HtmlWebpackPlugin from "html-webpack-plugin";
-import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
-import ESLintPlugin from "eslint-webpack-plugin";
-import CopyWebpackPlugin from "copy-webpack-plugin";
-import { CleanWebpackPlugin } from "clean-webpack-plugin";
+/* eslint-disable import/no-extraneous-dependencies */
+import path from 'path';
+import { Configuration } from 'webpack';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import ESLintPlugin from 'eslint-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
 
 const config: Configuration = {
-  mode: "production",
-  entry: "./src/index.tsx",
+  mode: 'production',
+  entry: './src/index.tsx',
   output: {
-    path: path.resolve(__dirname, "build"),
-    filename: "[name].[contenthash].js",
-    publicPath: "",
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].[contenthash].js',
+    publicPath: '',
   },
   module: {
     rules: [
@@ -20,37 +22,48 @@ const config: Configuration = {
         test: /\.(ts|js)x?$/i,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
           options: {
             presets: [
-              "@babel/preset-env",
-              "@babel/preset-react",
-              "@babel/preset-typescript",
+              '@babel/preset-env',
+              '@babel/preset-react',
+              '@babel/preset-typescript',
             ],
           },
         },
       },
+      {
+        test: /\.scss$/i,
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          "sass-loader"
+        ],
+      },
     ],
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"],
+    extensions: ['.tsx', '.ts', '.js'],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "public/index.html",
+      template: 'public/index.html',
     }),
     new ForkTsCheckerWebpackPlugin({
       async: false,
     }),
     new ESLintPlugin({
-      extensions: ["js", "jsx", "ts", "tsx"],
+      extensions: ['js', 'jsx', 'ts', 'tsx'],
     }),
     new CopyWebpackPlugin({
       patterns: [
-        { from: "public", to: "", globOptions: { ignore: ["**/index.html"] } },
+        { from: 'public', to: '', globOptions: { ignore: ['**/index.html'] } },
       ],
     }),
     new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin({
+      filename: "[name].[contenthash].css",
+    }),
   ],
 };
 

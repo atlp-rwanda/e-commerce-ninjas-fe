@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+$primary-color: #FF6D18;
+$container-color:#D9D9D933;
+$login-bg-color: linear-gradient(136deg, #FF6D18 54%, rgba(216, 201, 193, 0.8) 100%);
+*{
+  margin: 0;
+  padding: 0;
+}
+.landingPage {
+  background: $primary-color;
+  color: white; 
+  padding: 20px;
+
+  h1 {
+    font-size: 2em;
+    margin-bottom: 10px; 
+  }
+}
+.home-wrapper{
+  background-color: $container-color;
+  padding: 3rem 0;
+  display: flex;
+  justify-content: center;
+  .container{
+    max-width: 1280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .login-form{
+    width: 1126px;
+  }
+
+  form{
+    display: flex;
+    gap:5rem;
+    .left-side-login{
+      width: 556px;
+      height: 600px;
+      background: $login-bg-color;
+      border-radius: 40px;
+      padding: 40px;
+      .left-side-text{
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        h1{
+          font-family: 'Averia Serif Libre';
+          font-weight: 700;
+          font-size: 40px;
+          font-style: normal;
+          margin-top: 3rem;
+          margin-bottom: 10px;
+          color: white;
+          width: 485;
+        }
+        p{
+          color: #FAF8F8;
+          font-family: 'Averia Serif Libre';
+          font-weight: 700;
+          font-size: 13px;
+          width: 270px;
+        }
+
+      }
+      .img img{
+        margin-top: 1.5rem;
+        width: 480px;
+        height: 350px;
+      }
+    }
+    .right-side-login{
+      width: 500px;
+      height: 530px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .right-side-text{
+        margin-bottom: 2rem;
+        p,h1{
+          text-align: center;
+        }
+        .text-left{
+          text-align: left;
+        }
+      }
+    }
+  }
+}

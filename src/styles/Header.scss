@@ -144,10 +144,10 @@
       color: #555;
     }
 
-    a:active,
-    a:hover {
+    a:hover,
+    a.active {
       color: $primary-color;
-      border-bottom: 0.1rem solid #ff6d18;
+      border-bottom: 0.1rem solid $primary-color;
     }
   }
 
@@ -251,10 +251,12 @@
     color: $white;
     padding: 1.8rem;
     border-radius: 0.6rem;
+    box-shadow: 0.2rem 0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 0.1);
     position: absolute;
     left: -12%;
     top: 150%;
     width: 130%;
+    z-index: 500;
 
     &::before {
       content: "";

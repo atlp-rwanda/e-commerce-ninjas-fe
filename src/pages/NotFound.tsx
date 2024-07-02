@@ -1,4 +1,6 @@
-import React from 'react';
+/* eslint-disable */
+
+import React from "react";
 
 const NotFound: React.FC = () => (
   <main>

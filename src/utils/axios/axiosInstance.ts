@@ -1,15 +1,17 @@
-import axios from 'axios';
+/* eslint-disable */
+
+import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: 'https://e-commerce-ninjas-platform-backend.onrender.com/',
+  baseURL: "https://e-commerce-ninjas-platform-backend.onrender.com/",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

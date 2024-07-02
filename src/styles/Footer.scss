@@ -1,0 +1,137 @@
+@import "./Colors";
+
+.footer {
+  border-top: 0.2rem solid #ddd;
+
+  &__container {
+    background-color: #d9d9d9;
+    padding: 5.2rem 3rem;
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: space-between;
+    margin-bottom: 4.8rem;
+  }
+
+  &__left {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &__right {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+  }
+
+  &__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+  }
+
+  &__title {
+    font-size: 2.4rem;
+    font-weight: 600;
+    color: $text-color;
+  }
+
+  &__special__item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 1.2rem;
+    row-gap: 1.6rem;
+  }
+
+  &__item {
+    font-size: 1.8rem;
+    line-height: 1.4;
+  }
+
+  &__link {
+    &:link,
+    &:visited {
+      text-decoration: none;
+      font-size: 1.8rem;
+      color: inherit;
+      letter-spacing: 0.05rem;
+      transition: all 0.15s ease-in;
+    }
+
+    &:hover,
+    &:active {
+      color: $primary-color;
+    }
+  }
+
+  &__socials {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2.4rem;
+    width: 90%;
+  }
+
+  &__social {
+    height: 3.2rem;
+  }
+
+  &__additional {
+    background-color: #e7e7e7;
+    background-color: #fe975b;
+    padding: 1.6rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.8rem;
+  }
+
+  &__additional__list {
+    display: flex;
+    align-items: center;
+    gap: 2.4rem;
+  }
+
+  &__additional__item:first-child {
+    list-style: none;
+  }
+
+  &__additional__link {
+    &:link,
+    &:visited {
+      text-decoration: none;
+      color: $text-color;
+      font-size: 1.8rem;
+    }
+  }
+
+  &__address {
+    font-size: 1.8rem;
+    font-style: normal;
+    line-height: 1.4;
+  }
+
+  &__copyright {
+    font-size: 1.8rem;
+  }
+
+  &__text {
+    font-size: 2rem;
+    justify-self: start;
+  }
+
+  &__icon {
+    width: 3.2rem;
+    height: 3.2rem;
+  }
+}

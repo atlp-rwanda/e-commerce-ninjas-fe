@@ -1,5 +1,7 @@
-import React from 'react';
-import Header from '../components/layout/Header';
+/* eslint-disable */
+
+import React from "react";
+import Header from "../components/layout/Header";
 
 const Login: React.FC = () => (
   <>

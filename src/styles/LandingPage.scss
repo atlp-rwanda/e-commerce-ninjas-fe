@@ -1,12 +1,16 @@
-$primary-color: #FF6D18;
+@import "./Colors";
 
 .landingPage {
   background: $primary-color;
-  color: white; 
-  padding: 20px;
+  color: white;
+  padding: 2rem;
 
   h1 {
-    font-size: 2em;
-    margin-bottom: 10px; 
+    font-size: 2rem;
+    margin-bottom: 1rem;
   }
+}
+
+.container__button {
+  padding: 3.2rem;
 }

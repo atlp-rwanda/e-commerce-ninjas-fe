@@ -41,6 +41,17 @@ const config: Configuration = {
           'sass-loader'
         ],
       },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name].[ext]',
+            },
+          },
+        ],
+      },
     ],
   },
   resolve: {
@@ -66,7 +77,9 @@ const config: Configuration = {
   devtool: 'inline-source-map',
   devServer: {
     static: path.join(__dirname, 'dist'),
-    historyApiFallback: true,
+    historyApiFallback: {
+      disableDotRule: true,
+    },
     port: 5000,
     open: true,
     hot: true,

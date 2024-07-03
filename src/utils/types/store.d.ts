@@ -1,3 +1,4 @@
+/* eslint-disable */
 export interface IWelcomeMessage {
   status: boolean;
   message: string;

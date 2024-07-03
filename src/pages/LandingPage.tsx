@@ -8,6 +8,7 @@ import Product from '../components/product/Product';
 import Sample from '../components/layout/Sample';
 import { PuffLoader } from 'react-spinners';
 import "../styles/LandingPage.scss";
+import { Meta } from '../components/Meta';
 
 const LandingPage: React.FC = () => {
   const dispatch = useAppDispatch();

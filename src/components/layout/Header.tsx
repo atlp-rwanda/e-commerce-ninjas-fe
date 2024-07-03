@@ -1,5 +1,4 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable */
 import React from 'react';
 import { Link } from 'react-router-dom';
 

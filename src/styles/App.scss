@@ -1,88 +1,258 @@
 @import url('https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
 $primary-color: #FF6D18;
-$container-color:#D9D9D933;
+$container-color: #D9D9D933;
 $login-bg-color: linear-gradient(136deg, #FF6D18 54%, rgba(216, 201, 193, 0.8) 100%);
-*{
+$text-color: #666666;
+$text-family: 'Averia Serif Libre';
+$white-color: #FFFFFF;
+
+* {
   margin: 0;
   padding: 0;
 }
+
 .landingPage {
   background: $primary-color;
-  color: white; 
+  color: white;
   padding: 20px;
 
   h1 {
     font-size: 2em;
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
   }
 }
-.home-wrapper{
+
+.home-wrapper {
   background-color: $container-color;
   padding: 3rem 0;
   display: flex;
   justify-content: center;
-  .container{
+
+  .container {
     max-width: 1280px;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  .login-form{
+  .login-form {
     width: 1126px;
   }
 
-  form{
+  form {
     display: flex;
-    gap:5rem;
-    .left-side-login{
-      width: 556px;
-      height: 600px;
+    gap: 1.5rem;
+
+    .left-side-login {
+      width: 400px;
+      height: 500px;
       background: $login-bg-color;
       border-radius: 40px;
-      padding: 40px;
-      .left-side-text{
+      padding: 20px;
+
+      .left-side-text {
         display: flex;
         flex-direction: column;
         gap: 2rem;
-        h1{
-          font-family: 'Averia Serif Libre';
+        justify-content: center;
+
+        h1 {
+          font-family: $text-family;
           font-weight: 700;
-          font-size: 40px;
+          font-size: 30px;
           font-style: normal;
           margin-top: 3rem;
           margin-bottom: 10px;
           color: white;
-          width: 485;
+          width: 390px;
         }
-        p{
+
+        p {
           color: #FAF8F8;
-          font-family: 'Averia Serif Libre';
+          font-family: $text-family;
           font-weight: 700;
           font-size: 13px;
           width: 270px;
         }
 
       }
-      .img img{
-        margin-top: 1.5rem;
-        width: 480px;
-        height: 350px;
+
+      .img img {
+        width: 370px;
+        height: 260px;
       }
     }
-    .right-side-login{
+
+    .right-side-login {
       width: 500px;
-      height: 530px;
+      height: 500px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      .right-side-text{
-        margin-bottom: 2rem;
-        p,h1{
+      position: relative;
+      top: 2.5rem;
+
+      .right-side-text {
+        margin-bottom: 1rem;
+
+        p,
+        h1 {
           text-align: center;
+          font-family: $text-family;
+          font-weight: bold;
+          font-size: 32px;
         }
-        .text-left{
-          text-align: left;
+
+        p {
+          font-size: 13px;
+          color: $text-color;
+        }
+      }
+
+      .form-box {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+
+        .input-box {
+          input {
+            width: 400px;
+            height: 3.5rem;
+            border: none;
+            border: 1px solid #D9D9D9;
+            border-radius: 20px;
+            padding-left: 20px;
+            font-family: $text-family;
+            outline: none;
+          }
+          .error{
+            color: red;
+            padding-left:1rem ;
+            font-family: $text-family;
+          }
+        }
+        .input-box input:focus{
+          border: 1px solid $primary-color;
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+        .input-box:nth-child(2) {
+          position: relative;
+
+          .hide {
+            position: absolute;
+            top: 1.1rem;
+            right: 1.5rem;
+            opacity: 1;
+            font-size: 20px;
+            color: $text-color;
+            transition: all 0.3s ease-in-out;
+          }
+        }
+      }
+
+      .text-left {
+        width: 400px;
+        margin-top: 1.5rem;
+        display: flex;
+        justify-content: right;
+
+        .forgot-password {
+          font-family: $text-family;
+          font-weight: bold;
+          font-size: 14px;
+          color: $text-color;
+          cursor: pointer;
+          text-decoration: none;
+        }
+        .forgot-password:hover{
+          color: $primary-color;
+        }
+      }
+
+      .btn button {
+        background-color: $primary-color;
+        color: $white-color;
+        font-family: $text-family;
+        font-weight: 700;
+        font-size: 28px;
+        width: 400px;
+        height: 3.5rem;
+        border: none;
+        border-radius: 20px;
+        margin-top: 1.5rem;
+        cursor: pointer;
+      }
+      .btn:hover button{
+        background-color: $white-color;
+        color: $primary-color;
+        border: 1px solid #D9D9D9;
+        background-color: $white-color;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease-in-out;
+      }
+
+      .line-text {
+        p {
+          margin: 1.5rem 0;
+          text-align: center;
+          position: relative;
+          width: 350px;
+          color: $text-color;
+          font-size: 18px;
+          font-weight: bold;
+          font-family: $text-family;
+        }
+
+        p::before,
+        p::after {
+          content: "";
+          position: absolute;
+          top: 55%;
+          width: 100px;
+          height: 1px;
+          background-color: $text-color;
+        }
+
+        P::before {
+          left: 0;
+        }
+
+        P::after {
+          right: 0;
+        }
+      }
+
+      .google {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        border: none;
+        border-radius: 20px;
+        border: 1px solid #D9D9D9;
+        background-color: $white-color;
+        width: 400px;
+        height: 3.5rem;
+        cursor: pointer;
+        p {
+          font-family: $text-family;
+          font-weight: bold;
+          font-size: 20px;
+          color: $text-color;
+        }
+
+        .google-icon {
+          font-size: 50px;
+          color: $primary-color;
+        }
+      }
+      .google:hover{
+        background-color: $primary-color;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease-in-out;
+        p{
+          color: $white-color;
+          transition: all 0.3s ease-in-out;
         }
       }
     }

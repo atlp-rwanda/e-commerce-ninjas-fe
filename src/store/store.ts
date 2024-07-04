@@ -3,10 +3,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import welcomeReducer from "./features/welcomeSlice";
+import productReducer from "./features/ProductSlice";
 
 export const store = configureStore({
   reducer: {
     initialMessage: welcomeReducer,
+    searchProduct:productReducer
   },
 });
 

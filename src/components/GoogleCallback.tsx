@@ -18,7 +18,7 @@ const GoogleCallback = () => {
     }
   },[dispatch])
   return (
-    <div>Google</div>
+    <div>Authenticating....</div>
   )
 }
 

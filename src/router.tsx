@@ -18,7 +18,7 @@ const AppRouter: React.FC = () => {
         <Route path="/" element={<Layout />}>
           <Route index element={<LandingPage />} />
           <Route path="signup" element={<SignUp />} />
-          <Route path="verify-email" element={<EmailVerifying />} />
+          <Route path="/verify-email" element={<EmailVerifying />} />
           <Route path="/resend-email" element={<NotFound />} />
           <Route path="/api/auth/verify-email/:token" element={<VerifyEmail />} />
           <Route path="/api/auth/google/callback" element={<GoogleCallback />} />

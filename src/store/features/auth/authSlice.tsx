@@ -9,6 +9,7 @@ const initialState:AuthService= {
     isLoading: false,
     isSuccess: false,
     isVerified: false,
+    isAuthenticated: false,
     message: ""
 };
 
@@ -17,7 +18,8 @@ export interface AuthService{
     isError: boolean,
     isLoading: boolean,
     isSuccess: boolean,
-    isVerified: boolean
+    isVerified: boolean,
+    isAuthenticated: boolean
     message: string
 }
 
@@ -99,19 +101,15 @@ const userSlice = createSlice({
             })
             .addCase(googleAuth.pending, (state) => {
                 state.isLoading = true;
-                state.isError = false;
-                state.isSuccess = false;
+
             })
             .addCase(googleAuth.fulfilled, (state, action: PayloadAction<any>) => {
                 state.isLoading = false;
-                state.isSuccess = true;
-                state.user = action.payload;
-                state.message = action.payload.message;
+                state.isAuthenticated = true;
             })
             .addCase(googleAuth.rejected, (state, action: PayloadAction<any>) => {
                 state.isLoading = false;
                 state.isError = true;
-                state.message = action.payload;
             })
             .addCase(googleAuthCallback.pending, (state) => {
                 state.isLoading = true;

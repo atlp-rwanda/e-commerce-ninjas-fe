@@ -54,7 +54,6 @@ export const SignUp = () => {
 
   const handleGoogle = () =>{
     // TODO: Implement Google Sign-In
-    // navigate('/google-sign-in');
     dispatch(googleAuth())
   }
   return (
@@ -125,7 +124,7 @@ export const SignUp = () => {
                   <p>or Sign up with</p>
                 </div>
                 <div>
-                  <div className='google'>
+                  <div className='google' onClick={handleGoogle}>
                     <FcGoogle className='google-icon' />
                     <p>Continue with google</p>
                   </div>

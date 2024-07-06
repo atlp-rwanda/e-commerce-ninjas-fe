@@ -1,5 +1,5 @@
 /* eslint-disable */
-import {axiosInstance} from "../../../utils/axios/axiosInstance";
+import {axiosInstance, URL} from "../../../utils/axios/axiosInstance";
 import { IUser, IVerification } from "../../../utils/types/store";
 
 const register = async(userData: IUser) =>{
@@ -13,8 +13,7 @@ const verify = async(token:string) =>{
 }
 
 const googleAuth = async() =>{
-    const response = await axiosInstance.post('/api/auth/google');
-    return response.data;
+    window.location.href = `${URL}/api/auth/google`;
 }
 
 const googleAuthCallback = async(data:any) =>{

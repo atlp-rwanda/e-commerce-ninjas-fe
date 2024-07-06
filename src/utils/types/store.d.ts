@@ -9,14 +9,16 @@ export interface IWelcomeMessageState {
 }
 
 export interface IUser {
+  data?: any;
   email: string;
   password: string;
-}
+  }
 
 export interface IUserData {
-  data: object;
+  data : object
   message: string;
 }
+
 
 export interface IUserDataState {
   user: IUserData | undefined;

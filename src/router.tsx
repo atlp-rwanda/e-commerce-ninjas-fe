@@ -7,8 +7,8 @@ import NotFound from './pages/NotFound';
 import Layout from './components/layout/Layout';
 import VerifyEmail from './pages/VerifyEmail';
 import { EmailVerifying } from './pages/EmailVerifying';
-
-
+import { Login } from './pages/Login';
+import Dashboard from './pages/Dashboard';
 
 const AppRouter: React.FC = () => {
   return (
@@ -17,6 +17,8 @@ const AppRouter: React.FC = () => {
         <Route path="/" element={<Layout />}>
           <Route index element={<LandingPage />} />
           <Route path="signup" element={<SignUp />} />
+          <Route path="login" element={<Login/>} />
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="verify-email" element={<EmailVerifying />} />
           <Route path="/api/auth/verify-email/:token" element={<VerifyEmail />} />
           <Route path="*" element={<NotFound />} />

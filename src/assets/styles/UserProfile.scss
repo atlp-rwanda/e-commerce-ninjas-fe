@@ -1,0 +1,290 @@
+@import "./Colors";
+
+.profile-container {
+  width: 100%;
+  padding: 32px;
+  font-size: 15px;
+
+  .profile-details {
+    .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: $primary-color;
+      color: white;
+      height: 40px;
+      padding: 0 20px;
+
+      button {
+        padding: 8px 32px;
+        border-radius: 25px;
+        border: none;
+        height: 35px;
+        color: $primary-color;
+        font-size: 16px;
+      }
+    }
+
+    .details {
+      display: flex;
+      justify-content: space-between;
+      padding: 23px;
+
+      .input-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        .input-layout {
+          border: 1px solid $primary-color;
+          position: relative;
+          padding: 0 12px;
+          width: 32rem;
+          height: 36px;
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 12px;
+          border-radius: 3px;
+
+          label {
+            position: absolute;
+            top: -10px;
+            background-color: white;
+            padding: 0 5px;
+          }
+
+          input {
+            border: none;
+            outline: none;
+            font-size: 15px;
+            margin-top: 10px;
+          }
+        }
+
+        .select-layout {
+          display: flex;
+          align-items: center;
+          border: 1px solid $primary-color;
+          height: 36px;
+          border-radius: 3px;
+
+          select {
+            padding: 10px 2px;
+            border-color: $primary-color;
+            outline: $primary-color;
+          }
+
+          input {
+            padding: 8px 16px;
+            outline: none;
+            border: none;
+          }
+        }
+      }
+      .profile-pic{
+        position: relative;
+
+        form{
+          button{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            img{
+              object-fit: cover;
+              position: absolute;
+              left: 7.5rem;
+              top: 11.4rem;
+              z-index: 10;
+              background: #fff;
+              border-radius: 50%;
+            }
+          }
+        }
+      }
+
+      .right-side {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        .options {
+          border: 1px solid $primary-color;
+          position: relative;
+          padding: 0 12px;
+          width: 32rem;
+          height: 36px;
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 12px;
+          border-radius: 3px;
+
+          label {
+            position: absolute;
+            top: -10px;
+            background-color: white;
+            padding: 0 5px;
+          }
+
+          select {
+            font-size: 15px;
+            margin-top: 10px;
+            outline: none;
+            border: none;
+            color: $primary-color;
+
+            option {
+              color: #444444;
+            }
+          }
+        }
+
+        .input-d {
+          position: relative;
+          border: 1px solid $primary-color;
+          height: 32px;
+          padding: 0 12px;
+          border-radius: 3px;
+
+          label {
+            position: absolute;
+            top: -10px;
+            background-color: white;
+            padding: 0 5px;
+          }
+
+          input {
+            border: none;
+            outline: none;
+            font-size: 15px;
+            margin-top: 8px;
+            color: $primary-color;
+            padding-left: 10px;
+          }
+        }
+      }
+    }
+  }
+
+  .password-container {
+    .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: $primary-color;
+      color: white;
+      height: 40px;
+      padding: 0 20px;
+
+      button {
+        padding: 8px 32px;
+        border-radius: 25px;
+        border: none;
+        height: 35px;
+        color: $primary-color;
+        font-size: 16px;
+      }
+    }
+
+    .password {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+
+      .password-inp {
+        border: 1px solid $primary-color;
+        position: relative;
+        padding: 0 12px;
+        width: 32rem;
+        height: 36px;
+        border-radius: 3px;
+
+        label {
+          position: absolute;
+          top: -10px;
+          background-color: white;
+          padding: 0 5px;
+        }
+
+        .input-n {
+          display: flex;
+          align-items: center;
+
+          input {
+            border: none;
+            outline: none;
+            font-size: 15px;
+            margin-top: 10px;
+            width: 100%;
+            padding: 0 4px;
+          }
+
+          span {
+            margin-top: 9px;
+          }
+        }
+      }
+    }
+  }
+
+  .shipping-address {
+    .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: $primary-color;
+      color: white;
+      height: 40px;
+      padding: 0 20px;
+
+      button {
+        padding: 8px 32px;
+        border-radius: 25px;
+        border: none;
+        height: 35px;
+        color: $primary-color;
+        font-size: 16px;
+      }
+    }
+
+    .shipping {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px;
+
+      .select-inp {
+        border: 1px solid $primary-color;
+        position: relative;
+        padding: 0 12px;
+        width: 32rem;
+        height: 36px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 3px;
+        margin-bottom: 32px;
+
+        label {
+          position: absolute;
+          top: -10px;
+          background-color: white;
+          padding: 0 5px;
+        }
+
+        select {
+          font-size: 15px;
+          margin-top: 10px;
+          outline: none;
+          border: none;
+          color: $primary-color;
+
+          option {
+            color: #444444;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: 320px){
+  
+}

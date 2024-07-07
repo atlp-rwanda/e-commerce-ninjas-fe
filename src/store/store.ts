@@ -5,13 +5,15 @@ import welcomeReducer from "./features/welcomeSlice";
 import productReducer from './features/product/productSlice';
 import authReducer from './features/auth/authSlice';
 import singleProductReducer from './features/product/singleProductSlice';
+import userReducer from './features/user/userSlice'
 
 export const store = configureStore({
   reducer: {
     initialMessage: welcomeReducer,
     auth: authReducer,
     products: productReducer,
-    singleProduct: singleProductReducer
+    singleProduct: singleProductReducer,
+    user: userReducer
   },
 });
 

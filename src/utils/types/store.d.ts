@@ -76,3 +76,29 @@ export interface IProductInitialResponse {
   isLoading: boolean,
   message: string | null
 }
+export interface IProfile {
+  id: string,
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string,
+  phone: string,
+  profilePicture: string,
+  gender: string,
+  birthDate: string,
+  language: string,
+  currency: string,
+  role: string,
+  status: string,
+  isVerified: boolean,
+  is2FAEnabled: boolean,
+  createdAt: string,
+  updatedAt: string,
+  passwordUpdatedAt: string,
+};
+
+export interface ILocation {
+  province: string;
+  district: string;
+  sector: string;
+}

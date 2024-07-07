@@ -11,6 +11,7 @@ import { ResendEmail } from './components/ResendEmail';
 import GoogleCallback from './components/GoogleCallback';
 import SendResetPasswordLink from "./pages/SendResetPasswordLink";
 import ResetPassword from "./pages/ResetPassword";
+import UserProfile from './pages/UserEditProfile';
 
 import ViewProduct from './pages/ViewProduct';
 
@@ -29,6 +30,7 @@ const AppRouter: React.FC = () => {
           <Route path="/reset-password" element={<SendResetPasswordLink />} />
          <Route path="/api/auth/reset-password/:token" element={<ResetPassword />} />
           <Route path="product/:id" element={<ViewProduct />} />
+          <Route path='/profile' element={<UserProfile/>}/>
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

@@ -12,19 +12,19 @@ const VerifyEmail: React.FC = () => {
     const { token } = useParams<{ token: string }>() as any;
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const { isVerified, isError, message, isLoading } = useAppSelector((state) => state.auth)
+    const { isSuccess, isError, message, isLoading } = useAppSelector((state) => state.auth)
     useEffect(() => {
         dispatch(verifyEmail(token));
     }, [token, navigate]);
 
     useEffect(() => {
-        if (isVerified) {
+        if (isSuccess) {
             toast.success(message);
         }
         else if (isError) {
             toast.error(message);
         }
-    }, [isVerified, isError, navigate]
+    }, [isSuccess, isError, navigate]
     );
     return (
         <>
@@ -41,7 +41,7 @@ const VerifyEmail: React.FC = () => {
                                     <h2>Verifying your email...</h2>
                                     <p>Please wait...</p>
                                 </div>
-                            ) : isVerified ? (
+                            ) : isSuccess ? (
                                 <div className="isSuccess">
                                     <img src={email} alt="" />
                                     <p>Thank you for verifying your email.<span onClick={() => navigate("/login")}>Go to login</span></p>

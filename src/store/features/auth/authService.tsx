@@ -8,7 +8,7 @@ const register = async(userData: IUser) =>{
 }
 
 const verify = async(token:string) =>{
-    const response = await axiosInstance.get<IVerification>(`/api/auth/verify-email${token}`);
+    const response = await axiosInstance.get<IVerification>(`/api/auth/verify-email/${token}`);
     return response.data;
 }
 

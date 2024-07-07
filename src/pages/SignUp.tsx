@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../components/buttons/Button';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { registerUser } from '../store/features/auth/authSlice';
-import { CircleLoader } from 'react-spinners';
+import { CircleLoader, PuffLoader } from 'react-spinners';
 import SignUpIcon from '../../public/images/sign-up.png'
 import { toast } from 'react-toastify';
 const SignUpSchema = Yup.object().shape({
@@ -110,7 +110,7 @@ export const SignUp = () => {
                 </div>
                 {isLoading ? (
                   <div className='btn-loading'>
-                    <CircleLoader color="#FF6D18" size={30} loading={isLoading}/>
+                    <PuffLoader size={60} color='#FF6D18' loading={isLoading} />
                   </div>
                 ) : (
                   <div className='btn'>

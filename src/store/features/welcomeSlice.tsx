@@ -4,7 +4,7 @@ import type { IWelcomeMessage, IWelcomeMessageState } from '../../utils/types/st
 import welcomeService from './welcomeService';
 
 const initialState: IWelcomeMessageState = {
-  welcomeMessage: { status: false, message: '' }
+  welcomeMessage: { status: false, message: "" },
 };
 
 
@@ -24,19 +24,25 @@ export const loadWelcomeMessage = createAsyncThunk<IWelcomeMessage, void, { reje
 );
 
 export const WelcomeSlice = createSlice({
-  name: 'welcomeMessage',
+  name: "welcomeMessage",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(loadWelcomeMessage.pending, (state) => {
-        state.welcomeMessage = { status: false, message: 'Loading...' };
+        state.welcomeMessage = { status: false, message: "Loading..." };
       })
-      .addCase(loadWelcomeMessage.fulfilled, (state, action: PayloadAction<IWelcomeMessage>) => {
-        state.welcomeMessage = action.payload;
-      })
+      .addCase(
+        loadWelcomeMessage.fulfilled,
+        (state, action: PayloadAction<IWelcomeMessage>) => {
+          state.welcomeMessage = action.payload;
+        }
+      )
       .addCase(loadWelcomeMessage.rejected, (state) => {
-        state.welcomeMessage = { status: false, message: 'Failed to load welcome message.' };
+        state.welcomeMessage = {
+          status: false,
+          message: "Failed to load welcome message.",
+        };
       });
   },
 });

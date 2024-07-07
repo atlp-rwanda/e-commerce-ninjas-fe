@@ -7,7 +7,9 @@ import { Meta } from '../components/Meta';
 
 const LandingPage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const welcomeMessage: IWelcomeMessage = useAppSelector((state) => state.initialMessage.welcomeMessage);
+  const welcomeMessage: IWelcomeMessage = useAppSelector(
+    (state) => state.initialMessage.welcomeMessage
+  );
 
   useEffect(() => {
     dispatch(loadWelcomeMessage());
@@ -17,9 +19,9 @@ const LandingPage: React.FC = () => {
     <>
     <Meta title='Home - E-Commerce Ninjas' />
       <div className="landingPage">
-        <h1>
-          {welcomeMessage.message}
-        </h1>
+        <h1>{welcomeMessage.message}</h1>
+      </div>
+      <div className="container__button">
       </div>
     </>
   );

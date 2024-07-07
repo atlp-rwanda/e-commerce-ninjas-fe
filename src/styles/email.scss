@@ -22,7 +22,7 @@
         }
 
         p {
-            color: $text-color;
+            color: $text2-color;
         }
     }
 
@@ -35,7 +35,7 @@
     .btn-link {
         font-family: $text-family;
         font-weight: 700;
-        font-size: 1.2rem;
+        font-size: 1.9rem;
         margin-top: 1rem;
         margin-bottom: 1rem;
         text-align: center;
@@ -70,7 +70,7 @@
         font-family: $text-family;
         font-weight: 200;
         font-size: 1rem;
-        color: $text-color;
+        color: $text2-color;
     }
 }
 
@@ -89,14 +89,14 @@
     h2{
         font-family: $text-family;
         font-weight: 700;
-        font-size: 2rem;
+        font-size: 3.2rem;
         color: $primary-color;
     }
     p{
         font-family: $text-family;
         font-weight: 200;
-        font-size: 1rem;
-        color: $text-color;
+        font-size: 1.6rem;
+        color: $text2-color;
         text-align: center;
     }
     form {
@@ -126,8 +126,8 @@
             background-color: $white-color;
             color: $primary-color;
             font-weight: 700;
-            font-size: 1.2rem;
-            border-radius: 2rem;
+            font-size: 1.9rem;
+            border-radius: 3.2rem;
             cursor: pointer;
             transition: all 0.3s ease-in-out;
         }
@@ -171,7 +171,7 @@
         h2 {
             text-align: center;
             font-family: $text-family;
-            color: $text-color;
+            color: $text2-color;
         }
     }
 
@@ -182,9 +182,9 @@
     p {
         text-align: center;
         font-family: $text-family;
-        color: $text-color;
+        color: $text2-color;
         font-style: normal;
-        font-size: 1.2rem;
+        font-size: 1.9rem;
         font-weight: 500;
     }
 
@@ -193,9 +193,9 @@
             span {
                 color: $primary-color;
                 font-weight: 700;
-                font-size: 1.2rem;
-                line-height: 1.5rem;
-                letter-spacing: 0.05em;
+                font-size: 1.9rem;
+                line-height: 2.4rem;
+                letter-spacing: 0.05rem;
                 text-decoration: none;
                 transition: all 0.3s ease-in-out;
                 cursor: pointer;
@@ -212,9 +212,9 @@
         .error {
             font-family: $text-family;
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: 1.9rem;
             text-align: center;
-            line-height: 1.5rem;
+            line-height: 2.4rem;
             color: $red-color;
         }
     }
@@ -251,7 +251,13 @@
         }
     }
     .verify-email-page {
-        width: 40vw;
+        width: 90vw;
+
+        .isError{
+            img{
+                width: 300px;
+            }
+        }
     }
 }
 
@@ -263,54 +269,30 @@
         width: 60vw;
     }
     .verify-email-page {
-        width: 30vw;
+        width: 50vw;
     }
 }
 
 @media only screen and (min-width: 1024px) {
     .email-spot {
-        width: 50vw;
+        width: 70vw;
+        .text-header{
+            h1{
+                font-size: 2.5rem;
+            }
+            p{
+                font-size: 1.5rem;
+            }
+        }
+        .img-message img{
+            width: 50vw;
+            height: 60vh;
+        }
     }
     .resend-email {
         width: 50vw;
     }
     .verify-email-page {
-        width: 25vw;
-    }
-}
-
-@media only screen and (min-width: 1440px) {
-    .email-spot {
-        width: 40vw;
-    }
-    .resend-email {
-        width: 40vw;
-    }
-    .verify-email-page {
-        width: 20vw;
-    }
-}
-
-@media only screen and (min-width: 1920px) {
-    .email-spot {
-        width: 30vw;
-    }
-    .resend-email {
-        width: 30vw;
-    }
-    .verify-email-page {
-        width: 15vw;
-    }
-}
-
-@media only screen and (min-width: 2560px) {
-    .email-spot {
-        width: 25vw;
-    }
-    .resend-email {
-        width: 25vw;
-    }
-    .verify-email-page {
-        width: 12.5vw;
+        width: 50vw;
     }
 }

@@ -1,10 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
-@import './styles/color.scss';
+@import './styles/Colors.scss';
+@import './styles/style.scss';
 @import './styles/signup.scss';
 @import './styles/LandingPage.scss';
 @import './styles/email.scss';
-
-* {
-  margin: 0;
-  padding: 0;
-}
+@import './styles/AdminHeader.scss';
+@import './styles/Button.scss';
+@import './styles/Categories.scss';
+@import './styles/Footer.scss';
+@import './styles/Input.scss';
+@import './styles/SearchInput.scss';
+@import './styles/SellerHeader.scss';
+@import './styles/SideBar.scss';
+@import './styles/Header.scss';

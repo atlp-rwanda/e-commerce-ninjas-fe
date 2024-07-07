@@ -1,5 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import Button from '../components/buttons/Button';
+/* eslint-disable */
+
+import type { Meta, StoryObj } from "@storybook/react";
+import Button from "../components/buttons/Button";
 
 const meta = {
   title: 'Example/Button',

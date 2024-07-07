@@ -71,7 +71,7 @@ const userSlice = createSlice({
             })
             .addCase(verifyEmail.fulfilled, (state, action: PayloadAction<any>) => {
                 state.isLoading = false;
-                state.isVerified = true;
+                state.isSuccess = true;
                 state.message = action.payload.message;
             })
             .addCase(verifyEmail.rejected, (state, action: PayloadAction<any>) => {

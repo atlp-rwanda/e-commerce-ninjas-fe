@@ -8,6 +8,8 @@ import { DotLoader } from "react-spinners";
 import email from "../../public/assets/images/email.png"
 import failed from "../../public/assets/images/failed.png";
 import { toast } from "react-toastify";
+
+
 const VerifyEmail: React.FC = () => {
     const { token } = useParams<{ token: string }>() as any;
     const navigate = useNavigate();

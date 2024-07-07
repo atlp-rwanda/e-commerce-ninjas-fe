@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import authService from "./authService";
-import {IUser,IUserData } from "../../../utils/types/store";
+import {AuthService, IEmail, IUser,IUserData } from "../../../utils/types/store";
 import {getErrorMessage} from '../../../utils/axios/axiosInstance'
 const initialState:AuthService= {
     user: undefined,
@@ -12,14 +12,6 @@ const initialState:AuthService= {
     message: ""
 };
 
-export interface AuthService{
-    user: IUserData | undefined,
-    isError: boolean,
-    isLoading: boolean,
-    isSuccess: boolean,
-    isVerified: boolean
-    message: string
-}
 
 
 export const registerUser = createAsyncThunk("auth/register", async (userData: IUser, thunkApi) => {
@@ -34,7 +26,15 @@ export const registerUser = createAsyncThunk("auth/register", async (userData: I
 export const verifyEmail = createAsyncThunk("auth/verify-email", async(token:string, thunkApi)=>{
     try {
         const response = await authService.verify(token);
-        console.log(response)
+        return response;
+    } catch (error) {
+        return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+})
+
+export const resendVerificationEmail = createAsyncThunk("auth/resend-verification-email", async(email:IEmail, thunkApi)=>{
+    try {
+        const response = await authService.resendVerificationEmail(email);
         return response;
     } catch (error) {
         return thunkApi.rejectWithValue(getErrorMessage(error));
@@ -78,7 +78,21 @@ const userSlice = createSlice({
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;
-                console.log(action.payload);
+            })
+            .addCase(resendVerificationEmail.pending, (state) => {
+                state.isLoading = true;
+                state.isError = false;
+                state.isSuccess = false;
+            })
+            .addCase(resendVerificationEmail.fulfilled, (state, action: PayloadAction<any>) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.message = action.payload.message;
+            })
+            .addCase(resendVerificationEmail.rejected, (state, action: PayloadAction<any>) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
             })
     },
 });

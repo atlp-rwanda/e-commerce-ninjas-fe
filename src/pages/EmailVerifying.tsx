@@ -1,14 +1,16 @@
 /* eslint-disable */
 import React, { useEffect } from 'react'
 import { Meta } from '../components/Meta'
-import { useNavigate } from 'react-router-dom'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import newMessage from "../../public/images/new-message.png"
+import { useAppSelector } from '../store/store'
 export const EmailVerifying = () => {
     const navigate = useNavigate();
+    const {isVerified} = useAppSelector((state) => state.auth)
     useEffect(() => {
-        setTimeout(() => {
+        if (isVerified) {
             navigate("/")
-        },6000)
+        }
     },[navigate])
     return (
         <>
@@ -22,10 +24,10 @@ export const EmailVerifying = () => {
                             <p>If you didn't receive the email, please make sure to check your spam folder. If it's still not there, please try resending the verification email.</p>
                         </div>
                         <div className='img-message'>
-                            <img src="images/new-message.png" alt="" />
+                            <img src={newMessage} alt="message" />
                         </div>
                         <div>
-                            <Link to="resend-email" className="btn-link">Resend email</Link>
+                            <span onClick={(()=> navigate("/resend-email"))} className="btn-link">Resend email</span>
                         </div>
                     </div>
                 </div>

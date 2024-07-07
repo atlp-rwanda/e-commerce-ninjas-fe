@@ -7,6 +7,7 @@ import NotFound from './pages/NotFound';
 import Layout from './components/layout/Layout';
 import VerifyEmail from './pages/VerifyEmail';
 import { EmailVerifying } from './pages/EmailVerifying';
+import { ResendEmail } from './components/ResendEmail';
 
 
 
@@ -18,7 +19,7 @@ const AppRouter: React.FC = () => {
           <Route index element={<LandingPage />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="verify-email" element={<EmailVerifying />} />
-          <Route path="/resend-email" element={<NotFound />} />
+          <Route path="resend-email" element={<ResendEmail />} />
           <Route path="/api/auth/verify-email/:token" element={<VerifyEmail />} />
           <Route path="*" element={<NotFound />} />
         </Route>

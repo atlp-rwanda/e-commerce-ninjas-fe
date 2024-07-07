@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from '../store/store';
 import { registerUser } from '../store/features/auth/authSlice';
 import { CircleLoader } from 'react-spinners';
 import SignUpIcon from '../../public/images/sign-up.png'
+import { toast } from 'react-toastify';
 const SignUpSchema = Yup.object().shape({
   email: Yup.string().email('Email must be valid').required('Email is required'),
   password: Yup.string().required('Password is required'),
@@ -32,9 +33,10 @@ export const SignUp = () => {
   })
   useEffect(() => {
     if (isError) {
-      alert(message);
+      toast.error(message)
     }
     if (isSuccess) {
+      toast.success(message)
       navigate('/verify-email');
       formik.resetForm();
     }

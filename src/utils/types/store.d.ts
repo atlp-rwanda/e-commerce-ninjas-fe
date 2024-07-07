@@ -26,3 +26,16 @@ export interface IVerification{
   status: number;
   message: string;
 }
+
+export interface AuthService{
+  user: IUserData | undefined,
+  isError: boolean,
+  isLoading: boolean,
+  isSuccess: boolean,
+  isVerified: boolean
+  message: string
+}
+
+export interface IEmail {
+  email: string;
+}

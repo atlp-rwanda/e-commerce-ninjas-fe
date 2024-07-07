@@ -33,7 +33,7 @@ const config: Configuration = {
         },
       },
       {
-        test: /\.scss$/i,
+        test: /\.(scss|css)$/i,
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',

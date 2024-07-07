@@ -6,6 +6,7 @@ import productReducer from './features/product/productSlice';
 import authReducer from './features/auth/authSlice';
 import singleProductReducer from './features/product/singleProductSlice';
 import notificationReducer from './features/notifications/notificationSlice';
+import userReducer from './features/user/userSlice'
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     products: productReducer,
     singleProduct: singleProductReducer,
     notification: notificationReducer,
+    user: userReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

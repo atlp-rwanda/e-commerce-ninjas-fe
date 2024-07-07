@@ -11,6 +11,7 @@ import { ResendEmail } from "./components/ResendEmail";
 import GoogleCallback from "./components/GoogleCallback";
 import SendResetPasswordLink from "./pages/SendResetPasswordLink";
 import ResetPassword from "./pages/ResetPassword";
+import UserProfile from './pages/UserEditProfile';
 
 import ViewProduct from "./pages/ViewProduct";
 import UserLogin from "./pages/UserLogin";
@@ -49,6 +50,7 @@ const AppRouter: React.FC = () => {
             element={<ResetPassword />}
           />
           <Route path="product/:id" element={<ViewProduct />} />
+          <Route path='/profile' element={<UserProfile/>}/>
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

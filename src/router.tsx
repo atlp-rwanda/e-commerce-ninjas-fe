@@ -1,10 +1,10 @@
-/* eslint-disable linebreak-style */
+/* eslint-disable*/
 /* eslint-disable arrow-body-style */
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import LandingPage from './pages/LandingPage';
-import Login from './pages/Login';
-import NotFound from './pages/NotFound';
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import LandingPage from "./pages/LandingPage";
+import Login from "./pages/Login";
+import NotFound from "./pages/NotFound";
 
 const AppRouter: React.FC = () => {
   return (

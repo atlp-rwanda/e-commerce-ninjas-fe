@@ -1,5 +1,5 @@
 /* eslint-disable */
-import axiosInstance from "../../../utils/axios/axiosInstance";
+import {axiosInstance} from "../../../utils/axios/axiosInstance";
 
 const fetchProducts = async () => {
   try {

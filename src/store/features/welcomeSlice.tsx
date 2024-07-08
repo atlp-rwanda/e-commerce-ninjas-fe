@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import axiosInstance from "../../utils/axios/axiosInstance";
+import {axiosInstance} from "../../utils/axios/axiosInstance";
 import type {
   IWelcomeMessage,
   IWelcomeMessageState,

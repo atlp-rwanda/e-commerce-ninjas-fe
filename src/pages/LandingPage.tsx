@@ -1,37 +1,55 @@
 /* eslint-disable */
-
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { loadWelcomeMessage } from "../store/features/welcomeSlice";
-import { IWelcomeMessage } from "../utils/types/store";
+import { fetchProducts } from '../store/features/product/productSlice';
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
+import Product from '../components/product/Product';
+import Sample from '../components/layout/Sample';
+import { PuffLoader } from 'react-spinners';
 import "../styles/LandingPage.scss";
-import SearchInput from "../components/inputs/SearchInput";
-import Sidebar from "../components/sidebar/Sidebar";
-import AdminHeader from "../components/layout/AdminHeader";
-import SellerHeader from "../components/layout/SellerHeader";
 
 const LandingPage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const welcomeMessage: IWelcomeMessage = useAppSelector(
-    (state) => state.initialMessage.welcomeMessage
-  );
+  const { products, isError, isSuccess, isLoading, message } = useAppSelector((state: any) => state.products);
 
   useEffect(() => {
-    dispatch(loadWelcomeMessage());
+    dispatch(fetchProducts());
   }, [dispatch]);
 
   return (
     <>
-      <AdminHeader />
-      <SellerHeader />
       <Header />
-      <div className="landingPage">
-        <h1>{welcomeMessage.message}</h1>
-      </div>
-      <div className="container__button">
-        <SearchInput />
+      <Sample />
+      <div className="landing-container">
+        {isLoading ? (
+          <div className="loader">
+            <PuffLoader color="#ff6d18" size={300} loading={isLoading} />
+          </div>
+        ) : isError ? (
+          <div className="error-message">
+            <p>{message || "Something went wrong. Please try again later."}</p>
+          </div>
+        ) : (
+          <div>
+            <div className="head">
+              <h1>Today's Deal</h1>
+            </div>
+            <div className="product-list">
+              {isSuccess && products.map((product: any) => (
+                <Product
+                  key={product.id}
+                  images={product.images}
+                  name={product.name}
+                  price={`$${product.price}`}
+                  stock={Number(product.quantity)}
+                  description={product.description}
+                  discount={Number(product.discount.replace('%', ''))}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
       <Footer />
     </>

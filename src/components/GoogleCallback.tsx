@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useAppDispatch } from '../store/store';
 import { googleAuthCallback } from '../store/features/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
+import { PuffLoader } from 'react-spinners';
+import "../../src/styles/Loader.scss";
 
 const GoogleCallback = () => {
   const dispatch = useAppDispatch();
@@ -42,11 +44,15 @@ const GoogleCallback = () => {
   }, [dispatch, navigate]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loader">
+        <PuffLoader color="#ff6d18" size={300} loading={loading} />
+      </div>
+    );
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="error-message">{error}</div>;
   }
 
   return <div>Authenticating....</div>;

@@ -13,8 +13,6 @@ const LandingPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const { products, isError, isSuccess, isLoading, message } = useAppSelector((state: any) => state.products);
 
-  console.log(localStorage.getItem('token'))
-  const welcomeMessage: IWelcomeMessage = useAppSelector((state) => state.initialMessage.welcomeMessage);
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);

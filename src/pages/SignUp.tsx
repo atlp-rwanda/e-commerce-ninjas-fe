@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from '../store/store';
 import { googleAuth, registerUser } from '../store/features/auth/authSlice';
 import { CircleLoader } from 'react-spinners';
 import SignUpIcon from '../../public/images/sign-up.png'
+import "../styles/signup.scss"
 const SignUpSchema = Yup.object().shape({
   email: Yup.string().email('Email must be valid').required('Email is required'),
   password: Yup.string().required('Password is required'),
@@ -75,7 +76,7 @@ export const SignUp = () => {
                   </p>
                 </div>
                 <div className='img'>
-                  <img src={SignUpIcon} alt="login-icon" />
+                  <img src={SignUpIcon} alt="Signup-icon" />
                 </div>
               </div>
               <div className='right-side-login'>
@@ -137,4 +138,3 @@ export const SignUp = () => {
     </>
   )
 }
-

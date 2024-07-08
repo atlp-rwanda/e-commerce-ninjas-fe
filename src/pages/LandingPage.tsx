@@ -2,7 +2,6 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { fetchProducts } from '../store/features/product/productSlice';
-import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import Product from '../components/product/Product';
 import Sample from '../components/layout/Sample';
@@ -22,7 +21,6 @@ const LandingPage: React.FC = () => {
 
   return (
     <>
-      <Header />
       <Sample />
       <div className="landing-container">
         {isLoading ? (

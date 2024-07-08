@@ -1,11 +1,9 @@
 @import "./Colors";
 
 .footer {
-  border-top: 0.2rem solid #ddd;
-
   &__container {
-    background-color: #d9d9d9;
-    padding: 5.2rem 3rem;
+    background-color: $black-2;
+    padding: 8rem 5.2rem 2.4rem 5.2rem;
   }
 
   &__content {
@@ -29,19 +27,27 @@
     display: flex;
     flex-direction: column;
     gap: 2.4rem;
+
+    &__last {
+      justify-self: end;
+    }
+
+    &__second__last {
+      justify-self: center;
+    }
   }
 
   &__list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 1.8rem;
+    gap: 0.8rem;
   }
 
   &__title {
-    font-size: 2.4rem;
-    font-weight: 600;
-    color: $text-color;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: $white-2;
   }
 
   &__special__item {
@@ -60,8 +66,8 @@
     &:link,
     &:visited {
       text-decoration: none;
-      font-size: 1.8rem;
-      color: inherit;
+      font-size: 1.3rem;
+      color: $white-2;
       letter-spacing: 0.05rem;
       transition: all 0.15s ease-in;
     }
@@ -78,16 +84,17 @@
     align-items: center;
     gap: 2.4rem;
     width: 90%;
+    padding-left: 9.6rem;
   }
 
   &__social {
-    height: 3.2rem;
+    height: 3rem;
+    width: 3rem;
   }
 
   &__additional {
-    background-color: #e7e7e7;
-    background-color: #fe975b;
-    padding: 1.6rem;
+    background-color: $black-3;
+    padding: 3.2rem 1.6rem;
 
     display: flex;
     flex-direction: column;
@@ -100,6 +107,7 @@
     display: flex;
     align-items: center;
     gap: 2.4rem;
+    color: #fff;
   }
 
   &__additional__item:first-child {
@@ -110,28 +118,32 @@
     &:link,
     &:visited {
       text-decoration: none;
-      color: $text-color;
-      font-size: 1.8rem;
+      color: $white;
+      font-size: 1.3rem;
     }
   }
 
   &__address {
-    font-size: 1.8rem;
+    font-size: 1.3rem;
     font-style: normal;
     line-height: 1.4;
+    color: $white-2;
   }
 
   &__copyright {
-    font-size: 1.8rem;
+    font-size: 1.2rem;
+    color: $white-2;
   }
 
   &__text {
-    font-size: 2rem;
+    font-size: 1.2rem;
     justify-self: start;
+    color: $white-2;
   }
 
   &__icon {
     width: 3.2rem;
     height: 3.2rem;
+    color: $white-2;
   }
 }

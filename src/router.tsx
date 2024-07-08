@@ -1,4 +1,5 @@
 /* eslint-disable*/
+/* eslint-disable*/
 /* eslint-disable arrow-body-style */
 import React from "react";
 import { Route, Routes } from "react-router-dom";
@@ -22,3 +23,4 @@ const AppRouter: React.FC = () => {
 };
 
 export default AppRouter;
+

@@ -4,8 +4,6 @@
   display: flex;
   flex-direction: column;
 
-  background-color: #fff;
-
   &__top {
     flex: 1 0 auto;
     display: flex;
@@ -35,16 +33,16 @@
       display: flex;
       justify-content: flex-end;
       padding-bottom: 1.2rem;
-      padding-right: 8rem;
+      padding-right: 4.8rem;
     }
   }
 
   &__dropdown__container {
     margin-bottom: 1.2rem;
-    width: 30rem;
-    padding: 0.2rem 2.4rem 0.6rem 2.4rem;
+    padding: 1.6rem 2.4rem;
     display: flex;
     align-items: center;
+    gap: 3.2rem;
     justify-content: space-between;
     background-color: $background-color;
     cursor: pointer;
@@ -52,7 +50,7 @@
 
   &__selected {
     &__text {
-      font-size: 1.8rem;
+      font-size: 2rem;
       font-weight: 600;
       letter-spacing: 0.1rem;
       color: $text-color;
@@ -60,10 +58,10 @@
 
     &__icon {
       font-weight: 600;
-      font-size: 3.6rem;
+      width: 3.2rem;
+      height: 3.2rem;
       color: $primary-color;
-      transform: rotate(90deg);
-      transition: all 0.15s ease;
+      transition: all 0.08s linear;
     }
   }
 
@@ -131,26 +129,25 @@
 
   &__nav {
     align-self: center;
-    padding-left: 5rem;
 
     ul {
       display: flex;
       align-items: center;
       list-style: none;
-      gap: 1.6rem;
+      gap: 3.6rem;
     }
 
     a:link,
     a:visited {
       text-decoration: none;
-      font-size: 1.8rem;
-      color: #333;
+      font-size: 2rem;
+      color: #555;
     }
 
-    a:active,
-    a:hover {
+    a:hover,
+    a.active {
       color: $primary-color;
-      border-bottom: 0.1rem solid #ff6d18;
+      border-bottom: 0.1rem solid $primary-color;
     }
   }
 
@@ -228,30 +225,44 @@
 }
 
 .rotate {
-  transform: rotate(-90deg);
+  transform: rotate(180deg);
 }
 
 .user__container {
   position: relative;
-  width: 12%;
+  height: 100%;
+  flex: 0 0 10%;
   cursor: pointer;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -58%;
+    left: -30%;
+    width: 0.2rem;
+    height: 7rem;
+    background-color: #ccc;
+  }
 }
 
 .order {
   &__dropdown {
     background-color: $primary-color;
     color: $white;
-    padding: 2.4rem;
+    padding: 1.8rem;
     border-radius: 0.6rem;
+    box-shadow: 0.2rem 0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 0.1);
     position: absolute;
-    left: -10%;
+    left: -12%;
     top: 150%;
+    width: 130%;
+    z-index: 500;
 
     &::before {
       content: "";
       position: absolute;
       top: -3%;
-      left: 5%;
+      left: 6%;
       width: 5rem;
       height: 5rem;
       background-color: $black;
@@ -274,7 +285,7 @@
   }
 
   &__text {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
   }
 
   &__link {

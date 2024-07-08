@@ -9,12 +9,12 @@ type Story = StoryObj<typeof meta>;
 
 export const LongTitle = {
   args: {
-    children: "primary",
+    title: "This is how button will look like with long title",
   },
 } satisfies Story;
 
 export const ShortTitle = {
   args: {
-    children: "primary",
+    title: "Short Btn",
   },
 } satisfies Story;

@@ -7,6 +7,7 @@
   overflow: hidden;
   background-color: $white;
   padding-bottom: 3.2rem;
+  border-right: 0.1rem solid #eee;
 
   &__content {
     position: relative;
@@ -50,7 +51,7 @@
     padding-right: 3rem;
 
     &:hover {
-      background-color: $text-color;
+      background-color: $primary-color;
     }
   }
 

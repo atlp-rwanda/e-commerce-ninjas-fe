@@ -1,8 +1,8 @@
-/* eslint-disable */
+/* eslint-disable  */
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Button from "../components/buttons/Button2";
+import Button from "../components/buttons/Button";
 
 describe("Button Component", () => {
   it("renders button with correct title", () => {

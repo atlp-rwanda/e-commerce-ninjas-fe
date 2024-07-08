@@ -24,7 +24,7 @@ const AppRouter: React.FC = () => {
           <Route path="resend-email" element={<ResendEmail />} />
           <Route path="/api/auth/verify-email/:token" element={<VerifyEmail />} />
           <Route path="/api/auth/google/callback" element={<GoogleCallback />} />
-          <Route path="/send-reset-password-link" element={<SendResetPasswordLink />} />
+          <Route path="/reset-password" element={<SendResetPasswordLink />} />
          <Route path="/api/auth/reset-password/:token" element={<ResetPassword />} />
           <Route path="*" element={<NotFound />} />
         </Route>

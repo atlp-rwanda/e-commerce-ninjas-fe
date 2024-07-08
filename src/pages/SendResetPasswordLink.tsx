@@ -1,14 +1,11 @@
 /* eslint-disable */
 import React, { useEffect } from 'react'
 import { useFormik } from 'formik';
-import Header from '../components/layout/Header';
-import Button from '../components/buttons/Button';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { sendResetLink } from '../store/features/auth/authSlice';
-import '../styles/reset-password.scss';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
-import { CircleLoader, PuffLoader } from 'react-spinners';
+import {  PulseLoader } from 'react-spinners';
 
 const ResetPasswordSchema = Yup.object().shape({
   email: Yup.string().email('Email must be valid').required('Email is required'),
@@ -21,19 +18,26 @@ const SendResetPasswordLink: React.FC = () => {
       email: '',
     },
     validationSchema: ResetPasswordSchema,
-    onSubmit: (values) => {
-        dispatch(sendResetLink(values.email));
+    onSubmit: (values, { setStatus }) => {
+      dispatch(sendResetLink(values.email))
+        .then(() => {
+          if (isError) {
+            setStatus(message);
+          }
+       });
     },
-  })
+  });
+
   useEffect(() => {
     if (isError) {
-      toast.error(message)
-     }
+      formik.setStatus(message);
+    }
     if (isSuccess) {
       toast.success(message)
-      formik.resetForm();
+      formik.resetForm()
     }
-  }, [user, isError, isSuccess, isLoading, message])
+  }, [isError, isSuccess, message]);
+
   return (
     <>
     <hr />
@@ -57,16 +61,14 @@ const SendResetPasswordLink: React.FC = () => {
               />
               <label className="input-label" id="email" htmlFor="email">Email Address</label>
             </div>
-             {isLoading ? (
-                <div className='btn-loading'>
-                    <PuffLoader size={60} color='#FF6D18' loading={isLoading} />
-                  </div>
-                ) : (
-                  <div className="reset-Button">
-                    <Button title="Get Reset Link" type="submit" />
-                 </div>
-                )}
-            
+            <p className='error'>{formik.status}</p><br /><br />
+            <button
+            className={`reset-Button${isLoading ? " loading" : ""}`}
+             disabled={isLoading}
+              >
+            <span>{isLoading ? "Loading " : "Get Reset Link"}</span>
+            <PulseLoader size={6} color="#ffe2d1" loading={isLoading} />
+           </button>          
           </form>
         </div><br/>
       </main><br/><br/><br/><br/><br/><br/>

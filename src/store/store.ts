@@ -10,6 +10,7 @@ export const store = configureStore({
     initialMessage: welcomeReducer,
     auth: authReducer,
     products: productReducer,
+    auth: authReducer,
   },
 });
 

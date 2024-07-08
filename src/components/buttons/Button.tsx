@@ -1,6 +1,5 @@
 /* eslint-disable */
-import React from 'react';
-
+import React from "react";
 interface ButtonProps {
   title: string;
   type: "button" | "submit" | "reset";

@@ -16,11 +16,15 @@ const resendVerificationEmail = async(email:IEmail) => {
     const response = await axiosInstance.post<IEmail>(`/api/auth/send-verify-email`, email);
     return response.data;
 }
+const googleLogin = async()=> {
+    window.location.href=`http://localhost:5000/api/auth/google`
+}
 
 const authService = {
     register,
     verify,
     resendVerificationEmail,
+    googleLogin
 
 }
 

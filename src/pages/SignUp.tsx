@@ -1,8 +1,8 @@
 /* eslint-disable */
-import React, { useEffect, useState } from 'react'
-import { Meta } from '../components/Meta'
-import { useFormik } from 'formik'
-import * as Yup from 'yup'
+import React, { useEffect, useState } from 'react';
+import { Meta } from '../components/Meta';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from 'react-router-dom';
@@ -10,11 +10,11 @@ import Button from '../components/buttons/Button';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { googleAuth, registerUser } from '../store/features/auth/authSlice';
 import { CircleLoader } from 'react-spinners';
-import SignUpIcon from '../../public/images/sign-up.png'
+import SignUpIcon from '../../public/images/sign-up.png';
 import "../styles/signup.scss"
 const SignUpSchema = Yup.object().shape({
   email: Yup.string().email('Email must be valid').required('Email is required'),
-  password: Yup.string().required('Password is required'),
+  password: Yup.string().required('Password is required'), 
 })
 
 export const SignUp = () => {

@@ -5,8 +5,8 @@ import { Meta } from "../components/Meta";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { verifyEmail } from "../store/features/auth/authSlice";
 import { DotLoader } from "react-spinners";
-import email from "../../public/images/email.png"
-import failed from "../../public/images/failed.png";
+import email from "../../public/assets/images/email.png"
+import failed from "../../public/assets/images/failed.png";
 import { toast } from "react-toastify";
 const VerifyEmail: React.FC = () => {
     const { token } = useParams<{ token: string }>() as any;

@@ -1,8 +1,9 @@
 /* eslint-disable */
-
 import React from "react";
-import "../../styles/Categories.scss";
-
+import leftButton from '../../../public/assets/left-bottom.png';
+import middle from '../../../public/assets/middle.png';
+import rightButton from '../../../public/assets/right-bottom.png';
+import rightTop from '../../../public/assets/right-top.png';
 function Categories() {
   return (
     <div className="categories__container">
@@ -20,7 +21,7 @@ function Categories() {
         </div>
         <div className="categories__box categories__box__2">
           <img
-            src="left-bottom.png"
+            src={leftButton}
             alt="Product image"
             className="categories__img"
           />
@@ -31,7 +32,7 @@ function Categories() {
         </div>
         <div className="categories__box categories__box__3">
           <img
-            src="middle.png"
+            src={middle}
             alt="Product image"
             className="categories__img"
           />
@@ -51,7 +52,7 @@ function Categories() {
         </div>
         <div className="categories__box categories__box__4">
           <img
-            src="right-top.png"
+            src={rightTop}
             alt="Product image"
             className="categories__img"
           />
@@ -64,7 +65,7 @@ function Categories() {
         </div>
         <div className="categories__box categories__box__5">
           <img
-            src="right-bottom.png"
+            src={rightButton}
             alt="Product image"
             className="categories__img"
           />

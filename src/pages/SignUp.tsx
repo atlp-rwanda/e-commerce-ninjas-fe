@@ -10,7 +10,7 @@ import Button from '../components/buttons/Button';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { registerUser } from '../store/features/auth/authSlice';
 import { CircleLoader, PuffLoader } from 'react-spinners';
-import SignUpIcon from '../../public/images/sign-up.png'
+import SignUpIcon from '../../public/assets/images/sign-up.png'
 import { toast } from 'react-toastify';
 const SignUpSchema = Yup.object().shape({
   email: Yup.string().email('Email must be valid').required('Email is required'),

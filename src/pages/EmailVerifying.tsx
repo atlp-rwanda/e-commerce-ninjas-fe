@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react'
 import { Meta } from '../components/Meta'
 import { useNavigate } from 'react-router-dom';
-import newMessage from "../../public/images/new-message.png"
+import newMessage from "../../public/assets/images/new-message.png"
 import { useAppSelector } from '../store/store'
 export const EmailVerifying = () => {
     const navigate = useNavigate();

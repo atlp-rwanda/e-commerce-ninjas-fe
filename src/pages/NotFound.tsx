@@ -1,7 +1,8 @@
 /* eslint-disable */
 import React from 'react';
 import { Link } from 'react-router-dom';
-import notFound from '../../public/images/not-found.png';
+import notFound from '../../public/assets/images/not-found.png';
+
 const NotFound: React.FC = () => (
   <main className='wrapper'>
     <div className="container">

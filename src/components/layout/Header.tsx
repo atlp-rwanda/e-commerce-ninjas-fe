@@ -9,6 +9,7 @@ import { IoCartOutline } from "react-icons/io5";
 import { IoLogOutSharp } from "react-icons/io5";
 import { FaUserClock } from "react-icons/fa6";
 import { FaChevronDown } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
 
 import "../../styles/Header.scss";
 
@@ -109,28 +110,28 @@ function Header() {
               <div className="order__dropdown">
                 <ul className="order__list">
                   <li>
-                    <a href="#" className="order__link">
+                    <NavLink to="/my-orders" className="order__link">
                       <FaBuildingCircleCheck className="order__icon" />
                       <span className="order__text">My Orders</span>
-                    </a>
+                    </NavLink>
                   </li>
                   <li>
-                    <a href="#" className="order__link">
+                    <NavLink to="/wishlist" className="order__link">
                       <FaBuildingCircleCheck className="order__icon" />
                       <span className="order__text">WishList</span>
-                    </a>
+                    </NavLink>
                   </li>
                   <li>
-                    <a href="#" className="order__link">
+                    <NavLink to="/profile-settings" className="order__link">
                       <FaUserClock className="order__icon" />
                       <span className="order__text">Profile Settings</span>
-                    </a>
+                    </NavLink>
                   </li>
                   <li>
-                    <a href="#" className="order__link">
+                    <NavLink to="/login" className="order__link">
                       <IoLogOutSharp className="order__icon" />
                       <span className="order__text">Login</span>
-                    </a>
+                    </NavLink>
                   </li>
                 </ul>
               </div>
@@ -141,23 +142,35 @@ function Header() {
           <div className="header__nav">
             <nav>
               <ul>
-                <li>
-                  <a href="#">Home</a>
+                <li className="nav__item">
+                  <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')}>
+                    Home
+                  </NavLink>
                 </li>
-                <li>
-                  <a href="#">Shops</a>
+                <li className="nav__item">
+                  <NavLink to="/shops" className={({ isActive }) => (isActive ? 'active' : '')}>
+                    Shops
+                  </NavLink>
                 </li>
-                <li>
-                  <a href="#">Products</a>
+                <li className="nav__item">
+                  <NavLink to="/products" className={({ isActive }) => (isActive ? 'active' : '')}>
+                    Products
+                  </NavLink>
                 </li>
-                <li>
-                  <a href="#">Services</a>
+                <li className="nav__item">
+                  <NavLink to="/services" className={({ isActive }) => (isActive ? 'active' : '')}>
+                    Services
+                  </NavLink>
                 </li>
-                <li>
-                  <a href="#">Contact-Us</a>
+                <li className="nav__item">
+                  <NavLink to="/contact-us" className={({ isActive }) => (isActive ? 'active' : '')}>
+                    Contact-Us
+                  </NavLink>
                 </li>
-                <li>
-                  <a href="#">About-us</a>
+                <li className="nav__item">
+                  <NavLink to="/about-us" className={({ isActive }) => (isActive ? 'active' : '')}>
+                    About-us
+                  </NavLink>
                 </li>
               </ul>
             </nav>

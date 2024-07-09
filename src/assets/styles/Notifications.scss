@@ -4,7 +4,25 @@
   border: 0.2rem solid #c9c9c9;
   border-radius: 1rem;
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+
+  .loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+  }
+  .error-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: $black-3;
+    font-size: 1.8rem;
+    background-color: $primary-color-light;
+    border: 1px solid $primary-color-dark;
+    border-radius: 0.5rem;
+    padding: 2rem;
+  }
 
   .notifications-header {
     display: flex;
@@ -103,6 +121,10 @@
 
       &.unread {
         background-color: #E9E9E9;
+
+        .unread-icon {
+          color: #ff6d18;
+        }
       }
 
       .notification-text {

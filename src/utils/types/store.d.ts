@@ -50,8 +50,9 @@ export interface AuthService{
   isError: boolean,
   isLoading: boolean,
   isSuccess: boolean,
-  isVerified: boolean
-  message: string
+  isVerified: boolean,
+  message: string,
+  isAuthenticated?: boolean
 }
 
 export interface IEmail {

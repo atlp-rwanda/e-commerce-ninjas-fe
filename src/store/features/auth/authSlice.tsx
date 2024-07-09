@@ -41,6 +41,27 @@ export const resendVerificationEmail = createAsyncThunk("auth/resend-verificatio
     }
 })
 
+
+
+export const googleAuth = createAsyncThunk("auth/google", async(_,thunkApi) => {
+    try {
+        const response = await authService.googleAuth();
+        return response;
+    } catch (error) {
+        return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+})
+
+export const googleAuthCallback = createAsyncThunk('auth/googleAuthCallback', async(data:any, thunkApi) => {
+    try {
+        const response = await authService.googleAuthCallback(data);
+        return response;
+    } catch (error) {
+        return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+})
+
+
 const userSlice = createSlice({
     name: 'auth',
     initialState,
@@ -90,6 +111,34 @@ const userSlice = createSlice({
                 state.message = action.payload.message;
             })
             .addCase(resendVerificationEmail.rejected, (state, action: PayloadAction<any>) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            .addCase(googleAuth.pending, (state) => {
+                state.isLoading = true;
+
+            })
+            .addCase(googleAuth.fulfilled, (state, action: PayloadAction<any>) => {
+                state.isLoading = false;
+                state.isAuthenticated = true;
+            })
+            .addCase(googleAuth.rejected, (state, action: PayloadAction<any>) => {
+                state.isLoading = false;
+                state.isError = true;
+            })
+            .addCase(googleAuthCallback.pending, (state) => {
+                state.isLoading = true;
+                state.isError = false;
+                state.isSuccess = false;
+            })
+            .addCase(googleAuthCallback.fulfilled, (state, action: PayloadAction<any>) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.user = action.payload;
+                state.message = action.payload.message;
+            })
+            .addCase(googleAuthCallback.rejected, (state, action: PayloadAction<any>) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;

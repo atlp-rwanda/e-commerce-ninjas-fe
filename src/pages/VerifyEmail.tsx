@@ -5,25 +5,26 @@ import { Meta } from "../components/Meta";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { verifyEmail } from "../store/features/auth/authSlice";
 import { DotLoader } from "react-spinners";
-
+import email from "../../public/assets/images/email.png"
+import failed from "../../public/assets/images/failed.png";
+import { toast } from "react-toastify";
 const VerifyEmail: React.FC = () => {
     const { token } = useParams<{ token: string }>() as any;
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const [msg, setMsg] = useState("")
-    const { isVerified, isError, message, isLoading } = useAppSelector((state) => state.auth)
+    const { isSuccess, isError, message, isLoading } = useAppSelector((state) => state.auth)
     useEffect(() => {
         dispatch(verifyEmail(token));
     }, [token, navigate]);
 
     useEffect(() => {
-        if (isVerified) {
-            setMsg(message);
+        if (isSuccess) {
+            toast.success(message);
         }
         else if (isError) {
-            setMsg(message);
+            toast.error(message);
         }
-    }, [isVerified, isError, navigate]
+    }, [isSuccess, isError, navigate]
     );
     return (
         <>
@@ -40,15 +41,15 @@ const VerifyEmail: React.FC = () => {
                                     <h2>Verifying your email...</h2>
                                     <p>Please wait...</p>
                                 </div>
-                            ) : isVerified ? (
+                            ) : isSuccess ? (
                                 <div className="isSuccess">
-                                    <h2>{msg}</h2>
+                                    <img src={email} alt="" />
                                     <p>Thank you for verifying your email.<span onClick={() => navigate("/login")}>Go to login</span></p>
                                 </div>
                             ) : isError ? (
-                                <div className="error">
-                                    <h2>{msg}</h2>
-                                    <p>There was an error verifying your email</p>
+                                <div className="isError">
+                                    <img src={failed} alt="" />
+                                    <p className="error">There was an error in verifying your email</p>
                                 </div>
                             ) : null
                         }

@@ -1,4 +1,4 @@
-.email-spot{
+.email-spot {
     width: 80vw;
     display: flex;
     justify-content: center;
@@ -7,31 +7,74 @@
     background-color: $white-color;
     border-radius: 10px;
     padding: 2rem;
-    box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
     transition: all 0.3s ease-in-out;
 
-    .text-header{
+    .text-header {
         text-align: center;
         font-family: $text-family;
-        h1{
+
+        h1 {
             color: $primary-color;
             margin-bottom: 1rem;
             font-weight: 700;
             font-size: 2.7rem;
         }
-        p{
-            color: $text-color;
+
+        p {
+            color: $text2-color;
         }
     }
 
-    .img-message img{
+    .img-message img {
         margin-top: 2rem;
         width: 50vw;
         height: 70vh;
     }
+
+    .btn-link {
+        font-family: $text-family;
+        font-weight: 700;
+        font-size: 1.9rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        text-align: center;
+        line-height: 1.5;
+        letter-spacing: 0.05em;
+        border: none;
+        background-color: $primary-color;
+        padding: 1rem 4rem;
+        text-decoration: none;
+        color: $white-color;
+        border-radius: 2rem;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        &:hover{
+        background-color: $white-color;
+        color: $primary-color;
+        border: 1px solid $border-color;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease-in-out;
+        }
+    }
 }
 
-.resend-email{
+.loading-spinner{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+
+    p{
+        font-family: $text-family;
+        font-weight: 200;
+        font-size: 1rem;
+        color: $text2-color;
+    }
+}
+
+.resend-email {
     width: 80vw;
     display: flex;
     justify-content: center;
@@ -40,17 +83,31 @@
     background-color: $white-color;
     border-radius: 10px;
     padding: 2rem;
-    box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
     transition: all 0.3s ease-in-out;
 
-    form{
+    h2{
+        font-family: $text-family;
+        font-weight: 700;
+        font-size: 3.2rem;
+        color: $primary-color;
+    }
+    p{
+        font-family: $text-family;
+        font-weight: 200;
+        font-size: 1.6rem;
+        color: $text2-color;
+        text-align: center;
+    }
+    form {
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
         margin-top: 1rem;
         width: 100%;
-        input{
+
+        input {
             width: 50%;
             padding: 1rem;
             border: 1px solid $border-color;
@@ -58,7 +115,8 @@
             outline: none;
             font-family: $text-family;
         }
-        button{
+
+        button {
             width: 20%;
             padding: 1rem;
             border: 1px solid $border-color;
@@ -68,24 +126,23 @@
             background-color: $white-color;
             color: $primary-color;
             font-weight: 700;
-            font-size: 1.2rem;
-            border-radius: 2rem;
+            font-size: 1.9rem;
+            border-radius: 3.2rem;
             cursor: pointer;
             transition: all 0.3s ease-in-out;
         }
-        button:hover{
+
+        button:hover {
             background-color: $primary-color;
             color: $white-color;
-            border: none;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease-in-out;
         }
     }
 }
 
-.verify-email-page{
-    width: 80vw;
-    height: 50vh;
+.verify-email-page {
+    width: 50vw;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -93,24 +150,149 @@
     background-color: $white-color;
     border-radius: 10px;
     padding: 2rem;
-    box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+    border: none;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
     transition: all 0.3s ease-in-out;
 
     .spinner-wrapper {
         margin-bottom: 1.5rem;
     }
-    h1,p{
+
+    .isSuccess,
+    .isError,
+    .isLoading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .isLoading {
+        h2 {
+            text-align: center;
+            font-family: $text-family;
+            color: $text2-color;
+        }
+    }
+
+    img {
+        width: 400px;
+    }
+
+    p {
         text-align: center;
         font-family: $text-family;
-    }
-    h1{
-        font-weight: bold;
-        font-size: 2.7rem;
-    }
-    p{
-        color: $text-color;
+        color: $text2-color;
         font-style: normal;
-        font-weight: 400;
+        font-size: 1.9rem;
+        font-weight: 500;
+    }
+
+    .isSuccess {
+        p {
+            span {
+                color: $primary-color;
+                font-weight: 700;
+                font-size: 1.9rem;
+                line-height: 2.4rem;
+                letter-spacing: 0.05rem;
+                text-decoration: none;
+                transition: all 0.3s ease-in-out;
+                cursor: pointer;
+
+                &:hover {
+                    text-decoration: underline;
+                    transition: all 0.3s ease-in-out;
+                }
+            }
+        }
+    }
+
+    .isError {
+        .error {
+            font-family: $text-family;
+            font-weight: 700;
+            font-size: 1.9rem;
+            text-align: center;
+            line-height: 2.4rem;
+            color: $red-color;
+        }
     }
 }
 
+// Media queries
+
+/* Small Mobile */
+@media only screen and (min-width: 320px) {
+    .email-spot {
+        width: 70vw;
+        .text-header{
+            h1{
+                font-size: 2rem;
+            }
+            p{
+                font-size: 1.2rem;
+            }
+        }
+        .img-message img{
+            width: 80vw;
+            height: 30vh;
+        }
+    }
+    .resend-email {
+        width: 70vw;
+        form{
+            input{
+                width: 70%;
+            }
+            Button{
+                width: 50%;
+            }
+        }
+    }
+    .verify-email-page {
+        width: 90vw;
+
+        .isError{
+            img{
+                width: 300px;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .email-spot {
+        width: 60vw;
+    }
+    .resend-email {
+        width: 60vw;
+    }
+    .verify-email-page {
+        width: 50vw;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .email-spot {
+        width: 70vw;
+        .text-header{
+            h1{
+                font-size: 2.5rem;
+            }
+            p{
+                font-size: 1.5rem;
+            }
+        }
+        .img-message img{
+            width: 50vw;
+            height: 60vh;
+        }
+    }
+    .resend-email {
+        width: 50vw;
+    }
+    .verify-email-page {
+        width: 50vw;
+    }
+}

@@ -1,20 +1,20 @@
 /* eslint-disable */
-import React, { useEffect, useState } from 'react';
-import { Meta } from '../components/Meta';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import React, { useEffect, useState } from 'react'
+import { Meta } from '../components/Meta'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/buttons/Button';
 import { useAppDispatch, useAppSelector } from '../store/store';
-import { googleAuth, registerUser } from '../store/features/auth/authSlice';
-import { CircleLoader } from 'react-spinners';
-import SignUpIcon from '../../public/images/sign-up.png';
-import "../styles/signup.scss"
+import { registerUser } from '../store/features/auth/authSlice';
+import { CircleLoader, PuffLoader } from 'react-spinners';
+import SignUpIcon from '../../public/assets/images/sign-up.png'
+import { toast } from 'react-toastify';
 const SignUpSchema = Yup.object().shape({
   email: Yup.string().email('Email must be valid').required('Email is required'),
-  password: Yup.string().required('Password is required'), 
+  password: Yup.string().required('Password is required'),
 })
 
 export const SignUp = () => {
@@ -33,9 +33,10 @@ export const SignUp = () => {
   })
   useEffect(() => {
     if (isError) {
-      alert(message);
+      toast.error(message)
     }
     if (isSuccess) {
+      toast.success(message)
       navigate('/verify-email');
       formik.resetForm();
     }
@@ -52,11 +53,6 @@ export const SignUp = () => {
       setIsFocused(false)
     }
   };
-
-  const handleGoogle = () =>{
-    // TODO: Implement Google Sign-In
-    dispatch(googleAuth())
-  }
   return (
     <>
       <Meta title='Signup - E-Commerce Ninjas' />
@@ -76,7 +72,7 @@ export const SignUp = () => {
                   </p>
                 </div>
                 <div className='img'>
-                  <img src={SignUpIcon} alt="Signup-icon" />
+                  <img src={SignUpIcon} alt="login-icon" />
                 </div>
               </div>
               <div className='right-side-login'>
@@ -114,7 +110,7 @@ export const SignUp = () => {
                 </div>
                 {isLoading ? (
                   <div className='btn-loading'>
-                    <CircleLoader color="#FF6D18" size={30} loading={isLoading}/>
+                    <PuffLoader size={60} color='#FF6D18' loading={isLoading} />
                   </div>
                 ) : (
                   <div className='btn'>
@@ -125,7 +121,7 @@ export const SignUp = () => {
                   <p>or Sign up with</p>
                 </div>
                 <div>
-                  <div className='google' onClick={handleGoogle}>
+                  <div className='google'>
                     <FcGoogle className='google-icon' />
                     <p>Continue with google</p>
                   </div>

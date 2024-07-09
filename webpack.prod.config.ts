@@ -33,7 +33,7 @@ const config: Configuration = {
         },
       },
       {
-        test: /\.scss$/i,
+        test: /\.(scss|css)$/i,
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
@@ -47,6 +47,9 @@ const config: Configuration = {
             loader: 'file-loader',
             options: {
               name: '[path][name].[ext]',
+              context: 'public',
+              outputPath: 'assets/images/',
+              publicPath: '/assets/images/',
             },
           },
           {

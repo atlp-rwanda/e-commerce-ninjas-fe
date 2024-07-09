@@ -1,21 +1,25 @@
 /* eslint-disable */
-
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import {axiosInstance} from "../../utils/axios/axiosInstance";
-import type {
-  IWelcomeMessage,
-  IWelcomeMessageState,
-} from "../../utils/types/store";
+import { createSlice,createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import type { IWelcomeMessage, IWelcomeMessageState } from '../../utils/types/store';
+import welcomeService from './welcomeService';
 
 const initialState: IWelcomeMessageState = {
   welcomeMessage: { status: false, message: "" },
 };
 
-export const loadWelcomeMessage = createAsyncThunk<IWelcomeMessage>(
-  "welcomeMessage/loadWelcomeMessage",
-  async () => {
-    const response = await axiosInstance.get<IWelcomeMessage>("/");
-    return response.data;
+
+export const loadWelcomeMessage = createAsyncThunk<IWelcomeMessage, void, { rejectValue: string }>(
+  'welcomeMessage/loadWelcomeMessage',
+  async (_, thunkApi) => {
+    try {
+      return await welcomeService.welcome();
+    } catch (error) {
+      let errorMessage = 'An unknown error occurred';
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      return thunkApi.rejectWithValue(errorMessage);
+    }
   }
 );
 

@@ -1,6 +1,3 @@
-@import "./Colors";
-@import "color";
-
 .landing-container {
   padding: 3rem 2rem 4rem 5rem;
 
@@ -38,6 +35,7 @@
     gap: 1.7rem;
   }
 }
+
 .not-found{
   display: flex;
   align-items: center;
@@ -51,11 +49,11 @@
      font-weight: 700;
      font-size: 1.2rem;
      margin-top: 1rem;
-     margin-bottom: 1rem;
+     margin-bottom: 2rem;
      text-align: center;
      line-height: 1.5;
      letter-spacing: 0.05em;
-     color: $text-color;
+     color: $text2-color;
      text-decoration: none;
      transition: all 0.3s ease-in-out;
   }
@@ -80,13 +78,3 @@
       transition: all 0.3s ease-in-out;
   }
 }
-.landingPage {
-    background: $primary-color;
-    color: $white-color;
-    padding: 20px;
-  
-    h1 {
-      font-size: 2em;
-      margin-bottom: 10px;
-    }
-  }

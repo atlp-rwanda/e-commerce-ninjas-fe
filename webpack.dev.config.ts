@@ -36,9 +36,23 @@ const config: Configuration = {
       {
         test: /\.(scss|css)$/,
         use: [
-          "style-loader",
-          "css-loader",  
-          "sass-loader" 
+          'style-loader',
+          'css-loader',
+          'sass-loader'
+        ],
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name].[ext]',
+              context: 'public',
+              outputPath: 'assets/images/',
+              publicPath: '/assets/images/',
+            },
+          },
         ],
       },
       {

@@ -2,8 +2,6 @@
 import React, { useState, useRef } from 'react';
 import { CiHeart } from "react-icons/ci";
 import { PiShoppingCartThin } from "react-icons/pi";
-import '../../styles/index.scss';
-
 interface ProductProps {
   images: string[];
   name: string;

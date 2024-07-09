@@ -2,7 +2,6 @@
 import React from "react";
 import { IoIosNotifications } from "react-icons/io";
 import { FaEnvelope } from "react-icons/fa";
-import "../../styles/AdminHeader.scss";
 
 function AdminHeader() {
   return (

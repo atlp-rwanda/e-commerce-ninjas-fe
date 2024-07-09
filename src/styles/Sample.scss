@@ -1,9 +1,3 @@
-@import "./Colors";
-
-* {
-  margin: 0;
-  padding: 0;
-}
 .sampleImages1 {
   display: flex;
   width: 100%;
@@ -79,14 +73,15 @@
   }
 
   .menShoe, .phones, .womenShoe, .accessories {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    z-index: -1;
-    height: 50%;
-    display: flex;
-    align-items: center;
-
+      display: flex;
+      align-items: center;
+      position: relative;
+      z-index: 100;
+      img{
+        width: 100%;
+        height: 14.5rem;
+        object-fit: cover;
+      }
     p {
       font-size: 1.4rem;
     }
@@ -101,14 +96,13 @@
   }
 
   .menShoe {
-    background-image: url('../../public/assets/left-top.png');
-    padding-left: 3rem;
-    object-fit: cover;
 
     .text-container {
       display: flex;
+      position:absolute;
       flex-direction: column;
       align-items: flex-start;
+      left: 3rem;
     }
 
     button {
@@ -117,14 +111,13 @@
   }
 
   .phones {
-    background-image: url('../../public/assets/left-bottom.png');
-    padding-left: 3rem;
-    object-fit: cover;
 
     .text-container {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      position: absolute;
+      left: 3rem;
     }
 
     button {
@@ -133,15 +126,13 @@
   }
 
   .womenShoe {
-    background-image: url('../../public/assets/right-top.png');
-    padding-right: 3rem;
-    object-fit: cover;
-    justify-content: flex-end;
 
     .text-container {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
+      position: absolute;
+      right: 3rem;
     }
 
     button {
@@ -150,16 +141,14 @@
   }
 
   .accessories {
-    background-image: url('../../public/assets/right-bottom.png');
-    padding-right: 3rem;
-    object-fit: cover;
-    justify-content: flex-end;
+    // background-image: url('../../public/assets/right-bottom.png');
 
     .text-container {
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-
+      position: absolute;
+      right: 3rem;
       p {
         padding-right: 1.5rem;
       }

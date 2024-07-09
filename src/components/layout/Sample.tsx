@@ -6,8 +6,10 @@ import { LiaShippingFastSolid } from "react-icons/lia";
 import { FaHandHoldingUsd } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
 import { FaChevronCircleLeft, FaChevronCircleRight } from "react-icons/fa";
-import '../../styles/index.scss';
-
+import leftTop from "../../../public/assets/images/left-top.png";
+import rightTop from "../../../public/assets/images/right-top.png";
+import leftBottom from "../../../public/assets/images/left-bottom.png";
+import rightBottom from "../../../public/assets/images/right-bottom.png";
 const images = [
   '/assets/middle.png',
   '/assets/shoe2.jpeg',
@@ -53,12 +55,14 @@ const Sample: React.FC = () => {
       <div className="sampleImages1">
         <div className="sample1">
           <div className="menShoe">
+            <img src={leftTop} alt="" />
             <div className="text-container">
               <p>Men's Shoes</p>
               <button>View &gt;</button>
             </div>
           </div>
           <div className="phones">
+            <img src={leftBottom} alt="" />
             <div className="text-container">
               <p>Phones</p>
               <button>View &gt;</button>
@@ -84,12 +88,14 @@ const Sample: React.FC = () => {
         </div>
         <div className="sample3">
           <div className="womenShoe">
+            <img src={rightTop} alt="" />
             <div className="text-container">
               <p>Women's Shoes</p>
               <button>View &gt;</button>
             </div>
           </div>
           <div className="accessories">
+            <img src={rightBottom} alt="" />
             <div className="text-container">
               <p>Accessories</p>
               <button>View &gt;</button>

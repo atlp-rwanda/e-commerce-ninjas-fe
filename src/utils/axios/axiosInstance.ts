@@ -3,7 +3,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://e-commerce-ninjas-platform-backend.onrender.com/",
+  baseURL: "http://localhost:9090/" || "https://e-commerce-ninjas-platform-backend.onrender.com/",
   headers: {
     "Content-Type": "application/json",
   },

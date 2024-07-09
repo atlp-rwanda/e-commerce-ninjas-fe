@@ -12,6 +12,7 @@ import { registerUser } from '../store/features/auth/authSlice';
 import { CircleLoader, PuffLoader } from 'react-spinners';
 import SignUpIcon from '../../public/assets/images/sign-up.png'
 import { toast } from 'react-toastify';
+import authService from '../store/features/auth/authService';
 const SignUpSchema = Yup.object().shape({
   email: Yup.string().email('Email must be valid').required('Email is required'),
   password: Yup.string().required('Password is required'),
@@ -121,7 +122,7 @@ export const SignUp = () => {
                   <p>or Sign up with</p>
                 </div>
                 <div>
-                  <div className='google'>
+                  <div className='google' onClick={authService.googleAuth}>
                     <FcGoogle className='google-icon' />
                     <p>Continue with google</p>
                   </div>

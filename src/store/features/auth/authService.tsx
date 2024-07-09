@@ -1,6 +1,7 @@
 /* eslint-disable */
 import {axiosInstance} from "../../../utils/axios/axiosInstance";
 import { IEmail, IUser, IVerification } from "../../../utils/types/store";
+import {URL} from "../../../utils/axios/axiosInstance"
 
 const register = async(userData: IUser) =>{
     const response = await axiosInstance.post<IUser>('/api/auth/register', userData);

@@ -2,7 +2,6 @@
 
 import React from "react";
 import { FiSearch } from "react-icons/fi";
-import "../../styles/SearchInput.scss";
 
 interface SearchInputProps {
   className?: string;

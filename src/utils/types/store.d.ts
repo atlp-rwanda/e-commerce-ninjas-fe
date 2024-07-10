@@ -50,7 +50,8 @@ export interface AuthService{
   isError: boolean,
   isLoading: boolean,
   isSuccess: boolean,
-  isVerified: boolean
+  isVerified: boolean,
+  isAuthenticated?: boolean,
   message: string
 }
 

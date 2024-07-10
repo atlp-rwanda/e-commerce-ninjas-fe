@@ -1,8 +1,9 @@
 /* eslint-disable */
 import axios from 'axios';
-
+// export const URL = "https://e-commerce-ninjas-platform-backend.onrender.com"
+export const URL = "http://localhost:3000";
 const axiosInstance = axios.create({
-  baseURL: `https://e-commerce-ninjas-platform-backend.onrender.com`,
+  baseURL: `${URL}`,
   headers: {
     "Content-Type": "application/json",
   },

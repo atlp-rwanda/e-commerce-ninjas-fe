@@ -1,9 +1,10 @@
 /* eslint-disable */
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import productService from "./productService";
-import { IProduct } from "../../../utils/types/store";
+import { IProduct } from "../../../utils/types/product";
+import { IProductInitialResponse, IProductResponse } from "../../../utils/types/store";
 
-const initialState: { product: IProduct | null; isLoading: boolean; isError: string | null; isSuccess: boolean; message: string } = {
+const initialState: IProductInitialResponse = {
     product: null,
     isLoading: false,
     isError: null,
@@ -11,10 +12,10 @@ const initialState: { product: IProduct | null; isLoading: boolean; isError: str
     message: ''
 }
 
-export const fetchSingleProduct = createAsyncThunk<IProduct, string>("products/fetchSingleProducts", async (id, {rejectWithValue}) => {
+export const fetchSingleProduct = createAsyncThunk<IProductResponse, string>("products/fetchSingleProducts", async (id, { rejectWithValue }) => {
     try {
         const response = await productService.fetchSingleProduct(id);
-        return response.product;
+        return response;
     } catch (error) {
         return rejectWithValue('Failed to fetch product.');
     }
@@ -27,20 +28,21 @@ const singleProductSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-           .addCase(fetchSingleProduct.pending, (state) => {
+            .addCase(fetchSingleProduct.pending, (state) => {
                 state.isLoading = true;
                 state.isError = null;
                 state.isSuccess = false;
             })
-           .addCase(fetchSingleProduct.fulfilled, (state, action: PayloadAction<any>) => {
+            .addCase(fetchSingleProduct.fulfilled, (state, action: PayloadAction<IProductResponse>) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.product = action.payload;
+                state.product = action.payload.data?.product || null;
             })
-           .addCase(fetchSingleProduct.rejected, (state, action: PayloadAction<any>) => {
+            .addCase(fetchSingleProduct.rejected, (state, action: PayloadAction<any>) => {
                 state.isLoading = false;
-                state.isError = action.payload;
+                state.isError = action.payload.error || null;
                 state.isSuccess = false;
+                state.message = action.payload.message || null
             });
     }
 })

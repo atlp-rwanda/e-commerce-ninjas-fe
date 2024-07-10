@@ -2,30 +2,21 @@
 import React, { useEffect, useState } from 'react';
 import './../../styles/ProductComponent.scss';
 import { IProduct, IProductReview } from '../../utils/types/product';
-import { IShop } from '../../utils/types/shop';
+import { IShop } from '../../utils/types/product';
 import { FaCartPlus, FaRegStar, FaStar } from 'react-icons/fa';
 import { FaHeartCircleCheck } from 'react-icons/fa6';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { fetchSingleProduct } from '../../store/features/product/singleProductSlice';
 import { PuffLoader } from 'react-spinners';
+import { IProductInitialResponse } from '../../utils/types/store';
 
 const ProductComponent = ({ productId }: { productId: string }) => {
-    // const [product, setProduct] = useState<IProduct | null>(null)
-    const [shop, setShop] = useState<IShop | null>(null)
-    const [reviews, setReviews] = useState<IProductReview[] | null>(null)
-
     const dispatch = useAppDispatch();
-    const { product, isError, isSuccess, isLoading, message } = useAppSelector((state: any) => state.singleProduct);
+    const { product, isError, isSuccess, isLoading, message }: IProductInitialResponse = useAppSelector((state: any) => state.singleProduct);
 
     useEffect(() => {
         dispatch(fetchSingleProduct(productId));
     }, [dispatch]);
-
-    useEffect(() => {
-        // setProduct(productFromBackend)
-        setReviews(reviewsFromBackend)
-        setShop(shopFromBackend)
-    }, [])
 
     return (
         <>
@@ -42,11 +33,11 @@ const ProductComponent = ({ productId }: { productId: string }) => {
                     <div className="product-component">
                         <div className="product-container">
                             <ProductImages images={product.images} />
-                            {reviews && <ProductDetails product={product} reviews={reviews} />}
+                            <ProductDetails product={product} reviews={product.productReviews} />
                         </div>
                         <DetailsCard title='Product Details'>{product.description}</DetailsCard>
-                        {reviews && <DetailsCard title='Customer reviews'><ReviewsCard reviews={reviews} /></DetailsCard>}
-                        {shop && <DetailsCard title="Seller's info"><SellerInfoCard shop={shop} /></DetailsCard>}
+                        <DetailsCard title='Customer reviews'><ReviewsCard reviews={product.productReviews} /></DetailsCard>
+                        <DetailsCard title="Seller's info"><SellerInfoCard shop={product.shops} /></DetailsCard>
 
                     </div>
                     :
@@ -63,7 +54,7 @@ const ProductImages = ({ images }: { images: string[] }) => {
         <div className='images-container'>
             <div className="thumbnails-container">
                 {images.map((src, index) => (
-                    <img key={index} src={src} alt={`Product Thumbnail ${index + 1}`} className='thumbnail-image' onClick={() => setSelectedImage(index)} />
+                    <img key={index} src={src} alt={`Product Thumbnail ${index + 1}`} className='thumbnail-image' onMouseEnter={() => setSelectedImage(index)} />
                 ))}
             </div>
 
@@ -75,7 +66,7 @@ const ProductImages = ({ images }: { images: string[] }) => {
     );
 }
 
-const ProductDetails = ({ product, reviews }: { product: IProduct, reviews: IProductReview[] }) => {
+const ProductDetails = ({ product, reviews }: { product: IProduct, reviews: IProductReview[] | null }) => {
     const [qty, setQty] = useState(1)
     const addProductToWishlist = () => { return; }
     const addProductToCart = () => { return; }
@@ -83,7 +74,7 @@ const ProductDetails = ({ product, reviews }: { product: IProduct, reviews: IPro
         <div className="product-details">
             <h1 className="product-title">{product.name}</h1>
             <div className='product-stars-and-shipping'>
-                <div className="product-review-stars"> <StarsRender count={Math.floor(reviews.reduce((acc, review) => { return acc + review.rating }, 0) / reviews.length)} />{(reviews.reduce((acc, review) => { return acc + review.rating }, 0) / reviews.length).toFixed(1)} </div>
+                {reviews && <div className="product-review-stars"> <StarsRender count={reviews.length < 1 ? 0 : Math.floor(reviews.reduce((acc, review) => { return acc + review.rating }, 0) / reviews.length)} />{(reviews.length < 1 ? 0 : reviews.reduce((acc, review) => { return acc + review.rating }, 0) / reviews.length).toFixed(1)} </div>}
                 <div className="shipping-label">Free Shipping</div>
             </div>
             <div className="product-price-container">
@@ -122,25 +113,25 @@ const DetailsCard = ({ children, title }: { children: React.ReactNode, title: st
 
 }
 
-const SellerInfoCard = ({ shop }: { shop: IShop }) => {
+const SellerInfoCard = ({ shop }: { shop: IShop | null }) => {
     return (
         <div className='seller-info'>
-            <div className="seller-profile"><div className="img-holder"><img src={shop.image || 'https://placehold.co/100x100'} alt="Shop" /> </div><span>{shop.name}</span></div>
-            <div className="seller-description">{shop.description}</div>
+            <div className="seller-profile"><div className="img-holder"><img src={shop && shop.image || 'https://placehold.co/100x100'} alt="Shop" /> </div><span>{shop && shop.name}</span></div>
+            <div className="seller-description">{shop && shop.description}</div>
         </div>
     )
 }
 
-const ReviewsCard = ({ reviews }: { reviews: IProductReview[] }) => {
+const ReviewsCard = ({ reviews }: { reviews: IProductReview[] | null }) => {
     return (
         <div className='reviews-card'>
             <div className="reviews-header">
-                <span className='reviews-top-stars'><StarsRender count={Math.floor(reviews.reduce((acc, review) => { return acc + review.rating }, 0) / reviews.length)} />{(reviews.reduce((acc, review) => { return acc + review.rating }, 0) / reviews.length).toFixed(1)} out of 5</span>
-                <span>{reviews.length.toLocaleString()} Reviewers</span>
+                <span className='reviews-top-stars'><StarsRender count={reviews && reviews.length > 0 ? Math.floor(reviews.reduce((acc, review) => { return acc + review.rating }, 0) / reviews.length) : 0} />{reviews && reviews.length > 0 ? (reviews.reduce((acc, review) => { return acc + review.rating }, 0) / reviews.length).toFixed(1) : 0} out of 5</span>
+                <span>{reviews ? reviews.length.toLocaleString() : 0} Reviewers</span>
             </div>
             <h2>Top reviewers</h2>
             <div className="reviews">
-                {reviews.map(review => <SingleReviewCard review={review} />)}
+                {reviews && reviews.length > 0 ? reviews.map(review => <SingleReviewCard review={review} />) : "No reviews"}
             </div>
         </div>
     )
@@ -149,10 +140,10 @@ const ReviewsCard = ({ reviews }: { reviews: IProductReview[] }) => {
 const SingleReviewCard = ({ review }: { review: IProductReview }) => {
     return (
         <div className='review-card'>
-            <div className="reviewer-profile"><div className="img-holder"><img src={review.user?.image || 'https://placehold.co/100x100'} alt="Shop" /> </div><span>{review.user?.name || "Anonymous"}</span></div>
+            <div className="reviewer-profile"><div className="img-holder"><img src={review.user?.profilePicture || 'https://placehold.co/100x100'} alt="Shop" /> </div><span>{`${review.user?.firstName} ${' '} ${review.user?.lastName} `} </span></div>
             <div className="review-contents">
                 <div className="stars-container"><StarsRender count={review.rating} /></div>
-                <div className="review-date">Reviewed on {review.createdAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                <div className="review-date">Reviewed on {new Date(review.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
                 <div className="review-feedback">{review.feedback}</div>
             </div>
         </div>
@@ -171,98 +162,5 @@ const StarsRender = ({ count }: { count: number }) => {
     )
 }
 
-
-// variables
-
-const productDescriptionExample = `
-Introducing the New 4G S8 Ultra Smart Watch - Ultra Series 8
-
-Experience the pinnacle of technology and style with the New 4G S8 Ultra Smart Watch. Designed for both men and women, this versatile smart watch seamlessly combines functionality with an elegant design, making it the perfect companion for your daily activities and fitness goals.
-
-Key Features:
-- 4G Connectivity: Stay connected on the go with fast 4G LTE support, ensuring you can make calls, send messages, and access the internet directly from your wrist.
-- Google APP Integration: Enjoy the convenience of Google apps right on your wrist. From maps to music, all your favorite apps are just a tap away.
-- WiFi Support: Connect to WiFi networks for faster data access and seamless updates.
-- Bluetooth Call and Message Reminder: Never miss an important call or message with Bluetooth connectivity, which keeps you notified without needing to check your phone.
-- Fitness and Health Tracking: Monitor your health with features such as heart rate monitoring, sleep tracking, step counting, and more.
-- Sports Modes: Track your performance across various sports and activities, providing you with detailed analytics to improve your fitness routine.
-- Stylish Design: With a sleek and modern design, the S8 Ultra Smart Watch is a perfect fit for any occasion, whether it's a workout session or a night out.
-
-Specifications:
-- Display: High-resolution touchscreen for clear and vibrant visuals.
-- Battery Life: Long-lasting battery to keep up with your busy schedule.
-- Compatibility: Works with both Android and iOS devices.
-- Water Resistance: Built to withstand everyday water exposure, making it suitable for outdoor activities and workouts.
-
-Upgrade your lifestyle with the New 4G S8 Ultra Smart Watch Ultra Series 8. Embrace the future of wearable technology and stay connected, active, and stylish every day.
-`
-
-
-const productFromBackend: IProduct = {
-    id: '123',
-    name: "New 4G S8 Ultra Smart Watch Ultra Series 8 Google APP WiFi Smart Watch For Men Women Original BT Call Sports Watch",
-    description: productDescriptionExample,
-    shopId: "shop-id",
-    price: 5000,
-    discount: "20%",
-    category: "Shoes",
-    expiryDate: new Date(),
-    expired: false,
-    bonus: '10%',
-    images: ['https://placehold.co/101x101', 'https://placehold.co/102x102', 'https://placehold.co/103x103', 'https://placehold.co/104x104'],
-    quantity: 20,
-    status: "available",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-}
-
-const shopFromBackend: IShop = {
-    id: 'shop-id',
-    name: "Modern-Electronics",
-    userId: '12sd',
-    description: `
-    Welcome to Modern-Electronics, the best shop for electronics equipment! We pride ourselves on offering a vast selection of top-quality electronics to meet all your needs. Our store features the latest technology from the most trusted brands, ensuring you get only the best products on the market.
-
-    At Modern-Electronics, we cater to tech enthusiasts, professionals, and everyday consumers alike. Whether you're looking for the newest smartphones, high-performance laptops, state-of-the-art smart home devices, or essential accessories, we've got you covered. Our knowledgeable staff is always on hand to provide expert advice and help you find exactly what you're looking for.
-
-    Our commitment to customer satisfaction sets us apart. We offer competitive prices, regular promotions, and a customer loyalty program that rewards you for every purchase. Our user-friendly website ensures a seamless online shopping experience, complete with detailed product descriptions, customer reviews, and fast, reliable shipping.
-
-    In addition to our extensive product range, we also offer comprehensive after-sales support, including technical assistance and a hassle-free return policy. At Modern-Electronics, we're dedicated to helping you stay ahead of the curve with the latest tech innovations.
-
-    Join our growing community of satisfied customers and discover why Modern-Electronics is the go-to destination for all your electronics needs. Experience the difference today!
-    `
-}
-
-
-const reviewsFromBackend: IProductReview[] = [
-    {
-        id: 'asdfx',
-        userId: '123sf',
-        productId: 'afvf1',
-        feedback: 'Good Product',
-        rating: 2,
-        status: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        user: {
-            name: 'John Doe',
-            image: 'https://placehold.co/50x50'
-        }
-    },
-    {
-        id: 'asdfx',
-        userId: '123sf',
-        productId: 'afvf1',
-        feedback: 'Very Good Product',
-        rating: 4,
-        status: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        user: {
-            name: 'Emmaunel Manzi',
-            image: 'https://placehold.co/50x50'
-        }
-    }
-]
 
 export default ProductComponent;

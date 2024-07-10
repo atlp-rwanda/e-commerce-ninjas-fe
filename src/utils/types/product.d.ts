@@ -15,6 +15,8 @@ export interface IProduct {
     status: string;
     createdAt: Date;
     updatedAt: Date;
+    productReviews: IProductReview[];
+    shops: IShop;
 }
 
 export interface IProductReview {
@@ -27,7 +29,16 @@ export interface IProductReview {
     createdAt: Date;
     updatedAt: Date;
     user?: {
-        name: string;
-        image: string;
+        firstName?: string;
+        lastName?: string;
+        profilePicture?: string;
     }
+}
+
+export interface IShop {
+    id: string;
+    userId: string;
+    name: string;
+    description?: string;
+    image?: string;
 }

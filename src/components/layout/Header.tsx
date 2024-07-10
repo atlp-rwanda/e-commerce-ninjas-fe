@@ -10,8 +10,7 @@ import { IoLogOutSharp } from "react-icons/io5";
 import { FaUserClock } from "react-icons/fa6";
 import { FaChevronDown } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-
-import "../../styles/Header.scss";
+import Logo from "../../../public/assets/images/logo.png";
 
 import SearchInput from "../inputs/SearchInput";
 
@@ -34,7 +33,7 @@ function Header() {
       <div className="header__top">
         <div className="header__logo">
           <img
-            src="logo.png"
+            src={Logo}
             alt="Ecommerce logo"
             className="header__logo__img"
           />

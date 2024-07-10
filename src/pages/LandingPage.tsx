@@ -5,7 +5,7 @@ import { fetchProducts } from '../store/features/product/productSlice';
 import Product from '../components/product/Product';
 import Sample from '../components/layout/Sample';
 import { PuffLoader } from 'react-spinners';
-import "../styles/LandingPage.scss";
+import { Meta } from '../components/Meta';
 
 const LandingPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ const LandingPage: React.FC = () => {
 
   return (
     <>
-      {/* <Header /> */}
+    <Meta title='Home - E-Commerce Ninjas' />
       <Sample />
       <div className="landing-container">
         {isLoading ? (
@@ -50,7 +50,6 @@ const LandingPage: React.FC = () => {
           </div>
         )}
       </div>
-      {/* <Footer /> */}
     </>
   );
 };

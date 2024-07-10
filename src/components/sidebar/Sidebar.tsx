@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React, { useState } from "react";
 import { IoLogOutSharp } from "react-icons/io5";
 import { IoIosPeople } from "react-icons/io";
@@ -8,7 +7,6 @@ import { AiFillDashboard } from "react-icons/ai";
 import { FaShop } from "react-icons/fa6";
 import { FaBoxArchive } from "react-icons/fa6";
 
-import "../../styles/Sidebar.scss";
 
 function Sidebar() {
   const [isActive, setIsActive] = useState(false);

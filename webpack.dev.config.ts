@@ -34,11 +34,25 @@ const config: Configuration = {
         },
       },
       {
-        test: /\.scss$/,
+        test: /\.(scss|css)$/,
         use: [
-          "style-loader",
-          "css-loader",  
-          "sass-loader" 
+          'style-loader',
+          'css-loader',
+          'sass-loader'
+        ],
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name].[ext]',
+              context: 'public',
+              outputPath: 'assets/images/',
+              publicPath: '/assets/images/',
+            },
+          },
         ],
       },
     ],
@@ -66,7 +80,9 @@ const config: Configuration = {
   devtool: 'inline-source-map',
   devServer: {
     static: path.join(__dirname, 'dist'),
-    historyApiFallback: true,
+    historyApiFallback: {
+      disableDotRule: true,
+    },
     port: 5000,
     open: true,
     hot: true,

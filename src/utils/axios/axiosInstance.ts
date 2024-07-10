@@ -1,6 +1,5 @@
 /* eslint-disable */
-
-import axios from "axios";
+import axios from 'axios';
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:9090/" || "https://e-commerce-ninjas-platform-backend.onrender.com/",
@@ -20,4 +19,11 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-export default axiosInstance;
+const getErrorMessage = (msg: unknown): string => {
+  if (axios.isAxiosError(msg) && msg.response) {
+    return msg.response.data.message || msg.response.data.error;
+  }
+  return 'An unknown error occurred';
+};
+
+export { axiosInstance, getErrorMessage };

@@ -1,7 +1,6 @@
 /* eslint-disable */
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import productService from "./productService";
-import { IProduct } from "../../../utils/types/product";
 import { IProductInitialResponse, IProductResponse } from "../../../utils/types/store";
 
 const initialState: IProductInitialResponse = {

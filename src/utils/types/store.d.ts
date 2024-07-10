@@ -67,3 +67,11 @@ export interface IProductResponse {
   error?: string;
   status?: number;
 }
+
+export interface IProductInitialResponse {
+  product: IProduct | null,
+  isError: boolean | null,
+  isSuccess: boolean,
+  isLoading: boolean,
+  message: string | null
+}

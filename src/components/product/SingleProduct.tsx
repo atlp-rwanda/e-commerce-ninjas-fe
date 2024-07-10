@@ -1,6 +1,5 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react';
-import './../../styles/ProductComponent.scss';
 import { IProduct, IProductReview } from '../../utils/types/product';
 import { IShop } from '../../utils/types/product';
 import { FaCartPlus, FaRegStar, FaStar } from 'react-icons/fa';

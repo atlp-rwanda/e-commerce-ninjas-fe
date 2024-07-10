@@ -8,6 +8,8 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { fetchSingleProduct } from '../../store/features/product/singleProductSlice';
 import { PuffLoader } from 'react-spinners';
 import { IProductInitialResponse } from '../../utils/types/store';
+import { Meta } from '../Meta';
+import { Link } from 'react-router-dom';
 
 const ProductComponent = ({ productId }: { productId: string }) => {
     const dispatch = useAppDispatch();
@@ -19,6 +21,7 @@ const ProductComponent = ({ productId }: { productId: string }) => {
 
     return (
         <>
+            <Meta title={`Product details - ${productId}`} />
             {isLoading ? (
                 <div className="loader">
                     <PuffLoader color="#ff6d18" size={300} loading={isLoading} />
@@ -26,6 +29,7 @@ const ProductComponent = ({ productId }: { productId: string }) => {
             ) : isError ? (
                 <div className="error-message">
                     <p>{message || "Something went wrong. Please try again later."}</p>
+                    <Link to="/" className="btn-link">View all products</Link>
                 </div>
             ) : (
                 product ?
@@ -40,7 +44,10 @@ const ProductComponent = ({ productId }: { productId: string }) => {
 
                     </div>
                     :
-                    <div>No Product</div>
+                    <div className='error-message'>
+                            <p>Product was not found</p>
+                            <Link to="/" className="btn-link">View all products</Link>
+                    </div>
             )
             }
         </>

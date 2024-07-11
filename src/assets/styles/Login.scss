@@ -1,0 +1,262 @@
+@import "./Colors.scss";
+
+.section__login {
+  padding: 9.6rem 0;
+}
+
+.login {
+  display: flex;
+  gap: 3.2rem;
+
+  &__logo {
+    margin-bottom: 1.8rem;
+    font-size: 1.4rem;
+    justify-self: center;
+    align-self: center;
+    padding-left: 3.2rem;
+    margin: 4.8rem auto;
+  }
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.8rem;
+    flex: 0 0 40%;
+    border-radius: 3.6rem;
+    overflow: hidden;
+    padding: 10rem 3.2rem 3.2rem 4.8rem;
+    color: $white;
+    background-image: linear-gradient(to right bottom, #ff6d18 40%, #d8c9c1);
+  }
+
+  &__right {
+    flex: 1;
+    align-self: center;
+    padding: 3.2rem;
+  }
+
+  &__heading {
+    font-size: 3.8rem;
+    line-height: 1.2;
+    padding-left: 2rem;
+  }
+
+  &__secondary {
+    font-size: 1.2rem;
+    color: #888;
+    margin-bottom: 4.8rem;
+    padding-left: 2rem;
+  }
+
+  &__text {
+    font-size: 1.6rem;
+    line-height: 1.4;
+    padding-left: 2.4rem;
+  }
+
+  &__img {
+    width: 100%;
+    margin-top: auto;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__separator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.2rem;
+    color: #888;
+    font-size: 1.6rem;
+    margin-bottom: 2.4rem;
+
+    &::before,
+    &::after {
+      content: "";
+      width: 8rem;
+      height: 0.1rem;
+      background-color: currentColor;
+    }
+  }
+
+  &__box {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4.8rem;
+    border-radius: 0.9rem;
+    border: 0.1rem solid #888;
+    padding: 0.2rem 2rem;
+    margin-bottom: 1.2rem;
+  }
+
+  &__social {
+    &__icon {
+      width: 4.8rem;
+      height: 4.8rem;
+    }
+
+    &__text {
+      font-size: 1.8rem;
+      color: #888;
+      text-transform: lowercase;
+    }
+  }
+
+  &__register {
+    font-size: 1.6rem;
+    color: #888;
+  }
+
+  &__link {
+    &:link,
+    &:visited {
+      text-decoration: none;
+      color: $primary-color;
+    }
+  }
+}
+
+.form * {
+  outline: none;
+}
+
+.form {
+  &__group {
+    position: relative;
+    margin-bottom: 4.4rem;
+
+    &:last-of-type {
+      margin-bottom: 5.2rem;
+    }
+  }
+
+  &__input {
+    font-size: 1.8rem;
+    font-family: inherit;
+    display: inline-block;
+    padding: 1.4rem;
+    outline: none;
+    width: 95%;
+    border: 0.1rem solid #888;
+    border-radius: 0.9rem;
+  }
+
+  &__btn {
+    background-color: $primary-color;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.4rem 3.2rem;
+    border: none;
+    font-size: 2.4rem;
+    color: $white;
+    font-family: inherit;
+    text-transform: lowercase;
+    letter-spacing: 0.05rem;
+    border-radius: 0.9rem;
+    width: 102%;
+    margin-bottom: 2rem;
+    cursor: pointer;
+  }
+
+  &__link {
+    &:link,
+    &:visited {
+      font-size: 1.6rem;
+      color: #888;
+      text-decoration: none;
+      position: absolute;
+      top: 115%;
+      right: 0;
+      transition: all 0.15s ease-in;
+    }
+
+    &:hover,
+    &:active {
+      color: $primary-color;
+    }
+  }
+
+  &__icon {
+    width: 2.4rem;
+    height: 2.4rem;
+    color: #888;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+
+    &__2 {
+      right: 10%;
+    }
+  }
+}
+
+.loading {
+  cursor: not-allowed;
+  background-color: $primary-color-dark;
+}
+
+.error__container p {
+  font-size: 1.6rem;
+  border-radius: 10rem;
+  text-align: center;
+  color: $white;
+  padding: 0.6rem 1.2rem;
+  background-color: $primary-color;
+}
+
+.hidden {
+  display: none;
+}
+
+@media only screen and (max-width: 44rem) {
+  .login {
+    flex-direction: column;
+
+    &__left {
+      flex: 1;
+      align-self: stretch;
+      padding: 3.2rem;
+      border-radius: 0.9rem;
+    }
+
+    &__right {
+      flex: 1;
+      align-self: stretch;
+      order: -1;
+      background-color: #f7f7f7;
+      padding: 3.2rem;
+      border-radius: 0.9rem;
+    }
+
+    &__heading {
+      font-size: 2.6rem;
+    }
+  }
+
+  .form {
+    &__icon {
+      width: 2.4rem;
+      height: 2.4rem;
+      color: #888;
+      position: absolute;
+      right: 5%;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+
+      &__2 {
+        right: 10%;
+      }
+    }
+  }
+}

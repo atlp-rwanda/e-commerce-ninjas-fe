@@ -1,24 +1,28 @@
 /* eslint-disable */
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import notificationService from "./notificationService";
-import { INotifications } from "../../../utils/types/store";
+import { INotificationInitialResource } from "../../../utils/types/store";
+import { getErrorMessage } from '../../../utils/axios/axiosInstance';
 
-const initialState: { notifications: INotifications[] | null; isLoading: boolean; isError: string | null; isSuccess: boolean; message: string } = {
+const initialState: INotificationInitialResource = {
   notifications: null,
   isLoading: false,
-  isError: null,
+  isError: false,
   isSuccess: false,
   message: ''
 };
 
-export const fetchNotifications = createAsyncThunk<INotifications[]>("notifications/fetchNotifications", async () => {
-  try {
-    const notifications = await notificationService.fetchNotifications();
-    return notifications;
-  } catch (error) {
-    throw new Error('Failed to fetch notifications.');
+export const fetchNotifications = createAsyncThunk(
+  "notifications/fetchNotifications",
+  async (_, thunkApi) => {
+    try {
+      const notifications = await notificationService.fetchNotifications();
+      return notifications.data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
   }
-});
+);
 
 const notificationSlice = createSlice({
   name: "notifications",
@@ -28,18 +32,21 @@ const notificationSlice = createSlice({
     builder
       .addCase(fetchNotifications.pending, (state) => {
         state.isLoading = true;
-        state.isError = null;
+        state.isError = false;
         state.isSuccess = false;
+        state.message = '';
       })
-      .addCase(fetchNotifications.fulfilled, (state, action: PayloadAction<INotifications[]>) => {
+      .addCase(fetchNotifications.fulfilled, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.notifications = action.payload;
+        state.notifications = action.payload.notifications;
+        state.message = "Notifications fetched successfully";
       })
-      .addCase(fetchNotifications.rejected, (state, action: PayloadAction<any>) => {
+      .addCase(fetchNotifications.rejected, (state, action:PayloadAction<any>) => {
         state.isLoading = false;
-        state.isError = action.payload || 'Failed to fetch notifications.';
+        state.isError = true;
         state.isSuccess = false;
+        state.message = action.payload;
       });
   }
 });

@@ -15,7 +15,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 30vh;
     color: $black-3;
     font-size: 1.8rem;
     background-color: $primary-color-light;
@@ -132,12 +132,12 @@
 
         p {
           margin: 0;
-          font-size: 1rem;
+          font-size: 1.3rem;
         }
       }
 
       .notification-time {
-        font-size: 0.8rem;
+        font-size: 0.95rem;
         color: #999;
       }
     }

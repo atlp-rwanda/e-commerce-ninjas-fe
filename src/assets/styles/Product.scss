@@ -108,3 +108,47 @@
     }
   }
 }
+@media (max-width: 768px) {
+  .product {
+    width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 8px;
+    color: $white-color;
+  }
+
+ .product-info {
+   .product-name {
+      font-size: 1.4rem;
+    }
+
+   .product-price {
+      font-size: 1.8rem;
+    }
+
+   .product-stock {
+      font-size: 1.4rem;
+    }
+  }
+}
+@media (max-width: 480px) {
+  .product {
+    width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 8px;
+    color: $white-color;
+  }
+
+ .product-info {
+   .product-name {
+      font-size: 1.2rem;
+    }
+
+   .product-price {
+      font-size: 1.6rem;
+    }
+
+   .product-stock {
+      font-size: 1.2rem;
+    }
+  }
+}

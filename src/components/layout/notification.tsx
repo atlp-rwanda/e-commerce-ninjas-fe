@@ -38,9 +38,13 @@ const Notifications: React.FC = () => {
     setDisplayCount(displayCount + 4);
   };
 
-  const filteredNotifications = notifications ? notifications.filter((notification: Notification) => 
+  const sortedNotifications = notifications ? notifications.slice().sort((a: Notification, b: Notification) => Number(a.isRead) - Number(b.isRead)) : [];
+
+  const filteredNotifications = sortedNotifications.filter((notification: Notification) => 
     filter === 'All' || (filter === 'Unread' && !notification.isRead)
-  ).slice(0, displayCount) : [];
+  ).slice(0, displayCount);
+
+  const unreadCount = notifications ? notifications.filter((notification: Notification) => !notification.isRead).length : 0;
 
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
   const selectFilter = (filter: string) => {
@@ -56,7 +60,7 @@ const Notifications: React.FC = () => {
         </div>
       ) : isError ? (
         <div className="error-message">
-          <p>{message || "Something went wrong. Please try again later."}</p>
+          <p>{message}</p>
         </div>
       ) : (
         <>

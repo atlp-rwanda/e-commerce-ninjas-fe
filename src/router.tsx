@@ -12,6 +12,8 @@ import GoogleCallback from './components/GoogleCallback';
 import SendResetPasswordLink from "./pages/SendResetPasswordLink";
 import ResetPassword from "./pages/ResetPassword";
 
+import ViewProduct from './pages/ViewProduct';
+
 
 const AppRouter: React.FC = () => {
   return (
@@ -26,6 +28,7 @@ const AppRouter: React.FC = () => {
           <Route path="/api/auth/google/callback" element={<GoogleCallback />} />
           <Route path="/reset-password" element={<SendResetPasswordLink />} />
          <Route path="/api/auth/reset-password/:token" element={<ResetPassword />} />
+          <Route path="product/:id" element={<ViewProduct />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

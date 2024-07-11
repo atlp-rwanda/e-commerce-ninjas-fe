@@ -2,7 +2,10 @@
 import React, { useState, useRef } from 'react';
 import { CiHeart } from "react-icons/ci";
 import { PiShoppingCartThin } from "react-icons/pi";
+import { useNavigate } from 'react-router-dom';
+
 interface ProductProps {
+  id: string;
   images: string[];
   name: string;
   price: string;
@@ -11,9 +14,10 @@ interface ProductProps {
   discount: number;
 }
 
-const Product: React.FC<ProductProps> = ({ images, name, price, stock, description, discount }) => {
+const Product: React.FC<ProductProps> = ({ id, images, name, price, stock, description, discount }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const navigate = useNavigate()
 
   const handleMouseEnter = () => {
     intervalRef.current = setInterval(() => {
@@ -33,7 +37,7 @@ const Product: React.FC<ProductProps> = ({ images, name, price, stock, descripti
   };
 
   return (
-    <div className="product">
+    <div className="product" onClick={()=>navigate(`/product/${id}`)}>
       <div
         className="product-image-container"
         onMouseEnter={handleMouseEnter}

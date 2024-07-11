@@ -5,15 +5,20 @@ import welcomeReducer from "./features/welcomeSlice";
 import productReducer from './features/product/productSlice';
 import authReducer from './features/auth/authSlice';
 import singleProductReducer from './features/product/singleProductSlice';
+import notificationReducer from './features/notifications/notificationSlice';
 
 export const store = configureStore({
   reducer: {
     initialMessage: welcomeReducer,
     auth: authReducer,
     products: productReducer,
-    singleProduct: singleProductReducer
+    singleProduct: singleProductReducer,
+    notification: notificationReducer,
   },
 });
 
-export const useAppDispatch: () => typeof store.dispatch = useDispatch;
-export const useAppSelector: TypedUseSelectorHook<ReturnType<typeof store.getState>> = useSelector;
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+
+export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

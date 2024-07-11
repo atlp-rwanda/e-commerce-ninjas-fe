@@ -16,9 +16,10 @@
     "airbnb-typescript",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:jsx-a11y/recommended",
     "plugin:storybook/recommended"
   ],
-  "ignorePatterns":["jest.config.ts"],
+  "ignorePatterns": ["jest.config.ts"],
   "rules": {
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
@@ -58,7 +59,12 @@
     "no-param-reassign": "off",
     "arrow-body-style": ["warn", "as-needed"],
     "jsx-a11y/no-static-element-interactions": "off",
-    "max-len": "off"
+    "max-len": "off",
+    "jsx-a11y/label-has-associated-control": ["error", {
+      "required": {
+        "some": ["nesting", "id"]
+      }
+    }]
   },
   "settings": {
     "react": {

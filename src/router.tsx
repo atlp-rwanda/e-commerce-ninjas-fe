@@ -9,6 +9,9 @@ import VerifyEmail from './pages/VerifyEmail';
 import { EmailVerifying } from './pages/EmailVerifying';
 import { ResendEmail } from './components/ResendEmail';
 import GoogleCallback from './components/GoogleCallback';
+import SendResetPasswordLink from "./pages/SendResetPasswordLink";
+import ResetPassword from "./pages/ResetPassword";
+
 
 const AppRouter: React.FC = () => {
   return (
@@ -21,6 +24,8 @@ const AppRouter: React.FC = () => {
           <Route path="resend-email" element={<ResendEmail />} />
           <Route path="/api/auth/verify-email/:token" element={<VerifyEmail />} />
           <Route path="/api/auth/google/callback" element={<GoogleCallback />} />
+          <Route path="/reset-password" element={<SendResetPasswordLink />} />
+         <Route path="/api/auth/reset-password/:token" element={<ResetPassword />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

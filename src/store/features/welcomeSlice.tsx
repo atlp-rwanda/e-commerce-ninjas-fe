@@ -2,35 +2,28 @@
 import { createSlice,createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import type { IWelcomeMessage, IWelcomeMessageState } from '../../utils/types/store';
 import welcomeService from './welcomeService';
+import { axiosInstance } from '../../utils/axios/axiosInstance';
 
 const initialState: IWelcomeMessageState = {
-  welcomeMessage: { status: false, message: "" },
+  welcomeMessage: { status: false, message: '' },
 };
 
-
-export const loadWelcomeMessage = createAsyncThunk<IWelcomeMessage, void, { rejectValue: string }>(
+export const loadWelcomeMessage = createAsyncThunk<IWelcomeMessage>(
   'welcomeMessage/loadWelcomeMessage',
-  async (_, thunkApi) => {
-    try {
-      return await welcomeService.welcome();
-    } catch (error) {
-      let errorMessage = 'An unknown error occurred';
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      }
-      return thunkApi.rejectWithValue(errorMessage);
-    }
+  async () => {
+    const response = await axiosInstance.get<IWelcomeMessage>('/');
+    return response.data;
   }
 );
 
 export const WelcomeSlice = createSlice({
-  name: "welcomeMessage",
+  name: 'welcomeMessage',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(loadWelcomeMessage.pending, (state) => {
-        state.welcomeMessage = { status: false, message: "Loading..." };
+        state.welcomeMessage = { status: false, message: 'Loading...' };
       })
       .addCase(
         loadWelcomeMessage.fulfilled,
@@ -41,7 +34,7 @@ export const WelcomeSlice = createSlice({
       .addCase(loadWelcomeMessage.rejected, (state) => {
         state.welcomeMessage = {
           status: false,
-          message: "Failed to load welcome message.",
+          message: 'Failed to load welcome message.',
         };
       });
   },

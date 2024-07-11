@@ -37,12 +37,24 @@ const googleAuthCallback = async (data: any) => {
   return response.data;
 };
 
+const sendResetLink = async (email: string) => {
+  const response = await axiosInstance.post('api/auth/forget-password', { email });
+  return response.data.message;
+};
+
+const resetPassword = async (token: string, password: string) => {
+  const response = await axiosInstance.put(`/api/auth/reset-password/${token}`, { password });
+  return response.data;
+};
+
 const authService = {
   register,
   verify,
   resendVerificationEmail,
   googleAuth,
   googleAuthCallback,
+  sendResetLink,
+  resetPassword
 };
 
 export default authService;

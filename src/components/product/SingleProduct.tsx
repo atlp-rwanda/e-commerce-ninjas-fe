@@ -10,6 +10,7 @@ import { PuffLoader } from 'react-spinners';
 import { IProductInitialResponse } from '../../utils/types/store';
 import { Meta } from '../Meta';
 import { Link } from 'react-router-dom';
+import truncateString from '../../utils/text/truncateString';
 
 const ProductComponent = ({ productId }: { productId: string }) => {
     const dispatch = useAppDispatch();
@@ -45,8 +46,8 @@ const ProductComponent = ({ productId }: { productId: string }) => {
                     </div>
                     :
                     <div className='error-message'>
-                            <p>Product was not found</p>
-                            <Link to="/" className="btn-link">View all products</Link>
+                        <p>Product was not found</p>
+                        <Link to="/" className="btn-link">View all products</Link>
                     </div>
             )
             }
@@ -59,8 +60,8 @@ const ProductImages = ({ images }: { images: string[] }) => {
     return (
         <div className='images-container'>
             <div className="thumbnails-container">
-                {images.map((src, index) => (
-                    <img key={index} src={src} alt={`Product Thumbnail ${index + 1}`} className='thumbnail-image' onMouseEnter={() => setSelectedImage(index)} />
+                {images.slice(0, 4).map((src, index) => (
+                    <img key={index} src={src} alt={`Product Thumbnail ${index + 1}`} className={`thumbnail-image ${selectedImage === index && 'active'}`} onMouseEnter={() => setSelectedImage(index)} />
                 ))}
             </div>
 
@@ -79,8 +80,9 @@ const ProductDetails = ({ product, reviews }: { product: IProduct, reviews: IPro
     return (
         <div className="product-details">
             <h1 className="product-title">{product.name}</h1>
+            <p className='upper-description'>{truncateString(product.description || "", 200)}</p>
             <div className='product-stars-and-shipping'>
-                {reviews && <div className="product-review-stars"> <StarsRender count={reviews.length < 1 ? 0 : Math.floor(reviews.reduce((acc, review) => { return acc + review.rating }, 0) / reviews.length)} />{(reviews.length < 1 ? 0 : reviews.reduce((acc, review) => { return acc + review.rating }, 0) / reviews.length).toFixed(1)} </div>}
+                <div className="product-review-stars"> <StarsRender count={reviews && reviews.length > 0 ? Math.floor(reviews.reduce((acc, review) => { return acc + review.rating }, 0) / reviews.length) : 0} />{(reviews && reviews.length > 0 ? reviews.reduce((acc, review) => { return acc + review.rating }, 0) / reviews.length : 0).toFixed(1)} </div>
                 <div className="shipping-label">Free Shipping</div>
             </div>
             <div className="product-price-container">

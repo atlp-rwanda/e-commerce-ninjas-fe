@@ -32,9 +32,11 @@ const singleProductSlice = createSlice({
                 state.isError = null;
                 state.isSuccess = false;
             })
+            // .addCase(fetchSingleProduct.fulfilled, (state, action: PayloadAction<IProductResponse>) => {
             .addCase(fetchSingleProduct.fulfilled, (state, action: PayloadAction<any>) => {
                 state.isLoading = false;
                 state.isSuccess = true;
+                // state.product = action.payload.data?.product || null;
                 state.product = action.payload.product || null;
             })
             .addCase(fetchSingleProduct.rejected, (state, action: PayloadAction<any>) => {

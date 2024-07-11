@@ -24,6 +24,7 @@ Our e-commerce web application server, developed by Team Ninjas, facilitates smo
 - Setup Redux store
 - Setup StoryBook documentation
 - Sign up page
+- Login/Signup with Google
 
 ## Get started
 - Clone repository

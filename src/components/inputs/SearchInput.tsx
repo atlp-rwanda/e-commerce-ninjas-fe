@@ -2,33 +2,53 @@
 
 import React, { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
-import "../../styles/SearchInput.scss";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  searchProduct,
-  selectSearchResults,
-  selectSearchError,
-} from "../../store/features/ProductSlice";
+import { searchProduct } from "../../store/features/product/productSlice";
 interface SearchInputProps {
   className: string;
   placeholder?: string;
 }
+
 function SearchInput({ className, placeholder }: SearchInputProps) {
   const dispatch = useAppDispatch();
-  const searchResults = useAppSelector(selectSearchResults);
+  const { isSuccess, isError, isLoading, products } = useAppSelector(
+    (state) => state.products
+  );
   const [search, setSearch] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const [isHoved, setIsHoved] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const navigate = useNavigate();
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearch(value);
     if (value.trim()) {
       dispatch(searchProduct({ name: value.trim() }));
+    } else {
+      setIsFocused(false);
     }
   };
+
+  const handleProductClick = (name: string) => {
+    setSearch(name);
+    setIsFocused(false);
+    setIsHovered(false);
+    navigate(`/search?name=${name}`);
+  };
+
+  useEffect(() => {
+    if (!search.trim()) {
+      setIsFocused(false);
+      setIsHovered(false);
+    }
+  }, [search]);
+
+  const filteredProducts = products?.filter((product: any) =>
+    product.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className="main-search">
       <form
@@ -47,7 +67,11 @@ function SearchInput({ className, placeholder }: SearchInputProps) {
           type="text"
           placeholder={placeholder}
           onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          onBlur={() => {
+            if (!isHovered) {
+              setIsFocused(false);
+            }
+          }}
           onChange={handleSearchChange}
           value={search}
         />
@@ -59,19 +83,28 @@ function SearchInput({ className, placeholder }: SearchInputProps) {
           Search
         </button>
       </form>
-      {(isFocused || isHoved) && (
-        <div className="search-result" onMouseEnter={()=> setIsHoved(true)}>
-          {searchResults.length > 0 ? (
-            searchResults.map((product: any) => (
+      {isFocused && search.trim() && (
+        <div
+          className="search-result"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {filteredProducts && filteredProducts.length > 0 ? (
+            filteredProducts.map((product: any) => (
               <div key={product.id} className="result">
-                <Link to={`/search?name=${product.name}`} className="link">
-                  <p >{product.name}</p>
-                </Link>
+                <div
+                  className="link"
+                  onClick={() => handleProductClick(product.name)}
+                >
+                  <p>{product.name}</p>
+                </div>
               </div>
-            )
-            )
-          ) :null
-          }
+            ))
+          ) : (
+            <div className="no-results">
+              <p>No products found</p>
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -6,8 +6,6 @@ import { IoLogoFacebook } from "react-icons/io";
 import { FaSquareTwitter } from "react-icons/fa6";
 import { FaLinkedin } from "react-icons/fa6";
 
-import "../../styles/Footer.scss";
-
 function Footer() {
   return (
     <footer className="footer">

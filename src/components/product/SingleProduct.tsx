@@ -11,6 +11,7 @@ import { IProductInitialResponse } from '../../utils/types/store';
 import { Meta } from '../Meta';
 import { Link } from 'react-router-dom';
 import truncateString from '../../utils/text/truncateString';
+import UserDefaultImage from "../../../public/assets/images/user.png";
 
 const ProductComponent = ({ productId }: { productId: string }) => {
     const dispatch = useAppDispatch();
@@ -124,7 +125,7 @@ const DetailsCard = ({ children, title }: { children: React.ReactNode, title: st
 const SellerInfoCard = ({ shop }: { shop: IShop | null }) => {
     return (
         <div className='seller-info'>
-            <div className="seller-profile"><div className="img-holder"><img src={shop && shop.image || 'https://placehold.co/100x100'} alt="Shop" /> </div><span>{shop && shop.name}</span></div>
+            <div className="seller-profile"><div className="img-holder"><img src={shop && shop.image || UserDefaultImage} alt="Shop" /> </div><span>{shop && shop.name}</span></div>
             <div className="seller-description">{shop && shop.description}</div>
         </div>
     )
@@ -148,7 +149,7 @@ const ReviewsCard = ({ reviews }: { reviews: IProductReview[] | null }) => {
 const SingleReviewCard = ({ review }: { review: IProductReview }) => {
     return (
         <div className='review-card'>
-            <div className="reviewer-profile"><div className="img-holder"><img src={review.user?.profilePicture || 'https://placehold.co/100x100'} alt="Shop" /> </div><span>{`${review.user?.firstName} ${' '} ${review.user?.lastName} `} </span></div>
+            <div className="reviewer-profile"><div className="img-holder"><img src={review.user?.profilePicture || UserDefaultImage} alt="Shop" /> </div><span>{`${review.user?.firstName} ${' '} ${review.user?.lastName} `} </span></div>
             <div className="review-contents">
                 <div className="stars-container"><StarsRender count={review.rating} /></div>
                 <div className="review-date">Reviewed on {new Date(review.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>

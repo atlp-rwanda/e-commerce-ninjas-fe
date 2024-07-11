@@ -1,6 +1,7 @@
 @import "./Colors";
 
 .product-component {
+    background-color: $container-color;
     padding: 2rem;
 
     * {

@@ -96,7 +96,7 @@ function Header() {
           <div className="cart__container">
             <IoCartOutline className="cart__icon" />
             <span className="cart__text">Cart</span>
-            <span className="cart__description">$ 100</span>
+            <span className="cart__description">$ 0</span>
           </div>
           <div
             className="cart__container user__container"

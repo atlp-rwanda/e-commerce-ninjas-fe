@@ -1,0 +1,158 @@
+@import "./Colors";
+
+.input-wrapper {
+  width: 40rem;
+  margin: 5rem auto;
+  padding: 1rem;
+}
+
+.floating-label {
+  margin-bottom: 3rem;
+  position: relative;
+
+  > label {
+    font-weight: normal;
+    font-size: 1.8rem;
+    color: $secondary-color;
+    pointer-events: none;
+    position: absolute;
+    left: 1.2rem;
+    top: -0.1rem;
+    transition: 0.2s ease all;
+    padding: 0 0.4rem;
+    background-color: $white;
+    z-index: 1;
+  }
+
+  .input-highlight {
+    width: 100%;
+    height: 50%;
+    pointer-events: none;
+    position: absolute;
+    top: 0.8rem;
+    left: 0;
+    opacity: 0.5;
+  }
+}
+
+// Form Elements
+.floating-input,
+.floating-select {
+  display: block;
+  font-size: 1.4rem;
+  width: 100%;
+  height: 4rem;
+  padding: 0.6rem 1.2rem;
+  background-color: transparent;
+  border: 0.1rem solid $primary-color;
+  border-radius: 0.4rem;
+  position: relative;
+  z-index: 0;
+
+  &:focus {
+    outline: none;
+    border-color: $secondary-color;
+
+    ~ label {
+      color: $primary-color;
+    }
+  }
+
+  &:not(:placeholder-shown) ~ label,
+  &:not([value=""]) ~ label,
+  &:valid ~ label {
+    font-size: 1.4rem;
+    color: $primary-color;
+    padding: 0 0.4rem;
+    background-color: $white;
+    top: -0.1rem;
+    left: 1.4rem;
+  }
+}
+
+.floating-textarea {
+  min-height: 6rem;
+  max-height: 25rem;
+  overflow: hidden;
+  overflow-x: hidden;
+}
+
+// Active State
+.floating-input:focus,
+.floating-select:focus {
+  ~ .bar {
+    &:before,
+    &:after {
+      width: 550%;
+    }
+  }
+
+  ~ .input-highlight {
+    animation: input-Highlighter 0.1s ease;
+  }
+}
+
+// Normal Inputs
+.input-default {
+  display: block;
+  font-size: 1.4rem;
+  width: 100%;
+  height: 4rem;
+  padding: 0.6rem 1.2rem;
+  background-color: $white;
+  border: 0.1rem solid $primary-color;
+  border-radius: 0.4rem;
+  margin-bottom: 2rem;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+  }
+}
+
+.input-rounded {
+  display: block;
+  font-size: 1.4rem;
+  width: 100%;
+  height: 4rem;
+  padding: 0.6rem 1.7rem;
+  background-color: $white;
+  border: 0.1rem solid $primary-color;
+  border-radius: 2rem;
+  margin-bottom: 2rem;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+  }
+}
+
+.input-icon {
+  display: flex;
+  align-items: center;
+  font-size: 1.4rem;
+  width: 100%;
+  height: 4rem;
+  padding: 0.6rem 1.2rem;
+  background-color: $white;
+  border: 0.1rem solid $secondary-color;
+  border-radius: 0.4rem;
+  margin-bottom: 2rem;
+  position: relative;
+
+  &:focus-within {
+    border-color: $primary-color;
+  }
+
+  input {
+    border: none;
+    outline: none;
+    flex: 1;
+    padding: 0.6rem 0.6rem;
+  }
+
+  .icon {
+    color: $icon-color;
+    margin-right: 0.1rem;
+  }
+}

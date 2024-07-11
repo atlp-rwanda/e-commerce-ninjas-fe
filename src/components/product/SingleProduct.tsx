@@ -12,6 +12,7 @@ import { Meta } from '../Meta';
 import { Link } from 'react-router-dom';
 import truncateString from '../../utils/text/truncateString';
 import UserDefaultImage from "../../../public/assets/images/user.png";
+import ImageSlider from '../images/ImageSlider';
 
 const ProductComponent = ({ productId }: { productId: string }) => {
     const dispatch = useAppDispatch();
@@ -67,7 +68,7 @@ const ProductImages = ({ images }: { images: string[] }) => {
             </div>
 
             <div className="main-image-container">
-                <img src={images[selectedImage]} alt="Main Product Image" className="main-image" />
+                <ImageSlider images={images} selectedImage={selectedImage} setSelectedImage={setSelectedImage}/>
             </div>
         </div>
 

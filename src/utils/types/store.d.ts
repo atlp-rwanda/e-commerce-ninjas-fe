@@ -99,27 +99,23 @@ export interface INotificationInitialResource {
 }
 
 export interface IProfile {
-  id: string,
   firstName: string,
   lastName: string,
   email: string,
-  password: string,
-  phone: string,
-  profilePicture: string,
+  phone: number,
+  profilePicture:string,
   gender: string,
-  birthDate: string,
+  birthDate: date,
   language: string,
   currency: string,
-  role: string,
-  status: string,
-  isVerified: boolean,
-  is2FAEnabled: boolean,
-  createdAt: string,
-  updatedAt: string,
-  passwordUpdatedAt: string,
 };
 
+export interface IPassword{
+  password: string
+}
+
 export interface ILocation {
+  country: string
   province: string;
   district: string;
   sector: string;

@@ -82,6 +82,7 @@ const Sample: React.FC = () => {
                 key={index}
                 className="icon-dots"
                 style={{ color: currentIndex === index ? '#ff6d18' : '#fff' }}
+                onClick={()=>{setCurrentIndex(index)}}
               />
             ))}
           </div>

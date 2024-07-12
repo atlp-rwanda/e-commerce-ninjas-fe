@@ -1,4 +1,7 @@
 /* eslint-disable */
+import { IProduct } from "./product";
+
+/* eslint-disable */
 export interface IWelcomeMessage {
   status: boolean;
   message: string;
@@ -58,6 +61,22 @@ export interface AuthService{
 export interface IEmail {
   email: string;
 }
+
+export interface IProductResponse {
+  message?: string;
+  data?: { product: IProduct };
+  error?: string;
+  status?: number;
+}
+
+export interface IProductInitialResponse {
+  product: IProduct | null,
+  isError: boolean | null,
+  isSuccess: boolean,
+  isLoading: boolean,
+  message: string | null
+}
+
 export interface SearchCriteria {
   name?: string;
   category?: string;

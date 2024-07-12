@@ -1,5 +1,4 @@
 /* eslint-disable */
-// src\store\features\notifications\notificationSlice.tsx
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppDispatch } from '../../store';
 import notificationService from './notificationService';
@@ -40,11 +39,12 @@ const notificationSlice = createSlice({
       state.isLoggedOut = true;
     },
     checkPasswordExpiryAndLogout: (state, action: PayloadAction<Notification[]>) => {
-      const passwordExpiryNotifications = action.payload.filter(notification =>
+      const notifications = action.payload || [];
+      const passwordExpiryNotifications = notifications.filter(notification =>
         notification.message.includes('your password has expired')
       );
 
-      const passwordUpdateNotifications = action.payload.filter(notification =>
+      const passwordUpdateNotifications = notifications.filter(notification =>
         notification.message.includes('Password changed successfully')
       );
 
@@ -60,6 +60,7 @@ const notificationSlice = createSlice({
         new Date(latestPasswordExpiryNotification.createdAt).getTime() > new Date(latestPasswordUpdateNotification.createdAt).getTime())) {
         state.isLoggedOut = true;
         toast.error('Your password has expired. Reset your password and login again');
+        localStorage.removeItem('token');
       }
     },
   },
@@ -69,12 +70,14 @@ export const { addNotification, setPasswordExpiryMessage, setLoggedOut, checkPas
 
 export const handleNotifications = () => async (dispatch: AppDispatch) => {
   const notifications = await notificationService.getUserNotifications();
-  if (notifications) {
-    notifications.forEach((notification: Notification) => {
+  const safeNotifications = notifications || []; 
+  if (safeNotifications.length > 0) {
+    safeNotifications.forEach((notification: Notification) => {
       dispatch(addNotification(notification));
     });
-    dispatch(checkPasswordExpiryAndLogout(notifications));
+    dispatch(checkPasswordExpiryAndLogout(safeNotifications));
   }
+  return safeNotifications;
 };
 
 export default notificationSlice.reducer;

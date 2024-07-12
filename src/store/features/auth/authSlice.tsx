@@ -76,6 +76,15 @@ export const googleAuthCallback = createAsyncThunk('auth/googleAuthCallback', as
     }
 })
 
+export const logout = createAsyncThunk("auth/logout", async (_, thunkApi) => {
+    try {
+        localStorage.removeItem("token");
+        return true;
+    } catch (error) {
+        return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+});
+
 const userSlice = createSlice({
     name: 'auth',
     initialState,
@@ -189,8 +198,17 @@ const userSlice = createSlice({
               state.isSuccess = false;
               state.isError = true;
               state.message = action.payload;
-            }); 
-            
+            }) 
+            .addCase(logout.fulfilled, (state) => {
+                state.user = undefined;
+                state.isSuccess = false;
+                state.isError = false;
+                state.message = "";
+            })
+            .addCase(logout.rejected, (state, action: PayloadAction<any>) => {
+                state.isError = true;
+                state.message = action.payload;
+            });            
     },
 });
 

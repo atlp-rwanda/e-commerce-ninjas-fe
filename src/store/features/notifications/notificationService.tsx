@@ -1,5 +1,4 @@
 /* eslint-disable  */
-
 import { axiosInstance } from '../../../utils/axios/axiosInstance';
 
 const getUserNotifications = async () => {

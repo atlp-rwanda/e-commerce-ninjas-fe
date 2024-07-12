@@ -1,10 +1,8 @@
 /* eslint-disable */
-// src\store\features\notifications\notificationSlice.tsx
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppDispatch } from '../../store';
 import notificationService from './notificationService';
 import { toast } from 'react-toastify';
-
 interface Notification {
   id: string;
   userId: string;
@@ -40,11 +38,12 @@ const notificationSlice = createSlice({
       state.isLoggedOut = true;
     },
     checkPasswordExpiryAndLogout: (state, action: PayloadAction<Notification[]>) => {
-      const passwordExpiryNotifications = action.payload.filter(notification =>
+      const notifications = action.payload;
+      const passwordExpiryNotifications = notifications.filter(notification =>
         notification.message.includes('your password has expired')
       );
 
-      const passwordUpdateNotifications = action.payload.filter(notification =>
+      const passwordUpdateNotifications = notifications.filter(notification =>
         notification.message.includes('Password changed successfully')
       );
 
@@ -60,6 +59,7 @@ const notificationSlice = createSlice({
         new Date(latestPasswordExpiryNotification.createdAt).getTime() > new Date(latestPasswordUpdateNotification.createdAt).getTime())) {
         state.isLoggedOut = true;
         toast.error('Your password has expired. Reset your password and login again');
+        localStorage.removeItem('token');
       }
     },
   },
@@ -75,6 +75,7 @@ export const handleNotifications = () => async (dispatch: AppDispatch) => {
     });
     dispatch(checkPasswordExpiryAndLogout(notifications));
   }
+  return notifications;
 };
 
 export default notificationSlice.reducer;

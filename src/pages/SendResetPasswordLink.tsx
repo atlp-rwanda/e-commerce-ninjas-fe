@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useEffect } from 'react'
+import React, { useEffect ,useState} from 'react'
 import { useFormik } from 'formik';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { sendResetLink } from '../store/features/auth/authSlice';
@@ -11,6 +11,7 @@ const ResetPasswordSchema = Yup.object().shape({
   email: Yup.string().email('Email must be valid').required('Email is required'),
 })
 const SendResetPasswordLink: React.FC = () => {
+  const [hideParagraph, setHideParagraph] = useState(true);
   const dispatch = useAppDispatch();
   const { user, isError, isSuccess, isLoading, message } = useAppSelector((state) => state?.auth);
   const formik = useFormik({
@@ -35,6 +36,7 @@ const SendResetPasswordLink: React.FC = () => {
     if (isSuccess) {
       toast.success(message)
       formik.resetForm()
+      setHideParagraph(false);
     }
   }, [isError, isSuccess, message]);
 
@@ -61,7 +63,11 @@ const SendResetPasswordLink: React.FC = () => {
               />
               <label className="input-label" id="email" htmlFor="email">Email Address</label>
             </div>
-            <p className='error'>{formik.status}</p><br /><br />
+            {hideParagraph ? (
+              <>
+              <p className='error'>{formik.status}</p><br />
+              </>
+            ): null}
             <button
             className={`reset-Button${isLoading ? " loading" : ""}`}
              disabled={isLoading}

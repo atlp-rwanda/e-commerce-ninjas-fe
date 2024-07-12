@@ -41,7 +41,7 @@ const productService = {
     fetchProducts,
     fetchSingleProduct,
     fetchProductReviews,
-    fetchShopInfo
+    fetchShopInfo,
     searchProduct
 }
 export default productService;

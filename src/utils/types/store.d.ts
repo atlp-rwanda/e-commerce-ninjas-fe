@@ -83,21 +83,20 @@ export interface IProfile {
   email: string,
   password: string,
   phone: string,
-  profilePicture: string,
+  profilePicture?: File;
   gender: string,
-  birthDate: string,
+  birthDate: date,
   language: string,
   currency: string,
-  role: string,
-  status: string,
-  isVerified: boolean,
-  is2FAEnabled: boolean,
-  createdAt: string,
-  updatedAt: string,
-  passwordUpdatedAt: string,
 };
 
+export interface IPassword{
+  id: string,
+  password: string
+}
+
 export interface ILocation {
+  country: string
   province: string;
   district: string;
   sector: string;

@@ -8,6 +8,7 @@ import { IProfile, ILocation } from '../utils/types/store';
 import profile from "../../public/assets/ProfileImage.jpg"
 import camera from "../../public/assets/Camera.png"
 import { TailSpin } from 'react-loader-spinner'
+import data from '../components/locations/location';
 
 interface RwandaLocationSelectorProps {
     setLocation?: React.Dispatch<React.SetStateAction<ILocation | null>>;
@@ -29,7 +30,7 @@ type NestedObject = {
     [key: string]: NestedObject | string[];
 };
 
-// const rwandaData: RwandaData = data;
+const rwandaData: RwandaData = data;
 
 
 const UserProfile: React.FC<RwandaLocationSelectorProps> = ({ setLocation }) => {
@@ -37,6 +38,7 @@ const UserProfile: React.FC<RwandaLocationSelectorProps> = ({ setLocation }) => 
     const { user, isSuccess, isError, message, isLoading } = useAppSelector((state) => state.user);
 
     const [data, setData] = useState<IProfile | null>(null)
+    const [country, setCountry] = useState('Rwanda');
     const [province, setProvince] = useState('');
     const [district, setDistrict] = useState('');
     const [sector, setSector] = useState('');
@@ -59,6 +61,13 @@ const UserProfile: React.FC<RwandaLocationSelectorProps> = ({ setLocation }) => 
         if (data) {
             dispatch(updateUserProfile(data));
         }
+    };
+
+    const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setCountry(e.target.value);
+        setProvince('');
+        setDistrict('');
+        setSector('');
     };
 
     const handleProvinceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -85,8 +94,8 @@ const UserProfile: React.FC<RwandaLocationSelectorProps> = ({ setLocation }) => 
     };
 
     useEffect(() => {
-        setLocation && setLocation({ province, district, sector });
-    }, [province, district, sector, setLocation]);
+        setLocation && setLocation({ country, province, district, sector });
+    }, [country, province, district, sector, setLocation]);
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -103,7 +112,7 @@ const UserProfile: React.FC<RwandaLocationSelectorProps> = ({ setLocation }) => 
                 <div className='profile-details'>
                     <div className='title'>
                         <h1>MY PROFILE DETAILS</h1>
-                        <button onClick={()=>handleSubmit()}>
+                        <button onClick={() => handleSubmit()}>
                             {isLoading ? (
                                 <TailSpin color="orange" height={30} width={30} /> // Display spinner
                             ) : (
@@ -216,27 +225,25 @@ const UserProfile: React.FC<RwandaLocationSelectorProps> = ({ setLocation }) => 
                         <div >
                             <div className='select-inp'>
                                 <label htmlFor="Province">Province</label>
-                                <select value={province} onChange={handleProvinceChange}>
-                                    <option value=""></option>
-                                    {/* {getOptions(province[district])} */}
+                                <select value={province} onChange={handleProvinceChange} disabled={!country}>
+                                    <option value="">Select Province</option>
+                                    {country && getOptions(rwandaData[country])}
                                 </select>
                             </div>
                             <div className='select-inp'>
                                 <label htmlFor="District">District</label>
-                                <select onChange={handleInputs}>
-                                    <option value="" disabled></option>
-                                    <option value="Kicukiro">Kicukiro</option>
-                                    <option value="Gicumbi">Gicumbi</option>
+                                <select value={district} onChange={handleDistrictChange} disabled={!province}>
+                                    <option value="">Select District</option>
+                                    {province && getOptions(rwandaData[country][province])}
                                 </select>
                             </div>
                         </div>
                         <div>
                             <div className='select-inp'>
                                 <label htmlFor="Sector">Sector</label>
-                                <select onChange={handleInputs}>
-                                    <option value="" disabled></option>
-                                    <option >Nyarugenge</option>
-                                    <option>Gasabo</option>
+                                <select value={sector} onChange={handleSectorChange} disabled={!district}>
+                                    <option value="">Select Sector</option>
+                                    {district && getOptions(rwandaData[country][province][district])}
                                 </select>
                             </div>
                             <div className='select-inp'>

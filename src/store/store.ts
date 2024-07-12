@@ -15,6 +15,10 @@ export const store = configureStore({
     singleProduct: singleProductReducer,
     notification: notificationReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

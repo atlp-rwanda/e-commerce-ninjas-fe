@@ -1,13 +1,25 @@
 /* eslint-disable */
-import { axiosInstance } from '../../../utils/axios/axiosInstance';
-import { IEmail, IUser, IVerification } from '../../../utils/types/store';
-import { URL } from '../../../utils/axios/axiosInstance';
-    
+import { axiosInstance } from "../../../utils/axios/axiosInstance";
+import { IEmail, IUser, IVerification } from "../../../utils/types/store";
+import { URL } from "../../../utils/axios/axiosInstance";
+
 const register = async (userData: IUser) => {
   const response = await axiosInstance.post<IUser>(
-    '/api/auth/register',
+    "/api/auth/register",
     userData
   );
+  return response.data;
+};
+
+const login = async (userData: IUser) => {
+  const response = await axiosInstance.post<IUser>("/api/auth/login", userData);
+  return response.data;
+};
+
+const fetchUserDetails = async (token: string) => {
+  const response = await axiosInstance.get("/api/user/user-get-profile", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
   return response.data;
 };
 
@@ -38,23 +50,30 @@ const googleAuthCallback = async (data: any) => {
 };
 
 const sendResetLink = async (email: string) => {
-  const response = await axiosInstance.post('api/auth/forget-password', { email });
+  const response = await axiosInstance.post("api/auth/forget-password", {
+    email,
+  });
   return response.data.message;
 };
 
 const resetPassword = async (token: string, password: string) => {
-  const response = await axiosInstance.put(`/api/auth/reset-password/${token}`, { password });
+  const response = await axiosInstance.put(
+    `/api/auth/reset-password/${token}`,
+    { password }
+  );
   return response.data;
 };
 
 const authService = {
   register,
+  login,
   verify,
+  fetchUserDetails,
   resendVerificationEmail,
   googleAuth,
   googleAuthCallback,
   sendResetLink,
-  resetPassword
+  resetPassword,
 };
 
 export default authService;

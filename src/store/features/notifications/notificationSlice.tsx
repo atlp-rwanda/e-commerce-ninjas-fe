@@ -1,7 +1,9 @@
 /* eslint-disable */
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch } from '../../store';
 import notificationService from './notificationService';
+import { INotificationInitialResource } from '../../../utils/types/store';
+import { getErrorMessage } from '../../../utils/axios/axiosInstance';
 import { toast } from 'react-toastify';
 
 interface Notification {
@@ -19,8 +21,12 @@ interface NotificationState {
   isLoggedOut: boolean;
 }
 
-const initialState: NotificationState = {
+const initialState: INotificationInitialResource = {
   notifications: [],
+  isLoading: false,
+  isError: false,
+  isSuccess: false,
+  message: '',
   passwordExpiryMessage: null,
   isLoggedOut: false,
 };
@@ -64,6 +70,27 @@ const notificationSlice = createSlice({
       }
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchNotifications.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+        state.message = '';
+      })
+      .addCase(fetchNotifications.fulfilled, (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.notifications = action.payload;
+        state.message = "Notifications fetched successfully";
+      })
+      .addCase(fetchNotifications.rejected, (state, action:PayloadAction<any>) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.payload;
+      });
+  }
 });
 
 export const { addNotification, setPasswordExpiryMessage, setLoggedOut, checkPasswordExpiryAndLogout } = notificationSlice.actions;
@@ -79,5 +106,17 @@ export const handleNotifications = () => async (dispatch: AppDispatch) => {
   }
   return safeNotifications;
 };
+
+export const fetchNotifications = createAsyncThunk(
+  "notifications/fetchNotifications",
+  async (_, thunkApi) => {
+    try {
+      const notifications = await notificationService.getUserNotifications();
+      return notifications;
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
 
 export default notificationSlice.reducer;

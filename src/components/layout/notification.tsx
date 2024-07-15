@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { FaCheck } from 'react-icons/fa';
 import { RiArrowDropDownLine, RiCheckDoubleFill } from "react-icons/ri";
-import { fetchNotifications } from '../../store/features/notification/notificationSlice';
+import { fetchNotifications } from '../../store/features/notifications/notificationSlice';
 import { PuffLoader } from 'react-spinners';
 
 type Notification = {
@@ -28,7 +28,7 @@ const Notifications: React.FC = () => {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [displayCount, setDisplayCount] = useState<number>(4);
   const dispatch = useAppDispatch();
-  const { notifications, isLoading, isError, isSuccess, message } = useAppSelector((state: any) => state.notifications);
+  const { notifications, isLoading, isError, isSuccess, message } = useAppSelector((state: any) => state.notification);
 
   useEffect(() => {
     dispatch(fetchNotifications());

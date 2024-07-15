@@ -156,6 +156,76 @@
   }
 }
 
+@media screen and (max-width: 900px) {
+  .sampleImages1 {
+   height: 20rem;
+    .sample2 {
+      .arrow {
+        .icon-arrow {
+          width: 2rem;
+          height: 2rem;
+        }
+      }
+      .dots {
+        .icon-dots {
+          width: 1rem;
+          height: 1rem;
+        }
+      }
+    }
+
+    .menShoe, .phones, .womenShoe, .accessories {
+      img {
+       height: 9.5rem;
+      }
+      p {
+        font-size: 1rem;
+      }
+  
+      button {
+        font-size: 1rem;
+        padding: 0.25rem 1rem;
+        border-radius: 2rem;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .sampleImages1 {
+   height: 15rem;
+    .sample2 {
+      .arrow {
+        .icon-arrow {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+      .dots {
+        .icon-dots {
+          width: 0.75rem;
+          height: 0.75rem;
+        }
+      }
+    }
+
+    .menShoe, .phones, .womenShoe, .accessories {
+      img {
+       height: 7rem;
+      }
+      p {
+        font-size: 0.8rem;
+      }
+  
+      button {
+        font-size: 0.8rem;
+        padding: 0.1rem 0.5rem;
+        border-radius: 1.5rem;
+      }
+    }
+  }
+}
+
 .trust-container {
   display: flex;
   width: 100%;
@@ -190,6 +260,56 @@
         font-size: 1.4rem;
         color: $secondary-color;
         margin: 0;
+      }
+    }
+  }
+}
+@media screen and (max-width: 900px) {
+  .trust-container {
+    height: 8rem;
+
+    .trust {
+      padding: 0 1.5rem;
+
+      .icon {
+        height: 35%;
+      }
+
+      .name {
+        padding-left: 1rem;
+
+        h2 {
+          font-size: 1.2rem;
+        }
+
+        p {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 500px) {
+  .trust-container {
+    height: 6rem;
+
+    .trust {
+      padding: 0 1rem;
+
+      .icon {
+        height: 25%;
+      }
+
+      .name {
+        padding-left: 0.5rem;
+
+        h2 {
+          font-size: 1rem;
+        }
+
+        p {
+          font-size: 0.6rem;
+        }
       }
     }
   }

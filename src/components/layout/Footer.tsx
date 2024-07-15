@@ -12,7 +12,7 @@ function Footer() {
       <div className="footer__container">
         <div className="footer__content">
           <div className="footer__left">
-            <nav className="footer__nav">
+            <nav className="footer__nav footer__nav__first">
               <p className="footer__title">Get support</p>
               <ul className="footer__list">
                 <li className="footer__item">

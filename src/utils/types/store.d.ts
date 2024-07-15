@@ -43,19 +43,21 @@ export interface IUserDataState {
   user: IUserData | undefined;
 }
 
-export interface IVerification{
+export interface IVerification {
   status: number;
   message: string;
 }
 
-export interface AuthService{
-  user: IUserData | undefined,
-  isError: boolean,
-  isLoading: boolean,
-  isSuccess: boolean,
-  isVerified: boolean,
-  isAuthenticated?: boolean,
-  message: string
+export interface AuthService {
+  user: IUserData | undefined;
+  isError: boolean;
+  isLoading: boolean;
+  isSuccess: boolean;
+  isVerified: boolean;
+  isAuthenticated?: boolean;
+  message: string;
+  error: string;
+  token: string;
 }
 
 export interface IEmail {
@@ -70,9 +72,9 @@ export interface IProductResponse {
 }
 
 export interface IProductInitialResponse {
-  product: IProduct | null,
-  isError: boolean | null,
-  isSuccess: boolean,
-  isLoading: boolean,
-  message: string | null
+  product: IProduct | null;
+  isError: boolean | null;
+  isSuccess: boolean;
+  isLoading: boolean;
+  message: string | null;
 }

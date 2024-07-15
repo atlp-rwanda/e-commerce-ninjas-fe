@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoMdMailUnread } from "react-icons/io";
 import { FaPhoneVolume } from "react-icons/fa6";
@@ -9,16 +9,53 @@ import { IoCartOutline } from "react-icons/io5";
 import { IoLogOutSharp } from "react-icons/io5";
 import { FaUserClock } from "react-icons/fa6";
 import { FaChevronDown } from "react-icons/fa";
+import { IoIosNotifications } from "react-icons/io";
+import { IoMenu } from "react-icons/io5";
+import { IoMdClose } from "react-icons/io";
 import { NavLink } from "react-router-dom";
-import Logo from "../../../public/assets/images/logo.png";
 
 import SearchInput from "../inputs/SearchInput";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { getUserDetails } from "../../store/features/auth/authSlice";
 
 function Header() {
+  const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const {
+    isAuthenticated,
+    isSuccess,
+    user,
+    token: tokenLogin,
+  } = useAppSelector((state) => state.auth);
+  const [token, setToken] = useState("");
+  const navEl: any = useRef(null);
+
+  const User: any = { ...user };
 
   const categories = Array.from({ length: 5 }, (_, i) => i + 1);
+
+  useEffect(function () {
+    if (tokenLogin.trim()) {
+      setToken(tokenLogin);
+    } else {
+      const token = localStorage.getItem("token") || "";
+      setToken(token);
+    }
+  });
+
+  useEffect(
+    function () {
+      async function getUserDetail() {
+        if (token.trim()) await dispatch(getUserDetails(token));
+      }
+
+      getUserDetail();
+    },
+    [token]
+  );
 
   function handleSetIsOpen() {
     setIsOpen((isOpen) => !isOpen);
@@ -28,12 +65,17 @@ function Header() {
     setIsOpen2((isOpen) => !isOpen);
   }
 
+  function handleSetIsMenuOpen() {
+    navEl.current.classList.toggle("nav__open");
+    setIsMenuOpen((isMenuOpen) => !isMenuOpen);
+  }
+
   return (
     <header className="header">
       <div className="header__top">
         <div className="header__logo">
           <img
-            src={Logo}
+            src="../assets/images/logo.png"
             alt="Ecommerce logo"
             className="header__logo__img"
           />
@@ -73,7 +115,7 @@ function Header() {
               </span>
 
               <FaChevronDown
-                className={`header__selected__icon${isOpen ? " rotate" : ""}`}
+                className={`header__selected__icon${isOpen ? " rotate2" : ""}`}
               />
             </div>
             {isOpen && (
@@ -93,6 +135,12 @@ function Header() {
             )}
           </div>
           <SearchInput className="header__input" />
+          {isAuthenticated && (
+            <div className="header__notification__box">
+              <IoIosNotifications className="header__notification__icon header__notification__icon__1" />
+              <span className="header__notification__number">0</span>
+            </div>
+          )}
           <div className="cart__container">
             <IoCartOutline className="cart__icon" />
             <span className="cart__text">Cart</span>
@@ -102,9 +150,18 @@ function Header() {
             className="cart__container user__container"
             onClick={handleSetIsOpen2}
           >
-            <FaRegUser className="cart__icon" />
-            <span className="cart__text">User</span>
-            <span className="cart__description">Account</span>
+            {user && User.profilePicture ? (
+              <img src={User.profilePicture} className="cart__icon" />
+            ) : (
+              <FaRegUser className="cart__icon" />
+            )}
+
+            <span className="cart__text">{user ? "Hi, " : "User"}</span>
+            <span className="cart__description">
+              {user
+                ? `${User.email.slice(0, User.email.indexOf("@")).slice(0, 6).toUpperCase()}`
+                : "Account"}
+            </span>
             {isOpen2 && (
               <div className="order__dropdown">
                 <ul className="order__list">
@@ -127,9 +184,14 @@ function Header() {
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to="/login" className="order__link">
+                    <NavLink
+                      to={isAuthenticated ? "/logout" : `/login`}
+                      className="order__link"
+                    >
                       <IoLogOutSharp className="order__icon" />
-                      <span className="order__text">Login</span>
+                      <span className="order__text">
+                        {isAuthenticated ? "Logout" : "Login"}
+                      </span>
                     </NavLink>
                   </li>
                 </ul>
@@ -138,36 +200,61 @@ function Header() {
           </div>
         </div>
         <div className="header__bottom__bottom">
-          <div className="header__nav">
+          <div className="menu" onClick={handleSetIsMenuOpen}>
+            {isMenuOpen ? (
+              <IoMdClose className="menu__icon" />
+            ) : (
+              <IoMenu className="menu__icon" />
+            )}
+          </div>
+          <div className="header__nav" ref={navEl}>
             <nav>
-              <ul>
-                <li className="nav__item">
-                  <NavLink to="/" className={({ isActive }) => (isActive ? 'active' : '')}>
+              <ul className="header__list">
+                <li className="nav__item" onClick={handleSetIsMenuOpen}>
+                  <NavLink
+                    to="/"
+                    className={({ isActive }) => (isActive ? "active" : "")}
+                  >
                     Home
                   </NavLink>
                 </li>
-                <li className="nav__item">
-                  <NavLink to="/shops" className={({ isActive }) => (isActive ? 'active' : '')}>
+                <li className="nav__item" onClick={handleSetIsMenuOpen}>
+                  <NavLink
+                    to="/shops"
+                    className={({ isActive }) => (isActive ? "active" : "")}
+                  >
                     Shops
                   </NavLink>
                 </li>
-                <li className="nav__item">
-                  <NavLink to="/products" className={({ isActive }) => (isActive ? 'active' : '')}>
+                <li className="nav__item" onClick={handleSetIsMenuOpen}>
+                  <NavLink
+                    to="/products"
+                    className={({ isActive }) => (isActive ? "active" : "")}
+                  >
                     Products
                   </NavLink>
                 </li>
-                <li className="nav__item">
-                  <NavLink to="/services" className={({ isActive }) => (isActive ? 'active' : '')}>
+                <li className="nav__item" onClick={handleSetIsMenuOpen}>
+                  <NavLink
+                    to="/services"
+                    className={({ isActive }) => (isActive ? "active" : "")}
+                  >
                     Services
                   </NavLink>
                 </li>
-                <li className="nav__item">
-                  <NavLink to="/contact-us" className={({ isActive }) => (isActive ? 'active' : '')}>
+                <li className="nav__item" onClick={handleSetIsMenuOpen}>
+                  <NavLink
+                    to="/contact-us"
+                    className={({ isActive }) => (isActive ? "active" : "")}
+                  >
                     Contact-Us
                   </NavLink>
                 </li>
-                <li className="nav__item">
-                  <NavLink to="/about-us" className={({ isActive }) => (isActive ? 'active' : '')}>
+                <li className="nav__item" onClick={handleSetIsMenuOpen}>
+                  <NavLink
+                    to="/about-us"
+                    className={({ isActive }) => (isActive ? "active" : "")}
+                  >
                     About-us
                   </NavLink>
                 </li>

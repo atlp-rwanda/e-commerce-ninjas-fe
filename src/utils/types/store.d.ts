@@ -78,3 +78,22 @@ export interface IProductInitialResponse {
   isLoading: boolean;
   message: string | null;
 }
+
+export interface INotifications {
+  id: string;
+  userId: string;
+  message: string;
+  isRead: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface INotificationInitialResource {
+  notifications: INotifications[],
+  isError: boolean | null,
+  isSuccess: boolean,
+  isLoading: boolean,
+  message: string | null,
+  passwordExpiryMessage: string | null,
+  isLoggedOut: boolean
+}

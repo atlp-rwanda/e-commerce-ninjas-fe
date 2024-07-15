@@ -14,15 +14,18 @@ import { IoMenu } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 
+import Notifications from "./notification";
 import SearchInput from "../inputs/SearchInput";
 import { useAppDispatch, useAppSelector } from "../../store/store";
+import { fetchNotifications } from "../../store/features/notifications/notificationSlice";
 import { getUserDetails } from "../../store/features/auth/authSlice";
 
-function Header() {
+const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
   const {
     isAuthenticated,
@@ -30,32 +33,36 @@ function Header() {
     user,
     token: tokenLogin,
   } = useAppSelector((state) => state.auth);
+  const { notifications } = useAppSelector((state) => state.notification);
   const [token, setToken] = useState("");
-  const navEl: any = useRef(null);
+  const navEl = useRef<HTMLDivElement | null>(null);
 
   const User: any = { ...user };
 
   const categories = Array.from({ length: 5 }, (_, i) => i + 1);
 
-  useEffect(function () {
+  useEffect(() => {
     if (tokenLogin.trim()) {
       setToken(tokenLogin);
     } else {
       const token = localStorage.getItem("token") || "";
       setToken(token);
     }
-  });
+  }, [tokenLogin]);
 
-  useEffect(
-    function () {
-      async function getUserDetail() {
-        if (token.trim()) await dispatch(getUserDetails(token));
-      }
+  useEffect(() => {
+    async function getUserDetail() {
+      if (token.trim()) await dispatch(getUserDetails(token));
+    }
 
-      getUserDetail();
-    },
-    [token]
-  );
+    getUserDetail();
+  }, [token, dispatch]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(fetchNotifications());
+    }
+  }, [dispatch, isAuthenticated]);
 
   function handleSetIsOpen() {
     setIsOpen((isOpen) => !isOpen);
@@ -65,10 +72,18 @@ function Header() {
     setIsOpen2((isOpen) => !isOpen);
   }
 
-  function handleSetIsMenuOpen() {
-    navEl.current.classList.toggle("nav__open");
-    setIsMenuOpen((isMenuOpen) => !isMenuOpen);
+  function toggleNotifications() {
+    setIsNotificationOpen(!isNotificationOpen);
   }
+
+  function handleSetIsMenuOpen() {
+    if (navEl.current) {
+      navEl.current.classList.toggle("nav__open");
+      setIsMenuOpen((isMenuOpen) => !isMenuOpen);
+    }
+  }
+
+  const unreadCount = notifications ? notifications.filter((notification) => !notification.isRead).length : 0;
 
   return (
     <header className="header">
@@ -137,8 +152,13 @@ function Header() {
           <SearchInput className="header__input" />
           {isAuthenticated && (
             <div className="header__notification__box">
-              <IoIosNotifications className="header__notification__icon header__notification__icon__1" />
-              <span className="header__notification__number">0</span>
+              <IoIosNotifications className="header__notification__icon header__notification__icon__1" onClick={toggleNotifications} />
+              <span className="header__notification__number">{unreadCount}</span>
+              {isNotificationOpen && (
+                <div className="notification__dropdown">
+                  <Notifications />
+                </div>
+              )}
             </div>
           )}
           <div className="cart__container">
@@ -265,6 +285,6 @@ function Header() {
       </div>
     </header>
   );
-}
+};
 
 export default Header;

@@ -19,6 +19,7 @@ import SearchInput from "../inputs/SearchInput";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { fetchNotifications } from "../../store/features/notifications/notificationSlice";
 import { getUserDetails } from "../../store/features/auth/authSlice";
+import { useLocation } from "react-router-dom";
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -26,6 +27,7 @@ const Header: React.FC = () => {
   const [isOpen2, setIsOpen2] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const location = useLocation();
 
   const {
     isAuthenticated,
@@ -249,7 +251,7 @@ const Header: React.FC = () => {
                 <li className="nav__item" onClick={handleSetIsMenuOpen}>
                   <NavLink
                     to="/products"
-                    className={({ isActive }) => (isActive ? "active" : "")}
+                    className={({ isActive }) => (isActive ? "active" : location.pathname.startsWith('/product') ? "active" : "")}
                   >
                     Products
                   </NavLink>

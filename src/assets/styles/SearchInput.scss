@@ -1,89 +1,56 @@
+@import "./Colors";
 
-.main-search {
-  gap:2rem;
+.search-container {
+  display: flex;
+  align-items: center;
+  border: 0.1rem solid $primary-color-dark;
+  border-radius: 10rem;
+  overflow: hidden;
   position: relative;
 
-  .search-container {
+  .search-icon {
+    font-size: 2.4rem;
+    margin-left: -2rem;
     display: flex;
+    color: $primary-color;
     align-items: center;
-    border: 0.1rem solid $primary-color-dark;
-    border-radius: 10rem;
-    overflow: hidden;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    z-index: 1;
+  }
 
-    .search-icon {
-      font-size: 2.4rem;
-      padding-left:1rem;
-      display: flex;
-      color: $primary-color;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      cursor: pointer;
-      z-index: 1;
+  input {
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 1.6rem;
+    flex: 1;
+    background-color: transparent;
+
+    &::placeholder {
+      color: $secondary-color;
+    }
+  }
+
+  .search-button {
+    background-color: $primary-color;
+    border: none;
+    padding: 0.8rem 4.8rem;
+    color: $white;
+    font-size: 1.6rem;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    transition: all 0.2s ease-in;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
     }
 
-    input {
-      border: none;
+    &:focus {
       outline: none;
-      font-family: inherit;
-      font-size: 1.6rem;
-      flex: 1;
-      background-color: transparent;
-
-      &::placeholder {
-        color: $secondary-color;
-      }
     }
-
-    .search-button {
-      background-color: $primary-color;
-      border: none;
-      padding: 0.8rem 4.8rem;
-      color: $white;
-      font-size: 1.6rem;
-      font-weight: 600;
-      cursor: pointer;
-      position: relative;
-      z-index: 1;
-      transition: all 0.2s ease-in;
-
-      &:hover {
-        background-color: darken($primary-color, 10%);
-      }
-
-      &:focus {
-        outline: none;
-      }
-    }
-  }
-  .search-result {
-    position: absolute;
-    width: 36.5rem;
-    max-height: 28em;
-    left: 0.5rem;
-    z-index: 1000;
-    margin-top: 0.1rem;
-    padding: 1rem;
-    font-size: 14px;
-    font-weight: 500;
-    background-color: $white;
-    overflow-y: auto;
-    text-decoration: none;
-    .result {
-      display: flex;
-      flex-direction: column;
-      padding: 13px;
-      border: 1px solid none;
-      margin-top: 1px;
-    }
-    .result:hover {
-      background: rgb(242, 240, 240);
-      padding: 15px;
-      cursor: pointer;
-    }
-  }
-  .link{
-    text-decoration: none;
-    color: black;
   }
 }

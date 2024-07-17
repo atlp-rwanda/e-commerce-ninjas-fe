@@ -18,13 +18,14 @@
       opacity: 1;
       transition: opacity 0.3s;
       border-radius: 50%;
+      color: $primary-color;
 
       .icon-arrow {
         width: 3rem;
         height: 3rem;
 
         &:hover {
-          color: $primary-color;
+          color: $black;
         }
       }
     }

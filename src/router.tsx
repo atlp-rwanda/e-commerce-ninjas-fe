@@ -16,6 +16,7 @@ import ViewProduct from "./pages/ViewProduct";
 import UserLogin from "./pages/UserLogin";
 import SellerLogin from "./pages/SellerLogin";
 import AdminLogin from "./pages/AdminLogin";
+import SellerViewProduct from "./pages/SellerViewProduct";
 
 const AppRouter: React.FC = () => {
   return (
@@ -28,6 +29,7 @@ const AppRouter: React.FC = () => {
           <Route path="/seller">
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="login" element={<SellerLogin />} />
+            <Route path="product/:id" element={<SellerViewProduct />} />
           </Route>
           <Route path="/admin">
             <Route index element={<Navigate to="dashboard" replace />} />

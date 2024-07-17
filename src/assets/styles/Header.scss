@@ -16,11 +16,22 @@
     }
     &__dropdown {
       position: absolute;
-      left: -1170%;
+      left: -1195%;
       top: 150%;
       box-shadow: 0 5rem 10rem 0 rgba(0, 0, 0, 0.08);
       z-index: 500;
       transition: all 0.3s ease-in;
+    }
+  }
+  &__notification__box {
+    &::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: 160%;
+      width: 0.15rem;
+      height: 6rem;
+      background-color: #ccc;
     }
   }
 
@@ -34,7 +45,7 @@
   }
 
   &__input {
-    flex: 0 0 40%;
+    width: 100%;
   }
 
   &__bottom {
@@ -45,8 +56,12 @@
 
     &__top {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      gap: 5rem;
+      .icons {
+        display: flex;
+        margin-left: auto;
+      }
     }
 
     &__bottom {
@@ -236,10 +251,19 @@
     grid-template-columns: auto 1fr;
     grid-template-rows: repeat(2, 1fr);
     align-items: center;
-    column-gap: 1rem;
+    column-gap: 0.5rem;
   }
 
   &__icon {
+    color: $primary-color;
+    width: 3.7rem;
+    height: 3.7rem;
+    grid-column: 1 / 2;
+    grid-row: span 2;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  &__icon-user {
     color: $primary-color;
     width: 3.2rem;
     height: 3.2rem;
@@ -257,6 +281,10 @@
     color: #888;
   }
 }
+.cart__details {
+  margin-right: 3rem;
+  margin-left: 3rem;
+}
 
 .rotate2 {
   transform: rotate(180deg);
@@ -267,12 +295,13 @@
   height: 100%;
   flex: 0 0 10%;
   cursor: pointer;
+  margin-right: 1.5rem;
 
   &::before {
     content: "";
     position: absolute;
     top: -50%;
-    left: -28%;
+    left: -15%;
     width: 0.12rem;
     height: 6rem;
     background-color: #ccc;

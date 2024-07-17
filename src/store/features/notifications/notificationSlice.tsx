@@ -128,7 +128,6 @@ const notificationSlice = createSlice({
       })
       .addCase(markAllNotificationsRead.fulfilled, (state) => {
         state.notifications.forEach(notification => notification.isRead = true);
-        toast.success('All notifications marked as read');
       })
       .addCase(markNotificationRead.fulfilled, (state, action: PayloadAction<string>) => {
         const notificationId = action.payload;
@@ -136,7 +135,6 @@ const notificationSlice = createSlice({
         if (notification) {
           notification.isRead = true;
         }
-        toast.success('Notification marked as read');
       });
   }
 });

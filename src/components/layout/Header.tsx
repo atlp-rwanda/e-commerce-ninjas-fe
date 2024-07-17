@@ -13,7 +13,7 @@ import { IoIosNotifications } from "react-icons/io";
 import { IoMenu } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 import { NavLink } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 import Notifications from "./notification";
 import SearchInput from "../inputs/SearchInput";
 import { useAppDispatch, useAppSelector } from "../../store/store";
@@ -23,6 +23,7 @@ import { useLocation } from "react-router-dom";
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -70,6 +71,9 @@ const Header: React.FC = () => {
   }
 
   function handleSetIsOpen2() {
+    if(!isAuthenticated){
+      navigate("/login")
+    }
     setIsOpen2((isOpen) => !isOpen);
   }
 
@@ -151,6 +155,7 @@ const Header: React.FC = () => {
             )}
           </div>
           <SearchInput className="header__input" />
+          <div className="icons">
           {isAuthenticated && (
             <div className="header__notification__box">
               <IoIosNotifications className="header__notification__icon header__notification__icon__1" onClick={toggleNotifications} />
@@ -162,7 +167,7 @@ const Header: React.FC = () => {
               )}
             </div>
           )}
-          <div className="cart__container">
+          <div className="cart__container cart__details">
             <IoCartOutline className="cart__icon" />
             <span className="cart__text">Cart</span>
             <span className="cart__description">$ 0</span>
@@ -174,16 +179,16 @@ const Header: React.FC = () => {
             {user && User.profilePicture ? (
               <img src={User.profilePicture} className="cart__icon" />
             ) : (
-              <FaRegUser className="cart__icon" />
+              <FaRegUser className="cart__icon-user" />
             )}
 
             <span className="cart__text">{user ? "Hi, " : "User"}</span>
             <span className="cart__description">
               {user
-                ? `${User.email?.slice(0, User?.email.indexOf("@"))?.slice(0, 6)?.toUpperCase()}`
+                ? `${ User?.firstName || User?.email?.split('@')[0] }`
                 : "Account"}
             </span>
-            {isOpen2 && (
+            {isAuthenticated && isOpen2 && (
               <div className="order__dropdown">
                 <ul className="order__list">
                   <li>
@@ -206,18 +211,19 @@ const Header: React.FC = () => {
                   </li>
                   <li>
                     <NavLink
-                      to={isAuthenticated ? "/logout" : `/login`}
+                      to={"/"}
                       className="order__link"
                     >
                       <IoLogOutSharp className="order__icon" />
                       <span className="order__text">
-                        {isAuthenticated ? "Logout" : "Login"}
+                        Logout
                       </span>
                     </NavLink>
                   </li>
                 </ul>
               </div>
             )}
+          </div>
           </div>
         </div>
         <div className="header__bottom__bottom">

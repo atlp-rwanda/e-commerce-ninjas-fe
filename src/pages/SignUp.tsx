@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../components/buttons/Button";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { registerUser } from "../store/features/auth/authSlice";
-import { PuffLoader } from "react-spinners";
+import { HashLoader } from "react-spinners";
 import SignUpIcon from "../../public/assets/images/sign-up.png";
 import { toast } from "react-toastify";
 import authService from "../store/features/auth/authService";
@@ -58,7 +58,7 @@ export const SignUp = () => {
   };
   return (
     <>
-      <Meta title="Signup - E-Commerce Ninjas" />
+      <Meta title="Sign up - E-Commerce Ninjas" />
       <div className="wrapper">
         <div className="container">
           <div className="login-form">
@@ -93,7 +93,7 @@ export const SignUp = () => {
                       value={formik.values.email}
                     />
                     {formik.touched.email && formik.errors.email ? (
-                      <p className="error">{formik.errors.email}</p>
+                      <p className="error1">{formik.errors.email}</p>
                     ) : null}
                   </div>
                   <div className="input-box">
@@ -107,9 +107,10 @@ export const SignUp = () => {
                       onBlur={handleBlur}
                       onFocus={() => setIsFocused(true)}
                       value={formik.values.password}
+
                     />
                     {formik.touched.password && formik.errors.password ? (
-                      <p className="error">{formik.errors.password}</p>
+                      <p className="error1">{formik.errors.password}</p>
                     ) : null}
                     {isFocused && (
                       <span className="hide" onClick={togglePasswordVisibility}>
@@ -118,10 +119,12 @@ export const SignUp = () => {
                     )}
                   </div>
                 </div>
-                {isError && isClicked && <p className="error">{message}</p>}
+                {isError && isClicked ? (
+                  <p className="error2">{message}</p>
+                ) : null}
                 {isLoading ? (
                   <div className="btn-loading">
-                    <PuffLoader size={60} color="#FF6D18" loading={isLoading} />
+                    <HashLoader size={50} color="#FF6D18" loading={true} />
                   </div>
                 ) : (
                   <div className="btn">

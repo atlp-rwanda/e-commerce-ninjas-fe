@@ -49,7 +49,7 @@ const VerifyEmail: React.FC = () => {
                             ) : isError ? (
                                 <div className="isError">
                                     <img src={failed} alt="" />
-                                    <p className="error">There was an error in verifying your email</p>
+                                    <p className="error2">There was an error in verifying your email</p>
                                 </div>
                             ) : null
                         }

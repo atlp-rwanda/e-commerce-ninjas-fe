@@ -45,7 +45,7 @@
 
     &__top {
       display: flex;
-      justify-content: space-between;
+      gap: 9rem;
       align-items: center;
     }
 
@@ -272,7 +272,7 @@
     content: "";
     position: absolute;
     top: -50%;
-    left: -28%;
+    left: -10%;
     width: 0.12rem;
     height: 6rem;
     background-color: #ccc;

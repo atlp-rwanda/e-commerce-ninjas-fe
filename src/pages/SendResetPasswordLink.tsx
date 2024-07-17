@@ -1,31 +1,35 @@
 /* eslint-disable */
-import React, { useEffect ,useState} from 'react'
-import { useFormik } from 'formik';
-import { useAppDispatch, useAppSelector } from '../store/store';
-import { sendResetLink } from '../store/features/auth/authSlice';
-import { toast } from 'react-toastify';
-import * as Yup from 'yup';
-import {  PulseLoader } from 'react-spinners';
+import React, { useEffect, useState } from "react";
+import { useFormik } from "formik";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { sendResetLink } from "../store/features/auth/authSlice";
+import { toast } from "react-toastify";
+import * as Yup from "yup";
+import { PulseLoader } from "react-spinners";
 
 const ResetPasswordSchema = Yup.object().shape({
-  email: Yup.string().email('Email must be valid').required('Email is required'),
-})
+  email: Yup.string()
+    .email("Email must be valid")
+    .required("Email is required"),
+});
+
 const SendResetPasswordLink: React.FC = () => {
   const [hideParagraph, setHideParagraph] = useState(true);
   const dispatch = useAppDispatch();
-  const { user, isError, isSuccess, isLoading, message } = useAppSelector((state) => state?.auth);
+  const { user, isError, isSuccess, isLoading, message } = useAppSelector(
+    (state) => state?.auth
+  );
   const formik = useFormik({
     initialValues: {
-      email: '',
+      email: "",
     },
     validationSchema: ResetPasswordSchema,
     onSubmit: (values, { setStatus }) => {
-      dispatch(sendResetLink(values.email))
-        .then(() => {
-          if (isError) {
-            setStatus(message);
-          }
-       });
+      dispatch(sendResetLink(values.email)).then(() => {
+        if (isError) {
+          setStatus(message);
+        }
+      });
     },
   });
 
@@ -34,19 +38,20 @@ const SendResetPasswordLink: React.FC = () => {
       formik.setStatus(message);
     }
     if (isSuccess) {
-      toast.success(message)
-      formik.resetForm()
+      toast.success(message);
+      formik.resetForm();
       setHideParagraph(false);
     }
   }, [isError, isSuccess, message]);
 
   return (
     <>
-    <hr />
-    <br/><br/>
-     <main>
+      <br />
+      <br />
+
+      <main>
         <div className="resetPassword-Container">
-          <h1>Get  Reset  Password  Link</h1>
+          <h1>Get Reset Password Link</h1>
 
           <form onSubmit={formik.handleSubmit}>
             <div className="input-container">
@@ -61,23 +66,29 @@ const SendResetPasswordLink: React.FC = () => {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
-              <label className="input-label" id="email" htmlFor="email">Email Address</label>
+              <label className="input-label" id="email" htmlFor="email">
+                Email Address
+              </label>
             </div>
-            {hideParagraph ? (
-              <>
-              <p className='error'>{formik.status}</p><br />
-              </>
-            ): null}
+            {isError && <p className="error">{formik.status}</p>}
+            <br />
             <button
-            className={`reset-Button${isLoading ? " loading" : ""}`}
-             disabled={isLoading}
-              >
-            <span>{isLoading ? "Loading " : "Get Reset Link"}</span>
-            <PulseLoader size={6} color="#ffe2d1" loading={isLoading} />
-           </button>          
+              className={`reset-Button${isLoading ? " loading" : ""}`}
+              disabled={isLoading}
+            >
+              <span>{isLoading ? "Loading " : "Get Reset Link"}</span>
+              <PulseLoader size={6} color="#ffe2d1" loading={isLoading} />
+            </button>
           </form>
-        </div><br/>
-      </main><br/><br/><br/><br/><br/><br/>
+        </div>
+        <br />
+      </main>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
     </>
   );
 };

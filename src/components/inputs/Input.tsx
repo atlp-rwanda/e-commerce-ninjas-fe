@@ -19,7 +19,7 @@ function InputLabel({
       {type === "select" ? (
         <select
           className="floating-select"
-          {...(props as React.SelectHTMLAttributes<HTMLSelectElement>)}
+          {...(props as unknown as React.SelectHTMLAttributes<HTMLSelectElement>)}
         >
           <option value=""></option>
           {children}
@@ -27,7 +27,7 @@ function InputLabel({
       ) : type === "textarea" ? (
         <textarea
           className="floating-input floating-textarea"
-          {...(props as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
+          {...(props as unknown as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
         ></textarea>
       ) : (
         <input className="floating-input" type={type} {...props} />

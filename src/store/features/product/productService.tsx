@@ -37,10 +37,16 @@ const fetchShopInfo = async (id: string) => {
   }
 };
 
+const searchProduct = async(criteria:any)=>{
+  const response = await axiosInstance.get(`/api/shop/user-search-products?${criteria}`);
+  return response.data;
+}
+
 const productService = {
     fetchProducts,
     fetchSingleProduct,
     fetchProductReviews,
-    fetchShopInfo
+    fetchShopInfo,
+    searchProduct
 }
 export default productService;

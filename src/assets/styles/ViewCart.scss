@@ -1,0 +1,19 @@
+.cart-section {
+  display: flex;
+  flex-direction: row;
+  .cart-products {
+    flex: 2;
+    .cart {
+      border: 1px solid $border-color;
+      border-radius: 10px;
+      .title {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+      }
+    }
+  }
+  .checkout-details {
+    flex: 1;
+  }
+}

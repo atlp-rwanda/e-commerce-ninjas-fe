@@ -29,10 +29,10 @@ export interface IProductReview {
   createdAt: Date;
   updatedAt: Date;
   user?: {
-      firstName?: string;
-      lastName?: string;
-      profilePicture?: string;
-  }
+    firstName?: string;
+    lastName?: string;
+    profilePicture?: string;
+  };
 }
 
 export interface IShop {
@@ -41,4 +41,24 @@ export interface IShop {
   name: string;
   description?: string;
   image?: string;
+}
+
+export interface IProducts {
+  nextPage: number;
+  currentPage: number;
+  previousPage: number;
+  limit: number;
+  data: [];
+  error?: string;
+}
+export interface IProductsState {
+  // searchProduct: searchProduct;
+}
+
+export interface SearchCriteria {
+  name?: string;
+  category?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  discount?: number;
 }

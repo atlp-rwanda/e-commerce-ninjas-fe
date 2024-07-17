@@ -15,6 +15,7 @@ import ViewProduct from "./pages/ViewProduct";
 import UserLogin from "./pages/UserLogin";
 import SellerLogin from "./pages/SellerLogin";
 import AdminLogin from "./pages/AdminLogin";
+import Search from "./pages/Search";
 import VerifyOtp from "./pages/VerifyOtp";
 
 

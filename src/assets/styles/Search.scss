@@ -1,0 +1,91 @@
+.wrappers {
+    background-color: $container-color;
+  
+    .upper-side {
+      display: flex;
+      align-items: center;
+      font-size: 1.5rem;
+      padding: 2rem 5rem;
+      border-bottom: 2px solid rgba(119, 119, 119, 0.49);
+  
+      .product-name {
+        font-size: 2rem;
+        font-weight: 700;
+        color: $text-color;
+        margin-right: 2rem;
+      }
+  
+      .filter-option {
+        display: flex;
+        gap: 10rem;
+  
+        .selection-part {
+          display: flex;
+          align-items: center;
+          gap: 2rem;
+          font-size: 2rem;
+          font-weight: 700;
+          color: $text-color;
+  
+        }
+  
+        .search-Span-price {
+          font-size: 2rem;
+          font-weight: 700;
+          color: $text-color;
+          margin-right: 2rem;
+        }
+  
+        .dropdown-select {
+  
+          gap: 2rem;
+          font-size: 2rem;
+          font-weight: 700;
+          color: $text-color;
+          border: 1px solid rgba(255, 109, 24, 0.49);
+          border-radius: 4px;
+          padding: 0.5rem 2rem;
+          font-size: 15px;
+          cursor: pointer;
+        }
+      }
+  
+      .discount-display {
+        font-size: 2rem;
+        display: flex;
+        align-items: center;
+      }
+    }
+  
+    .product-main {
+      display: flex;
+  
+      .product-list {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 3rem 3rem;
+        margin-left: 5rem;
+        gap: 3rem;
+      }
+  
+      .loader-spinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 70rem;
+        margin-top: 20rem;
+      }
+  
+      .noResult {
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+  
+        img {
+          width: auto;
+          height: 400px;
+        }
+      }
+    }
+  }

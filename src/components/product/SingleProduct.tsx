@@ -11,7 +11,7 @@ import { IProductInitialResponse } from '../../utils/types/store';
 import { Meta } from '../Meta';
 import { Link } from 'react-router-dom';
 import truncateString from '../../utils/text/truncateString';
-import UserDefaultImage from "../../../public/assets/images/user.png";
+import UserDefaultImage from '../../../public/assets/images/user.png';
 import ImageSlider from '../images/ImageSlider';
 
 const ProductComponent = ({ productId }: { productId: string }) => {

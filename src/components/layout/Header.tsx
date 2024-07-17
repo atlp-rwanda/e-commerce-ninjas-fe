@@ -19,6 +19,7 @@ import SearchInput from "../inputs/SearchInput";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { fetchNotifications } from "../../store/features/notifications/notificationSlice";
 import { getUserDetails } from "../../store/features/auth/authSlice";
+import { useLocation } from "react-router-dom";
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -27,10 +28,10 @@ const Header: React.FC = () => {
   const [isOpen2, setIsOpen2] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const location = useLocation();
 
   const {
     isAuthenticated,
-    isSuccess,
     user,
     token: tokenLogin,
   } = useAppSelector((state) => state.auth);
@@ -70,7 +71,7 @@ const Header: React.FC = () => {
   }
 
   function handleSetIsOpen2() {
-    if(!isSuccess){
+    if(!isAuthenticated){
       navigate("/login")
     }
     setIsOpen2((isOpen) => !isOpen);
@@ -183,10 +184,10 @@ const Header: React.FC = () => {
             <span className="cart__text">{user ? "Hi, " : "User"}</span>
             <span className="cart__description">
               {user
-                ? `${ User.firstName || User.email.split('@')[0] }`
+                ? `${ User?.firstName || User?.email?.split('@')[0] }`
                 : "Account"}
             </span>
-            {isSuccess && isOpen2 && (
+            {isAuthenticated && isOpen2 && (
               <div className="order__dropdown">
                 <ul className="order__list">
                   <li>
@@ -209,12 +210,12 @@ const Header: React.FC = () => {
                   </li>
                   <li>
                     <NavLink
-                      to={!isAuthenticated && "/"}
+                      to={"/"}
                       className="order__link"
                     >
                       <IoLogOutSharp className="order__icon" />
                       <span className="order__text">
-                        {isAuthenticated && "Logout"}
+                        Logout
                       </span>
                     </NavLink>
                   </li>
@@ -253,7 +254,7 @@ const Header: React.FC = () => {
                 <li className="nav__item" onClick={handleSetIsMenuOpen}>
                   <NavLink
                     to="/products"
-                    className={({ isActive }) => (isActive ? "active" : "")}
+                    className={({ isActive }) => (isActive ? "active" : location.pathname.startsWith('/product') ? "active" : "")}
                   >
                     Products
                   </NavLink>

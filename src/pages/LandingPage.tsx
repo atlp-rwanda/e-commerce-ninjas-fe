@@ -38,7 +38,8 @@ const LandingPage: React.FC = () => {
             </div>
             <div className="product-list">
               {isSuccess &&
-                products.map((product: any) => (
+                Array.isArray(products) &&
+                products?.map((product: any) => (
                   <Product
                     key={product.id}
                     id={product.id}

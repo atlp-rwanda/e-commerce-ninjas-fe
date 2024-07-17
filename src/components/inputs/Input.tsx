@@ -1,7 +1,6 @@
 /* eslint-disable */
 
 import React, { ReactNode } from "react";
-import "../../styles/Input.scss";
 
 interface InputLabelProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;

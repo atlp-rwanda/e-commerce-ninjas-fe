@@ -20,10 +20,10 @@ const LoginSchema = Yup.object().shape({
 });
 
 function AdminLogin() {
+  const [isClicked, setIsClicked] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
-  const inputEl = useRef(null);
 
   const dispatch = useAppDispatch();
   const {
@@ -61,6 +61,7 @@ function AdminLogin() {
 
   function handleIsFocused() {
     setIsFocused(true);
+    setIsClicked(false);
   }
 
   function handleIsVisible() {
@@ -105,12 +106,11 @@ function AdminLogin() {
                 id="email"
                 name="email"
                 className="form__input"
-                onChange={formik.handleChange}
                 value={formik.values.email}
+                onChange={formik.handleChange}
+                onFocus={() => setIsClicked(false)}
+                onBlur={formik.handleBlur}
               />
-              {formik.touched.email && formik.errors.email ? (
-                <p className="error">{formik.errors.email}</p>
-              ) : null}
             </div>
             <div className="form__group">
               <input
@@ -119,14 +119,11 @@ function AdminLogin() {
                 className="form__input"
                 id="password"
                 name="password"
+                value={formik.values.password}
                 onChange={formik.handleChange}
                 onFocus={handleIsFocused}
-                value={formik.values.password}
-                ref={inputEl}
+                onBlur={formik.handleBlur}
               />
-              {formik.touched.password && formik.errors.password ? (
-                <p className="error">{formik.errors.password}</p>
-              ) : null}
               {isFocused ? (
                 isVisible ? (
                   <BiSolidShow
@@ -148,11 +145,18 @@ function AdminLogin() {
                 </Link>
               </p>
             </div>
-            {isError && <p className="error">{error}</p>}
+            {formik.touched.email && formik.errors.email ? (
+              <p className="error">{formik.errors.email}</p>
+            ) : formik.touched.password && formik.errors.password ? (
+              <p className="error">{formik.errors.password}</p>
+            ) : isError && isClicked ? (
+              <p className="error">{error}</p>
+            ) : null}
             <button
               type="submit"
               className={`btn form__btn${isLoading ? " loading" : ""}`}
               disabled={isLoading}
+              onClick={() => setIsClicked(true)}
             >
               <span>{isLoading ? "Loading " : "Login"}</span>
               <PulseLoader size={6} color="#ffe2d1" loading={isLoading} />

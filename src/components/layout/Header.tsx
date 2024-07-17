@@ -31,7 +31,6 @@ const Header: React.FC = () => {
 
   const {
     isAuthenticated,
-    isSuccess,
     user,
     token: tokenLogin,
   } = useAppSelector((state) => state.auth);
@@ -181,7 +180,7 @@ const Header: React.FC = () => {
             <span className="cart__text">{user ? "Hi, " : "User"}</span>
             <span className="cart__description">
               {user
-                ? `${User.email.slice(0, User.email.indexOf("@")).slice(0, 6).toUpperCase()}`
+                ? `${User.email?.slice(0, User?.email.indexOf("@"))?.slice(0, 6)?.toUpperCase()}`
                 : "Account"}
             </span>
             {isOpen2 && (

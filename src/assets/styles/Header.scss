@@ -10,12 +10,12 @@
       align-items: center;
       cursor: pointer;
     }
-  
+
     &__icon {
       font-size: 3.4rem;
       color: $primary-color;
     }
-  
+
     &__dropdown {
       position: absolute;
       left: -1170%;
@@ -274,9 +274,9 @@
     content: "";
     position: absolute;
     top: -50%;
-    left: -28%;
-    width: 0.12rem;
-    height: 6rem;
+    left: -30%;
+    width: 0.4rem;
+    height: 7rem;
     background-color: #ccc;
   }
 }

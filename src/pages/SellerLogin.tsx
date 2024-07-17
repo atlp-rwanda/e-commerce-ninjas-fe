@@ -21,10 +21,10 @@ const LoginSchema = Yup.object().shape({
 });
 
 function SellerLogin() {
+  const [isClicked, setIsClicked] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
-  const inputEl = useRef(null);
 
   const dispatch = useAppDispatch();
   const {
@@ -62,6 +62,7 @@ function SellerLogin() {
 
   function handleIsFocused() {
     setIsFocused(true);
+    setIsClicked(false);
   }
 
   function handleIsVisible() {
@@ -108,8 +109,10 @@ function SellerLogin() {
                 id="email"
                 name="email"
                 className="form__input"
-                onChange={formik.handleChange}
                 value={formik.values.email}
+                onChange={formik.handleChange}
+                onFocus={() => setIsClicked(false)}
+                onBlur={formik.handleBlur}
               />
             </div>
             <div className="form__group">
@@ -122,7 +125,7 @@ function SellerLogin() {
                 onChange={formik.handleChange}
                 onFocus={handleIsFocused}
                 value={formik.values.password}
-                ref={inputEl}
+                onBlur={formik.handleBlur}
               />
               {isFocused ? (
                 isVisible ? (
@@ -145,11 +148,18 @@ function SellerLogin() {
                 </Link>
               </p>
             </div>
-            {isError && <p className="error">{error}</p>}
+            {formik.touched.email && formik.errors.email ? (
+              <p className="error">{formik.errors.email}</p>
+            ) : formik.touched.password && formik.errors.password ? (
+              <p className="error">{formik.errors.password}</p>
+            ) : isError && isClicked ? (
+              <p className="error">{error}</p>
+            ) : null}
             <button
               type="submit"
               className={`btn form__btn${isLoading ? " loading" : ""}`}
               disabled={isLoading}
+              onClick={() => setIsClicked(true)}
             >
               <span>{isLoading ? "Loading " : "Login"}</span>
               <PulseLoader size={6} color="#ffe2d1" loading={isLoading} />

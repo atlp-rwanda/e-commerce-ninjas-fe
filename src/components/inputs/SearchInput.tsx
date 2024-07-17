@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React, { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { useAppDispatch, useAppSelector } from "../../store/store";
@@ -90,7 +89,6 @@ function SearchInput({ className, placeholder }: SearchInputProps) {
             ))
           ) : (
             <div className="no-results">
-              <p>No products found</p>
             </div>
           )}
         </div>

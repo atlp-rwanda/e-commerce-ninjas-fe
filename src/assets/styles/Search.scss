@@ -35,6 +35,7 @@
             margin-right: 2rem;
           }
            .dropdown-select{
+         
              gap: 2rem;
              font-size: 2rem;
              font-weight: 700;
@@ -46,7 +47,11 @@
             cursor: pointer;
            }
          }
-
+         .discount-display{
+          font-size: 2rem;
+          display: flex;
+          align-items: center;
+         }
         }
         .product-main{
           display: flex;
@@ -74,7 +79,5 @@
               height: 400px;
             }
           }
-        }
-      
-
+        }  
 }

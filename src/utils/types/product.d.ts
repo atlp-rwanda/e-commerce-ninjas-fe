@@ -1,5 +1,17 @@
-/* eslint-disable @typescript-eslint/indent */
-export interface IProduct {
+/* eslint-disable */
+export interface IProducts {
+    nextPage:number;
+    currentPage: number;
+    previousPage:number;
+    limit:number;
+    data:[];
+    error?:string
+  }
+  export interface IProductsState {
+    searchProduct: searchProduct;
+  }
+  
+  export interface IProduct {
     id: string;
     shopId: string;
     name: string;
@@ -17,9 +29,9 @@ export interface IProduct {
     updatedAt: Date;
     productReviews: IProductReview[];
     shops: IShop;
-}
-
-export interface IProductReview {
+  }
+  
+  export interface IProductReview {
     id: string;
     productId: string;
     userId: string;
@@ -33,12 +45,12 @@ export interface IProductReview {
         lastName?: string;
         profilePicture?: string;
     }
-}
-
-export interface IShop {
+  }
+  
+  export interface IShop {
     id: string;
     userId: string;
     name: string;
     description?: string;
     image?: string;
-}
+  }

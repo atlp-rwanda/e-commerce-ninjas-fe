@@ -97,3 +97,11 @@ export interface INotificationInitialResource {
   passwordExpiryMessage: string | null,
   isLoggedOut: boolean
 }
+
+export interface SearchCriteria {
+  name?: string;
+  category?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  discount?: number;
+}

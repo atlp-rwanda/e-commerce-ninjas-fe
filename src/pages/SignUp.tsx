@@ -44,6 +44,7 @@ export const SignUp = () => {
     }
   }, [user, isError, isSuccess, isLoading, message]);
 
+  const [isClicked, setIsClicked] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const togglePasswordVisibility = () => {
@@ -117,7 +118,7 @@ export const SignUp = () => {
                     )}
                   </div>
                 </div>
-                {isError && <p className="error">{message}</p>}
+                {isError && isClicked && <p className="error">{message}</p>}
                 {isLoading ? (
                   <div className="btn-loading">
                     <PuffLoader size={60} color="#FF6D18" loading={isLoading} />
@@ -128,6 +129,7 @@ export const SignUp = () => {
                       title="Sign up"
                       type="submit"
                       className="signup__btn"
+                      onClick={() => setIsClicked(true)}
                     />
                   </div>
                 )}

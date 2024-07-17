@@ -26,6 +26,7 @@
 
 .login {
   display: flex;
+  align-items: flex-start;
   gap: 3.2rem;
 
   &__logo {
@@ -34,7 +35,7 @@
     justify-self: center;
     align-self: center;
     padding-left: 3.2rem;
-    margin: 4.8rem auto;
+    margin: 2.4rem auto;
   }
 
   &__left {
@@ -45,7 +46,7 @@
     flex: 0 0 40%;
     border-radius: 3.6rem;
     overflow: hidden;
-    padding: 10rem 3.2rem 3.2rem 3.2rem;
+    padding: 10rem 3.2rem 6.4rem 3.2rem;
     color: $white;
     background-image: linear-gradient(to right bottom, #ff6d18 40%, #d8c9c1);
   }

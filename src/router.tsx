@@ -1,7 +1,7 @@
 /* eslint-disable*/
 /* eslint-disable */
 import React from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import { SignUp } from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
@@ -17,6 +17,7 @@ import ViewProduct from "./pages/ViewProduct";
 import UserLogin from "./pages/UserLogin";
 import SellerLogin from "./pages/SellerLogin";
 import AdminLogin from "./pages/AdminLogin";
+import Search from "./pages/Search";
 
 const AppRouter: React.FC = () => {
   return (

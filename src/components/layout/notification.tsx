@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { FaCheck } from 'react-icons/fa';
 import { RiArrowDropDownLine, RiCheckDoubleFill } from "react-icons/ri";
-import { fetchNotifications } from '../../store/features/notifications/notificationSlice';
+import { fetchNotifications, markAllNotificationsRead, markNotificationRead } from '../../store/features/notifications/notificationSlice';
 import { PuffLoader } from 'react-spinners';
 
 type Notification = {
@@ -52,6 +52,14 @@ const Notifications: React.FC = () => {
     setDropdownOpen(false);
   };
 
+  const handleMarkAllRead = () => {
+    dispatch(markAllNotificationsRead());
+  };
+
+  const handleMarkRead = (id: string) => {
+    dispatch(markNotificationRead(id));
+  };
+
   return (
     <div className="notifications-container">
       {isLoading ? (
@@ -77,14 +85,18 @@ const Notifications: React.FC = () => {
                   </div>
                 )}
               </div>
-              <div className="filter-double">
+              <div className="filter-double" onClick={handleMarkAllRead}>
                 <RiCheckDoubleFill size={20} className="filter-double-icon" />
               </div>
             </div>
           </div>
           <div className="notifications-list">
             {isSuccess && filteredNotifications.map((notification: Notification) => (
-              <div key={notification.id} className={`notification-item ${!notification.isRead ? 'unread' : ''}`}>
+              <div 
+                key={notification.id} 
+                className={`notification-item ${!notification.isRead ? 'unread' : ''}`}
+                onClick={() => handleMarkRead(notification.id)}
+              >
                 <FaCheck className={!notification.isRead ? 'unread-icon' : ''} />
                 <div className="notification-text">
                   <p>{notification.message}</p>

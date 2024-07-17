@@ -110,35 +110,35 @@
       }
     }
   }
-  .search-result {
-    position: absolute;
-    width: 36.5rem;
-    max-height: 28em;
-    left: 0.5rem;
-    z-index: 1000;
-    margin-top: 0.1rem;
-    padding: 1rem;
-    font-size: 14px;
-    font-weight: 500;
-    background-color: $white;
-    overflow-y: auto;
-    text-decoration: none;
-    .result {
-      display: flex;
-      flex-direction: column;
-      padding: 13px;
-      border: 1px solid none;
-      margin-top: 1px;
-    }
-    .result:hover {
-      background: rgb(242, 240, 240);
-      padding: 15px;
-      cursor: pointer;
-    }
+}
+.search-result {
+  position: absolute;
+  width: 36.5rem;
+  max-height: 28em;
+  left: 0.5rem;
+  z-index: 1000;
+  margin-top: 0.1rem;
+  padding: 1rem;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: $white;
+  overflow-y: auto;
+  text-decoration: none;
+  .result {
+    display: flex;
+    flex-direction: column;
+    padding: 13px;
+    border: 1px solid none;
+    margin-top: 1px;
   }
-  .link{
-    text-decoration: none;
-    color: black;
+  .result:hover {
+    background: rgb(242, 240, 240);
+    padding: 15px;
+    cursor: pointer;
   }
+}
+.link{
+  text-decoration: none;
+  color: black;
 }
 }

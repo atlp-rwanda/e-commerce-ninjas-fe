@@ -1,7 +1,6 @@
-/* eslint-disable*/
 /* eslint-disable */
 import React from "react";
-import { Navigate, Route, Routes, } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import { SignUp } from "./pages/SignUp";
 import NotFound from "./pages/NotFound";
@@ -16,7 +15,6 @@ import ViewProduct from "./pages/ViewProduct";
 import UserLogin from "./pages/UserLogin";
 import SellerLogin from "./pages/SellerLogin";
 import AdminLogin from "./pages/AdminLogin";
-import Search from "./pages/Search";
 import VerifyOtp from "./pages/VerifyOtp";
 
 
@@ -54,11 +52,12 @@ const AppRouter: React.FC = () => {
           <Route path="product/:id" element={<ViewProduct />} />
           <Route path="search" element={<Search/>}/>
         <Route path="*" element={<NotFound />} />
-        <Route path="/verify-otp" element={<VerifyOtp />} />
+        </Route>
+
       </Routes>
     </div>
   );
 };
 
-export default AppRouter;
 
+export default AppRouter;

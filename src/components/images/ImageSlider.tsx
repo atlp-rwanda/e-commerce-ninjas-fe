@@ -55,7 +55,7 @@ const ImageSlider = ({ images, selectedImage, setSelectedImage }: { images: stri
                     <GoDotFill
                         key={index}
                         className="icon-dots"
-                        style={{ color: currentIndex === index ? '#ff6d18' : '#fff' }}
+                        style={{ color: currentIndex === index ? '#ff6d18' : '#fff', border: '2px solid #ff6d18', borderRadius: '10px' }}
                         onClick={()=>{setCurrentIndex(index)}}
                     />
                 ))}

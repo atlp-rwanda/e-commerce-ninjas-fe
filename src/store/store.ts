@@ -2,7 +2,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import welcomeReducer from "./features/welcomeSlice";
-import productReducer from './features/product/productSlice'
+import productReducer from './features/product/productSlice';
 import authReducer from './features/auth/authSlice';
 import singleProductReducer from './features/product/singleProductSlice';
 import notificationReducer from './features/notifications/notificationSlice';

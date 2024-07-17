@@ -1,7 +1,6 @@
 /* eslint-disable */
 
 import React,{useState} from "react";
-import "../styles/verifyOtp.scss";
 import { IoReloadSharp } from "react-icons/io5";
 import SuccessModal from "../components/Modal/Modal";
 

@@ -1,7 +1,7 @@
 // SuccessModal.tsx
 
 import React from 'react';
-import '../../styles/verifyOtp.scss';
+
 
 interface SuccessModalProps {
   isOpen: boolean;

@@ -51,9 +51,12 @@ const AppRouter: React.FC = () => {
           />
           <Route path="product/:id" element={<ViewProduct />} />
           <Route path="search" element={<Search/>}/>
+          <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="*" element={<NotFound />} />
-        </Route>
 
+        </Route>
+     
+    
       </Routes>
     </div>
   );

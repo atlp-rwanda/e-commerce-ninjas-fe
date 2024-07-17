@@ -35,7 +35,7 @@ const productSlice = createSlice({
            .addCase(fetchProducts.fulfilled, (state, action: PayloadAction<any>) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.products = action.payload;
+                state.products = action.payload.products;
             })
            .addCase(fetchProducts.rejected, (state, action: PayloadAction<any>) => {
                 state.isLoading = false;

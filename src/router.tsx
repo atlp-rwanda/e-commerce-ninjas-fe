@@ -18,7 +18,6 @@ import UserLogin from "./pages/UserLogin";
 import SellerLogin from "./pages/SellerLogin";
 import AdminLogin from "./pages/AdminLogin";
 import Search from "./pages/Search";
-
 const AppRouter: React.FC = () => {
   return (
     <div>

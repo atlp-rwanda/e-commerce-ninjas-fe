@@ -14,6 +14,7 @@ export const store = configureStore({
     products: productReducer,
     singleProduct: singleProductReducer,
     notification: notificationReducer,
+
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

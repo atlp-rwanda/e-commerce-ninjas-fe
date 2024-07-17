@@ -42,3 +42,23 @@ export interface IShop {
   description?: string;
   image?: string;
 }
+
+export interface IProducts {
+  nextPage:number;
+  currentPage: number;
+  previousPage:number;
+  limit:number;
+  data:[];
+  error?:string
+}
+export interface IProductsState {
+  searchProduct: searchProduct;
+}
+
+export interface SearchCriteria {
+  name?: string;
+  category?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  discount?: number;
+}

@@ -17,11 +17,14 @@ Our e-commerce web application server, developed by Team Ninjas, facilitates smo
 [![Netlify Status](https://api.netlify.com/api/v1/badges/a3ed5a75-a862-4f3b-ba21-8369180cf3e6/deploy-status)](https://app.netlify.com/sites/e-commerce-ninja-fn-staging/deploys)
 [![Coverage Status](https://coveralls.io/repos/github/atlp-rwanda/e-commerce-ninjas-fe/badge.svg)](https://coveralls.io/github/atlp-rwanda/e-commerce-ninjas-fe)
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/atlp-rwanda/e-commerce-ninjas-fe/tree/develop.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/atlp-rwanda/e-commerce-ninjas-fe/tree/develop)
+[![CI](https://github.com/atlp-rwanda/e-commerce-ninjas-fe/actions/workflows/ci.yml/badge.svg)](https://github.com/atlp-rwanda/e-commerce-ninjas-fe/actions/workflows/ci.yml)
 
 ## Completed features
 - Setup empty react
 - Setup Redux store
 - Setup StoryBook documentation
+- Sign up page
+- Login/Signup with Google
 
 ## Get started
 - Clone repository
@@ -47,7 +50,7 @@ npm run storybook
 
 ## Folder Structure
 
-- `public`: Contains static files like `index.html` and images.
+- `public`: Contains static files and folder like `index.html` and images.
 - `src`: The main source folder for the React application.
   - `components`: Reusable UI components.
   - `pages`: Different pages/screens of the application.

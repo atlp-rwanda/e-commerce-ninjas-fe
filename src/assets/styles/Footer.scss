@@ -1,0 +1,154 @@
+.footer {
+  &__container {
+    background-color: $black-2;
+    padding: 8rem 5.2rem 2.4rem 5.2rem;
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: space-between;
+    margin-bottom: 4.8rem;
+  }
+
+  &__left {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &__right {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+
+    &__last {
+      justify-self: end;
+    }
+
+    &__second__last {
+      justify-self: center;
+    }
+  }
+
+  &__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  &__title {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: $white-2;
+  }
+
+  &__special__item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 1.2rem;
+    row-gap: 1.6rem;
+  }
+
+  &__item {
+    font-size: 1.8rem;
+    line-height: 1.4;
+  }
+
+  &__link {
+    &:link,
+    &:visited {
+      text-decoration: none;
+      font-size: 1.3rem;
+      color: $white-2;
+      letter-spacing: 0.05rem;
+      transition: all 0.15s ease-in;
+    }
+
+    &:hover,
+    &:active {
+      color: $primary-color;
+    }
+  }
+
+  &__socials {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2.4rem;
+    width: 90%;
+    padding-left: 9.6rem;
+  }
+
+  &__social {
+    height: 3rem;
+    width: 3rem;
+  }
+
+  &__additional {
+    background-color: $black-3;
+    padding: 3.2rem 1.6rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.8rem;
+  }
+
+  &__additional__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2.4rem;
+    color: #fff;
+  }
+
+  &__additional__item:first-child {
+    list-style: none;
+  }
+
+  &__additional__link {
+    &:link,
+    &:visited {
+      text-decoration: none;
+      color: $white;
+      font-size: 1.3rem;
+    }
+  }
+
+  &__address {
+    font-size: 1.3rem;
+    font-style: normal;
+    line-height: 1.4;
+    color: $white-2;
+  }
+
+  &__copyright {
+    font-size: 1.2rem;
+    color: $white-2;
+  }
+
+  &__text {
+    font-size: 1.2rem;
+    justify-self: start;
+    color: $white-2;
+  }
+
+  &__icon {
+    width: 3.2rem;
+    height: 3.2rem;
+    color: $white-2;
+  }
+}
+
+@media only screen and (max-width: 51rem) {
+}
+
+@media only screen and (max-width: 31rem) {
+}

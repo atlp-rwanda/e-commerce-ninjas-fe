@@ -1,0 +1,72 @@
+.button-wrapper {
+  width: 60rem;
+  margin: 5rem auto;
+  padding: 1rem;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  border-radius: 0.25rem;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+  position: relative;
+
+  &--primary {
+    background-color: $primary-color;
+    color: $white;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+
+  &--secondary {
+    background-color: $secondary-color;
+    color: $white;
+
+    &:hover {
+      background-color: darken($secondary-color, 10%);
+    }
+  }
+
+  &--outline {
+    background-color: transparent;
+    color: $primary-color;
+    border: 0.2rem solid $primary-color;
+
+    &:hover {
+      background-color: $primary-color;
+      color: $white;
+    }
+  }
+
+  &--disabled {
+    background-color: $secondary-color;
+    color: $white;
+    cursor: not-allowed;
+  }
+
+  .button-icon {
+    margin-right: 0.8rem;
+  }
+
+  .button-icon:last-child {
+    margin-right: 0;
+    margin-left: 0.8rem;
+  }
+
+  .button-text {
+    vertical-align: middle;
+  }
+}

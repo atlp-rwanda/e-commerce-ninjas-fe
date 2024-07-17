@@ -5,7 +5,7 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "strict": true,
+    "strict": false,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
@@ -14,5 +14,5 @@
     "jsx": "react",
     "types": ["react", "jest", "@testing-library/jest-dom","node"]
   },
-  "include": ["src","**/*.ts","**/*.tsx","jest.config.ts"]
+  "include": ["src", "src/utils/types/custom.d.ts", "**/*.ts","**/*.tsx","jest.config.ts"]
 }

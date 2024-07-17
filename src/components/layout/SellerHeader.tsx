@@ -4,7 +4,6 @@ import { IoIosNotifications } from "react-icons/io";
 import { MdDarkMode } from "react-icons/md";
 import { MdLightMode } from "react-icons/md";
 
-import "../../styles/SellerHeader.scss";
 
 function SellerHeader() {
   return (

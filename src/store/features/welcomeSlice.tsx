@@ -1,14 +1,11 @@
 /* eslint-disable */
-
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import axiosInstance from "../../utils/axios/axiosInstance";
-import type {
-  IWelcomeMessage,
-  IWelcomeMessageState,
-} from "../../utils/types/store";
+import { createSlice,createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import type { IWelcomeMessage, IWelcomeMessageState } from '../../utils/types/store';
+import welcomeService from './welcomeService';
+import { axiosInstance } from '../../utils/axios/axiosInstance';
 
 const initialState: IWelcomeMessageState = {
-  welcomeMessage: { status: false, message: "" },
+  welcomeMessage: { status: false, message: '' },
 };
 
 export const loadWelcomeMessage = createAsyncThunk<IWelcomeMessage>(
@@ -37,7 +34,7 @@ export const WelcomeSlice = createSlice({
       .addCase(loadWelcomeMessage.rejected, (state) => {
         state.welcomeMessage = {
           status: false,
-          message: "Failed to load welcome message.",
+          message: 'Failed to load welcome message.',
         };
       });
   },

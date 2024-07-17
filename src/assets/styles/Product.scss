@@ -1,0 +1,158 @@
+.product {
+  border: 1px solid $border-color;
+  border-radius: 1rem;
+  overflow: hidden;
+  width: 26rem;
+  margin-top: 2rem;
+  box-shadow: 0.5rem 0.5rem 0.5rem rgba(0, 0, 0, 0.2);
+  background-color: $white;
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.3);
+  }
+  
+  .product-image-container {
+    position: relative;
+    height: 18.8rem;
+    cursor: pointer;
+
+    .discount-badge {
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: #FF6D18;
+      color: $white;
+      padding: 0.3rem 1rem;
+      border-top-left-radius: 1rem;
+      border-bottom-right-radius: 1rem;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease-in-out;
+    }
+  }
+
+  .product-info {
+    padding: 1rem;
+    background-color: $secondary-color-light;
+
+    .product-name {
+      font-size: 1.7rem;
+      font-weight: bold;
+      color: $black;
+      margin: 0.5rem 0 0.5rem 0;
+    }
+
+    .product-details {
+      display: flex;
+      align-items: center;
+
+      .product-price {
+        font-size: 2rem;
+        font-weight: bold;
+        color: $primary-color;
+        margin-right: 2rem;
+      }
+
+      .product-stock {
+        font-size: 1.6rem;
+        font-weight: bold;
+        color: $black;
+
+        .stock {
+          color: $primary-color;
+        }
+      }
+    }
+
+    .product-add {
+      display: flex;
+      justify-content: flex-end;
+
+      .icon-container {
+        width: 2.8rem;
+        height: 2.8rem;
+        border-radius: 50%;
+        background-color: $secondary-color-light;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 0.7rem;
+        cursor: pointer;
+        border: 1px solid $primary-color;
+        transition: background-color 0.3s, color 0.3s;
+
+        &:hover {
+          background-color: $primary-color;
+          color: white;
+
+          .icon {
+            color: $white;
+          }
+        }
+
+        .icon {
+          width: auto;
+          height: 70%;
+          color: $primary-color;
+        }
+      }
+    }
+
+    .product-description {
+      font-size: 1.5rem;
+      color: $secondary-color;
+      margin-top: 0.7rem;
+      margin-bottom: 1rem;
+    }
+  }
+}
+@media (max-width: 768px) {
+  .product {
+    width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 8px;
+    color: $white-color;
+  }
+
+ .product-info {
+   .product-name {
+      font-size: 1.4rem;
+    }
+
+   .product-price {
+      font-size: 1.8rem;
+    }
+
+   .product-stock {
+      font-size: 1.4rem;
+    }
+  }
+}
+@media (max-width: 480px) {
+  .product {
+    width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 8px;
+    color: $white-color;
+  }
+
+ .product-info {
+   .product-name {
+      font-size: 1.2rem;
+    }
+
+   .product-price {
+      font-size: 1.6rem;
+    }
+
+   .product-stock {
+      font-size: 1.2rem;
+    }
+  }
+}

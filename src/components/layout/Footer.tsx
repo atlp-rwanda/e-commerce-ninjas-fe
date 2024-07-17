@@ -6,15 +6,13 @@ import { IoLogoFacebook } from "react-icons/io";
 import { FaSquareTwitter } from "react-icons/fa6";
 import { FaLinkedin } from "react-icons/fa6";
 
-import "../../styles/Footer.scss";
-
 function Footer() {
   return (
     <footer className="footer">
       <div className="footer__container">
         <div className="footer__content">
           <div className="footer__left">
-            <nav className="footer__nav">
+            <nav className="footer__nav footer__nav__first">
               <p className="footer__title">Get support</p>
               <ul className="footer__list">
                 <li className="footer__item">

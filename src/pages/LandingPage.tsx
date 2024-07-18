@@ -6,14 +6,13 @@ import Product from "../components/product/Product";
 import Sample from "../components/layout/Sample";
 import { PuffLoader } from "react-spinners";
 import { Meta } from "../components/Meta";
-// import useSocket from "../hooks/useSocket";
 
 const LandingPage: React.FC = () => {
   const dispatch = useAppDispatch();
+
   const { products, isError, isSuccess, isLoading, message } = useAppSelector(
     (state: any) => state.products
   );
-
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);

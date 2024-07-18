@@ -12,7 +12,7 @@ import { FaChevronDown } from "react-icons/fa";
 import { IoIosNotifications } from "react-icons/io";
 import { IoMenu } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
-import { NavLink } from "react-router-dom";
+import { Navigate, NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Notifications from "./notification";
 import SearchInput from "../inputs/SearchInput";
@@ -20,7 +20,7 @@ import { useAppDispatch, useAppSelector } from "../../store/store";
 import { fetchNotifications } from "../../store/features/notifications/notificationSlice";
 import { getUserDetails } from "../../store/features/auth/authSlice";
 import { useLocation } from "react-router-dom";
-
+import cartService from "../../store/features/carts/cartService";
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -29,7 +29,6 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const location = useLocation();
-
   const {
     isAuthenticated,
     user,
@@ -41,8 +40,42 @@ const Header: React.FC = () => {
 
   const User: any = { ...user };
 
-  const categories = Array.from({ length: 5 }, (_, i) => i + 1);
+  const cartsTotal = async () => {
+    try {
+      const carts = await cartService.getUserCarts();
+      let total = 0;
+      carts.data.carts.forEach((cart) => {
+        total += cart.total;
+      });
+      return total;
+    } catch (error) {
+      console.error("Error fetching carts:", error);
+      return 0;
+    }
+  };
 
+  const [cartTotal, setCartTotal] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchCartTotal = async () => {
+      try {
+        if (isAuthenticated) {
+          const total = Number(await cartsTotal());
+          const roundedTotal = total.toFixed(2);
+          setCartTotal(roundedTotal);
+        } else {
+          setCartTotal("0.00");
+        }
+      } catch (error) {
+        console.error("Error fetching cart total:", error);
+        setCartTotal("0.00"); 
+      }
+    };
+
+    fetchCartTotal();
+  }, [isAuthenticated]);
+
+  const categories = Array.from({ length: 5 }, (_, i) => i + 1);
   useEffect(() => {
     if (tokenLogin.trim()) {
       setToken(tokenLogin);
@@ -88,12 +121,14 @@ const Header: React.FC = () => {
     }
   }
 
-  const unreadCount = notifications ? notifications.filter((notification) => !notification.isRead).length : 0;
+  const unreadCount = notifications
+    ? notifications.filter((notification) => !notification.isRead).length
+    : 0;
 
   return (
     <header className="header">
       <div className="header__top">
-        <div className="header__logo">
+        <a className="header__logo" href="/">
           <img
             src="../assets/images/logo.png"
             alt="Ecommerce logo"
@@ -102,7 +137,7 @@ const Header: React.FC = () => {
           <p className="header__logo__text">
             e-Commerce <span>Ninjas</span>
           </p>
-        </div>
+        </a>
         <div className="header__content">
           <div className="header__box header__location">
             <FaLocationDot className="header__icon" />
@@ -158,8 +193,13 @@ const Header: React.FC = () => {
           <div className="icons">
           {isAuthenticated && (
             <div className="header__notification__box">
-              <IoIosNotifications className="header__notification__icon header__notification__icon__1" onClick={toggleNotifications} />
-              <span className="header__notification__number">{unreadCount}</span>
+              <IoIosNotifications
+                className="header__notification__icon header__notification__icon__1"
+                onClick={toggleNotifications}
+              />
+              <span className="header__notification__number">
+                {unreadCount}
+              </span>
               {isNotificationOpen && (
                 <div className="notification__dropdown">
                   <Notifications />
@@ -167,11 +207,19 @@ const Header: React.FC = () => {
               )}
             </div>
           )}
-          <div className="cart__container cart__details">
+
+          <a className="cart__container cart__details" href="/shopping-cart">
             <IoCartOutline className="cart__icon" />
             <span className="cart__text">Cart</span>
-            <span className="cart__description">$ 0</span>
-          </div>
+            <span className="cart__description">
+              {isAuthenticated
+                ? cartTotal !== null
+                  ? `$ ${cartTotal}`
+                  : "$ 0"
+                : "$ 0"}
+            </span>
+          </a>
+
           <div
             className="cart__container user__container"
             onClick={handleSetIsOpen2}
@@ -256,7 +304,13 @@ const Header: React.FC = () => {
                 <li className="nav__item" onClick={handleSetIsMenuOpen}>
                   <NavLink
                     to="/products"
-                    className={({ isActive }) => (isActive ? "active" : location.pathname.startsWith('/product') ? "active" : "")}
+                    className={({ isActive }) =>
+                      isActive
+                        ? "active"
+                        : location.pathname.startsWith("/product")
+                          ? "active"
+                          : ""
+                    }
                   >
                     Products
                   </NavLink>

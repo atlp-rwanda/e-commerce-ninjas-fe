@@ -1,11 +1,11 @@
 /* eslint-disable */
-import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { CiHeart } from "react-icons/ci";
-import { PiShoppingCartThin } from "react-icons/pi";
-import { useAppDispatch, useAppSelector } from "../../store/store";
-import { createCart } from "../../store/features/carts/cartSlice"; // Adjust the import path accordingly
-import { toast } from "react-toastify";
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { CiHeart } from 'react-icons/ci';
+import { PiShoppingCartThin } from 'react-icons/pi';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { createCart } from '../../store/features/carts/cartSlice'; // Adjust the import path accordingly
+import { toast } from 'react-toastify';
 
 interface ProductProps {
   id: string;
@@ -53,9 +53,9 @@ const Product: React.FC<ProductProps> = ({
     if (response.payload.data) {
       toast.success(response.payload.message);
       return;
-    } else if (response.payload === "Not authorized") {
-      toast.error("Please login first");
-      navigate("/login");
+    } else if (response.payload === 'Not authorized') {
+      toast.error('Please login first');
+      navigate('/login');
     } else {
       toast.error(response.payload.message);
       return;
@@ -68,6 +68,7 @@ const Product: React.FC<ProductProps> = ({
         className="product-image-container"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onClick={() => navigate(`/product/${id}`)}
       >
         <span className="discount-badge">{discount}%</span>
         <img

@@ -101,7 +101,7 @@ const UserViewCart: React.FC = () => {
                         <div className="flexer">
                           <div className="left">
                             <span className="discount">
-                              {product.discount}%
+                              {product.discount}
                             </span>
                             <div className="price">${product.price}</div>
                           </div>

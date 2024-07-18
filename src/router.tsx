@@ -28,7 +28,7 @@ const AppRouter: React.FC = () => {
           <Route path="signup" element={<SignUp />} />
           <Route path="login" element={<UserLogin />} />
           <Route path="/seller">
-            <Route index element={<Navigate to="dashboard" replace />} />
+         <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="login" element={<SellerLogin />} />
           </Route>
           <Route path="/admin">

@@ -1,10 +1,10 @@
 /* eslint-disable */
-import React, { useEffect, useState } from "react";
-import { Meta } from "../components/Meta";
-import { useAppDispatch, useAppSelector } from "../store/store";
-import { PuffLoader } from "react-spinners";
-import { toast } from "react-toastify";
-import { getUserCarts } from "../store/features/carts/cartSlice";
+import React, { useEffect, useState } from 'react';
+import { Meta } from '../components/Meta';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { PuffLoader } from 'react-spinners';
+import { toast } from 'react-toastify';
+import { getUserCarts } from '../store/features/carts/cartSlice';
 import {
   FaCheckSquare,
   FaMinus,
@@ -13,8 +13,8 @@ import {
   FaTrash,
   FaGift,
   FaShippingFast,
-} from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+} from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const UserViewCart: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -30,11 +30,11 @@ const UserViewCart: React.FC = () => {
       try {
         setIsLoading(true);
         const response = await dispatch(getUserCarts()).unwrap();
-        console.log("Cart response:", response);
+        console.log('Cart response:', response);
         setCartData(response.data);
         setIsLoading(false);
       } catch (error: any) {
-        console.error("Error fetching carts:", error);
+        console.error('Error fetching carts:', error);
         setIsLoading(false);
         setIsError(true);
         toast.error(error.message);
@@ -44,8 +44,8 @@ const UserViewCart: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      navigate("/login");
+    if (!localStorage.getItem('token')) {
+      navigate('/login');
     }
   }, [navigate]);
 
@@ -95,7 +95,9 @@ const UserViewCart: React.FC = () => {
                         <img src={product.image} alt={product.name} />
                       </div>
                       <div className="description">
-                        <h4>{product.name}</h4>
+                        <h4 onClick={() => navigate(`/product/${product.id}`)}>
+                          {product.name}
+                        </h4>
                         <div className="flexer">
                           <div className="left">
                             <span className="discount">

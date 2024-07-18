@@ -17,6 +17,7 @@ import ViewProduct from "./pages/ViewProduct";
 import UserLogin from "./pages/UserLogin";
 import SellerLogin from "./pages/SellerLogin";
 import AdminLogin from "./pages/AdminLogin";
+import Search from "./pages/Search";
 
 const AppRouter: React.FC = () => {
   return (
@@ -50,7 +51,8 @@ const AppRouter: React.FC = () => {
             element={<ResetPassword />}
           />
           <Route path="product/:id" element={<ViewProduct />} />
-          <Route path='/profile' element={<UserProfile/>}/>
+          <Route path="search" element={<Search/>}/>
+          <Route path='/profile-settings' element={<UserProfile/>}/>
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

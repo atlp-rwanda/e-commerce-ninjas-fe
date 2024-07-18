@@ -5,6 +5,8 @@ import welcomeReducer from "./features/welcomeSlice";
 import productReducer from './features/product/productSlice';
 import authReducer from './features/auth/authSlice';
 import singleProductReducer from './features/product/singleProductSlice';
+import singleSellerProductReducer from './features/product/sellerProductSlice';
+import sellerCollectionProducts from './features/product/sellerCollectionProductsSlice';
 import notificationReducer from './features/notifications/notificationSlice';
 
 export const store = configureStore({
@@ -13,6 +15,8 @@ export const store = configureStore({
     auth: authReducer,
     products: productReducer,
     singleProduct: singleProductReducer,
+    singleSellerProduct: singleSellerProductReducer,
+    sellerCollectionProducts: sellerCollectionProducts,
     notification: notificationReducer,
   },
   middleware: (getDefaultMiddleware) =>

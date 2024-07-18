@@ -16,7 +16,10 @@ import ViewProduct from "./pages/ViewProduct";
 import UserLogin from "./pages/UserLogin";
 import SellerLogin from "./pages/SellerLogin";
 import AdminLogin from "./pages/AdminLogin";
-import SellerViewProduct from "./pages/SellerViewProduct";
+import Search from "./pages/Search";
+import SellerViewProduct from "./pages/seller/SellerViewProduct";
+import SellerCollection from "./pages/seller/SellerCollection";
+import { SellerLayout } from "./components/layout/SellerLayout";
 
 const AppRouter: React.FC = () => {
   return (
@@ -26,11 +29,6 @@ const AppRouter: React.FC = () => {
           <Route index element={<LandingPage />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="login" element={<UserLogin />} />
-          <Route path="/seller">
-            <Route index element={<Navigate to="dashboard" replace />} />
-            <Route path="login" element={<SellerLogin />} />
-            <Route path="product/:id" element={<SellerViewProduct />} />
-          </Route>
           <Route path="/admin">
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="login" element={<AdminLogin />} />
@@ -51,8 +49,15 @@ const AppRouter: React.FC = () => {
             element={<ResetPassword />}
           />
           <Route path="product/:id" element={<ViewProduct />} />
+          <Route path="search" element={<Search/>}/>
           <Route path="*" element={<NotFound />} />
         </Route>
+        <Route path="/seller" element={<SellerLayout/>}>
+            <Route index element={<Navigate to="products" replace />} />
+            <Route path="login" element={<SellerLogin />} />
+            <Route path="product/:id" element={<SellerViewProduct />} />
+            <Route path="products" element={<SellerCollection />} />
+          </Route>
       </Routes>
     </div>
   );

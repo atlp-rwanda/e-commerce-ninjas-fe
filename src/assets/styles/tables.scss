@@ -1,0 +1,121 @@
+@import "./Colors";
+.table__header__ {
+    display: flex;
+    justify-content: space-between;
+
+    .table__title {
+        font-size: 1.6rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        color: $primary-color;
+    }
+
+    .pagination {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        span {
+            font-size: 1.3rem;
+        }
+
+        select{
+            width: 3.5rem;
+            height: 2rem;
+            font-size: 1.2rem;
+            border-radius:.2rem;
+            border: 1px solid $border-color;
+            color: $text-color;
+            font-weight: 200;
+            margin-right: .5rem;
+        }
+
+        button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            width: 2rem;
+            height: 2rem;
+        }
+        .btn-line::before {
+            content: "";
+            position: absolute;
+            width: 0.1rem;
+            height: 2rem;
+            left: 7.4rem;
+            background-color: $border-color;
+        }
+
+    }
+}
+
+.table__container {
+    position: relative;
+    height: 47rem;
+    max-height: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    &::-webkit-scrollbar{
+        display: none;
+    }
+    .empty-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+      }
+
+      .empty-container .ant-empty {
+        transform: scale(1.5);
+      }
+    .dynamic__table {
+        width: 100%;
+        border-collapse: collapse;
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            .table__header {
+                background-color: $border-color;
+                color: $primary-color;
+                font-weight: bold;
+                font-size: 1.6rem;
+                padding: 1rem 0;
+
+                th {
+                    padding: .5rem;
+                    text-align: left;
+
+                    &:first-child {
+                        border-radius: 5rem 0 0 5rem;
+                    }
+
+                    &:last-child {
+                        border-radius: 0 5rem 5rem 0;
+                    }
+                }
+            }
+        }
+
+        tbody {
+            font-size: 1.4rem;
+            max-width: 450px;
+            width: 100%;
+            .table__body {
+
+                td {
+                    padding: 0.8rem .5rem;
+                    text-align: left;
+                    border-bottom: 1px solid $border-color;
+                }
+            }
+
+
+        }
+    }
+  }

@@ -37,10 +37,37 @@ const fetchShopInfo = async (id: string) => {
   }
 };
 
+const searchProduct = async(criteria:any)=>{
+  const response = await axiosInstance.get(`/api/shop/user-search-products?${criteria}`);
+  return response.data;
+}
+
+
+const fetchSellerProducts = async () => {
+  try {
+    const response = await axiosInstance.get(`/api/shop/seller-get-products`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to fetch products.');
+  }
+};
+
+const fetchSellerSingleProduct = async (id: string) => {
+  try {
+    const response = await axiosInstance.get(`/api/shop/seller-get-product/${id}`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to fetch product.');
+  }
+};
+
 const productService = {
     fetchProducts,
     fetchSingleProduct,
     fetchProductReviews,
-    fetchShopInfo
+    fetchShopInfo,
+    searchProduct,
+    fetchSellerProducts,
+    fetchSellerSingleProduct
 }
 export default productService;

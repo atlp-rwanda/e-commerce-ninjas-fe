@@ -1,6 +1,6 @@
 /* eslint-disable*/
 import React from 'react'
-import SellerProduct from '../components/product/SellerProduct'
+import SellerProduct from '../../components/product/SellerProduct'
 import { useParams } from 'react-router-dom'
 
 const SellerViewProduct = () => {

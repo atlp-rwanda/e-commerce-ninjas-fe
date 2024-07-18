@@ -1,0 +1,161 @@
+.seller__wrapper {
+    height: 100vh;
+    display: flex;
+
+    .left__side {
+        width: 26rem;
+        display: flex;
+        .icons__side {
+            display: flex;
+            flex-direction: column;
+            background-color: $primary-color;
+            height: 100%;
+            width: 6.5rem;
+
+            .icons {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                height: 100%;
+                width: 100%;
+                gap: 34rem;
+
+                .icons__upper {
+                    margin-top: 10rem;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 3rem;
+
+                    .icon {
+                        color: $white-color;
+                        font-size: 2rem;
+                    }
+                }
+
+                .icons__bottom {
+                    height: 4rem;
+                    display: flex;
+                    align-items: center;
+                    .icon {
+                        color: $white-color;
+                        font-size: 3rem;
+                    }
+                }
+            }
+        }
+
+        .dashboard__items {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 19.5rem;
+            margin-left: .1rem;
+
+            .dashboard__side {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                width: 100%;
+                gap: 37.5rem;
+
+                .dashboard__links {
+                    display: flex;
+                    flex-direction: column;
+                    margin-top: 11rem;
+                    height: 5rem;
+                    gap: 3.5rem;
+
+                    .text_content {
+                        color: $text-color;
+                        font-size: 1.8rem;
+                        transition: all 0.5s ease-in-out;
+                        text-decoration: none;
+                    }
+                }
+
+                .dashboard__lower__link {
+                    height: 4rem;
+                    display: flex;
+                    align-items: center;
+
+                    .text_content {
+                        color: $text-color;
+                        font-size: 1.8rem;
+                        transition: all 0.5s ease-in-out;
+                        text-decoration: none;
+                    }
+                }
+            }
+
+            .active {
+                display: flex;
+                background-color: $menu-hover;
+                width: 15rem;
+                padding: 1rem 1rem;
+                transition: all 0.5s ease-in-out;
+                align-items: center;
+                border-radius: .5rem;
+            }
+        }
+    }
+
+    .main__seller__content__dashboard {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        max-height: 100vh;
+    }
+
+    .main__seller__dashboard {
+        display: flex;
+        flex: 1;
+        width: 100%;
+        min-height: calc(100vh - 120px);
+        max-height: calc(100vh - 120px);
+        background-color: $container-color;
+        padding: 20px;
+        .outlet{
+            background-color: white;
+            flex: 0 0 60%;
+            border-radius: 20px;
+            min-height: 95%;
+            max-height: 95%;
+            min-width: 70%;
+            max-width: 70%;
+            box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+        .right__side{
+            flex: 0 0 20%;
+            min-width: 20%;
+            max-width: 20%;
+            min-height: 100%;
+            max-height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            padding: 0 20px;
+            .right-profile{
+                background-color: $white-color;
+                height: 40%;
+                border-radius: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+                padding: 2rem;
+            }
+            .right-products{
+                background-color: $white-color;
+                height: 60%;
+                border-radius: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+                padding: 2rem;
+            }
+        }
+    }
+
+}

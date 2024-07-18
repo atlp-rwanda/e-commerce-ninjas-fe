@@ -42,3 +42,41 @@ export interface IShop {
   description?: string;
   image?: string;
 }
+
+export interface IProducts {
+  nextPage:number;
+  currentPage: number;
+  previousPage:number;
+  limit:number;
+  data:[];
+  error?:string
+}
+export interface IProductsState {
+  searchProduct: searchProduct;
+}
+
+export interface SearchCriteria {
+  name?: string;
+  category?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  discount?: number;
+}
+
+export interface ISingleProduct {
+  id: string;
+  shopId: string;
+  name: string;
+  description?: string;
+  price: number;
+  discount?: string;
+  category: string;
+  expiryDate?: Date;
+  expired: boolean;
+  bonus?: string;
+  images: string[];
+  quantity: number;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+}

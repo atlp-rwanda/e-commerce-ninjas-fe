@@ -1,21 +1,21 @@
 /* eslint-disable */
-import React, { useEffect, useState } from "react";
-import { IProduct, IProductReview } from "../../utils/types/product";
-import { IShop } from "../../utils/types/product";
-import { FaCartPlus, FaRegStar, FaStar } from "react-icons/fa";
-import { FaHeartCircleCheck } from "react-icons/fa6";
-import { useAppDispatch, useAppSelector } from "../../store/store";
-import { fetchSingleProduct } from "../../store/features/product/singleProductSlice";
-import { PuffLoader } from "react-spinners";
-import { IProductInitialResponse } from "../../utils/types/store";
-import { Meta } from "../Meta";
-import { Link } from "react-router-dom";
-import truncateString from "../../utils/text/truncateString";
-import UserDefaultImage from "../../../public/assets/images/user.png";
-import ImageSlider from "../images/ImageSlider";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { createCart } from "../../store/features/carts/cartSlice";
+import React, { useEffect, useState } from 'react';
+import { IProduct, IProductReview } from '../../utils/types/product';
+import { IShop } from '../../utils/types/product';
+import { FaCartPlus, FaRegStar, FaStar } from 'react-icons/fa';
+import { FaHeartCircleCheck } from 'react-icons/fa6';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { fetchSingleProduct } from '../../store/features/product/singleProductSlice';
+import { PuffLoader } from 'react-spinners';
+import { IProductInitialResponse } from '../../utils/types/store';
+import { Meta } from '../Meta';
+import { Link } from 'react-router-dom';
+import truncateString from '../../utils/text/truncateString';
+import UserDefaultImage from '../../../public/assets/images/user.png';
+import ImageSlider from '../images/ImageSlider';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { createCart } from '../../store/features/carts/cartSlice';
 
 const ProductComponent = ({ productId }: { productId: string }) => {
   const dispatch = useAppDispatch();
@@ -42,7 +42,7 @@ const ProductComponent = ({ productId }: { productId: string }) => {
         </div>
       ) : isError ? (
         <div className="error-message">
-          <p>{message || "Something went wrong. Please try again later."}</p>
+          <p>{message || 'Something went wrong. Please try again later.'}</p>
           <Link to="/" className="btn-link">
             View all products
           </Link>
@@ -88,7 +88,7 @@ const ProductImages = ({ images }: { images: string[] }) => {
             key={index}
             src={src}
             alt={`Product Thumbnail ${index + 1}`}
-            className={`thumbnail-image ${selectedImage === index && "active"}`}
+            className={`thumbnail-image ${selectedImage === index && 'active'}`}
             onMouseEnter={() => setSelectedImage(index)}
           />
         ))}
@@ -115,14 +115,14 @@ const ProductDetails = ({
   const addProductToWishlist = () => {
     return;
   };
-  const handleAddProductToCart = async (productId: string, quantity = 1) => {
+  const handleAddProductToCart = async (productId: string, quantity) => {
     const response = await dispatch(createCart({ productId, quantity }));
     if (response.payload.data) {
       toast.success(response.payload.message);
       return;
-    } else if (response.payload === "Not authorized") {
-      toast.error("Please login first");
-      navigate("/login");
+    } else if (response.payload === 'Not authorized') {
+      toast.error('Please login first');
+      navigate('/login');
     } else {
       toast.error(response.payload.message);
       return;
@@ -133,11 +133,11 @@ const ProductDetails = ({
     <div className="product-details">
       <h1 className="product-title">{product.name}</h1>
       <p className="upper-description">
-        {truncateString(product.description || "", 200)}
+        {truncateString(product.description || '', 200)}
       </p>
       <div className="product-stars-and-shipping">
         <div className="product-review-stars">
-          {" "}
+          {' '}
           <StarsRender
             count={
               reviews && reviews.length > 0
@@ -154,7 +154,7 @@ const ProductDetails = ({
               return acc + review.rating;
             }, 0) / reviews.length
             : 0
-          ).toFixed(1)}{" "}
+          ).toFixed(1)}{' '}
         </div>
         <div className="shipping-label">Free Shipping</div>
       </div>
@@ -192,7 +192,7 @@ const ProductDetails = ({
         </button>
         <button
           className="cart-button"
-          onClick={() => handleAddProductToCart(product.id)}
+          onClick={() => handleAddProductToCart(product.id, qty)}
         >
           <FaCartPlus /> Add to cart
         </button>
@@ -226,7 +226,7 @@ const SellerInfoCard = ({ shop }: { shop: IShop | null }) => {
     <div className="seller-info">
       <div className="seller-profile">
         <div className="img-holder">
-          <img src={(shop && shop.image) || UserDefaultImage} alt="Shop" />{" "}
+          <img src={(shop && shop.image) || UserDefaultImage} alt="Shop" />{' '}
         </div>
         <span>{shop && shop.name}</span>
       </div>
@@ -266,7 +266,7 @@ const ReviewsCard = ({ reviews }: { reviews: IProductReview[] | null }) => {
       <div className="reviews">
         {reviews && reviews.length > 0
           ? reviews.map((review) => <SingleReviewCard review={review} />)
-          : "No reviews"}
+          : 'No reviews'}
       </div>
     </div>
   );
@@ -280,10 +280,10 @@ const SingleReviewCard = ({ review }: { review: IProductReview }) => {
           <img
             src={review.user?.profilePicture || UserDefaultImage}
             alt="Shop"
-          />{" "}
+          />{' '}
         </div>
         <span>
-          {`${review.user?.firstName} ${" "} ${review.user?.lastName} `}{" "}
+          {`${review.user?.firstName} ${' '} ${review.user?.lastName} `}{' '}
         </span>
       </div>
       <div className="review-contents">
@@ -291,11 +291,11 @@ const SingleReviewCard = ({ review }: { review: IProductReview }) => {
           <StarsRender count={review.rating} />
         </div>
         <div className="review-date">
-          Reviewed on{" "}
-          {new Date(review.createdAt).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
+          Reviewed on{' '}
+          {new Date(review.createdAt).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
           })}
         </div>
         <div className="review-feedback">{review.feedback}</div>

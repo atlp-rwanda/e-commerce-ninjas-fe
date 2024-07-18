@@ -4,8 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { BiSolidShow } from "react-icons/bi";
 import { BiSolidHide } from "react-icons/bi";
 
-import { useAppDispatch, useAppSelector } from "../store/store";
-import { loginUser } from "../store/features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { loginUser } from "../../store/features/auth/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { PulseLoader } from "react-spinners";
@@ -51,7 +51,6 @@ function AdminLogin() {
     function () {
       if (isSuccess && isAuthenticated && token) {
         localStorage.setItem("token", token);
-        toast.success(message);
         navigate("/admin/dashboard");
         formik.resetForm();
       }

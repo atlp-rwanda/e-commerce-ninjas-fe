@@ -1,11 +1,10 @@
-@import "./Colors";
-
 .admin-header {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   gap: 3.2rem;
-  padding: 2.4rem 5.2rem;
+  padding: 1.5rem 3.5rem;
+  border-left: 1px solid $container-color;
 }
 
 .header {

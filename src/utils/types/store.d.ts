@@ -30,8 +30,26 @@ export interface IProduct {
 }
 
 export interface IUser {
+  [x: string]: any;
+  id?: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
   password: string;
+  phone?: number;
+  profilePicture?: string;
+  gender?: string;
+  birthDate?: string;
+  language?: string;
+  currency?: string;
+  role?: string;
+  isGoogleAccount?: boolean;
+  isVerified?: boolean;
+  is2FAEnabled?: boolean;
+  status?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  passwordUpdatedAt?: Date;
 }
 
 export interface IUserData {
@@ -96,4 +114,19 @@ export interface INotificationInitialResource {
   message: string | null,
   passwordExpiryMessage: string | null,
   isLoggedOut: boolean
+}
+
+export interface AdminReponse {
+  message?: string;
+  data?: {user:IUser};
+  error?: string;
+  status?: number;
+}
+
+export interface IAdminInitialResponse {
+  users: IUser;
+  isError: boolean | null;
+  isSuccess: boolean;
+  isLoading: boolean;
+  message: string | null;
 }

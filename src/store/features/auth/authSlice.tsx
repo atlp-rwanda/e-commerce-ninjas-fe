@@ -20,9 +20,11 @@ const initialState: AuthService = {
   error: "",
 };
 
+type IUserEmailAndPassword = Pick<IUser, 'email' | 'password'>;
+
 export const registerUser = createAsyncThunk(
   "auth/register",
-  async (userData: IUser, thunkApi) => {
+  async (userData: IUserEmailAndPassword, thunkApi) => {
     try {
       const response = await authService.register(userData);
       return response;
@@ -39,7 +41,7 @@ export const loginUser = createAsyncThunk(
       const response = await authService.login(userData);
       return response;
     } catch (error) {
-      return thunkApi.rejectWithValue(error);
+      return thunkApi.rejectWithValue(getErrorMessage(error));
     }
   }
 );
@@ -132,8 +134,8 @@ export const googleAuthCallback = createAsyncThunk(
 
 export const logout = createAsyncThunk("auth/logout", async (_, thunkApi) => {
   try {
-    localStorage.removeItem("token");
-    return true;
+    const response = await authService.logout();
+    return response
   } catch (error) {
     return thunkApi.rejectWithValue(getErrorMessage(error));
   }
@@ -280,9 +282,26 @@ const userSlice = createSlice({
         state.isError = true;
         state.isLoading = false;
         state.isSuccess = false;
-        state.error =
-          action.payload.response.data.message ||
-          action.payload.response.data.error;
+        state.error = action.payload
+      })
+      .addCase(logout.pending, (state) => {
+        state.isError = false;
+        state.isLoading = true;
+        state.isSuccess = false;
+      })
+      .addCase(logout.fulfilled, (state, action: PayloadAction<any>) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isAuthenticated = true;
+        state.isSuccess = true;
+        state.message = action.payload.message;
+        localStorage.clear();
+      })
+      .addCase(logout.rejected, (state, action: PayloadAction<any>) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.error = action.payload
       })
       .addCase(getUserDetails.pending, (state) => {
         state.isError = false;

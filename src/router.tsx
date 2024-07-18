@@ -11,13 +11,15 @@ import { ResendEmail } from "./components/ResendEmail";
 import GoogleCallback from "./components/GoogleCallback";
 import SendResetPasswordLink from "./pages/SendResetPasswordLink";
 import ResetPassword from "./pages/ResetPassword";
-
+import  ProtectedRoute from "./utils/protectRoute/ProtectedRoute";
 import ViewProduct from "./pages/ViewProduct";
 import UserLogin from "./pages/UserLogin";
 import SellerLogin from "./pages/SellerLogin";
-import AdminLogin from "./pages/AdminLogin";
+import AdminLogin from "./pages/admin/Login";
 import Search from "./pages/Search";
-
+import { AdminDashboard } from "./pages/admin/Dashboard";
+import { OverViewDashboard } from "./pages/admin/OverView";
+import Users from "./pages/admin/Users";
 const AppRouter: React.FC = () => {
   return (
     <div>
@@ -29,10 +31,6 @@ const AppRouter: React.FC = () => {
           <Route path="/seller">
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="login" element={<SellerLogin />} />
-          </Route>
-          <Route path="/admin">
-            <Route index element={<Navigate to="dashboard" replace />} />
-            <Route path="login" element={<AdminLogin />} />
           </Route>
           <Route path="verify-email" element={<EmailVerifying />} />
           <Route path="resend-email" element={<ResendEmail />} />
@@ -50,8 +48,17 @@ const AppRouter: React.FC = () => {
             element={<ResetPassword />}
           />
           <Route path="product/:id" element={<ViewProduct />} />
-          <Route path="search" element={<Search/>}/>
+          <Route path="search" element={<Search />} />
           <Route path="*" element={<NotFound />} />
+        </Route>
+        <Route path="/admin">
+          <Route index element={<AdminLogin />} />
+          <Route path="dashboard" element={<ProtectedRoute redirectPath= '/admin'>
+            <AdminDashboard />
+            </ProtectedRoute>}>
+            <Route index element={<ProtectedRoute redirectPath= '/admin'><OverViewDashboard /></ProtectedRoute>} />
+            <Route path="users" element={<ProtectedRoute redirectPath= '/admin'><Users /></ProtectedRoute>} />
+          </Route>
         </Route>
       </Routes>
     </div>

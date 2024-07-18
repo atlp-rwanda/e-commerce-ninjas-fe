@@ -62,13 +62,13 @@ const Header: React.FC = () => {
         if (isAuthenticated) {
           const total = Number(await cartsTotal());
           const roundedTotal = total.toFixed(2);
-          setCartTotal(roundedTotal);
+          setCartTotal(Number(roundedTotal));
         } else {
-          setCartTotal("0.00");
+          setCartTotal(Number("0.00"));
         }
       } catch (error) {
         console.error("Error fetching cart total:", error);
-        setCartTotal("0.00"); 
+        setCartTotal(Number("0.00")); 
       }
     };
 

@@ -1,10 +1,11 @@
 /* eslint-disable */
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { CiHeart } from "react-icons/ci";
+import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { PiShoppingCartThin } from "react-icons/pi";
-import { useAppDispatch } from "../../store/store";
+import { useAppDispatch, useAppSelector } from '../../store/store';
 import { createCart, getUserCarts } from "../../store/features/carts/cartSlice";
+import { addProductToWishlist, removeProductFromWishlist, fetchWishlistProducts } from '../../store/features/wishlist/wishlistSlice';
 import { toast } from "react-toastify";
 
 interface ProductProps {
@@ -30,6 +31,18 @@ const Product: React.FC<ProductProps> = ({
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  const wishlist = useAppSelector((state) => state.wishlist.items);
+  const isProductInWishlist = wishlist.some((item: any) => item.id === id);
+  const [isInWishlist, setIsInWishlist] = useState(isProductInWishlist);
+
+  useEffect(() => {
+    setIsInWishlist(isProductInWishlist);
+  }, [isProductInWishlist]);
+
+  useEffect(() => {
+    dispatch(fetchWishlistProducts());
+  }, [dispatch]);
 
   const [isLoading, setIsLoading] = useState(false);
   const [cartResponseData, setCartResponseData] = useState<any>(null);
@@ -97,6 +110,38 @@ const Product: React.FC<ProductProps> = ({
   };
 
 
+const handleToggleWishlist = (event: React.MouseEvent) => {
+  event.stopPropagation();
+  if (!isAuthenticated) {
+    localStorage.setItem("pendingWishlistProduct", id);
+    toast.error("Please login first");
+    navigate("/login");
+    return;
+  } 
+
+  if (isInWishlist) {
+    dispatch(removeProductFromWishlist(id)).then((action) => {
+      if (action.meta.requestStatus === 'fulfilled') {
+        toast.success("Product removed from wishlist.");
+        setIsInWishlist(false); 
+      } else {
+        toast.error(action.payload as string);
+      }
+    });
+  } else {
+    dispatch(addProductToWishlist(id)).then((action) => {
+      if (action.meta.requestStatus === 'fulfilled') {
+        toast.success("Product added to wishlist.");
+        setIsInWishlist(true); 
+      } else {
+        toast.error(action.payload as string);
+      }
+    });
+  }
+};
+
+
+
   return (
     <div className="product">
       <div
@@ -135,8 +180,8 @@ const Product: React.FC<ProductProps> = ({
               />
             )}
           </div>
-          <div className="icon-container">
-            <CiHeart className="icon" />
+          <div className="icon-container" onClick={handleToggleWishlist}>
+            {isInWishlist ? <BsHeartFill className="icon" /> : <BsHeart className="icon" />}
           </div>
         </div>
         <div

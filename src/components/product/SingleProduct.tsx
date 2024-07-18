@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { IProduct, IProductReview } from "../../utils/types/product";
 import { IShop } from "../../utils/types/product";
-import { FaCartPlus, FaRegStar, FaStar } from "react-icons/fa";
-import { FaHeartCircleCheck } from "react-icons/fa6";
+import { FaCartPlus, FaHeart, FaRegHeart, FaRegStar, FaStar } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { fetchSingleProduct } from "../../store/features/product/singleProductSlice";
 import { PuffLoader } from "react-spinners";
@@ -16,6 +15,7 @@ import ImageSlider from "../images/ImageSlider";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { createCart, getUserCarts } from "../../store/features/carts/cartSlice";
+import { addProductToWishlist, removeProductFromWishlist , fetchWishlistProducts} from '../../store/features/wishlist/wishlistSlice';
 
 const ProductComponent = ({ productId }: { productId: string }) => {
   const dispatch = useAppDispatch();
@@ -29,6 +29,54 @@ const ProductComponent = ({ productId }: { productId: string }) => {
   }: IProductInitialResponse = useAppSelector(
     (state: any) => state.singleProduct
   );
+  const wishlist = useAppSelector((state: any) => state.wishlist.items);
+  const isProductInWishlist = wishlist.some((item: any) => item.id === productId);
+  const isAuthenticated = useAppSelector((state: any) => state.auth.isAuthenticated);
+
+  const [isInWishlist, setIsInWishlist] = useState(isProductInWishlist);
+  const [wishlistLoading, setWishlistLoading] = useState(false);
+
+  useEffect(() => {
+    dispatch(fetchSingleProduct(productId));
+    dispatch(fetchWishlistProducts());
+  }, [dispatch, productId]);
+
+  useEffect(() => {
+    setIsInWishlist(isProductInWishlist);
+  }, [isProductInWishlist]);
+
+  const handleToggleWishlist = async () => {
+    if (!isAuthenticated) {
+      localStorage.setItem("pendingWishlistProduct", productId);
+      toast.error("Please login first");
+      navigate("/login");
+       return;
+    }
+
+    setWishlistLoading(true);
+    try {
+      if (isInWishlist) {
+        const action = await dispatch(removeProductFromWishlist(productId));
+        if (action.meta.requestStatus === 'fulfilled') {
+          toast.success("Product removed from wishlist.");
+          setIsInWishlist(false);
+        } else {
+          toast.error(action.payload as string);
+        }
+      } else {
+        const action = await dispatch(addProductToWishlist(productId));
+        if (action.meta.requestStatus === 'fulfilled') {
+          toast.success("Product added to wishlist.");
+          setIsInWishlist(true);
+        } else {
+          toast.error(action.payload as string);
+        }
+      }
+    } finally {
+      setWishlistLoading(false);
+    }
+  };
+
 
   useEffect(() => {
     dispatch(fetchSingleProduct(productId));
@@ -54,7 +102,9 @@ const ProductComponent = ({ productId }: { productId: string }) => {
             <ProductImages images={product.images} />
             <ProductDetails
               product={product}
-              reviews={product.productReviews}
+              reviews={product.productReviews}  handleToggleWishlist={handleToggleWishlist} 
+              isInWishlist={isInWishlist}
+              wishlistLoading={wishlistLoading}
             />
           </div>
           <DetailsCard title="Product Details">
@@ -107,21 +157,22 @@ const ProductImages = ({ images }: { images: string[] }) => {
 };
 
 const ProductDetails = ({
-  product,
+  product,  handleToggleWishlist,
   reviews,
+  wishlistLoading,
+  isInWishlist
 }: {
   product: IProduct;
+  isInWishlist: boolean;
+  wishlistLoading: boolean;
   reviews: IProductReview[] | null;
-}) => {
+  handleToggleWishlist: () => void; })  => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [qty, setQty] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [cartResponseData, setCartResponseData] = useState<any>(null);
 
-  const addProductToWishlist = () => {
-    return;
-  };
   const handleAddProductToCart = async (
     productId: string,
     quantity: number
@@ -227,14 +278,23 @@ const ProductDetails = ({
         </div>
       </div>
       <div className="action-buttons">
-        <button className="wishlist-button" onClick={addProductToWishlist}>
-          <FaHeartCircleCheck /> Add to WishList
+      <button
+          className="wishlist-button"
+          onClick={handleToggleWishlist}
+          disabled={wishlistLoading}
+        >
+          {wishlistLoading ? (
+            <PuffLoader color="#fff" size={20} />
+          ) : (
+            <span> {isInWishlist ? <FaHeart /> : <FaRegHeart />} {isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}</span>
+          )}
         </button>
         <button
           className="cart-button"
           onClick={() => handleAddProductToCart(product.id, qty)}
           disabled={isLoading}
         >
+        
           {isLoading ? (
             <PuffLoader color="#fff" size={20} />
           ) : isInCart(product.id) ? (

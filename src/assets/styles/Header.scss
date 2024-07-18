@@ -1,14 +1,36 @@
 .header {
   display: flex;
   flex-direction: column;
+  border-bottom: 0.12rem solid $fourth-color;
+
+  .notification {
+    &__container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    &__icon {
+      font-size: 3.4rem;
+      color: $primary-color;
+    }
+    &__dropdown {
+      position: absolute;
+      left: -1170%;
+      top: 150%;
+      box-shadow: 0 5rem 10rem 0 rgba(0, 0, 0, 0.08);
+      z-index: 500;
+      transition: all 0.3s ease-in;
+    }
+  }
 
   &__top {
     flex: 1 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 0.01rem solid #ccc;
-    padding: 2.4rem 5.2rem;
+    border-bottom: 0.12rem solid #ccc;
+    padding: 2.4rem 6.1rem 2.4rem 5.1rem;
   }
 
   &__input {
@@ -16,7 +38,7 @@
   }
 
   &__bottom {
-    padding: 0 5.2rem;
+    padding: 0 4.6rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -31,7 +53,7 @@
       display: flex;
       justify-content: flex-end;
       padding-bottom: 1.2rem;
-      padding-right: 4.8rem;
+      padding-right: 1.4rem;
     }
   }
 
@@ -78,8 +100,8 @@
     }
 
     &__text {
-      font-size: 2.8rem;
-      color: #555;
+      font-size: 2.4rem;
+      color: $secondary-color;
 
       span {
         color: $primary-color;
@@ -92,10 +114,11 @@
     grid-template-columns: auto 1fr;
     row-gap: 0.4rem;
     column-gap: 1rem;
+    cursor: pointer;
   }
 
   &__icon {
-    font-size: 3.2rem;
+    font-size: 2.8rem;
     color: $primary-color;
     grid-column: 1 / 2;
     grid-row: 1 / span 2;
@@ -109,9 +132,10 @@
   }
 
   &__description {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     grid-column: 2 / -1;
     letter-spacing: 0.04rem;
+    color: $secondary-color;
   }
 
   &__container {
@@ -155,7 +179,7 @@
 
   &__dropdown {
     position: absolute;
-    width: 100%;
+    width: 80%;
     left: 0;
     top: 105%;
     background-color: #fff;
@@ -164,8 +188,12 @@
     padding: 3.2rem;
     border-radius: 0.9rem;
     z-index: 1000;
-    transition: all 0.3s ease-in;
+    transition: all 0.2s ease-in;
   }
+}
+
+.menu {
+  display: none;
 }
 
 .dropdown {
@@ -195,6 +223,14 @@
 }
 
 .cart {
+  &__photo {
+    height: 4rem;
+    width: 4rem;
+    border-radius: 50%;
+    border: 0.1rem solid $primary-color-dark;
+    grid-row: span 2;
+  }
+
   &__container {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -222,7 +258,7 @@
   }
 }
 
-.rotate {
+.rotate2 {
   transform: rotate(180deg);
 }
 
@@ -235,10 +271,10 @@
   &::before {
     content: "";
     position: absolute;
-    top: -58%;
-    left: -30%;
-    width: 0.2rem;
-    height: 7rem;
+    top: -50%;
+    left: -28%;
+    width: 0.12rem;
+    height: 6rem;
     background-color: #ccc;
   }
 }
@@ -249,12 +285,12 @@
     color: $white;
     padding: 1.8rem;
     border-radius: 0.6rem;
-    box-shadow: 0.2rem 0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 0.1);
     position: absolute;
     left: -12%;
     top: 150%;
-    width: 130%;
+    width: 110%;
     z-index: 500;
+    box-shadow: 0 5rem 10rem 0 rgba(0, 0, 0, 0.08);
 
     &::before {
       content: "";
@@ -280,6 +316,8 @@
   &__icon {
     width: 1.8rem;
     height: 1.8rem;
+    grid-row: 1 / span 2;
+    grid-column: 1 / 2;
   }
 
   &__text {

@@ -1,23 +1,23 @@
 /* eslint-disable */
-import React, { useEffect, useState } from 'react';
-import { Meta } from '../components/Meta';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { BiSolidHide, BiSolidShow } from 'react-icons/bi';
-import { FcGoogle } from 'react-icons/fc';
-import { useNavigate } from 'react-router-dom';
-import Button from '../components/buttons/Button';
-import { useAppDispatch, useAppSelector } from '../store/store';
-import { registerUser } from '../store/features/auth/authSlice';
-import { CircleLoader, PuffLoader } from 'react-spinners';
-import SignUpIcon from '../../public/assets/images/sign-up.png';
-import { toast } from 'react-toastify';
-import authService from '../store/features/auth/authService';
+import React, { useEffect, useState } from "react";
+import { Meta } from "../components/Meta";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { BiSolidHide, BiSolidShow } from "react-icons/bi";
+import { FcGoogle } from "react-icons/fc";
+import { useNavigate } from "react-router-dom";
+import Button from "../components/buttons/Button";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { registerUser } from "../store/features/auth/authSlice";
+import { PuffLoader } from "react-spinners";
+import SignUpIcon from "../../public/assets/images/sign-up.png";
+import { toast } from "react-toastify";
+import authService from "../store/features/auth/authService";
 const SignUpSchema = Yup.object().shape({
   email: Yup.string()
-    .email('Email must be valid')
-    .required('Email is required'),
-  password: Yup.string().required('Password is required'),
+    .email("Email must be valid")
+    .required("Email is required"),
+  password: Yup.string().required("Password is required"),
 });
 
 export const SignUp = () => {
@@ -28,8 +28,8 @@ export const SignUp = () => {
   );
   const formik = useFormik({
     initialValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
     validationSchema: SignUpSchema,
     onSubmit: (values) => {
@@ -37,16 +37,14 @@ export const SignUp = () => {
     },
   });
   useEffect(() => {
-    if (isError) {
-      toast.error(message);
-    }
     if (isSuccess) {
       toast.success(message);
-      navigate('/verify-email');
+      navigate("/verify-email");
       formik.resetForm();
     }
   }, [user, isError, isSuccess, isLoading, message]);
 
+  const [isClicked, setIsClicked] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const togglePasswordVisibility = () => {
@@ -64,7 +62,7 @@ export const SignUp = () => {
       <div className="wrapper">
         <div className="container">
           <div className="login-form">
-            <form onSubmit={formik.handleSubmit}>
+            <form onSubmit={formik.handleSubmit} className="signup">
               <div className="left-side-login">
                 <div className="left-side-text">
                   <h1>Create e-commerceNinjas account.</h1>
@@ -88,6 +86,7 @@ export const SignUp = () => {
                       type="text"
                       placeholder="Email"
                       id="email"
+                      className="signup__input"
                       name="email"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
@@ -99,9 +98,10 @@ export const SignUp = () => {
                   </div>
                   <div className="input-box">
                     <input
-                      type={passwordVisible ? 'text' : 'password'}
+                      type={passwordVisible ? "text" : "password"}
                       placeholder="Password"
                       id="password"
+                      className="signup__input"
                       name="password"
                       onChange={formik.handleChange}
                       onBlur={handleBlur}
@@ -118,13 +118,19 @@ export const SignUp = () => {
                     )}
                   </div>
                 </div>
+                {isError && isClicked && <p className="error">{message}</p>}
                 {isLoading ? (
                   <div className="btn-loading">
                     <PuffLoader size={60} color="#FF6D18" loading={isLoading} />
                   </div>
                 ) : (
                   <div className="btn">
-                    <Button title="Sign up" type="submit" />
+                    <Button
+                      title="Sign up"
+                      type="submit"
+                      className="signup__btn"
+                      onClick={() => setIsClicked(true)}
+                    />
                   </div>
                 )}
                 <div className="line-text">

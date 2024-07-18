@@ -1,12 +1,9 @@
 /* eslint-disable */
 import axios from 'axios';
-export const URL = "http://localhost:5001"
-// export const URL = "https://e-commerce-ninjas-platform-backend.onrender.com"
+// export const URL = "http://localhost:5001"
+export const URL = "https://e-commerce-ninjas-platform-backend.onrender.com"
 const axiosInstance = axios.create({
   baseURL: `${URL}`,
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 axiosInstance.interceptors.request.use(
@@ -14,6 +11,11 @@ axiosInstance.interceptors.request.use(
     const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    }
+    if (config.data instanceof FormData) {
+      config.headers['Content-Type'] = 'multipart/form-data';
+    } else {
+      config.headers['Content-Type'] = 'application/json';
     }
     return config;
   },

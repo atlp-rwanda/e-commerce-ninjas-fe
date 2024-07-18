@@ -1,7 +1,7 @@
 /* eslint-disable */
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction, isRejectedWithValue } from "@reduxjs/toolkit";
 import userService from "./userService";
-import {  IProfile } from "../../../utils/types/store";
+import {  IPassword, IProfile } from "../../../utils/types/store";
 
 const initialState: { user: IProfile | null; isLoading: boolean; isError: string | null; isSuccess: boolean; message: string } = {
     user: null,
@@ -20,14 +20,27 @@ export const fetchUserProfile = createAsyncThunk<IProfile[]>("user/fetchUserProf
     }
 });
 
-export const updateUserProfile = createAsyncThunk<IProfile, IProfile>("user/updateUserProfile", async()=>{
+export const updateUserProfile = createAsyncThunk<IProfile, FormData>(
+    "user/updateUserProfile",
+    async (formData: FormData, { rejectWithValue })=>{
     try {
-        const response = await userService.updateUserProfile();
+        const response = await userService.updateUserProfile(formData);
         return response;
-    } catch (error) {
-        throw new Error('Failed to fetch products.');
+    } catch (error:any) {
+        return rejectWithValue(error.response.data);
     }
 })
+
+export const updatePassword = createAsyncThunk<IPassword, IPassword>("userupdatePassword",
+    async({password}, { rejectWithValue })=>{
+        try{
+            const response = await userService.fetchAndUpdatePassword(password)
+            return response
+        }catch(error: any){
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
 
 const userSlice = createSlice({
     name: "user",
@@ -59,10 +72,23 @@ const userSlice = createSlice({
                 state.isLoading = false;
                 state.isSuccess = true;
                 state.user = action.payload;
-                console.log("4")
-                console.log(action.payload)
               })
               .addCase(updateUserProfile.rejected, (state, action: PayloadAction<any>) => {
+                state.isLoading = false;
+                state.isError = action.payload;
+                state.isSuccess = false
+              })
+              .addCase(updatePassword.pending, (state) => {
+                state.isLoading = true;
+                state.isError = null;
+                state.isSuccess = false;
+              })
+              .addCase(updatePassword.fulfilled, (state, action: PayloadAction<any>) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.user = action.payload;
+              })
+              .addCase(updatePassword.rejected, (state, action: PayloadAction<any>) => {
                 state.isLoading = false;
                 state.isError = action.payload;
                 state.isSuccess = false

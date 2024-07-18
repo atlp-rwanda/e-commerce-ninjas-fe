@@ -1,6 +1,14 @@
 /* eslint-disable */
 import { axiosInstance } from "../../../utils/axios/axiosInstance";
+import { IProfile } from "../../../utils/types/store";
 
+
+// const fetchUserProfile = async (token: string) => {
+//     const response = await axiosInstance.get("/api/user/user-get-profile", {
+//       headers: { Authorization: `Bearer ${token}` },
+//     });
+//     return response.data;
+//   };
 const fetchUserProfile = async () => {
     try {
         console.log("1")
@@ -13,23 +21,21 @@ const fetchUserProfile = async () => {
     }
 }
 
-export const updateUserProfile = async () => {
+export const updateUserProfile = async(formData: FormData): Promise<IProfile> => {
     try {
-        const response = await axiosInstance.put('/api/user/user-update-profile');
+        const response = await axiosInstance.put('/api/user/user-update-profile',formData);
+        console.log("response",response)
         return response.data.data.user;
     }
     catch (error) {
+        console.log(error)
         throw new Error('Failed to update User')
     }
 }
 
-const fetchAndUpdatePassword = async(id: string, password: string)=>{
+const fetchAndUpdatePassword = async(password: string)=>{
     try{
-        const response = await axiosInstance.put('api/user/change-password',
-            {
-               id, password 
-            }
-        )
+        const response = await axiosInstance.put('api/user/change-password',password)
         console.log(response)
         return response.data.password
     }

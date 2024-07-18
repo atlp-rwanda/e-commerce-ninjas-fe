@@ -103,6 +103,7 @@
 
   &__additional__list {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 2.4rem;
     color: #fff;
@@ -144,4 +145,10 @@
     height: 3.2rem;
     color: $white-2;
   }
+}
+
+@media only screen and (max-width: 51rem) {
+}
+
+@media only screen and (max-width: 31rem) {
 }

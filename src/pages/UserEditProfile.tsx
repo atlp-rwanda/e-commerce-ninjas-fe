@@ -1,14 +1,51 @@
 /* eslint-disable */
 import React, { useEffect } from 'react'
-import { IoMdEyeOff } from 'react-icons/io';
+import { IoMdEyeOff, IoMdEye } from 'react-icons/io';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/store';
-import { fetchUserProfile, updateUserProfile } from '../store/features/user/userSlice';
-import { IProfile, ILocation } from '../utils/types/store';
-import profile from "../../public/assets/ProfileImage.jpg"
+import { updatePassword, fetchUserProfile, updateUserProfile } from '../store/features/user/userSlice';
+import { IProfile, ILocation, IEmail } from '../utils/types/store';
+import profileImage from "../../public/assets/ProfileImage.jpg"
 import camera from "../../public/assets/Camera.png"
 import { TailSpin } from 'react-loader-spinner'
 import data from '../components/locations/location';
+import * as Yup from "yup"
+import { useFormik } from "formik";
+import { toast } from "react-toastify"
+
+const updateProfileSchema = Yup.object().shape({
+    firstName: Yup.string()
+        .min(2, 'FirstName must be at least 2 characters')
+        .required('FirstName is required'),
+    lastName: Yup.string()
+        .min(2, 'LastName must be at least 2 characters')
+        .required('LastName is required'),
+    phone: Yup.string()
+        .required('Telephone is required'),
+    profilePicture: Yup.string()
+        .required("profile is required"),
+    gender: Yup.string()
+        .required('Gender is required'),
+    language: Yup.string()
+        .required('preferredLanguage is required'),
+    currency: Yup.string()
+        .required('preferredCurrency is required'),
+    birthDate: Yup.date()
+        .required('Birthdate is required'),
+});
+
+const passwordSchema = Yup.object().shape({
+    password: Yup.string()
+        .min(8, 'Password must be at least 8 characters long')
+        .matches(/(?=.*[A-Z])/, 'Password must contain at least one uppercase letter')
+        .matches(/(?=.*\d)/, 'Password must contain at least one number')
+        .matches(/(?=.*[\W_])/, 'Password must contain at least one special character')
+        .required('Password is required'),
+    confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password')], 'Passwords must match')
+        .required('Confirm password is required')
+});
+
 
 interface RwandaLocationSelectorProps {
     setLocation?: React.Dispatch<React.SetStateAction<ILocation | null>>;
@@ -33,190 +70,164 @@ type NestedObject = {
 const rwandaData: RwandaData = data;
 
 
-const UserProfile: React.FC<RwandaLocationSelectorProps> = ({ setLocation }) => {
-    const dispatch = useAppDispatch();
-    const { user, isSuccess, isError, message, isLoading } = useAppSelector((state) => state.user);
+const UserProfile: React.FC = () => {
 
-    const [data, setData] = useState<IProfile | null>(null)
-    const [country, setCountry] = useState('Rwanda');
-    const [province, setProvince] = useState('');
-    const [district, setDistrict] = useState('');
-    const [sector, setSector] = useState('');
+    const dispatch = useAppDispatch()
 
-    useEffect(() => {
-        dispatch(fetchUserProfile())
-    }, [dispatch]);
+    const formData = new FormData()
 
-    useEffect(() => {
+    const formik = useFormik({
+        initialValues: {
+            firstName: "",
+            lastName: "",
+            phone: "",
+            profilePicture: "",
+            gender: "",
+            birthDate: "",
+            language: "",
+            currency: "",
+        },
+        validationSchema: updateProfileSchema,
+        onSubmit: (values)=>{
+            formData.append("firstName", values.firstName)
+            formData.append("lastName", values.lastName)
+            formData.append("phone", values.phone)
+            // formData.append("profilePicture", values.profilePicture)
+            formData.append("gender", values.gender)
+            formData.append("currency", values.currency)
+            formData.append("language", values.language)
+            formData.append("birthDate", values.birthDate)
 
-        if (user) {
-            setData(user);
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+              }
+            // dispatch(updateUserProfile(formData))
         }
-    }, [user]);
-    const handleInputs: React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement> = (e) => {
-        setData(prev => prev ? ({ ...prev, [e.target.name]: e.target.value }) : null)
-    }
+    })
 
-    const handleSubmit = () => {
-        if (data) {
-            dispatch(updateUserProfile(data));
-        }
-    };
-
-    const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setCountry(e.target.value);
-        setProvince('');
-        setDistrict('');
-        setSector('');
-    };
-
-    const handleProvinceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setProvince(e.target.value);
-        setDistrict('');
-        setSector('');
-    };
-
-    const handleDistrictChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setDistrict(e.target.value);
-        setSector('');
-    };
-
-    const handleSectorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSector(e.target.value);
-    };
-
-    const getOptions = (selectedData: NestedObject) => {
-        return Object.keys(selectedData).map(key => <option key={key} value={key}>{key}</option>);
-    };
-
-    const getArrayOptions = (array: string[]) => {
-        return array.map(item => <option key={item} value={item}>{item}</option>);
-    };
-
-    useEffect(() => {
-        setLocation && setLocation({ country, province, district, sector });
-    }, [country, province, district, sector, setLocation]);
-
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    if (isError) {
-        return <div>Error: {message}</div>;
-    }
-
+    
+    const handleFileChange = (event) => {
+        formik.setFieldValue('profilePicture', event.currentTarget.files[0]);
+      };
 
     return (
         <>
             <section className='profile-container'>
-                <div className='profile-details'>
+                <form className='profile-details' onSubmit={formik.handleSubmit}>
                     <div className='title'>
                         <h1>MY PROFILE DETAILS</h1>
-                        <button onClick={() => handleSubmit()}>
-                            {isLoading ? (
-                                <TailSpin color="orange" height={30} width={30} /> // Display spinner
-                            ) : (
-                                'Save Changes'
-                            )}
-                        </button>
+                        <button type='submit'>Save Changes</button>
+
                     </div>
                     <div className='details'>
                         <div className='input-container'>
                             <div className='input-layout'>
                                 <label htmlFor='firstName'>First Name</label>
-                                <input type='text' name='firstName' value={data?.firstName} onChange={handleInputs} />
+                                <input type='text' name='firstName' value={formik.values.firstName} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                             </div>
                             <div className='input-layout'>
                                 <label htmlFor='lastName'>Last Name</label>
-                                <input type='text' name='lastName' value={data?.lastName || ''} onChange={handleInputs} />
+                                <input type='text' name='lastName' value={formik.values.lastName} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                             </div>
                             <div className='input-layout'>
                                 <label htmlFor='email'>Email Address</label>
-                                <input type='text' name='email' placeholder='support@e-commerce-ninjas.com' value={data?.email} onChange={handleInputs} />
+                                {/* <div>{data.email}</div> */}
                             </div>
                             <div className='select-layout'>
-                                <select onChange={handleInputs}>
-                                    <option value="" disabled></option>
+                                <select id='country' name='country'>
                                     <option value="value1">Rwanda</option>
                                     <option value="">Uganda</option>
                                     <option value="">Burundi</option>
                                     <option value="">Kenya</option>
                                 </select>
-                                <input type="tel" name='phone' value={data?.phone || ''} onChange={handleInputs} placeholder='250788888888' />
+                                <input type="tel" name='phone' value={formik.values.phone} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                             </div>
                         </div>
                         <div className='profile-pic'>
-                            <img src={profile} alt="profile" />
-                            <form encType='multipart/form-data'>
-                                <button type='submit'>
-                                    <img
-                                        src={camera}
-                                        alt='edit profile'
-                                    />
-                                </button>
-                                {/* <input type="file" /> */}
-                            </form>
+                            <img src={profileImage} alt="profile" />
+                            <img
+                                src={camera}
+                                alt='edit profile'
+                            />
+                            <input type="file" name="profilePicture" onChange={handleFileChange} multiple />
                         </div>
                         <div className='right-side'>
                             <div className='options'>
                                 <label htmlFor="gender">Gender</label>
-                                <select value={data?.gender || ''} onChange={handleInputs}>
-                                    <option value="" disabled></option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
+                                <select value={formik.values.gender} onChange={formik.handleChange} onBlur={formik.handleBlur} name='gender' id='gender'>
+                                    <option value="male">male</option>
+                                    <option value="female">female</option>
                                 </select>
                             </div>
                             <div className='options'>
                                 <label htmlFor="currency">Currency</label>
-                                <select value={data?.currency || ''} onChange={handleInputs}>
-                                    <option value="" disabled></option>
+                                <select value={formik.values.currency} onChange={formik.handleChange} onBlur={formik.handleBlur} name='currency' id='currency'>
                                     <option value="USD">$</option>
                                     <option value="RWF">RWF</option>
                                 </select>
                             </div>
                             <div className='options'>
                                 <label htmlFor="language">Language</label>
-                                <select value={data?.language || ''} onChange={handleInputs}>
-                                    <option value="" disabled></option>
+                                <select value={formik.values.language} onChange={formik.handleChange} onBlur={formik.handleBlur} name='language' id='language'>
                                     <option value="English">English</option>
                                     <option value="Kinyarwanda">Kinyarwanda</option>
                                     <option value="Greek">Greek</option>
                                 </select>
                             </div>
                             <div className='input-d'>
-                                <label htmlFor="email">Birth date</label>
-                                <input type="date" name="date" value={data?.birthDate} onChange={handleInputs} />
+                                <label htmlFor="birthDate">Birth date</label>
+                                <input type="date" name="birthDate" value={formik.values.birthDate} onChange={formik.handleChange} onBlur={formik.handleBlur} />
                             </div>
                         </div>
+
                     </div>
-                </div>
-                <div className="password-container">
-                    <div className='title'>
+
+
+                </form>
+                <form className="password-container" onSubmit={formik.handleSubmit}>
+                    <div className="title">
                         <h1>MY PASSWORD</h1>
-                        <button onSubmit={handleSubmit}>Save Change</button>
+                        <button type="submit">Save Change</button>
                     </div>
-                    <div className='password'>
-                        <div className='password-inp'>
-                            <label htmlFor="password">Password</label>
-                            <div className='input-n'>
-                                <input type="password" name="password" value={data?.password} onChange={handleInputs} />
-                                <span>
-                                    <IoMdEyeOff />
-                                </span>
+                    <div className="password">
+                        <div>
+                            <div className="password-inp">
+                                <label htmlFor="password">Password</label>
+                                <div className="input-n">
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        value=""
+                                        onChange={formik.handleChange}
+                                    />
+                                    {/* <span onClick={() => setPasswordVisible(!passwordVisible)}>
+                                        {passwordVisible ? <IoMdEyeOff /> : <IoMdEye />}
+                                    </span> */}
+                                </div>
+                                {/* {formik.touched.password && formik.errors.password ? (
+                                    <p className="error">{formik.errors.password}</p>
+                                ) : null} */}
                             </div>
                         </div>
-                        <div className='password-inp'>
-                            <label htmlFor="confirmPassword">confirm Password</label>
-                            <div className="input-n">
-                                <input type="confirm-assword" name="confirmPassword" value={data?.password} onChange={handleInputs} />
-                                <span>
-                                    <IoMdEyeOff />
-                                </span>
+                        <div>
+                            <div className="password-inp">
+                                <label htmlFor="confirmPassword">Confirm Password</label>
+                                <div className="input-n">
+                                    <input
+                                        type="password"
+                                        name="confirmPassword"
+                                        // value={formik.values.confirmPassword}
+                                        onChange={formik.handleChange}
+                                    />
+                                    {/* <span onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)}>
+                                        {confirmPasswordVisible ? <IoMdEyeOff /> : <IoMdEye />}
+                                    </span> */}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className="shipping-address">
+                </form>
+                {/* <div className="shipping-address">
                     <div className='title'>
                         <h1>MY SHIPPING ADDRESS</h1>
                         <button onSubmit={handleSubmit}>Save Change</button>
@@ -248,7 +259,7 @@ const UserProfile: React.FC<RwandaLocationSelectorProps> = ({ setLocation }) => 
                             </div>
                             <div className='select-inp'>
                                 <label htmlFor="Street-address">Street Address:</label>
-                                <select onChange={handleInputs}>
+                                <select >
                                     <option value="" disabled></option>
                                     <option >KN 123</option>
                                     <option >KN 301</option>
@@ -256,7 +267,7 @@ const UserProfile: React.FC<RwandaLocationSelectorProps> = ({ setLocation }) => 
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </section>
         </>
 

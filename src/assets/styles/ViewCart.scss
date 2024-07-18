@@ -60,6 +60,7 @@ FaCheckSquare {
               margin: 5px;
               margin-bottom: 10px;
               font-size: 18px;
+              cursor: pointer;
             }
             .flexer {
               display: flex;
@@ -224,7 +225,7 @@ FaCheckSquare {
             flex-direction: column;
             padding: 10px;
             .check {
-             display: none;
+              display: none;
             }
             .image {
               flex: 2;

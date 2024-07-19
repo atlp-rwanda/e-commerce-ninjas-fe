@@ -76,7 +76,6 @@ const Product: React.FC<ProductProps> = ({
           alt="Product"
           className="product-image"
           onClick={() => navigate(`/product/${id}`)}
-
         />
       </div>
       <div className="product-info">

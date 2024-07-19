@@ -33,21 +33,18 @@ export const updateUserProfile = async(formData: FormData): Promise<IProfile> =>
     }
 }
 
-const fetchAndUpdatePassword = async(password: string)=>{
-    try{
-        const response = await axiosInstance.put('api/user/change-password',password)
-        console.log(response)
-        return response.data.password
-    }
-    catch(error){
-        throw new Error("failed to update password")
-    }
-}
+const changePassword = async (token: string, password: string) => {
+    const response = await axiosInstance.put(
+      `/api/auth/reset-password/${token}`,
+      { password }
+    );
+    return response.data;
+  };
 
 const userService = {
     fetchUserProfile,
     updateUserProfile,
-    fetchAndUpdatePassword
+    changePassword
 }
 
 export default userService

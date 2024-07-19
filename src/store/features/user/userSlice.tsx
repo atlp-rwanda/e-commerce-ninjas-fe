@@ -31,16 +31,20 @@ export const updateUserProfile = createAsyncThunk<IProfile, FormData>(
     }
 })
 
-export const updatePassword = createAsyncThunk<IPassword, IPassword>("userupdatePassword",
-    async({password}, { rejectWithValue })=>{
-        try{
-            const response = await userService.fetchAndUpdatePassword(password)
-            return response
-        }catch(error: any){
-            return rejectWithValue(error.response.data)
-        }
+export const updatePassword = createAsyncThunk(
+    "auth/reset-password",
+    async (
+      { token, password }: { token: string; password: string },
+      thunkApi
+    ) => {
+      try {
+        const response = await userService.changePassword(token, password);
+        return response;
+      } catch (error) {
+        return thunkApi.rejectWithValue(error.response.data);
+      }
     }
-)
+  );
 
 const userSlice = createSlice({
     name: "user",
@@ -90,8 +94,8 @@ const userSlice = createSlice({
               })
               .addCase(updatePassword.rejected, (state, action: PayloadAction<any>) => {
                 state.isLoading = false;
-                state.isError = action.payload;
-                state.isSuccess = false
+                state.isSuccess = false;
+                state.message = action.payload;
               })
               ;
     }

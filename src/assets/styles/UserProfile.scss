@@ -2,28 +2,29 @@
 
 .profile-container {
   width: 100%;
-  padding: 32px;
+  padding: 32px 0;
   font-size: 15px;
 
-  .profile-details {
-    .title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: $primary-color;
-      color: white;
-      height: 40px;
-      padding: 0 20px;
+  .title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $primary-color;
+    color: white;
+    height: 40px;
+    // padding: 0 20px;
 
-      button {
-        padding: 8px 32px;
-        border-radius: 25px;
-        border: none;
-        height: 35px;
-        color: $primary-color;
-        font-size: 16px;
-      }
+    button {
+      padding: 8px 32px;
+      border-radius: 25px;
+      border: none;
+      height: 35px;
+      color: $primary-color;
+      font-size: 16px;
     }
+  }
+
+  .profile-details {
 
     .details {
       display: flex;
@@ -166,24 +167,6 @@
   }
 
   .password-container {
-    .title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: $primary-color;
-      color: white;
-      height: 40px;
-      padding: 0 20px;
-
-      button {
-        padding: 8px 32px;
-        border-radius: 25px;
-        border: none;
-        height: 35px;
-        color: $primary-color;
-        font-size: 16px;
-      }
-    }
 
     .password {
       display: flex;
@@ -227,24 +210,7 @@
   }
 
   .shipping-address {
-    .title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: $primary-color;
-      color: white;
-      height: 40px;
-      padding: 0 20px;
-
-      button {
-        padding: 8px 32px;
-        border-radius: 25px;
-        border: none;
-        height: 35px;
-        color: $primary-color;
-        font-size: 16px;
-      }
-    }
+    
 
     .shipping {
       display: flex;
@@ -285,6 +251,39 @@
   }
 }
 
-@media only screen and (min-width: 320px){
-  
+@media only screen and (max-width: 425px){
+  .profile-container{
+
+    .title{
+      font-size: 10px;
+
+      button{
+        height: 5rem;
+        font-size: 12px;
+        padding: 0 8px;
+      }
+    }
+    .details{
+      flex-direction: column;
+      gap: 30px;
+      padding: 0;
+
+      .input-container{
+        width: 100%;
+      .input-layout{
+        padding: 0;
+        width: 100%;
+      }
+    }
+    }
+
+    .password{
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .shipping{
+      flex-direction: column;
+    }
+  }
 }

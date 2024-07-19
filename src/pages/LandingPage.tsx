@@ -1,12 +1,12 @@
 /* eslint-disable */
-import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../store/store";
-import { fetchProducts } from "../store/features/product/productSlice";
-import Product from "../components/product/Product";
-import Sample from "../components/layout/Sample";
-import { PuffLoader } from "react-spinners";
-import { Meta } from "../components/Meta";
-
+import React, { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { fetchProducts } from '../store/features/product/productSlice';
+import Product from '../components/product/Product';
+import Sample from '../components/layout/Sample';
+import { PuffLoader } from 'react-spinners';
+import { Meta } from '../components/Meta';
+import useSocket from '../hooks/useSocket';
 const LandingPage: React.FC = () => {
   const dispatch = useAppDispatch();
 
@@ -28,7 +28,7 @@ const LandingPage: React.FC = () => {
           </div>
         ) : isError ? (
           <div className="error-message">
-            <p>{message || "Something went wrong. Please try again later."}</p>
+            <p>{message || 'Something went wrong. Please try again later.'}</p>
           </div>
         ) : (
           <div>
@@ -47,7 +47,7 @@ const LandingPage: React.FC = () => {
                     price={`$${product.price}`}
                     stock={Number(product.quantity)}
                     description={product.description}
-                    discount={Number(product.discount.replace("%", ""))}
+                    discount={Number(product.discount.replace('%', ''))}
                   />
                 ))}
             </div>

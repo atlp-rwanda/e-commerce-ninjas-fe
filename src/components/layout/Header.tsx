@@ -128,7 +128,7 @@ const Header: React.FC = () => {
   return (
     <header className="header">
       <div className="header__top">
-        <a className="header__logo" href="/">
+        <Link className="header__logo" to="/">
           <img
             src="../assets/images/logo.png"
             alt="Ecommerce logo"
@@ -137,7 +137,7 @@ const Header: React.FC = () => {
           <p className="header__logo__text">
             e-Commerce <span>Ninjas</span>
           </p>
-        </a>
+        </Link>
         <div className="header__content">
           <div className="header__box header__location">
             <FaLocationDot className="header__icon" />

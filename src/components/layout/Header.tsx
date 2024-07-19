@@ -1,26 +1,26 @@
 /* eslint-disable */
-import React, { useEffect, useRef, useState } from "react";
-import { FaLocationDot } from "react-icons/fa6";
-import { IoMdMailUnread } from "react-icons/io";
-import { FaPhoneVolume } from "react-icons/fa6";
-import { FaBuildingCircleCheck } from "react-icons/fa6";
-import { FaRegUser } from "react-icons/fa";
-import { IoCartOutline } from "react-icons/io5";
-import { IoLogOutSharp } from "react-icons/io5";
-import { FaUserClock } from "react-icons/fa6";
-import { FaChevronDown } from "react-icons/fa";
-import { IoIosNotifications } from "react-icons/io";
-import { IoMenu } from "react-icons/io5";
-import { IoMdClose } from "react-icons/io";
-import { NavLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import Notifications from "./notification";
-import SearchInput from "../inputs/SearchInput";
-import { useAppDispatch, useAppSelector } from "../../store/store";
-import { fetchNotifications } from "../../store/features/notifications/notificationSlice";
-import { getUserDetails } from "../../store/features/auth/authSlice";
-import { useLocation } from "react-router-dom";
-
+import React, { useEffect, useRef, useState } from 'react';
+import { FaLocationDot } from 'react-icons/fa6';
+import { IoMdMailUnread } from 'react-icons/io';
+import { FaPhoneVolume } from 'react-icons/fa6';
+import { FaBuildingCircleCheck } from 'react-icons/fa6';
+import { FaRegUser } from 'react-icons/fa';
+import { IoCartOutline } from 'react-icons/io5';
+import { IoLogOutSharp } from 'react-icons/io5';
+import { FaUserClock } from 'react-icons/fa6';
+import { FaChevronDown } from 'react-icons/fa';
+import { IoIosNotifications } from 'react-icons/io';
+import { IoMenu } from 'react-icons/io5';
+import { IoMdClose } from 'react-icons/io';
+import { Navigate, NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Notifications from './notification';
+import SearchInput from '../inputs/SearchInput';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { fetchNotifications } from '../../store/features/notifications/notificationSlice';
+import { getUserDetails } from '../../store/features/auth/authSlice';
+import { useLocation, Link } from 'react-router-dom';
+import cartService from '../../store/features/carts/cartService';
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -29,25 +29,58 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const location = useLocation();
-
   const {
     isAuthenticated,
     user,
     token: tokenLogin,
   } = useAppSelector((state) => state.auth);
   const { notifications } = useAppSelector((state) => state.notification);
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState('');
   const navEl = useRef<HTMLDivElement | null>(null);
 
   const User: any = { ...user };
 
-  const categories = Array.from({ length: 5 }, (_, i) => i + 1);
+  const cartsTotal = async () => {
+    try {
+      const carts = await cartService.getUserCarts();
+      let total = 0;
+      carts.data.carts.forEach((cart) => {
+        total += cart.total;
+      });
+      return total;
+    } catch (error) {
+      console.error('Error fetching carts:', error);
+      return 0;
+    }
+  };
 
+  const [cartTotal, setCartTotal] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchCartTotal = async () => {
+      try {
+        if (isAuthenticated) {
+          const total = Number(await cartsTotal());
+          const roundedTotal = total.toFixed(2);
+          setCartTotal(Number(roundedTotal));
+        } else {
+          setCartTotal(Number('0.00'));
+        }
+      } catch (error) {
+        console.error('Error fetching cart total:', error);
+        setCartTotal(Number('0.00'));
+      }
+    };
+
+    fetchCartTotal();
+  }, [isAuthenticated]);
+
+  const categories = Array.from({ length: 5 }, (_, i) => i + 1);
   useEffect(() => {
     if (tokenLogin.trim()) {
       setToken(tokenLogin);
     } else {
-      const token = localStorage.getItem("token") || "";
+      const token = localStorage.getItem('token') || '';
       setToken(token);
     }
   }, [tokenLogin]);
@@ -71,8 +104,8 @@ const Header: React.FC = () => {
   }
 
   function handleSetIsOpen2() {
-    if(!isAuthenticated){
-      navigate("/login")
+    if (!isAuthenticated) {
+      navigate('/login');
     }
     setIsOpen2((isOpen) => !isOpen);
   }
@@ -83,17 +116,19 @@ const Header: React.FC = () => {
 
   function handleSetIsMenuOpen() {
     if (navEl.current) {
-      navEl.current.classList.toggle("nav__open");
+      navEl.current.classList.toggle('nav__open');
       setIsMenuOpen((isMenuOpen) => !isMenuOpen);
     }
   }
 
-  const unreadCount = notifications ? notifications.filter((notification) => !notification.isRead).length : 0;
+  const unreadCount = notifications
+    ? notifications.filter((notification) => !notification.isRead).length
+    : 0;
 
   return (
     <header className="header">
       <div className="header__top">
-        <div className="header__logo">
+        <a className="header__logo" href="/">
           <img
             src="../assets/images/logo.png"
             alt="Ecommerce logo"
@@ -102,7 +137,7 @@ const Header: React.FC = () => {
           <p className="header__logo__text">
             e-Commerce <span>Ninjas</span>
           </p>
-        </div>
+        </a>
         <div className="header__content">
           <div className="header__box header__location">
             <FaLocationDot className="header__icon" />
@@ -135,7 +170,7 @@ const Header: React.FC = () => {
               </span>
 
               <FaChevronDown
-                className={`header__selected__icon${isOpen ? " rotate2" : ""}`}
+                className={`header__selected__icon${isOpen ? ' rotate2' : ''}`}
               />
             </div>
             {isOpen && (
@@ -157,8 +192,13 @@ const Header: React.FC = () => {
           <SearchInput className="header__input" />
           {isAuthenticated && (
             <div className="header__notification__box">
-              <IoIosNotifications className="header__notification__icon header__notification__icon__1" onClick={toggleNotifications} />
-              <span className="header__notification__number">{unreadCount}</span>
+              <IoIosNotifications
+                className="header__notification__icon header__notification__icon__1"
+                onClick={toggleNotifications}
+              />
+              <span className="header__notification__number">
+                {unreadCount}
+              </span>
               {isNotificationOpen && (
                 <div className="notification__dropdown">
                   <Notifications />
@@ -166,11 +206,19 @@ const Header: React.FC = () => {
               )}
             </div>
           )}
-          <div className="cart__container">
+
+          <Link className="cart__container" to="/shopping-cart">
             <IoCartOutline className="cart__icon" />
             <span className="cart__text">Cart</span>
-            <span className="cart__description">$ 0</span>
-          </div>
+            <span className="cart__description">
+              {isAuthenticated
+                ? cartTotal !== null
+                  ? `$${cartTotal}`
+                  : '$0'
+                : '$0'}
+            </span>
+          </Link>
+
           <div
             className="cart__container user__container"
             onClick={handleSetIsOpen2}
@@ -181,11 +229,11 @@ const Header: React.FC = () => {
               <FaRegUser className="cart__icon" />
             )}
 
-            <span className="cart__text">{user ? "Hi, " : "User"}</span>
+            <span className="cart__text">{user ? 'Hi, ' : 'User'}</span>
             <span className="cart__description">
               {user
-                ? `${ User?.firstName || User?.email?.split('@')[0] }`
-                : "Account"}
+                ? `${User?.firstName || User?.email?.split('@')[0]}`
+                : 'Account'}
             </span>
             {isAuthenticated && isOpen2 && (
               <div className="order__dropdown">
@@ -209,14 +257,9 @@ const Header: React.FC = () => {
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink
-                      to={"/"}
-                      className="order__link"
-                    >
+                    <NavLink to={'/'} className="order__link">
                       <IoLogOutSharp className="order__icon" />
-                      <span className="order__text">
-                        Logout
-                      </span>
+                      <span className="order__text">Logout</span>
                     </NavLink>
                   </li>
                 </ul>
@@ -238,7 +281,7 @@ const Header: React.FC = () => {
                 <li className="nav__item" onClick={handleSetIsMenuOpen}>
                   <NavLink
                     to="/"
-                    className={({ isActive }) => (isActive ? "active" : "")}
+                    className={({ isActive }) => (isActive ? 'active' : '')}
                   >
                     Home
                   </NavLink>
@@ -246,7 +289,7 @@ const Header: React.FC = () => {
                 <li className="nav__item" onClick={handleSetIsMenuOpen}>
                   <NavLink
                     to="/shops"
-                    className={({ isActive }) => (isActive ? "active" : "")}
+                    className={({ isActive }) => (isActive ? 'active' : '')}
                   >
                     Shops
                   </NavLink>
@@ -254,7 +297,13 @@ const Header: React.FC = () => {
                 <li className="nav__item" onClick={handleSetIsMenuOpen}>
                   <NavLink
                     to="/products"
-                    className={({ isActive }) => (isActive ? "active" : location.pathname.startsWith('/product') ? "active" : "")}
+                    className={({ isActive }) =>
+                      isActive
+                        ? 'active'
+                        : location.pathname.startsWith('/product')
+                          ? 'active'
+                          : ''
+                    }
                   >
                     Products
                   </NavLink>
@@ -262,7 +311,7 @@ const Header: React.FC = () => {
                 <li className="nav__item" onClick={handleSetIsMenuOpen}>
                   <NavLink
                     to="/services"
-                    className={({ isActive }) => (isActive ? "active" : "")}
+                    className={({ isActive }) => (isActive ? 'active' : '')}
                   >
                     Services
                   </NavLink>
@@ -270,7 +319,7 @@ const Header: React.FC = () => {
                 <li className="nav__item" onClick={handleSetIsMenuOpen}>
                   <NavLink
                     to="/contact-us"
-                    className={({ isActive }) => (isActive ? "active" : "")}
+                    className={({ isActive }) => (isActive ? 'active' : '')}
                   >
                     Contact-Us
                   </NavLink>
@@ -278,7 +327,7 @@ const Header: React.FC = () => {
                 <li className="nav__item" onClick={handleSetIsMenuOpen}>
                   <NavLink
                     to="/about-us"
-                    className={({ isActive }) => (isActive ? "active" : "")}
+                    className={({ isActive }) => (isActive ? 'active' : '')}
                   >
                     About-us
                   </NavLink>

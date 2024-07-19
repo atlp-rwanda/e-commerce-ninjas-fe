@@ -48,7 +48,9 @@ const Notifications: React.FC = () => {
   const sortedNotifications = notifications ? notifications.slice().sort((a: Notification, b: Notification) => Number(a.isRead) - Number(b.isRead)) : [];
 
   const filteredNotifications = sortedNotifications.filter((notification: Notification) => 
-    filter === 'All' || (filter === 'Unread' && !notification.isRead)
+    filter === 'All' || 
+    (filter === 'Unread' && !notification.isRead) ||
+    (filter === 'Read' && notification.isRead)
   ).slice(0, displayCount);
 
   const unreadCount = notifications ? notifications.filter((notification: Notification) => !notification.isRead).length : 0;
@@ -89,6 +91,7 @@ const Notifications: React.FC = () => {
                   <div className="dropdown-menu">
                     <div className="dropdown-item" onClick={() => selectFilter('All')}>All</div>
                     <div className="dropdown-item" onClick={() => selectFilter('Unread')}>Unread</div>
+                    <div className="dropdown-item" onClick={() => selectFilter('Read')}>Read</div>
                   </div>
                 )}
               </div>

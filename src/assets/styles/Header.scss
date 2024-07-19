@@ -74,10 +74,10 @@
 
   &__dropdown__container {
     margin-bottom: 1.2rem;
-    padding: 1.6rem 2.4rem;
+    padding: 1.6rem 1.6rem;
     display: flex;
     align-items: center;
-    gap: 3.2rem;
+    gap: 1.3rem;
     justify-content: space-between;
     background-color: $background-color;
     cursor: pointer;
@@ -93,7 +93,7 @@
 
     &__icon {
       font-weight: 600;
-      width: 3.2rem;
+      width: 2.2rem;
       height: 3.2rem;
       color: $primary-color;
       transition: all 0.08s linear;
@@ -194,7 +194,7 @@
 
   &__dropdown {
     position: absolute;
-    width: 80%;
+    width: 76%;
     left: 0;
     top: 105%;
     background-color: #fff;

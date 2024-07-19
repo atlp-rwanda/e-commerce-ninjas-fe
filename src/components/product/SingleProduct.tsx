@@ -164,7 +164,7 @@ const ProductDetails = ({
         </div>
         <div className="discount-label-container">
           <div className="discount-label">
-            Discounted price of {product.discount}
+            Discounted price of -{product.discount}
           </div>
         </div>
       </div>

@@ -70,7 +70,7 @@ const Product: React.FC<ProductProps> = ({
         onMouseLeave={handleMouseLeave}
         onClick={() => navigate(`/product/${id}`)}
       >
-        <span className="discount-badge">{discount}%</span>
+        <span className="discount-badge">-{discount}%</span>
         <img
           src={images[currentImageIndex]}
           alt="Product"

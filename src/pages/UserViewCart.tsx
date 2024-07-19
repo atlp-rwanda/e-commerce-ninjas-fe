@@ -67,7 +67,7 @@ const UserViewCart: React.FC = () => {
 
   if (!cartData || cartData.carts.length === 0) {
     return (
-      <div className="no-products">
+      <div className="error-message">
         <p>Your cart is empty.</p>
       </div>
     );

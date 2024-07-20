@@ -45,7 +45,7 @@ FaCheckSquare {
             flex: 3;
             border: 2px solid $border-color;
             border-radius: 10px;
-            width: 200px;
+            width: 150px;
             height: 120px;
             img {
               width: 100%;
@@ -119,6 +119,7 @@ FaCheckSquare {
                     border: 0;
                     font-size: 20px;
                     cursor: pointer;
+                    margin-left: 10px;
                   }
                 }
               }

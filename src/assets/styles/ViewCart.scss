@@ -118,7 +118,7 @@ FaCheckSquare {
                     border: 0;
                     font-size: 20px;
                     cursor: pointer;
-                    margin-left: 10px;
+                    margin-left: 30px;
                   }
                 }
               }
@@ -229,13 +229,12 @@ FaCheckSquare {
               display: none;
             }
             .image {
-              flex: 2;
               border: 2px solid $border-color;
               border-radius: 10px;
               text-align: center;
               img {
-                width: 200px;
-                height: 120px;
+                width: 100%;
+                height: 100%;
                 object-fit: cover;
                 text-align: center;
               }

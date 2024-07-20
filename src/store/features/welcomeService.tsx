@@ -1,5 +1,5 @@
 /* eslint-disable */
-import {axiosInstance} from '../../utils/axios/axiosInstance';
+import {axiosInstance} from './notifications/axios/axiosInstance';
 import { IWelcomeMessage } from '../../utils/types/store';
 
 const welcome = async () => {

@@ -89,6 +89,8 @@ FaCheckSquare {
                   padding: 3px;
                   border-radius: 20px;
                   margin-bottom: 10px;
+                  font-size: 1.5rem;
+                
                   button {
                     background: $red-color;
                     border: 0;
@@ -102,7 +104,7 @@ FaCheckSquare {
                   input {
                     background: transparent;
                     border: 0;
-                    width: 20px;
+                    width: 30px;
                     padding-left: 10px;
                     text-align: center;
                     align-items: center;

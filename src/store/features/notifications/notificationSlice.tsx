@@ -3,7 +3,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch } from '../../store';
 import notificationService from './notificationService';
 import { INotificationInitialResource } from '../../../utils/types/store';
-import { getErrorMessage } from '../../../utils/axios/axiosInstance';
+import { getErrorMessage } from './axios/axiosInstance';
 import { toast } from 'react-toastify';
 
 interface Notification {

@@ -7,6 +7,7 @@ import authReducer from "./features/auth/authSlice";
 import singleProductReducer from "./features/product/singleProductSlice";
 import notificationReducer from "./features/notifications/notificationSlice";
 import cartReducer from "./features/carts/cartSlice";
+
 export const store = configureStore({
   reducer: {
     initialMessage: welcomeReducer,

@@ -7,7 +7,7 @@ import {
   IUser,
   IUserData,
 } from "../../../utils/types/store";
-import { getErrorMessage } from "../../../utils/axios/axiosInstance";
+import { getErrorMessage } from "../notifications/axios/axiosInstance";
 const initialState: AuthService = {
   user: undefined,
   isError: false,

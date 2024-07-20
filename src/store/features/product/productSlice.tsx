@@ -2,7 +2,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import productService from "./productService";
 import { IProduct, SearchCriteria } from "../../../utils/types/product";
-import { getErrorMessage } from "../../../utils/axios/axiosInstance";
+import { getErrorMessage } from "../notifications/axios/axiosInstance";
 
 const initialState: { products: IProduct[] | null; isLoading: boolean; isError: boolean | null; isSuccess: boolean; message: string } = {
     products: [],

@@ -1,21 +1,74 @@
 /* eslint-disable */
-import React, { useEffect, useState } from "react";
-import { Meta } from "../components/Meta";
-import { useAppDispatch, useAppSelector } from "../store/store";
-import { PuffLoader } from "react-spinners";
-import { toast } from "react-toastify";
-import { getUserCarts } from "../store/features/carts/cartSlice";
 import {
   FaCheckSquare,
   FaMinus,
   FaPlus,
-  FaEdit,
   FaTrash,
   FaGift,
   FaShippingFast,
-} from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+} from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { PuffLoader } from 'react-spinners';
+import { toast } from 'react-toastify';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { Meta } from '../components/Meta';
+import { getUserCarts, createCart } from '../store/features/carts/cartSlice';
 
+const CartProduct = ({ product, onQuantityChange }) => {
+  const [quantity, setQuantity] = useState(product.quantity);
+  const navigate = useNavigate();
+
+  const handleQuantityChange = (newQuantity) => {
+    if (newQuantity >= 1) {
+      setQuantity(newQuantity);
+      onQuantityChange(product.id, newQuantity);
+     
+    }
+  };
+
+  return (
+    <div className="product-box" key={product.productId}>
+      <div className="check">
+        <FaCheckSquare color="#ff6d18" />
+      </div>
+      <div className="image">
+        <img src={product.image} alt={product.name} />
+      </div>
+      <div className="description">
+        <h4 onClick={() => navigate(`/product/${product.id}`)}>
+          {product.name}
+        </h4>
+        <div className="flexer">
+          <div className="left">
+            <span className="discount">{product.discount}</span>
+            <div className="price">${product.price}</div>
+          </div>
+          <div className="controls">
+            <div className="quantity">
+              <button className="minus" type="button" onClick={() => handleQuantityChange(Number(quantity) - 1)}>
+                <FaMinus />
+              </button>
+              <input
+              
+                value={quantity}
+                readOnly
+              />
+              <button className="plus" type="button" onClick={() => handleQuantityChange(Number(quantity) + 1)}>
+                <FaPlus />
+              </button>
+            </div>
+            <div className="other">
+              <button className="delete" type="button">
+                <FaTrash color="#ff6d18" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 const UserViewCart: React.FC = () => {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(true);
@@ -23,6 +76,20 @@ const UserViewCart: React.FC = () => {
   const [cartData, setCartData] = useState<any>(null);
   const navigate = useNavigate();
 
+  const handleChangeQty = async (productId, newQuantity) => {
+    const response = await dispatch(createCart({ productId, quantity: newQuantity }));
+    if (response.payload.data) {
+      toast.success(response.payload.message);
+      
+      return;
+    } else if (response.payload === 'Not authorized') {
+      toast.error('Please login first');
+      navigate('/login');
+    } else {
+      toast.error(response.payload.message);
+      return;
+    }
+  };
   const cartState = useAppSelector((state) => state.cart);
 
   useEffect(() => {
@@ -30,11 +97,11 @@ const UserViewCart: React.FC = () => {
       try {
         setIsLoading(true);
         const response = await dispatch(getUserCarts()).unwrap();
-        console.log("Cart response:", response);
+        console.log('Cart response:', response);
         setCartData(response.data);
         setIsLoading(false);
       } catch (error: any) {
-        console.error("Error fetching carts:", error);
+        console.error('Error fetching carts:', error);
         setIsLoading(false);
         setIsError(true);
         toast.error(error.message);
@@ -44,8 +111,8 @@ const UserViewCart: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      navigate("/login");
+    if (!localStorage.getItem('token')) {
+      navigate('/login');
     }
   }, [navigate]);
 
@@ -67,7 +134,7 @@ const UserViewCart: React.FC = () => {
 
   if (!cartData || cartData.carts.length === 0) {
     return (
-      <div className="no-products">
+      <div className="error-message">
         <p>Your cart is empty.</p>
       </div>
     );
@@ -85,52 +152,13 @@ const UserViewCart: React.FC = () => {
                 <h2>Shopping Cart</h2>
               </div>
               <div className="products-list">
-                {cart.products.map((product: any) => {
-                  return (
-                    <div className="product-box" key={product.productId}>
-                      <div className="check">
-                        <FaCheckSquare color="#ff6d18" />
-                      </div>
-                      <div className="image">
-                        <img src={product.image} alt={product.name} />
-                      </div>
-                      <div className="description">
-                        <h4>{product.name}</h4>
-                        <div className="flexer">
-                          <div className="left">
-                            <span className="discount">
-                              {product.discount}%
-                            </span>
-                            <div className="price">${product.price}</div>
-                          </div>
-                          <div className="controls">
-                            <div className="quantity">
-                              <button className="minus" type="button">
-                                <FaMinus />
-                              </button>
-                              <input
-                                type="number"
-                                value={product.quantity}
-                                readOnly
-                              />
-                              <button className="plus" type="button">
-                                <FaPlus />
-                              </button>
-                            </div>
-                            <div className="other">
-                              <button className="edit" type="button">
-                                <FaEdit color="#ff6d18" />
-                              </button>
-                              <button className="delete" type="button">
-                                <FaTrash color="#ff6d18" />
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+                {cart.products.map((product: any) => (
+                  <CartProduct
+                    key={product.productId}
+                    product={product}
+                    onQuantityChange={handleChangeQty}
+                  />
+                ))}
               </div>
             </div>
           ))}

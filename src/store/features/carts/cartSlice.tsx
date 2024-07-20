@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import cartService from "./cartService";
-import { getErrorMessage } from "../../../utils/axios/axiosInstance";
+import { getErrorMessage } from "../notifications/axios/axiosInstance";
 import { toast } from "react-toastify";
 import { iCartInitialResource } from "../../../utils/types/store";
 

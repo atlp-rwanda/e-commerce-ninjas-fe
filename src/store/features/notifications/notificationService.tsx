@@ -1,5 +1,5 @@
 /* eslint-disable  */
-import { axiosInstance } from '../../../utils/axios/axiosInstance';
+import { axiosInstance } from './axios/axiosInstance';
 
 const getUserNotifications = async () => {
   try {

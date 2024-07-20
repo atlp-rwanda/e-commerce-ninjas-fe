@@ -84,8 +84,6 @@ FaCheckSquare {
                 }
               }
               .controls {
-                display: flex;
-                flex-direction: column;
                 .quantity {
                   background: $border-color;
                   padding: 3px;

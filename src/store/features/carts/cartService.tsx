@@ -25,10 +25,20 @@ const getUserCarts = async ()=> {
         throw error;
     }
 }
-
+const clearCarts = async ()=> {
+  try {
+      const response = await axiosInstance.delete("/api/cart/buyer-clear-carts");
+      return response
+  }
+  catch (error) {
+      console.error("Error clear carts", error);
+      throw error;
+  }
+}
 const cartService = {
   createCart,
-  getUserCarts
+  getUserCarts,
+  clearCarts
 };
 
 export default cartService;

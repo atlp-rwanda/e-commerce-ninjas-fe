@@ -13,7 +13,7 @@ import { PuffLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { Meta } from '../components/Meta';
-import { getUserCarts, createCart } from '../store/features/carts/cartSlice';
+import { getUserCarts, createCart, clearCarts } from '../store/features/carts/cartSlice';
 
 const CartProduct = ({ product, onQuantityChange }) => {
   const [quantity, setQuantity] = useState(product.quantity);
@@ -28,6 +28,8 @@ const CartProduct = ({ product, onQuantityChange }) => {
   };
 
   return (
+    <>
+   
     <div className="product-box" key={product.productId}>
       <div className="check">
         <FaCheckSquare color="#ff6d18" />
@@ -66,7 +68,9 @@ const CartProduct = ({ product, onQuantityChange }) => {
           </div>
         </div>
       </div>
+   
     </div>
+</>
   );
 };
 const UserViewCart: React.FC = () => {
@@ -139,11 +143,16 @@ const UserViewCart: React.FC = () => {
       </div>
     );
   }
-
+  const handleClearCart = ()=>{
+      dispatch(clearCarts())
+  }
   return (
     <>
       <Meta title="View shopping cart - E-Commerce Ninjas" />
       <section className="cart-section">
+      <button className="delete" type="button" onClick={handleClearCart}>
+<FaTrash color="#ff6d18" />
+</button>
         <div className="cart-products">
           {cartData.carts.map((cart: any) => (
             <div key={cart.id} className="cart">

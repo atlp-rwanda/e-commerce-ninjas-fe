@@ -42,6 +42,17 @@ export const getUserCarts = createAsyncThunk(
     }
   }
 );
+export const clearCarts = createAsyncThunk(
+  "cart/userClearCarts",
+  async (_, thunkAPI) => {
+    try {
+      const response = await cartService.clearCarts();
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
 
 const cartSlice = createSlice({
   name: "cart",
@@ -93,6 +104,24 @@ const cartSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = "";
+      })
+      .addCase(clearCarts.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+        state.message = "";
+      })
+      .addCase(clearCarts.fulfilled, (state, action:PayloadAction<any>) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.message = action.payload.message;
+      })
+      .addCase(clearCarts.rejected, (state, action:PayloadAction<any>) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.payload;
       });
   },
 });

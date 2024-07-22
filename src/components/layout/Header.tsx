@@ -208,7 +208,7 @@ const Header: React.FC = () => {
             </div>
           )}
 
-          <Link className="cart__container cart__details" to="/shopping-cart">
+          <Link className="cart__container" to="/shopping-cart">
             <IoCartOutline className="cart__icon" />
             <span className="cart__text">Cart</span>
             <span className="cart__description">

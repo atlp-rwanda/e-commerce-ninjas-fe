@@ -1,4 +1,5 @@
 /* eslint-disable */
+
 import { axiosInstance } from "../../../utils/axios/axiosInstance";
 
 const createCart = async (productId: string, quantity: number) => {
@@ -14,16 +15,15 @@ const createCart = async (productId: string, quantity: number) => {
   }
 };
 
-const getUserCarts = async ()=> {
-    try {
-        const response = await axiosInstance.get("/api/cart/buyer-get-carts");
-        return response.data
-    }
-    catch (error) {
-        console.error("Error getting user carts", error);
-        throw error;
-    }
-}
+const getUserCarts = async () => {
+  try {
+    const response = await axiosInstance.get("/api/cart/buyer-get-carts");
+    return response.data;
+  } catch (error) {
+    console.error("Error getting user carts", error);
+    throw error;
+  }
+};
 
 const productCheckout = async (cartId: string) => {
   const response = await axiosInstance.get(
@@ -32,10 +32,18 @@ const productCheckout = async (cartId: string) => {
   return response.data;
 };
 
+const payCart = async (cartId: string) => {
+  const response = await axiosInstance.post(`/api/cart/buyer-pay-cart`, {
+    cartId,
+  });
+  return response.data;
+};
+
 const cartService = {
   createCart,
   getUserCarts,
-  productCheckout
+  productCheckout,
+  payCart,
 };
 
 export default cartService;

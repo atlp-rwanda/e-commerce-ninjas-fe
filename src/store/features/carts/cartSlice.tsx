@@ -2,7 +2,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import cartService from "./cartService";
 import { getErrorMessage } from "../../../utils/axios/axiosInstance";
-import { toast } from "react-toastify";
 import { iCartInitialResource } from "../../../utils/types/store";
 
 const initialState: iCartInitialResource = {
@@ -12,6 +11,7 @@ const initialState: iCartInitialResource = {
   isSuccess: false,
   message: "",
   isLoggedOut: false,
+  payment_url: "",
 };
 
 interface CreateCartParams {
@@ -48,6 +48,18 @@ export const checkout = createAsyncThunk(
   async (cartId: string, thunkApi) => {
     try {
       const response = await cartService.productCheckout(cartId);
+      return response;
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
+export const payment = createAsyncThunk(
+  "cart/payment",
+  async (cartId: string, thunkApi) => {
+    try {
+      const response = await cartService.payCart(cartId);
       return response;
     } catch (error) {
       return thunkApi.rejectWithValue(getErrorMessage(error));
@@ -124,10 +136,23 @@ const cartSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = "";
+      })
+      .addCase(payment.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(payment.fulfilled, (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.payment_url = action.payload;
+        console.log(action.payload);
+      })
+      .addCase(payment.rejected, (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.isError = true;
       });
   },
 });
 
-export const { addCart, usergetCarts
- } = cartSlice.actions;
+export const { addCart, usergetCarts } = cartSlice.actions;
 export default cartSlice.reducer;

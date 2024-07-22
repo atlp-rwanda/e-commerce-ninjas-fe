@@ -1,10 +1,14 @@
 /* eslint-disable */
-import React, { useEffect, useState } from 'react';
-import { Meta } from '../components/Meta';
-import { useAppDispatch, useAppSelector } from '../store/store';
-import { PuffLoader, PulseLoader } from 'react-spinners';
-import { toast } from 'react-toastify';
-import { getUserCarts,checkout } from '../store/features/carts/cartSlice';
+import React, { useEffect, useState } from "react";
+import { Meta } from "../components/Meta";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { PuffLoader, PulseLoader } from "react-spinners";
+import { toast } from "react-toastify";
+import {
+  getUserCarts,
+  checkout,
+  payment,
+} from "../store/features/carts/cartSlice";
 import {
   FaMinus,
   FaPlus,
@@ -12,8 +16,8 @@ import {
   FaTrash,
   FaGift,
   FaShippingFast,
-} from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+} from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const UserViewCart: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -23,9 +27,8 @@ const UserViewCart: React.FC = () => {
   const [checkoutData, setcheckoutData] = useState(null);
   const [checkedCarts, setCheckedCarts] = useState(new Set());
   const [isPreloader, setPreloader] = useState(false);
-  const [isCheckoutSuccess,setCheckoutSuccess] = useState(null);
+  const [isCheckoutSuccess, setCheckoutSuccess] = useState(null);
   const navigate = useNavigate();
-  
 
   const cartState = useAppSelector((state) => state.cart);
 
@@ -34,11 +37,11 @@ const UserViewCart: React.FC = () => {
       try {
         setIsLoading(true);
         const response = await dispatch(getUserCarts()).unwrap();
-        console.log('Cart response:', response);
+        console.log("Cart response:", response);
         setCartData(response.data);
         setIsLoading(false);
       } catch (error: any) {
-        console.error('Error fetching carts:', error);
+        console.error("Error fetching carts:", error);
         setIsLoading(false);
         setIsError(true);
         toast.error(error.message);
@@ -48,8 +51,8 @@ const UserViewCart: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!localStorage.getItem('token')) {
-      navigate('/login');
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
     }
   }, [navigate]);
 
@@ -77,7 +80,7 @@ const UserViewCart: React.FC = () => {
     );
   }
 
-  const handleCartCheckboxChange = (cartId) => (event) => {
+  const handleCartCheckboxChange = (cartId: string) => (event) => {
     const newCheckedCarts = new Set(checkedCarts);
     if (event.target.checked) {
       newCheckedCarts.add(cartId);
@@ -86,30 +89,33 @@ const UserViewCart: React.FC = () => {
     }
     setCheckedCarts(newCheckedCarts);
   };
-const paymentNavigation =  () => {
-  navigate('/payment');
-}
-const handleCheckoutClick = () => {
-    const checkedIds:any = Array.from(checkedCarts);
-    if (checkedIds !== null && checkedIds.length === 1) {
-          const Checkout = async (checkedIds) => {
-          setPreloader(true);
-          const response = await dispatch(checkout(checkedIds));
-          setcheckoutData(response.payload.data.totalAmount);
-          setCheckoutSuccess(true);
-          setPreloader(false);  
-          toast.success("Checkout is done Successfully");     
+  const paymentNavigation = () => {
+    if (checkedCarts instanceof Set) {
+      const cartId = Array.from(checkedCarts)[0];
+      dispatch(payment(cartId as string));
+    } else {
+      console.error("checkedCarts is not a Set or an array");
     }
-    Checkout(checkedIds); 
-  }
-    else if(checkedIds.length > 1){
-      toast.error("Select Single Cart");
-    }
-    else{
-      toast.error("No Cart Selected");
-    }  
   };
-return (
+  const handleCheckoutClick = () => {
+    const checkedIds: any = Array.from(checkedCarts);
+    if (checkedIds !== null && checkedIds.length === 1) {
+      const Checkout = async (checkedIds) => {
+        setPreloader(true);
+        const response = await dispatch(checkout(checkedIds));
+        setcheckoutData(response.payload.data.totalAmount);
+        setCheckoutSuccess(true);
+        setPreloader(false);
+        toast.success("Checkout is done Successfully");
+      };
+      Checkout(checkedIds);
+    } else if (checkedIds.length > 1) {
+      toast.error("Select Single Cart");
+    } else {
+      toast.error("No Cart Selected");
+    }
+  };
+  return (
     <>
       <Meta title="View shopping cart - E-Commerce Ninjas" />
       <section className="cart-section">
@@ -117,20 +123,23 @@ return (
           {cartData.carts.map((cart: any) => (
             <div key={cart.cartId} className="cart">
               <div className="title">
-              <input
-              type="checkbox"
-              className="custom-checkbox"
-              onChange={handleCartCheckboxChange(cart.cartId)} 
-            />
-            <h2>Shopping Cart</h2>
+                <input
+                  type="checkbox"
+                  className="custom-checkbox"
+                  onChange={handleCartCheckboxChange(cart.cartId)}
+                />
+                <h2>Shopping Cart</h2>
               </div>
               <div className="products-list">
                 {cart.products.map((product: any) => {
                   return (
                     <div className="product-box" key={product.productId}>
                       <div className="check">
-                      <input  type="checkbox" id={`cartCheckbox-${product.productId}}`}  className="custom-checkbox" />
-                     
+                        <input
+                          type="checkbox"
+                          id={`cartCheckbox-${product.productId}}`}
+                          className="custom-checkbox"
+                        />
                       </div>
                       <div className="image">
                         <img src={product.image} alt={product.name} />
@@ -141,9 +150,7 @@ return (
                         </h4>
                         <div className="flexer">
                           <div className="left">
-                            <span className="discount">
-                              {product.discount}
-                            </span>
+                            <span className="discount">{product.discount}</span>
                             <div className="price">${product.price}</div>
                           </div>
                           <div className="controls">
@@ -195,27 +202,25 @@ return (
                 <div className="text">$8000</div>
               </div>
             </div>
-          </div>             
+          </div>
           <div className="order-details">
             <h3>Order details</h3>
-              <div className="row">
+            <div className="row">
               <div className="left">Total amount:</div>
               <div className="right">{checkoutData}$</div>
             </div>
-            {!isCheckoutSuccess ? (  
-           <button
-              className={`${isPreloader ? " loading" : ""}`}
-              disabled={isPreloader}
-              onClick={handleCheckoutClick}
-            >
-              <span>{isPreloader ? "Loading " : "Check out"}</span>
-              <PulseLoader size={6} color="#ffe2d1" loading={isPreloader} />
-            </button>
-          ) : (
-          <button onClick={paymentNavigation} >
-            Proceed To Payment
-          </button>
-        )}
+            {!isCheckoutSuccess ? (
+              <button
+                className={`${isPreloader ? " loading" : ""}`}
+                disabled={isPreloader}
+                onClick={handleCheckoutClick}
+              >
+                <span>{isPreloader ? "Loading " : "Check out"}</span>
+                <PulseLoader size={6} color="#ffe2d1" loading={isPreloader} />
+              </button>
+            ) : (
+              <button onClick={paymentNavigation}>Proceed To Payment</button>
+            )}
           </div>
         </div>
       </section>

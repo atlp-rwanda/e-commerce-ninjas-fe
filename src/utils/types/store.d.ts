@@ -105,4 +105,5 @@ export interface iCartInitialResource {
   isLoading: boolean;
   message: string | null;
   isLoggedOut: boolean;
+  payment_url: string;
 }

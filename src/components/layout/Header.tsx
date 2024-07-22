@@ -155,6 +155,7 @@ const Header: React.FC = () => {
             )}
           </div>
           <SearchInput className="header__input" />
+          <div className="icons">
           {isAuthenticated && (
             <div className="header__notification__box">
               <IoIosNotifications className="header__notification__icon header__notification__icon__1" onClick={toggleNotifications} />
@@ -166,7 +167,7 @@ const Header: React.FC = () => {
               )}
             </div>
           )}
-          <div className="cart__container">
+          <div className="cart__container cart__details">
             <IoCartOutline className="cart__icon" />
             <span className="cart__text">Cart</span>
             <span className="cart__description">$ 0</span>
@@ -178,7 +179,7 @@ const Header: React.FC = () => {
             {user && User.profilePicture ? (
               <img src={User.profilePicture} className="cart__icon" />
             ) : (
-              <FaRegUser className="cart__icon" />
+              <FaRegUser className="cart__icon-user" />
             )}
 
             <span className="cart__text">{user ? "Hi, " : "User"}</span>
@@ -222,6 +223,7 @@ const Header: React.FC = () => {
                 </ul>
               </div>
             )}
+          </div>
           </div>
         </div>
         <div className="header__bottom__bottom">

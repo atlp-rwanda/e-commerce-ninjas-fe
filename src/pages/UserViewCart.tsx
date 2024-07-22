@@ -83,6 +83,7 @@ const UserViewCart: React.FC = () => {
               <div className="title">
                 <FaCheckSquare className="check" color="#ff6d18" />
                 <h2>Shopping Cart</h2>
+                <FaTrash color="#ff6d18" />
               </div>
               <div className="products-list">
                 {cart.products.map((product: any) => {
@@ -154,7 +155,7 @@ const UserViewCart: React.FC = () => {
                 <div className="icon">
                   <FaShippingFast />
                 </div>
-                <div className="text">$8000</div>
+                <div className="text">$ 0.00</div>
               </div>
             </div>
           </div>

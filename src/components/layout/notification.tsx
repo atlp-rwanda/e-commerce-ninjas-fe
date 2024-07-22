@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { FaCheck } from 'react-icons/fa';
 import { RiArrowDropDownLine, RiCheckDoubleFill } from "react-icons/ri";
-import { fetchNotifications } from '../../store/features/notifications/notificationSlice';
+import { fetchNotifications, markAllNotificationsRead, markNotificationRead } from '../../store/features/notifications/notificationSlice';
 import { PuffLoader } from 'react-spinners';
 
 type Notification = {
@@ -16,11 +16,18 @@ type Notification = {
 const formatTime = (dateString: string): string => {
   const date = new Date(dateString);
   const now = new Date();
-  const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
-  if (diffInMinutes < 60) return `${diffInMinutes} min`;
-  const diffInHours = Math.floor(diffInMinutes / 60);
-  if (diffInHours < 24) return `${diffInHours} h`;
-  return date.toLocaleDateString();
+  
+  if (date.toDateString() === now.toDateString()) {
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const formattedHours = hours % 12 || 12;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    return `${formattedHours}:${formattedMinutes} ${ampm}`;
+  } else {
+    const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
+    return date.toLocaleDateString(undefined, options);
+  }
 };
 
 const Notifications: React.FC = () => {
@@ -41,7 +48,9 @@ const Notifications: React.FC = () => {
   const sortedNotifications = notifications ? notifications.slice().sort((a: Notification, b: Notification) => Number(a.isRead) - Number(b.isRead)) : [];
 
   const filteredNotifications = sortedNotifications.filter((notification: Notification) => 
-    filter === 'All' || (filter === 'Unread' && !notification.isRead)
+    filter === 'All' || 
+    (filter === 'Unread' && !notification.isRead) ||
+    (filter === 'Read' && notification.isRead)
   ).slice(0, displayCount);
 
   const unreadCount = notifications ? notifications.filter((notification: Notification) => !notification.isRead).length : 0;
@@ -50,6 +59,14 @@ const Notifications: React.FC = () => {
   const selectFilter = (filter: string) => {
     setFilter(filter);
     setDropdownOpen(false);
+  };
+
+  const handleMarkAllRead = () => {
+    dispatch(markAllNotificationsRead());
+  };
+
+  const handleMarkRead = (id: string) => {
+    dispatch(markNotificationRead(id));
   };
 
   return (
@@ -74,17 +91,22 @@ const Notifications: React.FC = () => {
                   <div className="dropdown-menu">
                     <div className="dropdown-item" onClick={() => selectFilter('All')}>All</div>
                     <div className="dropdown-item" onClick={() => selectFilter('Unread')}>Unread</div>
+                    <div className="dropdown-item" onClick={() => selectFilter('Read')}>Read</div>
                   </div>
                 )}
               </div>
-              <div className="filter-double">
+              <div className="filter-double" onClick={handleMarkAllRead}>
                 <RiCheckDoubleFill size={20} className="filter-double-icon" />
               </div>
             </div>
           </div>
           <div className="notifications-list">
             {isSuccess && filteredNotifications.map((notification: Notification) => (
-              <div key={notification.id} className={`notification-item ${!notification.isRead ? 'unread' : ''}`}>
+              <div 
+                key={notification.id} 
+                className={`notification-item ${!notification.isRead ? 'unread' : ''}`}
+                onClick={() => handleMarkRead(notification.id)}
+              >
                 <FaCheck className={!notification.isRead ? 'unread-icon' : ''} />
                 <div className="notification-text">
                   <p>{notification.message}</p>

@@ -8,6 +8,7 @@ import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { logout } from '../../store/features/auth/authSlice';
 import { toast } from 'react-toastify';
+import { Backdrop, Box, CircularProgress, Typography } from '@mui/material';
 
 
 export const AdminDashboard = () => {
@@ -29,7 +30,7 @@ export const AdminDashboard = () => {
 
     const handleLogout = () => {
         dispatch(logout());
-        navigate('/admin');
+        navigate("/admin")
     };
 
     useEffect(() => {
@@ -42,6 +43,7 @@ export const AdminDashboard = () => {
 
     return (
         <>
+
             <div className='admin__wrapper'>
                 <section className="left__side">
                     <div className="icons">

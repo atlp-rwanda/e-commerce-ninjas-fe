@@ -31,6 +31,42 @@ const initialState: INotificationInitialResource = {
   isLoggedOut: false,
 };
 
+export const fetchNotifications = createAsyncThunk(
+  "notifications/fetchNotifications",
+  async (_, thunkApi) => {
+    try {
+      const notifications = await notificationService.getUserNotifications();
+      return notifications;
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
+export const markAllNotificationsRead = createAsyncThunk(
+  "notifications/markAllNotificationsRead",
+  async (_, thunkApi) => {
+    try {
+      await notificationService.markAllNotificationsAsRead();
+      return;
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
+export const markNotificationRead = createAsyncThunk(
+  "notifications/markNotificationRead",
+  async (id: string, thunkApi) => {
+    try {
+      await notificationService.markNotificationAsRead(id);
+      return id;
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
 const notificationSlice = createSlice({
   name: 'notification',
   initialState,
@@ -84,11 +120,21 @@ const notificationSlice = createSlice({
         state.notifications = action.payload;
         state.message = "Notifications fetched successfully";
       })
-      .addCase(fetchNotifications.rejected, (state, action:PayloadAction<any>) => {
+      .addCase(fetchNotifications.rejected, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.message = action.payload;
+      })
+      .addCase(markAllNotificationsRead.fulfilled, (state) => {
+        state.notifications.forEach(notification => notification.isRead = true);
+      })
+      .addCase(markNotificationRead.fulfilled, (state, action: PayloadAction<string>) => {
+        const notificationId = action.payload;
+        const notification = state.notifications.find(notification => notification.id === notificationId);
+        if (notification) {
+          notification.isRead = true;
+        }
       });
   }
 });
@@ -106,17 +152,5 @@ export const handleNotifications = () => async (dispatch: AppDispatch) => {
   }
   return safeNotifications;
 };
-
-export const fetchNotifications = createAsyncThunk(
-  "notifications/fetchNotifications",
-  async (_, thunkApi) => {
-    try {
-      const notifications = await notificationService.getUserNotifications();
-      return notifications;
-    } catch (error) {
-      return thunkApi.rejectWithValue(getErrorMessage(error));
-    }
-  }
-);
 
 export default notificationSlice.reducer;

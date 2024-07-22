@@ -1,4 +1,4 @@
-/* eslint-disable  */
+/* eslint-disable */
 import { axiosInstance } from '../../../utils/axios/axiosInstance';
 
 const getUserNotifications = async () => {
@@ -10,8 +10,26 @@ const getUserNotifications = async () => {
   }
 };
 
+const markAllNotificationsAsRead = async () => {
+  try {
+    await axiosInstance.put('/api/user/user-mark-all-notifications');
+  } catch (error) {
+    console.error("Error marking all notifications as read:", error);
+  }
+};
+
+const markNotificationAsRead = async (id: string) => {
+  try {
+    await axiosInstance.put(`/api/user/user-mark-notification/${id}`);
+  } catch (error) {
+    console.error(`Error marking notification ${id} as read:`, error);
+  }
+};
+
 const notificationService = {
   getUserNotifications,
+  markAllNotificationsAsRead,
+  markNotificationAsRead,
 };
 
 export default notificationService;

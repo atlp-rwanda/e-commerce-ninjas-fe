@@ -1,21 +1,11 @@
 /* eslint-disable */
+// src/store/store.js
 import { configureStore } from "@reduxjs/toolkit";
+import rootReducer from './reducers';
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import welcomeReducer from "./features/welcomeSlice";
-import productReducer from './features/product/productSlice';
-import authReducer from './features/auth/authSlice';
-import singleProductReducer from './features/product/singleProductSlice';
-import notificationReducer from './features/notifications/notificationSlice';
-import adminReducer from './features/admin/adminSlice';
+
 export const store = configureStore({
-  reducer: {
-    initialMessage: welcomeReducer,
-    auth: authReducer,
-    products: productReducer,
-    singleProduct: singleProductReducer,
-    notification: notificationReducer,
-    admin: adminReducer
-  },
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,

@@ -21,6 +21,8 @@ import { fetchNotifications } from '../../store/features/notifications/notificat
 import { getUserDetails } from '../../store/features/auth/authSlice';
 import { useLocation, Link } from 'react-router-dom';
 import cartService from '../../store/features/carts/cartService';
+import { getUserCarts } from '../../store/features/carts/cartSlice';
+import { toast } from 'react-toastify';
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -54,37 +56,32 @@ const Header: React.FC = () => {
     }
   };
 
-  const cartsCountTotal = async () => {
-    try {
-      const carts = await cartService.getUserCarts();
-      let total = 0;
-      total = carts.data.carts.length; // Correctly assigning the length of the carts array to total
-      return total;
-    } catch (error) {
-      console.error('Error fetching carts:', error);
-      return 0;
-    }
-  };
+
 
   const [cartsCount, setCartsCount] = useState<number | null>(null);
-
   useEffect(() => {
     const fetchCartCount = async () => {
       try {
         if (isAuthenticated) {
-          const total: number = Number(await cartsCountTotal());
-          setCartsCount(Number(total));
-          console.log(total, "this is total");
+          const response = await dispatch(getUserCarts()).unwrap();
+          const carts = response.data.carts;
+          let totals = 0;
+          carts.forEach(cart => {
+            totals += cart.products.length;
+          });
+          console.log("This is cart", totals);
+          setCartsCount(totals);
         } else {
-          setCartsCount(Number('0'));
+          setCartsCount(0);
         }
       } catch (error) {
         console.error('Error fetching cart total:', error);
-        setCartsCount(Number('0'));
+        setCartsCount(0);
       }
-    }
+    };
+
     fetchCartCount();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, dispatch]);
 
   const [cartTotal, setCartTotal] = useState<number | null>(null);
 
@@ -242,13 +239,22 @@ const Header: React.FC = () => {
 
             <Link className="cart__container cart__details" to="/shopping-cart">
               <div className="cart__icons_row">
-                {isAuthenticated && (
+                {isAuthenticated ? (
                   <div className="header__notification__box cart_icon_box">
                     <IoCartOutline
                       className="header__notification__icon header__notification__icon__1"
                     />
                     <span className="header__notification__number">
                       {cartsCount}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="header__notification__box cart_icon_box">
+                    <IoCartOutline
+                      className="header__notification__icon header__notification__icon__1"
+                    />
+                    <span className="header__notification__number">
+                      0
                     </span>
                   </div>
                 )}

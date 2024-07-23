@@ -409,32 +409,5 @@ a {
 
 
 @media only screen and (max-width: 768px) {
-  .cart__icons_row {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    .cart_icon_box {
-      border: 0;
-      flex: 1;
-    }
-    .cart_icon_box::before {
-      content: "";
-      position: absolute;
-      top: -15%;
-      left: 160%;
-      width: 0.15rem;
-      height: 6rem;
-      background-color: transparent;
-    }
-    .cart_box_info {
-      display: flex;
-      flex-direction: column;
-      margin-left: 10px;
-    }
-  }
-  .notification_box_cont {
-   margin-top: 15px;
-  }
-  
   
 }

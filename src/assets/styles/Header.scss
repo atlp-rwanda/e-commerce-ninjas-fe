@@ -23,7 +23,8 @@
       transition: all 0.3s ease-in;
     }
   }
-  &__notification__box {
+  &__notification{
+    &__boxes {
     &::before {
       content: "";
       position: absolute;
@@ -33,6 +34,19 @@
       height: 6rem;
       background-color: #ccc;
     }
+  }
+  &__icon {
+    color: $primary-color;
+    width: 2rem;
+    height: 2rem;
+
+    &__1 {
+      width: 3rem;
+      height: 3rem;
+      transform: translateX(15%);
+    }
+  }
+  
   }
 
   &__top {

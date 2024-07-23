@@ -20,10 +20,9 @@ import Button from '@mui/material/Button';
 
 export default function Users() {
     const dispatch = useAppDispatch();
-    const { users, isLoading, isError, isSuccess, message } = useAppSelector((state) => state?.admin)
+    const { users, isLoading } = useAppSelector((state) => state?.admin)
     const [localUserState, setLocalUserState] = useState([]);
     const [open, setOpen] = useState(false);
-    const [selectedUserId, setSelectedUserId] = useState(null);
     const [pendingRoleChange, setPendingRoleChange] = useState(null);
 
     const headers = ['N0', 'Profile', 'Name', 'Email', 'Phone', 'Gender', 'Role', 'Registered At', 'Status', 'Actions'];

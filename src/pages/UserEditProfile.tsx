@@ -6,13 +6,14 @@ import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { updatePassword, fetchUserProfile, updateUserProfile } from '../store/features/user/userSlice';
 import { IProfile, ILocation, IEmail } from '../utils/types/store';
-import profileImage from "../../public/assets/ProfileImage.jpg"
+import avatar from "../../public/assets/avatar.jpg"
 import camera from "../../public/assets/Camera.png"
 import { TailSpin } from 'react-loader-spinner'
 import data from '../components/locations/location';
 import * as Yup from "yup"
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
+import { PuffLoader } from 'react-spinners';
 
 const updateProfileSchema = Yup.object().shape({
   firstName: Yup.string().required('Required'),
@@ -48,10 +49,10 @@ type NestedObject = {
 const rwandaData: RwandaData = data;
 
 
-const UserProfile: React.FC<RwandaLocationSelectorProps> = ({setLocation}) => {
+const UserProfile: React.FC<RwandaLocationSelectorProps> = ({ setLocation }) => {
   const dispatch = useAppDispatch();
   const { user, isSuccess, isError, isLoading, message } = useAppSelector((state) => state.user);
-  const inputRef = useRef(null) 
+  const inputRef = useRef(null)
   const [initialValues, setInitialValues] = useState({
     firstName: "",
     lastName: "",
@@ -66,38 +67,37 @@ const UserProfile: React.FC<RwandaLocationSelectorProps> = ({setLocation}) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [country, setCountry] = useState('Rwanda');
-    const [province, setProvince] = useState('');
-    const [district, setDistrict] = useState('');
-    const [sector, setSector] = useState('');
-    const [profileImage, setProfileImage] = useState<File | string>('../../public/assets/ProfileImage.jpg');
-    const [profilePictureUrl, setProfilePictureUrl] = useState<string>('../public/assets/ProfileImage.jpg');
+  const [province, setProvince] = useState('');
+  const [district, setDistrict] = useState('');
+  const [sector, setSector] = useState('');
+  const [profileImage, setProfileImage] = useState<string | null>(null);
 
-    const handleImageClick = ()=>{
-      inputRef.current.click()
-    }
+  const handleImageClick = () => {
+    inputRef.current.click()
+  }
 
-    const handleProvinceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setProvince(e.target.value);
-      setDistrict('');
-      setSector('');
+  const handleProvinceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setProvince(e.target.value);
+    setDistrict('');
+    setSector('');
   };
 
   const handleDistrictChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setDistrict(e.target.value);
-      setSector('');
+    setDistrict(e.target.value);
+    setSector('');
   };
 
   const handleSectorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setSector(e.target.value);
+    setSector(e.target.value);
   };
 
   const getOptions = (selectedData: NestedObject) => {
     return Object.keys(selectedData).map(key => <option key={key} value={key}>{key}</option>);
-};
+  };
 
-useEffect(() => {
+  useEffect(() => {
     setLocation && setLocation({ country, province, district, sector });
-}, [country, province, district, sector, setLocation]);
+  }, [country, province, district, sector, setLocation]);
 
 
   const newPasswordVisibility = () => {
@@ -124,7 +124,6 @@ useEffect(() => {
         language: user.language || "",
         currency: user.currency || "",
       });
-      setProfileImage(user.profilePicture || 'ProfileImage.jpg');
     }
   }, [user]);
 
@@ -153,16 +152,21 @@ useEffect(() => {
 
   const handleFileChange = (event) => {
     const file = event.currentTarget.files[0];
-    setProfilePictureUrl(URL.createObjectURL(file));
-    formik.setFieldValue('profilePicture', file);
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        if (e.target?.result && typeof e.target.result === 'string') {
+          setProfileImage(e.target.result);
+        }
+        formik.setFieldValue('profilePicture', file);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      console.error('Invalid file type. Please select an image.');
+    }
 
   };
-
-  useEffect(() => {
-    if (isSuccess) {
-      alert("Success");
-    }
-  }, [isSuccess]);
+  
   const renderError = (field) => {
     if (formik.touched[field] && typeof formik.errors[field] === 'string') {
       return <div>{formik.errors[field]}</div>;
@@ -203,7 +207,12 @@ useEffect(() => {
         <form className='profile-details' onSubmit={formik.handleSubmit}>
           <div className='title'>
             <h1>MY PROFILE DETAILS</h1>
-            <button type='submit'>Save Changes</button>
+            <button type='submit'>
+              {isLoading ?
+              <PuffLoader color="#ff6d18" size={300} loading={isLoading}/>
+              :"Save Changes"
+              }
+              </button>
           </div>
           <div className='details'>
             <div className='input-container'>
@@ -219,7 +228,11 @@ useEffect(() => {
               </div>
               <div className='input-layout'>
                 <label>Email Address</label>
-                {/* <div>{user.email}</div> */}
+                <div>
+                  {user && (
+                    <p>{user.email}</p>
+                  )}
+                </div>
               </div>
               <div className='select-layout'>
                 <select id='country' name='country'>
@@ -233,9 +246,16 @@ useEffect(() => {
               </div>
             </div>
             <div className='profile-pic' onClick={handleImageClick}>
-              <img src={profilePictureUrl}/>              
-              <img src={camera} alt='edit profile' />
-              <input type="file" name="profilePicture" onChange={handleFileChange} ref={inputRef} style={{ display: 'none' }}/>
+              <div className='profile-image'>
+                {profileImage ?
+                  <img src={profileImage} width={400} height={400} /> :
+                  <img src={avatar} alt='upload profile' className='img' />
+                }
+              </div>
+              <div className='img-uploader'>
+                <img src={camera} alt='edit profile' />
+              </div>
+              <input type="file" name="profilePicture" onChange={handleFileChange} ref={inputRef} style={{ display: 'none' }} />
               {renderError('profilePicture')}
             </div>
             <div className='right-side'>
@@ -294,12 +314,12 @@ useEffect(() => {
                     onBlur={formikPwd.handleBlur}
                   />
                   <button
-                type="button"
-                className="toggle-password"
-                onClick={newPasswordVisibility}
-              >
-                <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
-              </button>
+                    type="button"
+                    className="toggle-password"
+                    onClick={newPasswordVisibility}
+                  >
+                    <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
+                  </button>
                 </div>
               </div>
             </div>
@@ -319,58 +339,58 @@ useEffect(() => {
                     required
                   />
                   <button
-                type="button"
-                className="toggle-password"
-                onClick={confirmPasswordVisibility}
-              >
-                <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
-              </button>
+                    type="button"
+                    className="toggle-password"
+                    onClick={confirmPasswordVisibility}
+                  >
+                    <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </form>
         <div className="shipping-address">
-                    <div className='title'>
-                        <h1>MY SHIPPING ADDRESS</h1>
-                        <button>Save Change</button>
-                    </div>
-                    <div className="shipping">
-                        <div >
-                            <div className='select-inp'>
-                                <label htmlFor="Province">Province</label>
-                                <select value={province} onChange={handleProvinceChange} disabled={!country}>
-                                    <option value="">Select Province</option>
-                                    {country && getOptions(rwandaData[country])}
-                                </select>
-                            </div>
-                            <div className='select-inp'>
-                                <label htmlFor="District">District</label>
-                                <select value={district} onChange={handleDistrictChange} disabled={!province}>
-                                    <option value="">Select District</option>
-                                    {province && getOptions(rwandaData[country][province])}
-                                </select>
-                            </div>
-                        </div>
-                        <div>
-                            <div className='select-inp'>
-                                <label htmlFor="Sector">Sector</label>
-                                <select value={sector} onChange={handleSectorChange} disabled={!district}>
-                                    <option value="">Select Sector</option>
-                                    {district && getOptions(rwandaData[country][province][district])}
-                                </select>
-                            </div>
-                            <div className='select-inp'>
-                                <label htmlFor="Street-address">Street Address:</label>
-                                <select >
-                                    <option value="" disabled></option>
-                                    <option >KN 123</option>
-                                    <option >KN 301</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          <div className='title'>
+            <h1>MY SHIPPING ADDRESS</h1>
+            <button>Save Change</button>
+          </div>
+          <div className="shipping">
+            <div >
+              <div className='select-inp'>
+                <label htmlFor="Province">Province</label>
+                <select value={province} onChange={handleProvinceChange} disabled={!country}>
+                  <option value="">Select Province</option>
+                  {country && getOptions(rwandaData[country])}
+                </select>
+              </div>
+              <div className='select-inp'>
+                <label htmlFor="District">District</label>
+                <select value={district} onChange={handleDistrictChange} disabled={!province}>
+                  <option value="">Select District</option>
+                  {province && getOptions(rwandaData[country][province])}
+                </select>
+              </div>
+            </div>
+            <div>
+              <div className='select-inp'>
+                <label htmlFor="Sector">Sector</label>
+                <select value={sector} onChange={handleSectorChange} disabled={!district}>
+                  <option value="">Select Sector</option>
+                  {district && getOptions(rwandaData[country][province][district])}
+                </select>
+              </div>
+              <div className='select-inp'>
+                <label htmlFor="Street-address">Street Address:</label>
+                <select >
+                  <option value="" disabled></option>
+                  <option >KN 123</option>
+                  <option >KN 301</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </>
 

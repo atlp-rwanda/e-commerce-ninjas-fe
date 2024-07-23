@@ -1,9 +1,8 @@
 @import "./Colors";
 
 .profile-container {
-  width: 100%;
-  padding: 32px 0;
   font-size: 15px;
+  padding: 1.5rem 0;
 
   .title {
     display: flex;
@@ -12,7 +11,7 @@
     background-color: $primary-color;
     color: white;
     height: 40px;
-    // padding: 0 20px;
+    padding: 0 20px;
 
     button {
       padding: 8px 32px;
@@ -25,10 +24,11 @@
   }
 
   .profile-details {
-
+    padding: 0 2rem !important;
     .details {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       padding: 23px;
 
       .input-container {
@@ -60,6 +60,9 @@
             font-size: 15px;
             margin-top: 10px;
           }
+          div{
+            margin-top: 10px;
+          }
         }
 
         .select-layout {
@@ -82,23 +85,32 @@
           }
         }
       }
-      .profile-pic{
+
+      .profile-pic {
         position: relative;
 
-        form{
-          button{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            img{
-              object-fit: cover;
-              position: absolute;
-              left: 7.5rem;
-              top: 11.4rem;
-              z-index: 10;
-              background: #fff;
-              border-radius: 50%;
-            }
+        .profile-image {
+          width: 20rem;
+
+          img {
+            height: 20rem;
+            width: 100%;
+            border-radius: 50%;
+          }
+        }
+
+        .img-uploader {
+          position: absolute;
+          width: 5.5rem;
+          height: 5.5rem;
+          right: 7rem;
+          top: 17rem;
+          z-index: 10;
+
+          img {
+            width: 100%;
+            background: #fff;
+            border-radius: 50%;
           }
         }
       }
@@ -167,7 +179,7 @@
   }
 
   .password-container {
-
+    padding: 0 2rem !important;
     .password {
       display: flex;
       justify-content: space-between;
@@ -202,7 +214,7 @@
           }
 
           span {
-            margin-top: 9px;
+            margin-top: 1rem;
           }
         }
       }
@@ -210,7 +222,7 @@
   }
 
   .shipping-address {
-    
+    padding: 0 2rem !important;
 
     .shipping {
       display: flex;
@@ -251,38 +263,40 @@
   }
 }
 
-@media only screen and (max-width: 425px){
-  .profile-container{
+@media only screen and (max-width: 425px) {
+  .profile-container {
 
-    .title{
+    .title {
       font-size: 10px;
 
-      button{
+      button {
         height: 5rem;
         font-size: 12px;
         padding: 0 8px;
       }
     }
-    .details{
+
+    .details {
       flex-direction: column;
       gap: 30px;
       padding: 0;
 
-      .input-container{
+      .input-container {
         width: 100%;
-      .input-layout{
-        padding: 0;
-        width: 100%;
+
+        .input-layout {
+          padding: 0;
+          width: 100%;
+        }
       }
     }
-    }
 
-    .password{
+    .password {
       flex-direction: column;
       gap: 20px;
     }
 
-    .shipping{
+    .shipping {
       flex-direction: column;
     }
   }

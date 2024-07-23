@@ -15,14 +15,20 @@
 .available {
     background-color: $green-middle-color;
     border-radius: 30px;
-    padding: 8px 25px;
+    padding: 5px 10px;
     color: $green-color;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .unavailable {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: $red-middle-color;
     border-radius: 30px;
-    padding: 8px 25px;
+    padding: 5px 10px;
     color: $red-color;
 }
 

@@ -159,3 +159,39 @@
     }
 
 }
+
+.seller-dashboard-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+}
+
+
+@media (max-width: 1024px) {
+    .seller__wrapper {
+        .left__side {
+            width: 6.5rem;
+            .dashboard__items {
+                display: none;
+            }
+        }
+        .main__seller__content__dashboard {
+            flex: 1;
+            padding: auto;
+            padding-left: 0px;
+        }
+        .main__seller__dashboard {
+            padding: 12px;
+            .outlet{
+                max-width: calc(100vw - 6rem);
+                overflow-y: scroll;
+            }
+            .right__side{
+                display: none;
+            }
+        }
+    }
+    
+}

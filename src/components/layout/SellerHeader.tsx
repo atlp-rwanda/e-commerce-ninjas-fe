@@ -8,7 +8,7 @@ import { MdLightMode } from "react-icons/md";
 function SellerHeader() {
   return (
     <header className="seller-header">
-      <p className="header__title">Dashboard</p>
+      <p className="header__title">Seller Dashboard</p>
       <div className="header__notification__box">
         <IoIosNotifications className="header__notification__icon header__notification__icon__1" />
         <span className="header__notification__number">10</span>

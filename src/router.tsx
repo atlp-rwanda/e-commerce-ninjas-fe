@@ -20,6 +20,7 @@ import Search from "./pages/Search";
 import SellerViewProduct from "./pages/seller/SellerViewProduct";
 import SellerCollection from "./pages/seller/SellerCollection";
 import { SellerLayout } from "./components/layout/SellerLayout";
+import SellerDashboard from "./pages/seller/SellerDashboard";
 
 const AppRouter: React.FC = () => {
   return (
@@ -53,7 +54,8 @@ const AppRouter: React.FC = () => {
           <Route path="*" element={<NotFound />} />
         </Route>
         <Route path="/seller" element={<SellerLayout/>}>
-            <Route index element={<Navigate to="products" replace />} />
+            <Route index element={<Navigate to="dashboard" replace />} />
+            <Route path="dashboard" element={<SellerDashboard />} />
             <Route path="login" element={<SellerLogin />} />
             <Route path="product/:id" element={<SellerViewProduct />} />
             <Route path="products" element={<SellerCollection />} />

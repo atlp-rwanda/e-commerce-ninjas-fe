@@ -1,9 +1,9 @@
 .notifications-container {
   width: 40rem;
   background-color: #fff;
-  border: 0.2rem solid #c9c9c9;
+  // border: 0.2rem solid #c9c9c9;
   border-radius: 1rem;
-  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
 
   .loader {
     display: flex;
@@ -30,6 +30,8 @@
     align-items: center;
     padding: 1rem 2rem;
     background-color: #fff;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
     border-bottom: 0.2rem solid #c9c9c9;
 
     h2 {

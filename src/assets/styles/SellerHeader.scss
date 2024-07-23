@@ -60,3 +60,11 @@
   transform: translateX(0.6rem);
   background-color: #666;
 }
+
+@media (max-width: 1024px) {
+  .seller-header {
+    .header__theme__container, line{
+      display: none;
+    }
+  }
+}

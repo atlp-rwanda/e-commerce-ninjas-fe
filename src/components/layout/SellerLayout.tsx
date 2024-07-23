@@ -1,18 +1,17 @@
 /* eslint-disable */
 import React, { useState } from 'react'
 import { AiFillDashboard } from "react-icons/ai";
-import { FaProductHunt, FaUsers } from "react-icons/fa";
+import { FaProductHunt } from "react-icons/fa";
 import { IoLogOutSharp } from "react-icons/io5";
 import { Link, Outlet } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 import SellerHeader from './SellerHeader';
+
 export const SellerLayout = () => {
     const [isActive, setIsActive] = useState(
         () => {
             return parseInt(localStorage.getItem('activeSellerTab')) || 1;
         }
     )
-    const navigate = useNavigate()
     const handleClick = (index: number) => {
         setIsActive(index);
         localStorage.setItem('activeSellerTab', String(index));
@@ -24,10 +23,10 @@ export const SellerLayout = () => {
                     <div className="icons">
                         <div className='icons__upper'>
                             <div>
-                                <AiFillDashboard size={32} className='icon' />
+                            <Link to={"/seller/dashboard"} onClick={() => { handleClick(1); }}><AiFillDashboard size={32} className='icon' /></Link>
                             </div>
                             <div>
-                                <FaProductHunt size={32} className='icon' />
+                            <Link to={"/seller/products"} onClick={() => { handleClick(2); }}><FaProductHunt size={32} className='icon' /></Link>
                             </div>
                         </div>
                         <div className='icons__bottom'>
@@ -39,7 +38,7 @@ export const SellerLayout = () => {
                     <div className='dashboard__side'>
                         <div className='dashboard__links'>
                             <div>
-                                <Link to={"/seller/dashboard"} className={`text_content ${isActive === 1 ? "active" : ""}`} onClick={() => { handleClick(1); }}>Seller Dashboard</Link>
+                                <Link to={"/seller/dashboard"} className={`text_content ${isActive === 1 ? "active" : ""}`} onClick={() => { handleClick(1); }}>Dashboard</Link>
                             </div>
                             <div>
                                 <Link to={"/seller/products"} className={`text_content ${isActive === 2 ? "active" : ""}`} onClick={() => { handleClick(2); }}>Products</Link>

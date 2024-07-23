@@ -20,6 +20,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import truncateString from "../../utils/text/truncateString";
 
 export default function Users() {
   const dispatch = useAppDispatch();
@@ -95,12 +96,12 @@ export default function Users() {
 
   const rows = localUserState
     ? localUserState
-        .filter((user) => user.role === "seller" || user.role === "buyer" || user.role === "admin")
+    .filter((user) => user.role === "buyer" || user.role === "seller" || user.role === "admin")
         .map((user, index) => [
           index + 1,
           <img src={user.profilePicture} alt="image" className="Profile" />,
-          user.firstName + "  " + user.lastName,
-          user.email,
+          truncateString(user.firstName + "  " + user.lastName,17),
+          truncateString(user.email,18),
           user.phone,
           user.gender,
           <select

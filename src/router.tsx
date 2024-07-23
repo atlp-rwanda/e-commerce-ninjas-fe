@@ -11,7 +11,7 @@ import { ResendEmail } from "./components/ResendEmail";
 import GoogleCallback from "./components/GoogleCallback";
 import SendResetPasswordLink from "./pages/SendResetPasswordLink";
 import ResetPassword from "./pages/ResetPassword";
-import ProtectedRoute from "./utils/protectRoute/ProtectedRoute";
+import {ProtectedRoute} from "./utils/protectRoute/ProtectedRoute";
 import ViewProduct from "./pages/ViewProduct";
 import UserLogin from "./pages/UserLogin";
 import SellerLogin from "./pages/SellerLogin";

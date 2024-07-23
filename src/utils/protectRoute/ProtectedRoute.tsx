@@ -59,4 +59,4 @@ const ProtectedRoute = ({ redirectPath = '/', children }) => {
   return children ? children : <Outlet />;
 };
 
-export default ProtectedRoute;
+export {ProtectedRoute};

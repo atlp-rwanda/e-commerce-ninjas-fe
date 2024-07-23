@@ -6,7 +6,7 @@ import { BiSolidHide } from "react-icons/bi";
 
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { loginUser } from "../../store/features/auth/authSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { PulseLoader } from "react-spinners";
 import { useFormik } from "formik";
@@ -24,7 +24,7 @@ function AdminLogin() {
   const [isFocused, setIsFocused] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
-
+  const location = useLocation()
   const dispatch = useAppDispatch();
   const {
     isLoading,
@@ -47,16 +47,16 @@ function AdminLogin() {
     },
   });
 
-  useEffect(
-    function () {
-      if (isSuccess && isAuthenticated && token) {
-        localStorage.setItem("token", token);
-        navigate("/admin/dashboard");
-        formik.resetForm();
-      }
-    },
-    [token, isAuthenticated, error, isError, isSuccess]
-  );
+  useEffect(()=>{
+    if (isSuccess && isAuthenticated && token) {
+      localStorage.setItem("token", token);
+      navigate("/admin/dashboard");
+      formik.resetForm();
+    }
+  },[token, isAuthenticated, error, isError, isSuccess]);
+  if(isAuthenticated && localStorage.getItem('token')){
+    return <Navigate to="/admin/dashboard" state={{from:location}}/>
+  }
 
   function handleIsFocused() {
     setIsFocused(true);

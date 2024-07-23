@@ -54,6 +54,38 @@ const Header: React.FC = () => {
     }
   };
 
+  const cartsCountTotal = async () => {
+    try {
+      const carts = await cartService.getUserCarts();
+      let total = 0;
+      total = carts.data.carts.length; // Correctly assigning the length of the carts array to total
+      return total;
+    } catch (error) {
+      console.error('Error fetching carts:', error);
+      return 0;
+    }
+  };
+
+  const [cartsCount, setCartsCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      try {
+        if (isAuthenticated) {
+          const total: number = Number(await cartsCountTotal());
+          setCartsCount(Number(total));
+          console.log(total, "this is total");
+        } else {
+          setCartsCount(Number('0'));
+        }
+      } catch (error) {
+        console.error('Error fetching cart total:', error);
+        setCartsCount(Number('0'));
+      }
+    }
+    fetchCartCount();
+  }, [isAuthenticated]);
+
   const [cartTotal, setCartTotal] = useState<number | null>(null);
 
   useEffect(() => {
@@ -191,82 +223,95 @@ const Header: React.FC = () => {
           </div>
           <SearchInput className="header__input" />
           <div className="icons">
-          {isAuthenticated && (
-            <div className="header__notification__box">
-              <IoIosNotifications
-                className="header__notification__icon header__notification__icon__1"
-                onClick={toggleNotifications}
-              />
-              <span className="header__notification__number">
-                {unreadCount}
+            {isAuthenticated && (
+              <div className="header__notification__box notification_box_cont">
+                <IoIosNotifications
+                  className="header__notification__icon header__notification__icon__1"
+                  onClick={toggleNotifications}
+                />
+                <span className="header__notification__number">
+                  {unreadCount}
+                </span>
+                {isNotificationOpen && (
+                  <div className="notification__dropdown">
+                    <Notifications />
+                  </div>
+                )}
+              </div>
+            )}
+
+            <Link className="cart__container cart__details" to="/shopping-cart">
+              <div className="cart__icons_row">
+                {isAuthenticated && (
+                  <div className="header__notification__box cart_icon_box">
+                    <IoCartOutline
+                      className="header__notification__icon header__notification__icon__1"
+                    />
+                    <span className="header__notification__number">
+                      {cartsCount}
+                    </span>
+                  </div>
+                )}
+                <div className="cart_box_info">
+                  <span className="cart__text">Cart</span>
+                  <span className="cart__description">
+                    {isAuthenticated
+                      ? cartTotal !== null
+                        ? `$${cartTotal}`
+                        : '$0'
+                      : '$0'}
+                  </span>
+                </div>
+              </div>
+            </Link>
+
+            <div
+              className="cart__container user__container"
+              onClick={handleSetIsOpen2}
+            >
+              {user && User.profilePicture ? (
+                <img src={User.profilePicture} className="cart__icon" />
+              ) : (
+                <FaRegUser className="cart__icon-user" />
+              )}
+
+              <span className="cart__text">{user ? 'Hi, ' : 'User'}</span>
+              <span className="cart__description">
+                {user
+                  ? `${User?.firstName || User?.email?.split('@')[0]}`
+                  : 'Account'}
               </span>
-              {isNotificationOpen && (
-                <div className="notification__dropdown">
-                  <Notifications />
+              {isAuthenticated && isOpen2 && (
+                <div className="order__dropdown">
+                  <ul className="order__list">
+                    <li>
+                      <NavLink to="/my-orders" className="order__link">
+                        <FaBuildingCircleCheck className="order__icon" />
+                        <span className="order__text">My Orders</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="/wishlist" className="order__link">
+                        <FaBuildingCircleCheck className="order__icon" />
+                        <span className="order__text">WishList</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="/profile-settings" className="order__link">
+                        <FaUserClock className="order__icon" />
+                        <span className="order__text">Profile Settings</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to={'/'} className="order__link">
+                        <IoLogOutSharp className="order__icon" />
+                        <span className="order__text">Logout</span>
+                      </NavLink>
+                    </li>
+                  </ul>
                 </div>
               )}
             </div>
-          )}
-
-          <Link className="cart__container cart__details" to="/shopping-cart">
-            <IoCartOutline className="cart__icon" />
-            <span className="cart__text">Cart</span>
-            <span className="cart__description">
-              {isAuthenticated
-                ? cartTotal !== null
-                  ? `$${cartTotal}`
-                  : '$0'
-                : '$0'}
-            </span>
-          </Link>
-
-          <div
-            className="cart__container user__container"
-            onClick={handleSetIsOpen2}
-          >
-            {user && User.profilePicture ? (
-              <img src={User.profilePicture} className="cart__icon" />
-            ) : (
-              <FaRegUser className="cart__icon-user" />
-            )}
-
-            <span className="cart__text">{user ? 'Hi, ' : 'User'}</span>
-            <span className="cart__description">
-              {user
-                ? `${User?.firstName || User?.email?.split('@')[0]}`
-                : 'Account'}
-            </span>
-            {isAuthenticated && isOpen2 && (
-              <div className="order__dropdown">
-                <ul className="order__list">
-                  <li>
-                    <NavLink to="/my-orders" className="order__link">
-                      <FaBuildingCircleCheck className="order__icon" />
-                      <span className="order__text">My Orders</span>
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/wishlist" className="order__link">
-                      <FaBuildingCircleCheck className="order__icon" />
-                      <span className="order__text">WishList</span>
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/profile-settings" className="order__link">
-                      <FaUserClock className="order__icon" />
-                      <span className="order__text">Profile Settings</span>
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to={'/'} className="order__link">
-                      <IoLogOutSharp className="order__icon" />
-                      <span className="order__text">Logout</span>
-                    </NavLink>
-                  </li>
-                </ul>
-              </div>
-            )}
-          </div>
           </div>
         </div>
         <div className="header__bottom__bottom">

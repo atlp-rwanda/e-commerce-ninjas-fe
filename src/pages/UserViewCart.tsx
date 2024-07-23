@@ -1,10 +1,10 @@
 /* eslint-disable */
-import React, { useEffect, useState } from 'react';
-import { Meta } from '../components/Meta';
-import { useAppDispatch, useAppSelector } from '../store/store';
-import { PuffLoader } from 'react-spinners';
-import { toast } from 'react-toastify';
-import { getUserCarts } from '../store/features/carts/cartSlice';
+import React, { useEffect, useState } from "react";
+import { Meta } from "../components/Meta";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { PuffLoader } from "react-spinners";
+import { toast } from "react-toastify";
+import { getUserCarts } from "../store/features/carts/cartSlice";
 import {
   FaCheckSquare,
   FaMinus,
@@ -13,14 +13,16 @@ import {
   FaTrash,
   FaGift,
   FaShippingFast,
-} from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+} from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const UserViewCart: React.FC = () => {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [cartData, setCartData] = useState<any>(null);
+  const [cartResponseData, setCartResponseData] = useState<any>(null);
+  const [isLoggedOut, setIsLoggedOut] = useState(false);
   const navigate = useNavigate();
 
   const cartState = useAppSelector((state) => state.cart);
@@ -29,12 +31,22 @@ const UserViewCart: React.FC = () => {
     const fetchCarts = async () => {
       try {
         setIsLoading(true);
-        const response = await dispatch(getUserCarts()).unwrap();
-        console.log('Cart response:', response);
-        setCartData(response.data);
+        const response = await dispatch(getUserCarts());
+        const response1 = await dispatch(getUserCarts()).unwrap();
+        if (response.payload === "Not authorized") {
+          setIsLoggedOut(true);
+          toast.error("Please login first");
+          navigate("/login");
+        }
+        setCartResponseData(response1.data);
         setIsLoading(false);
       } catch (error: any) {
-        console.error('Error fetching carts:', error);
+        if (error === "Not authorized") {
+          setIsLoggedOut(true);
+          toast.error("Please login first");
+          navigate("/login");
+        }
+        console.error("Error fetching carts:", error);
         setIsLoading(false);
         setIsError(true);
         toast.error(error.message);
@@ -42,12 +54,6 @@ const UserViewCart: React.FC = () => {
     };
     fetchCarts();
   }, [dispatch]);
-
-  useEffect(() => {
-    if (!localStorage.getItem('token')) {
-      navigate('/login');
-    }
-  }, [navigate]);
 
   if (isLoading) {
     return (
@@ -64,8 +70,15 @@ const UserViewCart: React.FC = () => {
       </div>
     );
   }
+  if (isLoggedOut) {
+    return (
+      <div className="error-message">
+        <p>Please login or create account first.</p>
+      </div>
+    );
+  }
 
-  if (!cartData || cartData.carts.length === 0) {
+  if (!cartResponseData || cartResponseData.carts.length < 1) {
     return (
       <div className="error-message">
         <p>Your cart is empty.</p>
@@ -78,12 +91,12 @@ const UserViewCart: React.FC = () => {
       <Meta title="View shopping cart - E-Commerce Ninjas" />
       <section className="cart-section">
         <div className="cart-products">
-          {cartData.carts.map((cart: any) => (
+          {cartResponseData.carts.map((cart: any) => (
             <div key={cart.id} className="cart">
               <div className="title">
                 <FaCheckSquare className="check" color="#ff6d18" />
                 <h2>Shopping Cart</h2>
-                <FaTrash color="#ff6d18" className='delete' />
+                <FaTrash color="#ff6d18" className="delete" />
               </div>
               <div className="products-list">
                 {cart.products.map((product: any) => {
@@ -101,9 +114,7 @@ const UserViewCart: React.FC = () => {
                         </h4>
                         <div className="flexer">
                           <div className="left">
-                            <span className="discount">
-                              {product.discount}
-                            </span>
+                            <span className="discount">{product.discount}</span>
                             <div className="price">${product.price}</div>
                           </div>
                           <div className="controls">
@@ -146,7 +157,9 @@ const UserViewCart: React.FC = () => {
                 <div className="icon">
                   <FaGift />
                 </div>
-                <div className="text">There are 2 vouchers for you.</div>
+                <div className="text">
+                  There are {cartResponseData.carts.length} vouchers for you.
+                </div>
               </div>
             </div>
             <div className="box">

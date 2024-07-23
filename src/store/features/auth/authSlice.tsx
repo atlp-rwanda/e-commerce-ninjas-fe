@@ -217,8 +217,7 @@ const userSlice = createSlice({
         (state, action: PayloadAction<any>) => {
           state.isLoading = false;
           state.isSuccess = true;
-          state.user = action.payload;
-          console.log(action.payload);
+          state.token = action.payload.data.token;
           state.message = action.payload.message;
         }
       )

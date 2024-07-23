@@ -20,7 +20,8 @@ import { useAppDispatch, useAppSelector } from "../../store/store";
 import { fetchNotifications } from "../../store/features/notifications/notificationSlice";
 import { getUserDetails } from "../../store/features/auth/authSlice";
 import { useLocation } from "react-router-dom";
-import logo from "../../../public/assets/images/logo.png"
+import logo from "../../../public/assets/images/logo.png";
+
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     async function getUserDetail() {
-      if (token.trim()) await dispatch(getUserDetails(token));
+      if (token?.trim()) await dispatch(getUserDetails(token));
     }
 
     getUserDetail();

@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable*/
 import React, { useEffect } from "react";
 import { IoIosNotifications } from "react-icons/io";
 import { FaEnvelope } from "react-icons/fa";
@@ -24,13 +24,13 @@ const User:any = {...user}
           e-Commerce <span>Ninjas</span>
         </p>
       </div>
-      <div className="header__notification__box">
-        <IoIosNotifications className="header__notification__icon header__notification__icon__1" />
-        <span className="header__notification__number">10</span>
+      <div className="header__notifications__box">
+        <IoIosNotifications className="header__notifications__icon header__notifications__icon__1" />
+        <span className="header__notifications__number">0</span>
       </div>
-      <div className="header__notification__box">
-        <FaEnvelope className="header__notification__icon" />
-        <span className="header__notification__number">30</span>
+      <div className="header__notifications__box">
+        <FaEnvelope className="header__notifications__icon" />
+        <span className="header__notifications__number">0</span>
       </div>
       <div className="header__user__box">
         <img src={User.profilePicture} alt="UI face" className="header__user__img" />

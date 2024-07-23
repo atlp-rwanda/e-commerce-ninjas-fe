@@ -13,7 +13,6 @@ import data from '../components/locations/location';
 import * as Yup from "yup"
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
-import { PuffLoader } from 'react-spinners';
 
 const updateProfileSchema = Yup.object().shape({
   firstName: Yup.string().required('Required'),
@@ -70,7 +69,13 @@ const UserProfile: React.FC<RwandaLocationSelectorProps> = ({ setLocation }) => 
   const [province, setProvince] = useState('');
   const [district, setDistrict] = useState('');
   const [sector, setSector] = useState('');
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<any>(null);
+
+  useEffect(()=>{
+    if(user){
+      setProfileImage(user.profilePicture)
+    }
+  },[user])
 
   const handleImageClick = () => {
     inputRef.current.click()
@@ -209,7 +214,7 @@ const UserProfile: React.FC<RwandaLocationSelectorProps> = ({ setLocation }) => 
             <h1>MY PROFILE DETAILS</h1>
             <button type='submit'>
               {isLoading ?
-              <PuffLoader color="#ff6d18" size={300} loading={isLoading}/>
+              <TailSpin color="#ff6d18" width={20}/>
               :"Save Changes"
               }
               </button>

@@ -30,11 +30,7 @@ const Header: React.FC = () => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const location = useLocation();
 
-  const {
-    isAuthenticated,
-    user,
-    token: tokenLogin,
-  } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, user, token: tokenLogin } = useAppSelector((state) => state.auth);
   const { notifications } = useAppSelector((state) => state.notification);
   const [token, setToken] = useState("");
   const navEl = useRef<HTMLDivElement | null>(null);
@@ -71,8 +67,8 @@ const Header: React.FC = () => {
   }
 
   function handleSetIsOpen2() {
-    if(!isAuthenticated){
-      navigate("/login")
+    if (!isAuthenticated) {
+      navigate("/login");
     }
     setIsOpen2((isOpen) => !isOpen);
   }
@@ -89,6 +85,12 @@ const Header: React.FC = () => {
   }
 
   const unreadCount = notifications ? notifications.filter((notification) => !notification.isRead).length : 0;
+
+  function formatName(name: string) {
+    const trimmedName = name.trim();
+    const formattedName = trimmedName.replace(/\s+/g, '.');
+    return formattedName.length > 5 ? formattedName.substring(0, 5) + '...' : formattedName;
+  }
 
   return (
     <header className="header">
@@ -156,74 +158,69 @@ const Header: React.FC = () => {
           </div>
           <SearchInput className="header__input" />
           <div className="icons">
-          {isAuthenticated && (
-            <div className="header__notification__box">
-              <IoIosNotifications className="header__notification__icon header__notification__icon__1" onClick={toggleNotifications} />
-              <span className="header__notification__number">{unreadCount}</span>
-              {isNotificationOpen && (
-                <div className="notification__dropdown">
-                  <Notifications />
+            {isAuthenticated && (
+              <div className="header__notification__box">
+                <IoIosNotifications className="header__notification__icon header__notification__icon__1" onClick={toggleNotifications} />
+                <span className="header__notification__number">{unreadCount}</span>
+                {isNotificationOpen && (
+                  <div className="notification__dropdown">
+                    <Notifications />
+                  </div>
+                )}
+              </div>
+            )}
+            <div className="cart__container cart__details">
+              <IoCartOutline className="cart__icon" />
+              <span className="cart__text">Cart</span>
+              <span className="cart__description">$ 0</span>
+            </div>
+            <div
+              className="cart__container user__container"
+              onClick={handleSetIsOpen2}
+            >
+              {user && User.profilePicture ? (
+                <img src={User.profilePicture} className="cart__icon" />
+              ) : (
+                <FaRegUser className="cart__icon-user" />
+              )}
+
+              <span className="cart__text">{user ? "Hi, " : "User"}</span>
+              <span className="cart__description">
+                {user
+                  ? formatName(User?.firstName || User?.email?.split('@')[0])
+                  : "Account"}
+              </span>
+              {isAuthenticated && isOpen2 && (
+                <div className="order__dropdown">
+                  <ul className="order__list">
+                    <li>
+                      <NavLink to="/my-orders" className="order__link">
+                        <FaBuildingCircleCheck className="order__icon" />
+                        <span className="order__text">My Orders</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="/wishlist" className="order__link">
+                        <FaBuildingCircleCheck className="order__icon" />
+                        <span className="order__text">WishList</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="/profile-settings" className="order__link">
+                        <FaUserClock className="order__icon" />
+                        <span className="order__text">Profile Settings</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="/logout" className="order__link">
+                        <IoLogOutSharp className="order__icon" />
+                        <span className="order__text">Logout</span>
+                      </NavLink>
+                    </li>
+                  </ul>
                 </div>
               )}
             </div>
-          )}
-          <div className="cart__container cart__details">
-            <IoCartOutline className="cart__icon" />
-            <span className="cart__text">Cart</span>
-            <span className="cart__description">$ 0</span>
-          </div>
-          <div
-            className="cart__container user__container"
-            onClick={handleSetIsOpen2}
-          >
-            {user && User.profilePicture ? (
-              <img src={User.profilePicture} className="cart__icon" />
-            ) : (
-              <FaRegUser className="cart__icon-user" />
-            )}
-
-            <span className="cart__text">{user ? "Hi, " : "User"}</span>
-            <span className="cart__description">
-              {user
-                ? `${ User?.firstName || User?.email?.split('@')[0] }`
-                : "Account"}
-            </span>
-            {isAuthenticated && isOpen2 && (
-              <div className="order__dropdown">
-                <ul className="order__list">
-                  <li>
-                    <NavLink to="/my-orders" className="order__link">
-                      <FaBuildingCircleCheck className="order__icon" />
-                      <span className="order__text">My Orders</span>
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/wishlist" className="order__link">
-                      <FaBuildingCircleCheck className="order__icon" />
-                      <span className="order__text">WishList</span>
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/profile-settings" className="order__link">
-                      <FaUserClock className="order__icon" />
-                      <span className="order__text">Profile Settings</span>
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      to={"/"}
-                      className="order__link"
-                    >
-                      <IoLogOutSharp className="order__icon" />
-                      <span className="order__text">
-                        Logout
-                      </span>
-                    </NavLink>
-                  </li>
-                </ul>
-              </div>
-            )}
-          </div>
           </div>
         </div>
         <div className="header__bottom__bottom">

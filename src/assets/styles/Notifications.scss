@@ -1,7 +1,6 @@
 .notifications-container {
   width: 40rem;
   background-color: #fff;
-  // border: 0.2rem solid #c9c9c9;
   border-radius: 1rem;
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
 
@@ -28,7 +27,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
+    padding: 2rem 2rem;
     background-color: #fff;
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
@@ -50,7 +49,7 @@
         align-items: center;
         cursor: pointer;
         border: 0.1rem solid #ddd;
-        padding: 0.5rem 1rem;
+        padding: 0rem 1rem;
         border-radius: 0.4rem;
         background-color: #fff;
         height: 3rem;
@@ -100,7 +99,7 @@
         border: 0.2rem solid #ff6d18;
         margin-left: 1rem;
         border-radius: 0.4rem;
-        height: 3rem;
+        height: 2rem;
         padding: 0.3rem;
 
         .filter-double-icon {
@@ -117,7 +116,7 @@
     .notification-item {
       display: flex;
       justify-content: space-between;
-      padding: 1rem 2rem;
+      padding: 1.5rem 2rem;
       border-bottom: 0.2rem solid #c9c9c9;
       color: #333333;
 
@@ -147,7 +146,7 @@
 
   .load-more {
     text-align: center;
-    padding: 1rem;
+    padding: 2.3rem;
 
     button {
       border: none;

@@ -96,7 +96,7 @@ const Notifications: React.FC = () => {
                 )}
               </div>
               <div className="filter-double" onClick={handleMarkAllRead}>
-                <RiCheckDoubleFill size={20} className="filter-double-icon" />
+                <RiCheckDoubleFill size={15} className="filter-double-icon" />
               </div>
             </div>
           </div>

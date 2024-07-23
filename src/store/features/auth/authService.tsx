@@ -64,6 +64,11 @@ const resetPassword = async (token: string, password: string) => {
   return response.data;
 };
 
+const logout = async () => {
+  const response = await axiosInstance.post("/api/auth/logout");
+  return response.data;
+};
+
 const authService = {
   register,
   login,
@@ -74,6 +79,7 @@ const authService = {
   googleAuthCallback,
   sendResetLink,
   resetPassword,
+  logout,
 };
 
 export default authService;

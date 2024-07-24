@@ -8,6 +8,8 @@ import {
   IUserData,
 } from "../../../utils/types/store";
 import { getErrorMessage } from "../../../utils/axios/axiosInstance";
+import { toast } from "react-toastify";
+
 const initialState: AuthService = {
   user: undefined,
   isError: false,
@@ -132,8 +134,9 @@ export const googleAuthCallback = createAsyncThunk(
 
 export const logout = createAsyncThunk("auth/logout", async (_, thunkApi) => {
   try {
+    const response = await authService.logout();
     localStorage.removeItem("token");
-    return true;
+    return response;
   } catch (error) {
     return thunkApi.rejectWithValue(getErrorMessage(error));
   }
@@ -165,7 +168,9 @@ const userSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.isVerified = false;
         state.message = action.payload.message;
+        toast.success(action.payload.message);
       })
       .addCase(registerUser.rejected, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
@@ -180,7 +185,7 @@ const userSlice = createSlice({
       })
       .addCase(verifyEmail.fulfilled, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
-        state.isSuccess = true;
+        state.isVerified = true;
         state.message = action.payload.message;
       })
       .addCase(verifyEmail.rejected, (state, action: PayloadAction<any>) => {
@@ -316,6 +321,25 @@ const userSlice = createSlice({
         state.isAuthenticated = false;
         state.user = undefined;
         state.error = action.payload.message;
+      })
+      .addCase(logout.pending, (state) => {
+        state.isError = false;
+        state.isLoading = true;
+        state.isSuccess = false;
+      })
+      .addCase(logout.fulfilled, (state, action: PayloadAction<any>) => {
+        state.user = undefined;
+        state.isError = false;
+        state.isLoading = false;
+        state.isAuthenticated = false;
+        state.token = "";
+        toast.success(state.message = action.payload.message);
+      })
+      .addCase(logout.rejected, (state, action: PayloadAction<any>) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.message = action.payload;
       });
   },
 });

@@ -1,7 +1,6 @@
 /* eslint-disable */
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import authService from "./authService";
-import { toast } from "react-toastify";
 import {
   AuthService,
   IEmail,
@@ -9,7 +8,6 @@ import {
   IUserData,
 } from "../../../utils/types/store";
 import { getErrorMessage } from "../../../utils/axios/axiosInstance";
-
 const initialState: AuthService = {
   user: undefined,
   isError: false,
@@ -81,7 +79,6 @@ export const resendVerificationEmail = createAsyncThunk(
     }
   }
 );
-
 export const sendResetLink = createAsyncThunk(
   "auth/forgot-password",
   async (userEmail: string, thunkApi) => {
@@ -135,9 +132,8 @@ export const googleAuthCallback = createAsyncThunk(
 
 export const logout = createAsyncThunk("auth/logout", async (_, thunkApi) => {
   try {
-    const response = await authService.logout();
     localStorage.removeItem("token");
-    return response;
+    return true;
   } catch (error) {
     return thunkApi.rejectWithValue(getErrorMessage(error));
   }
@@ -320,26 +316,6 @@ const userSlice = createSlice({
         state.isAuthenticated = false;
         state.user = undefined;
         state.error = action.payload.message;
-      })
-      .addCase(logout.pending, (state) => {
-        state.isError = false;
-        state.isLoading = true;
-        state.isSuccess = false;
-      })
-      .addCase(logout.fulfilled, (state, action: PayloadAction<any>) => {
-        state.user = undefined;
-        state.isError = false;
-        state.isLoading = false;
-        state.isAuthenticated = false;
-        state.isSuccess = true;
-        state.token = "";
-        toast.success(state.message = action.payload.message);
-      })
-      .addCase(logout.rejected, (state, action: PayloadAction<any>) => {
-        state.isError = true;
-        state.isLoading = false;
-        state.isSuccess = false;
-        state.message = action.payload;
       });
   },
 });

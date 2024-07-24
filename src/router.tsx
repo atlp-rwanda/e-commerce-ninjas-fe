@@ -41,19 +41,10 @@ const AppRouter: React.FC = () => {
           </Route>
           <Route path="verify-email" element={<EmailVerifying />} />
           <Route path="resend-email" element={<ResendEmail />} />
-          <Route
-            path="/api/auth/verify-email/:token"
-            element={<VerifyEmail />}
-          />
-          <Route
-            path="/api/auth/google/callback"
-            element={<GoogleCallback />}
-          />
+          <Route path="/api/auth/verify-email/:token" element={<VerifyEmail />} />
+          <Route path="/api/auth/google/callback" element={<GoogleCallback />} />
           <Route path="/reset-password" element={<SendResetPasswordLink />} />
-          <Route
-            path="/api/auth/reset-password/:token"
-            element={<ResetPassword />}
-          />
+          <Route path="/api/auth/reset-password/:token" element={<ResetPassword />} />
           <Route path="product/:id" element={<ViewProduct />} />
           <Route path="search" element={<Search/>}/>
           <Route path="shopping-cart" element={<UserViewCart />} />

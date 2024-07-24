@@ -11,8 +11,8 @@ import { useAppDispatch, useAppSelector } from "../store/store";
 import { registerUser } from "../store/features/auth/authSlice";
 import { HashLoader } from "react-spinners";
 import SignUpIcon from "../../public/assets/images/sign-up.png";
-import { toast } from "react-toastify";
 import authService from "../store/features/auth/authService";
+import { logout } from "../store/features/auth/authSlice";
 const SignUpSchema = Yup.object().shape({
   email: Yup.string()
     .email("Email must be valid")
@@ -23,7 +23,7 @@ const SignUpSchema = Yup.object().shape({
 export const SignUp = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { user, isError, isSuccess, isLoading, message } = useAppSelector(
+  const { user, isError, isSuccess, isLoading, message, isVerified } = useAppSelector(
     (state) => state?.auth
   );
   const formik = useFormik({
@@ -33,16 +33,19 @@ export const SignUp = () => {
     },
     validationSchema: SignUpSchema,
     onSubmit: (values) => {
-      dispatch(registerUser(values));
+     dispatch(registerUser(values)).then(() => {
+      navigate("/verify-email");
+      formik.resetForm();
+     });
     },
   });
   useEffect(() => {
-    if (isSuccess) {
-      toast.success(message);
-      navigate("/verify-email");
-      formik.resetForm();
-    }
-  }, [user, isError, isSuccess, isLoading, message]);
+    const performLogout = async () => {
+      await dispatch(logout());
+      navigate("/signup");
+    };
+    performLogout();
+  }, []);
 
   const [isClicked, setIsClicked] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);

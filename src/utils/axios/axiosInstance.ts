@@ -1,6 +1,6 @@
 /* eslint-disable */
-import axios from 'axios';
-export const URL = "https://e-commerce-ninjas-platform-backend.onrender.com"
+import axios from "axios";
+export const URL = "https://e-commerce-ninjas-platform-backend.onrender.com";
 const axiosInstance = axios.create({
   baseURL: `${URL}`,
   headers: {
@@ -23,7 +23,7 @@ const getErrorMessage = (msg: unknown): string => {
   if (axios.isAxiosError(msg) && msg.response) {
     return msg.response.data.message || msg.response.data.error;
   }
-  return 'An unknown error occurred';
+  return "An unknown error occurred";
 };
 
 export { axiosInstance, getErrorMessage };

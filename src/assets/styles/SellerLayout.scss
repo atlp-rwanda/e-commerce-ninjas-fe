@@ -5,6 +5,7 @@
     .left__side {
         width: 26rem;
         display: flex;
+
         .icons__side {
             display: flex;
             flex-direction: column;
@@ -36,12 +37,17 @@
                     height: 4rem;
                     display: flex;
                     align-items: center;
+
                     .icon {
                         color: $white-color;
                         font-size: 3rem;
                     }
                 }
             }
+        }
+
+        .dashboard__lower__link h2 {
+            cursor: pointer;
         }
 
         .dashboard__items {
@@ -114,7 +120,8 @@
         max-height: calc(100vh - 120px);
         background-color: $container-color;
         padding: 20px;
-        .outlet{
+
+        .outlet {
             background-color: white;
             flex: 0 0 60%;
             border-radius: 20px;
@@ -124,8 +131,15 @@
             max-width: 70%;
             box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
             padding: 2rem;
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
         }
-        .right__side{
+
+        .right__side {
             flex: 0 0 20%;
             min-width: 20%;
             max-width: 20%;
@@ -135,7 +149,8 @@
             flex-direction: column;
             gap: 25px;
             padding: 0 20px;
-            .right-profile{
+
+            .right-profile {
                 background-color: $white-color;
                 height: 40%;
                 border-radius: 20px;
@@ -145,7 +160,8 @@
                 box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
                 padding: 2rem;
             }
-            .right-products{
+
+            .right-products {
                 background-color: $white-color;
                 height: 60%;
                 border-radius: 20px;
@@ -160,7 +176,7 @@
 
 }
 
-.seller-dashboard-container{
+.seller-dashboard-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -173,25 +189,38 @@
     .seller__wrapper {
         .left__side {
             width: 6.5rem;
+
             .dashboard__items {
                 display: none;
             }
         }
+
         .main__seller__content__dashboard {
             flex: 1;
             padding: auto;
             padding-left: 0px;
         }
+
         .main__seller__dashboard {
             padding: 12px;
-            .outlet{
+
+            .outlet {
                 max-width: calc(100vw - 6rem);
                 overflow-y: scroll;
             }
-            .right__side{
+
+            .right__side {
                 display: none;
             }
         }
     }
-    
+
+}
+
+.seller-loading {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

@@ -52,11 +52,11 @@ const AppRouter: React.FC = () => {
           <Route path="product/:id" element={<ViewProduct />} />
           <Route path="search" element={<Search/>}/>
           <Route path="*" element={<NotFound />} />
+            <Route path="seller/login" element={<SellerLogin />} />
         </Route>
         <Route path="/seller" element={<SellerLayout/>}>
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<SellerDashboard />} />
-            <Route path="login" element={<SellerLogin />} />
             <Route path="product/:id" element={<SellerViewProduct />} />
             <Route path="products" element={<SellerCollection />} />
           </Route>

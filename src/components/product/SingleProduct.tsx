@@ -96,12 +96,15 @@ const ProductImages = ({ images }: { images: string[] }) => {
       </div>
 
       <div className="main-image-container">
-        <ImageSlider images={images} selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
+        <ImageSlider
+          images={images}
+          selectedImage={selectedImage}
+          setSelectedImage={setSelectedImage}
+        />
       </div>
     </div>
-
   );
-}
+};
 
 const ProductDetails = ({
   product,
@@ -179,17 +182,17 @@ const ProductDetails = ({
             count={
               reviews && reviews.length > 0
                 ? Math.floor(
-                  reviews.reduce((acc, review) => {
-                    return acc + review.rating;
-                  }, 0) / reviews.length
-                )
+                    reviews.reduce((acc, review) => {
+                      return acc + review.rating;
+                    }, 0) / reviews.length
+                  )
                 : 0
             }
           />
           {(reviews && reviews.length > 0
             ? reviews.reduce((acc, review) => {
-              return acc + review.rating;
-            }, 0) / reviews.length
+                return acc + review.rating;
+              }, 0) / reviews.length
             : 0
           ).toFixed(1)}{" "}
         </div>
@@ -292,10 +295,10 @@ const ReviewsCard = ({ reviews }: { reviews: IProductReview[] | null }) => {
             count={
               reviews && reviews.length > 0
                 ? Math.floor(
-                  reviews.reduce((acc, review) => {
-                    return acc + review.rating;
-                  }, 0) / reviews.length
-                )
+                    reviews.reduce((acc, review) => {
+                      return acc + review.rating;
+                    }, 0) / reviews.length
+                  )
                 : 0
             }
           />

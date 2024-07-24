@@ -2,10 +2,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import welcomeReducer from "./features/welcomeSlice";
-import productReducer from './features/product/productSlice';
-import authReducer from './features/auth/authSlice';
-import singleProductReducer from './features/product/singleProductSlice';
-import notificationReducer from './features/notifications/notificationSlice';
+import productReducer from "./features/product/productSlice";
+import authReducer from "./features/auth/authSlice";
+import singleProductReducer from "./features/product/singleProductSlice";
+import notificationReducer from "./features/notifications/notificationSlice";
+import cartReducer from "./features/carts/cartSlice";
+import singleSellerProductReducer from "./features/product/sellerProductSlice";
+import sellerCollectionProducts from "./features/product/sellerCollectionProductsSlice";
 
 export const store = configureStore({
   reducer: {

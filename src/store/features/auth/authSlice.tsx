@@ -142,7 +142,19 @@ export const logout = createAsyncThunk("auth/logout", async (_, thunkApi) => {
 const userSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    resetAuth: (state) => {
+      state.user = undefined;
+      state.isError = false;
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.isVerified = false;
+      state.message = "";
+      state.token = "";
+      state.isAuthenticated = false;
+      state.error = "";
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
@@ -307,5 +319,7 @@ const userSlice = createSlice({
       });
   },
 });
+
+export const { resetAuth } = userSlice.actions;
 
 export default userSlice.reducer;

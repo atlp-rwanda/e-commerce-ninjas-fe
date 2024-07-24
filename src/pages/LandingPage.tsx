@@ -51,7 +51,6 @@ const LandingPage: React.FC = () => {
       if (pendingProduct) {
         try {
           await handleAddProductToCart(pendingProduct, 1);
-          // Optionally clear the pending product after successful addition
           localStorage.removeItem("pendingCartProduct");
         } catch (error) {
           console.error("Failed to add product to cart:", error);
@@ -61,7 +60,6 @@ const LandingPage: React.FC = () => {
 
     checkProductToCartPending();
   }, []);
-
 
   return (
     <>

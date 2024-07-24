@@ -20,9 +20,6 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { fetchNotifications } from '../../store/features/notifications/notificationSlice';
 import { getUserDetails } from '../../store/features/auth/authSlice';
 import { useLocation, Link } from 'react-router-dom';
-import cartService from '../../store/features/carts/cartService';
-import { getUserCarts } from '../../store/features/carts/cartSlice';
-import { toast } from 'react-toastify';
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -42,67 +39,7 @@ const Header: React.FC = () => {
 
   const User: any = { ...user };
 
-  const cartsTotal = async () => {
-    try {
-      const carts = await cartService.getUserCarts();
-      let total = 0;
-      carts.data.carts.forEach((cart) => {
-        total += cart.total;
-      });
-      return total;
-    } catch (error) {
-      console.error('Error fetching carts:', error);
-      return 0;
-    }
-  };
-
-
-
-  const [cartsCount, setCartsCount] = useState<number | null>(null);
-  useEffect(() => {
-    const fetchCartCount = async () => {
-      try {
-        if (isAuthenticated) {
-          const response = await dispatch(getUserCarts()).unwrap();
-          const carts = response.data.carts;
-          let totals = 0;
-          carts.forEach(cart => {
-            totals += cart.products.length;
-          });
-          console.log("This is cart", totals);
-          setCartsCount(totals);
-        } else {
-          setCartsCount(0);
-        }
-      } catch (error) {
-        console.error('Error fetching cart total:', error);
-        setCartsCount(0);
-      }
-    };
-
-    fetchCartCount();
-  }, [isAuthenticated, dispatch]);
-
-  const [cartTotal, setCartTotal] = useState<number | null>(null);
-
-  useEffect(() => {
-    const fetchCartTotal = async () => {
-      try {
-        if (isAuthenticated) {
-          const total = Number(await cartsTotal());
-          const roundedTotal = total.toFixed(2);
-          setCartTotal(Number(roundedTotal));
-        } else {
-          setCartTotal(Number('0.00'));
-        }
-      } catch (error) {
-        console.error('Error fetching cart total:', error);
-        setCartTotal(Number('0.00'));
-      }
-    };
-
-    fetchCartTotal();
-  }, [isAuthenticated]);
+  const { cartCounter, cartTotalMoney } = useAppSelector((state) => state.cart)
 
   const categories = Array.from({ length: 5 }, (_, i) => i + 1);
   useEffect(() => {
@@ -245,7 +182,7 @@ const Header: React.FC = () => {
                       className="header__notification__icon header__notification__icon__1"
                     />
                     <span className="header__notification__number">
-                      {cartsCount}
+                      {cartCounter}
                     </span>
                   </div>
                 ) : (
@@ -262,8 +199,8 @@ const Header: React.FC = () => {
                   <span className="cart__text">Cart</span>
                   <span className="cart__description">
                     {isAuthenticated
-                      ? cartTotal !== null
-                        ? `$${cartTotal}`
+                      ? cartTotalMoney !== null
+                        ? `$${cartTotalMoney.toFixed(2)}`
                         : '$0'
                       : '$0'}
                   </span>

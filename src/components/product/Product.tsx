@@ -6,7 +6,6 @@ import { PiShoppingCartThin } from "react-icons/pi";
 import { useAppDispatch } from "../../store/store";
 import { createCart, getUserCarts } from "../../store/features/carts/cartSlice";
 import { toast } from "react-toastify";
-import PuffLoader from "react-spinners/PuffLoader";
 
 interface ProductProps {
   id: string;
@@ -51,6 +50,7 @@ const Product: React.FC<ProductProps> = ({
   const truncateDescription = (desc: string, length: number) => {
     return desc.length > length ? `${desc.substring(0, length)}...` : desc;
   };
+
   const handleAddProductToCart = async (productId: string, quantity = 1) => {
     setIsLoading(true);
     try {
@@ -77,8 +77,6 @@ const Product: React.FC<ProductProps> = ({
       setIsLoading(false);
     }
   };
-
-
 
   useEffect(() => {
     const fetchCarts = async () => {

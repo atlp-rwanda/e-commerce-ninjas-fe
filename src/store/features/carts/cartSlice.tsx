@@ -12,6 +12,8 @@ const initialState: iCartInitialResource = {
   isSuccess: false,
   message: "",
   isLoggedOut: false,
+  cartCounter: 0,
+  cartTotalMoney: 0,
 };
 
 interface CreateCartParams {
@@ -49,6 +51,7 @@ const cartSlice = createSlice({
   reducers: {
     addCart: (state, action) => {
       state.carts.push(action.payload);
+      state.cartCounter += 1
     },
     usergetCarts: (state, action: PayloadAction) => {
       state.carts.push(action.payload);
@@ -67,6 +70,7 @@ const cartSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.carts.push(action.payload);
+        state.cartCounter += 1
         state.message = "Cart created successfully";
       })
       .addCase(createCart.rejected, (state, action) => {
@@ -86,6 +90,17 @@ const cartSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.carts.push(action.payload);
+        let cartProductsTotal = 0
+        let cartTotalAmount = 0
+        action.payload.data.carts.forEach(cart => {
+          cartProductsTotal += cart.products.length;
+          cartTotalAmount += cart.total;
+        });
+        state.cartCounter = cartProductsTotal;
+        state.cartTotalMoney = cartTotalAmount;
+
+
+
         state.message = "";
       })
       .addCase(getUserCarts.rejected, (state, action) => {
@@ -98,5 +113,5 @@ const cartSlice = createSlice({
 });
 
 export const { addCart, usergetCarts
- } = cartSlice.actions;
+} = cartSlice.actions;
 export default cartSlice.reducer;

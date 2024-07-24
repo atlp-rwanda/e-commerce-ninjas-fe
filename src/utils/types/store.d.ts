@@ -105,6 +105,8 @@ export interface iCartInitialResource {
   isLoading: boolean;
   message: string | null;
   isLoggedOut: boolean;
+  cartCounter: number;
+  cartTotalMoney:number;
 }
 
 

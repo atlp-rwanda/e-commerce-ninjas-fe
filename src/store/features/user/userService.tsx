@@ -2,13 +2,6 @@
 import { axiosInstance } from "../../../utils/axios/axiosInstance";
 import { IProfile } from "../../../utils/types/store";
 
-
-// const fetchUserProfile = async (token: string) => {
-//     const response = await axiosInstance.get("/api/user/user-get-profile", {
-//       headers: { Authorization: `Bearer ${token}` },
-//     });
-//     return response.data;
-//   };
 const fetchUserProfile = async () => {
     try {
         console.log("1")
@@ -33,18 +26,43 @@ export const updateUserProfile = async(formData: FormData): Promise<IProfile> =>
     }
 }
 
-const changePassword = async (token: string, password: string) => {
+const changePassword = async (oldPassword: string, newPassword: string, confirmPassword: string) => {
     const response = await axiosInstance.put(
-      `/api/auth/reset-password/${token}`,
-      { password }
+      `/api/user/change-password`,
+      { oldPassword, newPassword, confirmPassword }
     );
     return response.data;
-  };
+};
+const userRequest = async(data)=>{
+    try {
+        const response = await axiosInstance.post('/api/user/user-submit-seller-request',data);
+        console.log("response",response)
+        return response.data.data.user;
+    }
+    catch (error) {
+        console.log(error)
+        throw new Error('Failed to update User')
+    }
+}
+
+const userAddress = async( data: any)=>{
+    try {
+        const response = await axiosInstance.post('/api/user/user-change-address',data);
+        console.log("response",response)
+        return response.data.data.user;
+    }
+    catch (error) {
+        console.log(error)
+        throw new Error('Failed to update User')
+    }
+}
 
 const userService = {
     fetchUserProfile,
     updateUserProfile,
-    changePassword
+    changePassword,
+    userRequest,
+    userAddress
 }
 
 export default userService

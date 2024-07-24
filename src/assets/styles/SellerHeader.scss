@@ -6,6 +6,8 @@
   justify-content: flex-end;
   gap: 3.2rem;
   padding: 2.4rem 5.2rem;
+  min-height: 3rem;
+  max-height: 3rem;
 }
 
 .header {
@@ -57,4 +59,12 @@
   height: 3.2rem;
   transform: translateX(0.6rem);
   background-color: #666;
+}
+
+@media (max-width: 1024px) {
+  .seller-header {
+    .header__theme__container, line{
+      display: none;
+    }
+  }
 }

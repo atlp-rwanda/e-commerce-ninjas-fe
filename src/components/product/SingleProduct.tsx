@@ -68,7 +68,7 @@ const ProductImages = ({ images }: { images: string[] }) => {
             </div>
 
             <div className="main-image-container">
-                <ImageSlider images={images} selectedImage={selectedImage} setSelectedImage={setSelectedImage}/>
+                <ImageSlider images={images} selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
             </div>
         </div>
 

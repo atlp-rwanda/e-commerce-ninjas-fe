@@ -1,29 +1,30 @@
 /* eslint-disable */
-
-import React, { useEffect, useRef, useState } from "react";
-import { BiSolidShow } from "react-icons/bi";
-import { BiSolidHide } from "react-icons/bi";
+import React, { useEffect, useState } from "react";
+import { BiSolidShow, BiSolidHide } from "react-icons/bi";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { loginUser } from "../store/features/auth/authSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { loginUser, getUserDetails, resetAuth } from "../store/features/auth/authSlice";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import authService from "../store/features/auth/authService";
 
 const LoginSchema = Yup.object().shape({
-  email: Yup.string()
-    .email("Email must be valid")
-    .required("Email is required"),
+  email: Yup.string().email("Email must be valid").required("Email is required"),
   password: Yup.string().required("Password is required"),
 });
 
 function SellerLogin() {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const callbackUrl = queryParams.get('callbackUrl');
   const [isClicked, setIsClicked] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [badUser, setBadUser] = useState(false);
+  const [isChecking, setIsChecking] = useState(true);
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
@@ -35,6 +36,7 @@ function SellerLogin() {
     token,
     error,
     message,
+    user
   } = useAppSelector((state) => state.auth);
 
   const formik = useFormik({
@@ -48,17 +50,40 @@ function SellerLogin() {
     },
   });
 
-  useEffect(
-    function () {
-      if (isSuccess && token && isAuthenticated) {
-        localStorage.setItem("token", token);
-        toast.success(message);
-        navigate("/seller/dashboard");
-        formik.resetForm();
+  useEffect(() => {
+    dispatch(resetAuth());
+  }, [dispatch]);
+
+  useEffect(() => {
+    async function checkAuth() {
+      if (token) {
+        await dispatch(getUserDetails(token));
       }
-    },
-    [error, isError, isSuccess, token, isAuthenticated]
-  );
+      setIsChecking(false);
+    }
+
+    checkAuth();
+  }, [dispatch, token]);
+
+  useEffect(() => {
+    if (!isChecking && isSuccess && isAuthenticated) {
+      if (user && (user as any).role !== "seller") {
+        setBadUser(true);
+        dispatch(resetAuth());
+        return;
+      }
+      localStorage.setItem("token", token);
+      {message && toast.success(message)}
+      navigate(callbackUrl || "/seller/dashboard");
+      formik.resetForm();
+    }
+  }, [isChecking, isSuccess, token, isAuthenticated, user, navigate, callbackUrl, message, dispatch]);
+
+  useEffect(() => {
+    if (!isChecking && isAuthenticated && user && (user as any).role === 'seller') {
+      navigate(callbackUrl || "/seller/dashboard");
+    }
+  }, [isChecking, isAuthenticated, user, navigate, callbackUrl]);
 
   function handleIsFocused() {
     setIsFocused(true);
@@ -67,6 +92,10 @@ function SellerLogin() {
 
   function handleIsVisible() {
     setIsVisible((isVisible) => !isVisible);
+  }
+
+  if (isChecking) {
+    return <PulseLoader size={10} color="#007bff" />;
   }
 
   return (
@@ -148,6 +177,7 @@ function SellerLogin() {
                 </Link>
               </p>
             </div>
+            {badUser && (<p className="error">You must login as a seller</p>)}
             {formik.touched.email && formik.errors.email ? (
               <p className="error">{formik.errors.email}</p>
             ) : formik.touched.password && formik.errors.password ? (

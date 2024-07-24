@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { IProduct } from "./product";
+import { IProduct, ISingleProduct } from "./product";
 
 /* eslint-disable */
 export interface IWelcomeMessage {
@@ -126,6 +126,48 @@ export interface AdminReponse {
 export interface IAdminInitialResponse {
   users: IUser;
   isError: boolean | null;
+  isSuccess: boolean;
+  isLoading: boolean;
+  message: string | null;
+}
+
+export interface ISingleProductResponse {
+  message?: string;
+  data?: { product: ISingleProduct[] };
+  error?: string;
+  status?: number;
+}
+
+export interface ISingleProductInitialResponse {
+  product: ISingleProduct | null;
+  isError: boolean | null;
+  isSuccess: boolean;
+  isLoading: boolean;
+  message: string | null;
+}
+
+export interface ISellerCollectionProductResponse {
+  message?: string;
+  data?: {
+    products: ISingleProduct[]
+    previousPage: number,
+    currentPage: number,
+    nextPage: number,
+    limit: number,
+  };
+  error?: string;
+  status?: number;
+}
+
+export interface ISellerCollectionProductInitialResponse {
+  data?: {
+    products: ISingleProduct[] | null,
+    previousPage: number,
+    currentPage: number,
+    nextPage: number,
+    limit: number,
+  };
+  isError: boolean;
   isSuccess: boolean;
   isLoading: boolean;
   message: string | null;

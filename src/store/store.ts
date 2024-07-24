@@ -1,5 +1,4 @@
 /* eslint-disable */
-// src/store/store.js
 import { configureStore } from "@reduxjs/toolkit";
 import rootReducer from './reducers';
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";

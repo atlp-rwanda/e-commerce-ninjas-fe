@@ -17,6 +17,10 @@ import UserLogin from "./pages/UserLogin";
 import SellerLogin from "./pages/SellerLogin";
 import AdminLogin from "./pages/admin/Login";
 import Search from "./pages/Search";
+import SellerViewProduct from "./pages/seller/SellerViewProduct";
+import SellerCollection from "./pages/seller/SellerCollection";
+import { SellerLayout } from "./components/layout/SellerLayout";
+import SellerDashboard from "./pages/seller/SellerDashboard";
 import { AdminDashboard } from "./pages/admin/Dashboard";
 import { OverViewDashboard } from "./pages/admin/OverView";
 import Users from "./pages/admin/Users";
@@ -29,10 +33,6 @@ const AppRouter: React.FC = () => {
           <Route index element={<LandingPage />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="login" element={<UserLogin />} />
-          <Route path="/seller">
-            <Route index element={<Navigate to="dashboard" replace />} />
-            <Route path="login" element={<SellerLogin />} />
-          </Route>
           <Route path="verify-email" element={<EmailVerifying />} />
           <Route path="resend-email" element={<ResendEmail />} />
           <Route path="/api/auth/verify-email/:token" element={<VerifyEmail />} />
@@ -42,7 +42,14 @@ const AppRouter: React.FC = () => {
           <Route path="product/:id" element={<ViewProduct />} />
           <Route path="search" element={<Search />} />
           <Route path="*" element={<NotFound />} />
+            <Route path="seller/login" element={<SellerLogin />} />
         </Route>
+        <Route path="/seller" element={<SellerLayout/>}>
+            <Route index element={<Navigate to="dashboard" replace />} />
+            <Route path="dashboard" element={<SellerDashboard />} />
+            <Route path="product/:id" element={<SellerViewProduct />} />
+            <Route path="products" element={<SellerCollection />} />
+          </Route>
         <Route path="/admin">
           <Route index element={<AdminLogin />} />
           <Route path="dashboard" element={<ProtectedRoute redirectPath="/admin"><AdminDashboard /></ProtectedRoute>}>

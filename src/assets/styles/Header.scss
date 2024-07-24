@@ -251,7 +251,7 @@
     grid-template-columns: auto 1fr;
     grid-template-rows: repeat(2, 1fr);
     align-items: center;
-    column-gap: 0.5rem;
+    column-gap: 0.8rem;
   }
 
   &__icon {
@@ -315,9 +315,9 @@
     padding: 1.8rem;
     border-radius: 0.6rem;
     position: absolute;
-    left: -12%;
+    left: -20%;
     top: 150%;
-    width: 110%;
+    width: 140%;
     z-index: 500;
     box-shadow: 0 5rem 10rem 0 rgba(0, 0, 0, 0.08);
 
@@ -326,8 +326,8 @@
       position: absolute;
       top: -3%;
       left: 6%;
-      width: 5rem;
-      height: 5rem;
+      width: 4.5rem;
+      height: 4.5rem;
       background-color: $black;
       transform: rotate(45deg);
       z-index: 1;
@@ -356,7 +356,7 @@
   &__link {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
+    gap: 0.4rem;
 
     &:link,
     &:visited {

@@ -92,6 +92,9 @@
   }
 
   .menShoe {
+    img{
+      transform: scaleX(-1);
+    }
 
     .text-container {
       display: flex;
@@ -102,7 +105,7 @@
     }
 
     button {
-      color: $sixth-color;
+      color: $primary-color;
     }
   }
 
@@ -122,6 +125,9 @@
   }
 
   .womenShoe {
+    img{
+      transform: scaleX(-1);
+    }
 
     .text-container {
       display: flex;
@@ -132,7 +138,7 @@
     }
 
     button {
-      color: $primary-color;
+      color: $sixth-color;
     }
   }
 

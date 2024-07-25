@@ -246,7 +246,7 @@ const Header: React.FC = () => {
                       </NavLink>
                     </li>
                     <li>
-                      <NavLink to={'/'} className="order__link">
+                      <NavLink to={'/logout'} className="order__link">
                         <IoLogOutSharp className="order__icon" />
                         <span className="order__text">Logout</span>
                       </NavLink>

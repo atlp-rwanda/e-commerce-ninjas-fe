@@ -19,13 +19,12 @@ const passwordSchema = Yup.object({
     .oneOf([Yup.ref('newPassword')], 'Passwords must match'),
 });
 
-const PasswordUpdate = ({ message, isError,isSuccess }) => {
+const PasswordUpdate = ({ message, isError, isSuccess }) => {
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false)
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(null);
 
   const newPasswordVisibility = () => {
     setShowPassword(!showPassword);

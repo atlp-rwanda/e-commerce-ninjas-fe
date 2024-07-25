@@ -2,7 +2,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useAppDispatch} from '../../store/store';
+import { useAppDispatch } from '../../store/store';
 import { updateUserProfile, fetchUserProfile } from '../../store/features/user/userSlice';
 import avatar from "../../../public/assets/avatar.jpg";
 import camera from "../../../public/assets/Camera.png";
@@ -22,7 +22,7 @@ const updateProfileSchema = Yup.object().shape({
   currency: Yup.string().required('Required'),
 });
 
-const ProfileDetails = ({ user,isLoading, isSuccess, isError, message }) => {
+const ProfileDetails = ({ user, isLoading, isSuccess, isError, message }) => {
   const dispatch = useAppDispatch();
   const inputRef = useRef(null);
   const [profileImage, setProfileImage] = useState<any>(null);
@@ -166,6 +166,7 @@ const ProfileDetails = ({ user,isLoading, isSuccess, isError, message }) => {
           <div className='options'>
             <label htmlFor="gender">Gender</label>
             <select value={formik.values.gender} onChange={formik.handleChange} onBlur={formik.handleBlur} name='gender' id='gender'>
+              <option value=""></option>
               <option value="male">Male</option>
               <option value="female">Female</option>
             </select>
@@ -173,6 +174,7 @@ const ProfileDetails = ({ user,isLoading, isSuccess, isError, message }) => {
           <div className='options'>
             <label htmlFor="currency">Currency</label>
             <select value={formik.values.currency} onChange={formik.handleChange} onBlur={formik.handleBlur} name='currency' id='currency'>
+              <option value=""></option>
               <option value="USD">USD</option>
               <option value="RWF">RWF</option>
             </select>
@@ -180,6 +182,7 @@ const ProfileDetails = ({ user,isLoading, isSuccess, isError, message }) => {
           <div className='options'>
             <label htmlFor="language">Language</label>
             <select value={formik.values.language} onChange={formik.handleChange} onBlur={formik.handleBlur} name='language' id='language'>
+              <option value=""></option>
               <option value="English">English</option>
               <option value="Kinyarwanda">Kinyarwanda</option>
               <option value="Greek">Greek</option>

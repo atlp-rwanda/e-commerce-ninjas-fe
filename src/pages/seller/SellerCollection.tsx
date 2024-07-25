@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import Table from '../../components/table/Table';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { fetchSellerCollectionProduct } from '../../store/features/product/sellerCollectionProductsSlice';
+import { fetchSellerCollectionProduct, deleteItem, removeItem } from '../../store/features/product/sellerCollectionProductsSlice';
 import Zoom from '@mui/material/Zoom';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -22,6 +22,13 @@ import { FaEye, FaPlusCircle } from 'react-icons/fa';
 import { ISingleProductInitialResponse } from '../../utils/types/store';
 import { resetUpdateState, updateSellerProductStatus } from '../../store/features/product/sellerProductSlice';
 import { toast } from 'react-toastify';
+import ConfirmModal from '../../components/product/ConfirmModal';
+
+interface DeleteItemState {
+    id: any;
+    name: string;
+}
+
 export default function SellerCollection() {
     const navigate = useNavigate()
     const dispatch = useAppDispatch();
@@ -32,6 +39,26 @@ export default function SellerCollection() {
     useEffect(() => {
         dispatch(fetchSellerCollectionProduct())
     }, [dispatch]);
+
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState<DeleteItemState | null>(null);
+
+
+    const handleDelete = async () => {
+        try {
+            setShowConfirm(false)
+            dispatch(removeItem(itemToDelete.id))
+            await dispatch(deleteItem(itemToDelete.id)).unwrap();
+            dispatch(fetchSellerCollectionProduct());
+            setItemToDelete(null)
+        } catch (error) {
+            console.error('Error deleting item:', error);
+        }finally{
+            if(isSuccess)
+            toast.success(message)
+        }
+    };
+
 
     useEffect(() => {
         if (isUpdate && isUpdateSuccess) {
@@ -69,7 +96,7 @@ export default function SellerCollection() {
                     </IconButton>
                 </Tooltip>
                 <Tooltip TransitionComponent={Zoom} title="Delete" arrow>
-                    <IconButton>
+                    <IconButton onClick={() => { setShowConfirm(true); setItemToDelete({ id: product.id, name: product.name }); }}>
                         <DeleteIcon className='icon__delete' />
                     </IconButton>
                 </Tooltip>
@@ -101,6 +128,8 @@ export default function SellerCollection() {
         setPendingStatusChange(null);
         setOpen(false);
     };
+
+    const popupMessage = `Deleting this product <i>${itemToDelete?.name}</i> will be permanently removed from the system. This can't be undone!`;
 
     return (
         <div className='seller__main__container'>
@@ -162,6 +191,16 @@ export default function SellerCollection() {
                     </Button>
                 </DialogActions>
             </Dialog>
+
+            {showConfirm && (
+                <ConfirmModal
+                    isOpen={showConfirm}
+                    title="Are you sure?"
+                    message={popupMessage}
+                    onConfirm={handleDelete}
+                    onCancel={() => setShowConfirm(false)}
+                />
+            )}
         </div>
     )
 }

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import Table from '../../components/table/Table';
 import { useAppDispatch, useAppSelector } from '../../store/store';
-import { fetchSellerCollectionProduct} from '../../store/features/product/sellerCollectionProductsSlice';
+import { fetchSellerCollectionProduct, deleteItem, removeItem } from '../../store/features/product/sellerCollectionProductsSlice';
 import Zoom from '@mui/material/Zoom';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -47,8 +47,8 @@ export default function SellerCollection() {
     const handleDelete = async () => {
         try {
             setShowConfirm(false)
-            // dispatch(removeItem(itemToDelete.id))
-            // await dispatch(deleteItem(itemToDelete.id)).unwrap();
+            dispatch(removeItem(itemToDelete.id))
+            await dispatch(deleteItem(itemToDelete.id)).unwrap();
             dispatch(fetchSellerCollectionProduct());
             setItemToDelete(null)
         } catch (error) {

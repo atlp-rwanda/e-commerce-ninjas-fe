@@ -31,7 +31,7 @@ a {
     &::before {
       content: "";
       position: absolute;
-      top: -95%;
+      top: -80%;
       left: 160%;
       width: 0.15rem;
       height: 6.5rem;
@@ -268,6 +268,7 @@ a {
     grid-row: span 2;
     border-radius: 50%;
     object-fit: cover;
+    margin-left: 0.5rem;
   }
   &__icon-user {
     color: $primary-color;
@@ -289,8 +290,8 @@ a {
 }
 .cart__details {
   all: unset;
-  margin-right: 3rem;
-  margin-left: 3rem;
+  margin-right: 2.5rem;
+  margin-left: 2.5rem;
   margin-top: 15px;
   cursor: pointer;
 }
@@ -304,13 +305,13 @@ a {
   height: 100%;
   flex: 0 0 10%;
   cursor: pointer;
-  margin-right: 1.5rem;
+  margin-right: 0.5rem;
   margin-top: 10px;
 
   &::before {
     content: "";
     position: absolute;
-    top: -75%;
+    top: -60%;
     left: -10%;
     width: 0.12rem;
     height:6.5rem;
@@ -325,7 +326,8 @@ a {
     padding: 1.8rem;
     border-radius: 0.6rem;
     position: absolute;
-    left: -20%;
+    left: -10%;
+    padding-right: 0;
     top: 150%;
     width: 140%;
     z-index: 500;

@@ -90,6 +90,12 @@ const Header: React.FC = () => {
   const unreadCount = notifications
     ? notifications.filter((notification) => !notification.isRead).length
     : 0;
+  
+    function formatName(name: string) {
+      const trimmedName = name.trim();
+      const formattedName = trimmedName.replace(/\s+/g, '.');
+      return formattedName.length > 5 ? formattedName.substring(0, 5) + '...' : formattedName;
+    }
 
   return (
     <header className="header">
@@ -220,9 +226,9 @@ const Header: React.FC = () => {
 
               <span className="cart__text">{user ? 'Hi, ' : 'User'}</span>
               <span className="cart__description">
-                {user
-                  ? `${User?.firstName || User?.email?.split('@')[0]}`
-                  : 'Account'}
+              {user
+                  ? formatName(User?.firstName || User?.email?.split('@')[0])
+                  : "Account"}
               </span>
               {isAuthenticated && isOpen2 && (
                 <div className="order__dropdown">
@@ -268,14 +274,16 @@ const Header: React.FC = () => {
           <div className="header__nav" ref={navEl}>
             <nav>
               <ul className="header__list">
-                <li className="nav__item" onClick={handleSetIsMenuOpen}>
-                  <NavLink
-                    to="/"
-                    className={({ isActive }) => (isActive ? 'active' : '')}
-                  >
-                    Home
-                  </NavLink>
-                </li>
+              {isAuthenticated && (
+                  <li className="nav__item" onClick={handleSetIsMenuOpen}>
+                    <NavLink
+                      to="/home"
+                      className={({ isActive }) => (isActive ? "active" : "")}
+                    >
+                      Home
+                    </NavLink>
+                  </li>
+                )}
                 <li className="nav__item" onClick={handleSetIsMenuOpen}>
                   <NavLink
                     to="/shops"

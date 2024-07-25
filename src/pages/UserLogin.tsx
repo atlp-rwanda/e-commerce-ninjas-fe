@@ -49,7 +49,7 @@ function UserLogin() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      navigate("/");
+      navigate("/home");
     }
   }, [navigate]);
 
@@ -58,7 +58,7 @@ function UserLogin() {
       if (isSuccess && token && isAuthenticated) {
         localStorage.setItem("token", token);
         toast.success(message);
-        navigate("/");
+        navigate("/home");
         formik.resetForm();
       }
     },

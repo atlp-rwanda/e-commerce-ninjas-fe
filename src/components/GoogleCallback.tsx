@@ -30,7 +30,7 @@ const GoogleCallback = () => {
   useEffect(() => {
     if (isSuccess) {
       localStorage.setItem("token", token);
-      navigate("/");
+      navigate("/home");
     }
     if (isError) {
       setError(message);

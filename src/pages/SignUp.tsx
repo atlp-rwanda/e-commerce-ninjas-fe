@@ -31,7 +31,7 @@ export const SignUp = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      navigate("/");
+      navigate("/home");
     }
   }, [navigate]);
 

@@ -23,7 +23,7 @@ const Logout: React.FC = () => {
   if (loading) {
     return (
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-        <PuffLoader color="#ff6d18" size={50} />
+        <PuffLoader color="#ff6d18" size={300} />
       </div>
     );
   }

@@ -11,8 +11,9 @@ import { useAppDispatch, useAppSelector } from "../store/store";
 import { registerUser } from "../store/features/auth/authSlice";
 import { HashLoader } from "react-spinners";
 import SignUpIcon from "../../public/assets/images/sign-up.png";
+import { toast } from "react-toastify";
 import authService from "../store/features/auth/authService";
-import { logout } from "../store/features/auth/authSlice";
+
 const SignUpSchema = Yup.object().shape({
   email: Yup.string()
     .email("Email must be valid")
@@ -23,9 +24,17 @@ const SignUpSchema = Yup.object().shape({
 export const SignUp = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { user, isError, isSuccess, isLoading, message, isVerified } = useAppSelector(
+  const { user, isError, isSuccess, isLoading, message } = useAppSelector(
     (state) => state?.auth
   );
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/");
+    }
+  }, [navigate]);
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -33,19 +42,17 @@ export const SignUp = () => {
     },
     validationSchema: SignUpSchema,
     onSubmit: (values) => {
-     dispatch(registerUser(values)).then(() => {
-      navigate("/verify-email");
-      formik.resetForm();
-     });
+      dispatch(registerUser(values));
     },
   });
+  
   useEffect(() => {
-    const performLogout = async () => {
-      await dispatch(logout());
-      navigate("/signup");
-    };
-    performLogout();
-  }, []);
+    if (isSuccess) {
+      toast.success(message);
+      navigate("/verify-email");
+      formik.resetForm();
+    }
+  }, [user, isError, isSuccess, isLoading, message, navigate]);
 
   const [isClicked, setIsClicked] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -110,7 +117,6 @@ export const SignUp = () => {
                       onBlur={handleBlur}
                       onFocus={() => setIsFocused(true)}
                       value={formik.values.password}
-
                     />
                     {formik.touched.password && formik.errors.password ? (
                       <p className="error1">{formik.errors.password}</p>

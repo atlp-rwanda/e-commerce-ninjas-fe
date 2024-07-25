@@ -12,7 +12,6 @@ import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
 import authService from "../store/features/auth/authService";
-import { logout } from "../store/features/auth/authSlice";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -48,12 +47,11 @@ function UserLogin() {
   });
 
   useEffect(() => {
-      const performLogout = async () => {
-        await dispatch(logout());
-        navigate("/login");
-      };
-      performLogout(); 
-  }, []);
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   useEffect(
     function () {

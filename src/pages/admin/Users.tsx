@@ -21,6 +21,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import truncateString from "../../utils/text/truncateString";
+import { Meta } from "../../components/Meta";
 
 export default function Users() {
   const dispatch = useAppDispatch();
@@ -94,16 +95,29 @@ export default function Users() {
     setOpen(false);
   };
 
+  const getDisplayName = (firstName, lastName, email) => {
+    const name =
+      firstName && lastName
+        ? truncateString(`${firstName} ${lastName}`, 17)
+        : email.split("@")[0];
+    return name;
+  };
+
   const rows = localUserState
     ? localUserState
-    .filter((user) => user.role === "buyer" || user.role === "seller" || user.role === "admin")
+        .filter(
+          (user) =>
+            user.role === "buyer" ||
+            user.role === "seller" ||
+            user.role === "admin"
+        )
         .map((user, index) => [
           index + 1,
           <img src={user.profilePicture} alt="image" className="Profile" />,
-          truncateString(user.firstName + "  " + user.lastName,17),
-          truncateString(user.email,18),
-          user.phone,
-          user.gender,
+          getDisplayName(user.firstName, user.lastName, user.email),
+          user.email.split("@")[0],
+          user.phone ? user.phone : "xxxxxxx",
+          user.gender ? user.gender : "xxxxxx",
           <select
             name="role"
             value={user.newRole}
@@ -139,71 +153,74 @@ export default function Users() {
     : [];
 
   return (
-    <div className="main__container">
-      {isLoading && (
-        <div className="table__spinner">
-          <Box sx={{ width: "100%" }}>
-            <LinearProgress
+    <>
+      <Meta title="Users - Dashboard" />
+      <div className="main__container">
+        {isLoading && (
+          <div className="table__spinner">
+            <Box sx={{ width: "100%" }}>
+              <LinearProgress
+                sx={{
+                  backgroundColor: "#fff",
+                  "& .MuiLinearProgress-bar": {
+                    backgroundColor: "#ff8a46",
+                  },
+                }}
+              />
+            </Box>
+          </div>
+        )}
+        <Table title={"All Users"} headers={headers} rows={rows} />
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Confirm Role Change"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText
+              id="alert-dialog-description"
+              sx={{ fontSize: "1.6rem" }}
+            >
+              Are you sure you want to change this user's role to Admin?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={handleClose}
               sx={{
-                backgroundColor: "#fff",
-                "& .MuiLinearProgress-bar": {
-                  backgroundColor: "#ff8a46",
+                backgroundColor: "primary.main",
+                color: "#fff",
+                fontSize: "1.2rem",
+                "&:hover": {
+                  backgroundColor: "primary.dark",
+                  color: "#fff",
                 },
               }}
-            />
-          </Box>
-        </div>
-      )}
-      <Table title={"All Users"} headers={headers} rows={rows} />
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Confirm Role Change"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText
-            id="alert-dialog-description"
-            sx={{ fontSize: "1.6rem" }}
-          >
-            Are you sure you want to change this user's role to Admin?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={handleClose}
-            sx={{
-              backgroundColor: "primary.main",
-              color: "#fff",
-              fontSize: "1.2rem",
-              "&:hover": {
-                backgroundColor: "primary.dark",
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleConfirmRoleChange}
+              sx={{
+                backgroundColor: "#ff6d18",
                 color: "#fff",
-              },
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleConfirmRoleChange}
-            sx={{
-              backgroundColor: "#ff6d18",
-              color: "#fff",
-              fontSize: "1.2rem",
-              "&:hover": {
-                backgroundColor: "#e65b00",
-                color: "#fff",
-              },
-            }}
-            autoFocus
-          >
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+                fontSize: "1.2rem",
+                "&:hover": {
+                  backgroundColor: "#e65b00",
+                  color: "#fff",
+                },
+              }}
+              autoFocus
+            >
+              Confirm
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    </>
   );
 }

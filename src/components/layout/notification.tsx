@@ -12,7 +12,6 @@ type Notification = {
   createdAt: string;
   isRead: boolean;
 };
-
 const formatTime = (dateString: string): string => {
   const date = new Date(dateString);
   const now = new Date();
@@ -96,7 +95,7 @@ const Notifications: React.FC = () => {
                 )}
               </div>
               <div className="filter-double" onClick={handleMarkAllRead}>
-                <RiCheckDoubleFill size={20} className="filter-double-icon" />
+                <RiCheckDoubleFill size={15} className="filter-double-icon" />
               </div>
             </div>
           </div>

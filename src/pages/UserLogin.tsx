@@ -46,12 +46,19 @@ function UserLogin() {
     },
   });
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/home");
+    }
+  }, [navigate]);
+
   useEffect(
     function () {
       if (isSuccess && token && isAuthenticated) {
         localStorage.setItem("token", token);
         toast.success(message);
-        navigate("/");
+        navigate("/home");
         formik.resetForm();
       }
     },

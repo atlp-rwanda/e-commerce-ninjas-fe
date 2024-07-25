@@ -55,9 +55,9 @@ const Sample: React.FC = () => {
       <div className="sampleImages1">
         <div className="sample1">
           <div className="menShoe">
-            <img src={leftTop} alt="" />
+            <img src={rightTop} alt="" />
             <div className="text-container">
-              <p>Men's Shoes</p>
+              <p>women's Shoes</p>
               <button>View &gt;</button>
             </div>
           </div>
@@ -89,9 +89,9 @@ const Sample: React.FC = () => {
         </div>
         <div className="sample3">
           <div className="womenShoe">
-            <img src={rightTop} alt="" />
+            <img src={leftTop} alt="" />
             <div className="text-container">
-              <p>Women's Shoes</p>
+              <p>Men's Shoes</p>
               <button>View &gt;</button>
             </div>
           </div>

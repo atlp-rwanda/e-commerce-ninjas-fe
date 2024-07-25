@@ -69,6 +69,7 @@ const resetPassword = async (token: string, password: string) => {
   return response.data;
 };
 
+
 const authService = {
   register,
   login,

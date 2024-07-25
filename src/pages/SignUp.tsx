@@ -8,7 +8,7 @@ import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/buttons/Button";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { registerUser } from "../store/features/auth/authSlice";
+import { registerUser, resetAuth } from "../store/features/auth/authSlice";
 import { HashLoader } from "react-spinners";
 import SignUpIcon from "../../public/assets/images/sign-up.png";
 import { toast } from "react-toastify";
@@ -27,6 +27,14 @@ export const SignUp = () => {
   const { user, isError, isSuccess, isLoading, message } = useAppSelector(
     (state) => state?.auth
   );
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/home");
+    }
+  }, [navigate]);
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -49,7 +57,7 @@ export const SignUp = () => {
       navigate("/verify-email");
       formik.resetForm();
     }
-  }, [user, isError, isSuccess, isLoading, message]);
+  }, [user, isError, isSuccess, isLoading, message, navigate]);
 
   useEffect(() => {
     setShowError(isError);
@@ -70,6 +78,10 @@ export const SignUp = () => {
     setShowError(false);
     setIsFocused(true);
   };
+
+  useEffect(() => {
+    dispatch(resetAuth());
+  }, [dispatch]);
 
   return (
     <>

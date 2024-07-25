@@ -3,6 +3,8 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import authService from "./authService";
 import { AuthService, IEmail, IUser} from "../../../utils/types/store";
 import { getErrorMessage } from "../../../utils/axios/axiosInstance";
+import { toast } from "react-toastify";
+
 import { resetState, RESET_STATE } from "../../actions/resetAction";
 const initialState: AuthService = {
   user: undefined,
@@ -305,6 +307,7 @@ const userSlice = createSlice({
         state.isSuccess = true;
         state.message = action.payload.message;
         localStorage.clear();
+        toast.success(action.payload.message);
 
       })
       .addCase(RESET_STATE,()=> initialState)
@@ -319,9 +322,7 @@ const userSlice = createSlice({
         state.isSuccess = false;
         state.isAuthenticated = false;
       })
-      .addCase(
-        getUserDetails.fulfilled,
-        (state, action: PayloadAction<any>) => {
+      .addCase( getUserDetails.fulfilled, (state, action: PayloadAction<any>) => {
           state.isError = false;
           state.isSuccess = true;
           state.isAuthenticated = true;
@@ -333,8 +334,8 @@ const userSlice = createSlice({
         state.isSuccess = false;
         state.isAuthenticated = false;
         state.user = undefined;
-        state.error = action.payload;
-      });
+        state.error = action.payload.message;
+      })
   },
 });
 

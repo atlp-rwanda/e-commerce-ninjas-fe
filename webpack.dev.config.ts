@@ -30,6 +30,7 @@ const config: Configuration = {
               '@babel/preset-react',
               '@babel/preset-typescript',
             ],
+            cacheDirectory: true, // Enable Babel caching
           },
         },
       },
@@ -77,7 +78,7 @@ const config: Configuration = {
       ],
     }),
   ],
-  devtool: 'inline-source-map',
+  devtool: 'eval-cheap-module-source-map', // Use a faster devtool setting
   devServer: {
     static: path.join(__dirname, 'dist'),
     historyApiFallback: {
@@ -86,6 +87,12 @@ const config: Configuration = {
     port: 5000,
     open: true,
     hot: true,
+  },
+  cache: {
+    type: 'filesystem', // Enable filesystem caching
+  },
+  optimization: {
+    usedExports: true, // Enable tree shaking
   },
 };
 

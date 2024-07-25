@@ -89,14 +89,26 @@ export interface INotifications {
 }
 
 export interface INotificationInitialResource {
-  notifications: INotifications[],
-  isError: boolean | null,
-  isSuccess: boolean,
-  isLoading: boolean,
-  message: string | null,
-  passwordExpiryMessage: string | null,
-  isLoggedOut: boolean
+  notifications: INotifications[];
+  isError: boolean | null;
+  isSuccess: boolean;
+  isLoading: boolean;
+  message: string | null;
+  passwordExpiryMessage: string | null;
+  isLoggedOut: boolean;
 }
+
+export interface iCartInitialResource {
+  carts: any[];
+  isError: boolean | null;
+  isSuccess: boolean;
+  isLoading: boolean;
+  message: string | null;
+  isLoggedOut: boolean;
+  cartCounter: number;
+  cartTotalMoney:number;
+}
+
 
 export interface ISingleProductResponse {
   message?: string;

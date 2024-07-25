@@ -35,7 +35,6 @@ function UserLogin() {
     error,
     message,
   } = useAppSelector((state) => state.auth);
-
   const formik = useFormik({
     initialValues: {
       email: "",

@@ -10,7 +10,7 @@
     transform: scale(1.05);
     box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.3);
   }
-  
+
   .product-image-container {
     position: relative;
     height: 18.8rem;
@@ -20,7 +20,7 @@
       position: absolute;
       top: 0;
       left: 0;
-      background-color: #FF6D18;
+      background-color: #ff6d18;
       color: $white;
       padding: 0.3rem 1rem;
       border-top-left-radius: 1rem;
@@ -85,7 +85,9 @@
         margin-left: 0.7rem;
         cursor: pointer;
         border: 1px solid $primary-color;
-        transition: background-color 0.3s, color 0.3s;
+        transition:
+          background-color 0.3s,
+          color 0.3s;
 
         &:hover {
           background-color: $primary-color;
@@ -95,7 +97,10 @@
             color: $white;
           }
         }
-
+        .loading-spinner {
+          width: 100%;
+          color: 100%;
+        }
         .icon {
           width: auto;
           height: 70%;
@@ -120,16 +125,16 @@
     color: $white-color;
   }
 
- .product-info {
-   .product-name {
+  .product-info {
+    .product-name {
       font-size: 1.4rem;
     }
 
-   .product-price {
+    .product-price {
       font-size: 1.8rem;
     }
 
-   .product-stock {
+    .product-stock {
       font-size: 1.4rem;
     }
   }
@@ -142,16 +147,16 @@
     color: $white-color;
   }
 
- .product-info {
-   .product-name {
+  .product-info {
+    .product-name {
       font-size: 1.2rem;
     }
 
-   .product-price {
+    .product-price {
       font-size: 1.6rem;
     }
 
-   .product-stock {
+    .product-stock {
       font-size: 1.2rem;
     }
   }

@@ -22,13 +22,14 @@ import SellerViewProduct from "./pages/seller/SellerViewProduct";
 import SellerCollection from "./pages/seller/SellerCollection";
 import { SellerLayout } from "./components/layout/SellerLayout";
 import SellerDashboard from "./pages/seller/SellerDashboard";
-
+import Logout from './components/layout/Logout';
 const AppRouter: React.FC = () => {
   return (
     <div>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<LandingPage />} />
+          <Route path="/home" element={<LandingPage />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="login" element={<UserLogin />} />
           <Route path="/seller">
@@ -56,6 +57,7 @@ const AppRouter: React.FC = () => {
           />
           <Route path="product/:id" element={<ViewProduct />} />
           <Route path="search" element={<Search/>}/>
+          <Route path="logout" element={<Logout />} />
           <Route path="shopping-cart" element={<UserViewCart />} />
          <Route path="*" element={<NotFound />} />
             <Route path="seller/login" element={<SellerLogin />} />

@@ -1,4 +1,3 @@
-@import "./Colors";
 .table__header__ {
     display: flex;
     justify-content: space-between;
@@ -31,7 +30,7 @@
             margin-right: .5rem;
         }
 
-        button {
+        .buttons {
             display: flex;
             justify-content: center;
             align-items: center;

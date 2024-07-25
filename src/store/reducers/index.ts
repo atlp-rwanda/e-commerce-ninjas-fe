@@ -8,6 +8,7 @@ import notificationReducer from '../features/notifications/notificationSlice';
 import singleSellerProductReducer from '../features/product/sellerProductSlice';
 import sellerCollectionProducts from '../features/product/sellerCollectionProductsSlice';
 import adminReducer from '../features/admin/adminSlice';
+import cartReducer from "../features/carts/cartSlice";
 import { RESET_STATE } from '../actions/resetAction';
 
 const appReducer = combineReducers({
@@ -19,6 +20,7 @@ const appReducer = combineReducers({
   singleSellerProduct: singleSellerProductReducer,
   sellerCollectionProducts: sellerCollectionProducts,
   admin: adminReducer,
+  cart: cartReducer,
 });
 
 const rootReducer = (state, action) => {

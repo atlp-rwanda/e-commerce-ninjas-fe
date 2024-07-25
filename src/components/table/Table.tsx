@@ -41,13 +41,14 @@ const Table = ({ headers, rows, title }) => {
           <button
             onClick={handlePreviousPage}
             disabled={currentPage === 1}
-            className="btn-line"
+            className="btn-line buttons"
           >
             <IoIosArrowRoundBack />
           </button>
           <button
             onClick={handleNextPage}
             disabled={currentPage === totalPages}
+            className="buttons"
           >
             <IoIosArrowRoundForward />
           </button>

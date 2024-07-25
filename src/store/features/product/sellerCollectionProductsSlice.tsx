@@ -2,6 +2,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import productService from "./productService";
 import { ISellerCollectionProductInitialResponse, ISellerCollectionProductResponse } from "../../../utils/types/store";
+import { getErrorMessage } from "../../../utils/axios/axiosInstance";
 
 const initialState: ISellerCollectionProductInitialResponse = {
     data: {
@@ -12,17 +13,17 @@ const initialState: ISellerCollectionProductInitialResponse = {
         limit: 0
     },
     isLoading: false,
-    isError: null,
+    isError: false,
     isSuccess: false,
     message: ''
 }
 
-export const fetchSellerCollectionProduct = createAsyncThunk<ISellerCollectionProductResponse>("products/fetchSellerCollectionProducts", async () => {
+export const fetchSellerCollectionProduct = createAsyncThunk<ISellerCollectionProductResponse>("products/fetchSellerCollectionProducts", async (_,thunkApi) => {
     try {
         const response = await productService.fetchSellerProducts();
         return response;
     } catch (error) {
-        throw new error;
+        return thunkApi.rejectWithValue(getErrorMessage(error));
     }
 });
 
@@ -45,7 +46,7 @@ const sellerCollectionProductsSlice = createSlice({
             })
             .addCase(fetchSellerCollectionProduct.rejected, (state, action: PayloadAction<any>) => {
                 state.isLoading = false;
-                state.isError = action.payload.error || null;
+                state.isError = false;
                 state.isSuccess = false;
                 state.message = action.payload.message || null
             });

@@ -20,6 +20,7 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { fetchNotifications } from '../../store/features/notifications/notificationSlice';
 import { getUserDetails } from '../../store/features/auth/authSlice';
 import { useLocation, Link } from 'react-router-dom';
+import logo from "../../../public/assets/images/logo.png";
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     async function getUserDetail() {
-      if (token.trim()) await dispatch(getUserDetails(token));
+      if (token?.trim()) await dispatch(getUserDetails(token));
     }
 
     getUserDetail();
@@ -102,7 +103,7 @@ const Header: React.FC = () => {
       <div className="header__top">
         <Link className="header__logo" to="/">
           <img
-            src="../assets/images/logo.png"
+            src={logo}
             alt="Ecommerce logo"
             className="header__logo__img"
           />

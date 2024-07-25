@@ -1,0 +1,59 @@
+.main__container {
+    height: 50rem;
+    width: 76vw;
+    max-width: 100%;
+    max-height: 100%;
+    background-color: $white-color;
+    padding: 2rem 2rem;
+    border-radius: 3rem;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+    transition: all 0.5s ease-in-out;
+    .Profile {
+        width: 4rem;
+        height: 4rem;
+        border: 2px solid $primary-color;
+        border-radius: 50%;
+    }
+
+    .user__role {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 10rem;
+        height: 2.5rem;
+        border: 1px solid $primary-color;
+        border-radius: 0.5rem;
+        padding-left: 1rem;
+        color: $text2-color;
+        background-image: url('data:image/svg+xml;utf8,<svg fill="%23ff6d18" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 12px;
+
+        &::-ms-expand {
+            display: none;
+        }
+
+        option {
+            color: $text2-color !important;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+    }
+}
+
+.action__icons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .icon__save {
+        color: $green-color;
+        font-size: 3rem;
+    }
+
+    .icon__delete {
+        color: $red-color;
+        font-size: 3rem;
+    }
+}

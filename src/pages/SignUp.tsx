@@ -8,7 +8,7 @@ import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/buttons/Button";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { registerUser } from "../store/features/auth/authSlice";
+import { registerUser, resetAuth } from "../store/features/auth/authSlice";
 import { HashLoader } from "react-spinners";
 import SignUpIcon from "../../public/assets/images/sign-up.png";
 import { toast } from "react-toastify";
@@ -45,7 +45,12 @@ export const SignUp = () => {
       dispatch(registerUser(values));
     },
   });
-  
+
+  const [isClicked, setIsClicked] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [showError, setShowError] = useState(isError);
+
   useEffect(() => {
     if (isSuccess) {
       toast.success(message);
@@ -54,18 +59,30 @@ export const SignUp = () => {
     }
   }, [user, isError, isSuccess, isLoading, message, navigate]);
 
-  const [isClicked, setIsClicked] = useState(false);
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
+  useEffect(() => {
+    setShowError(isError);
+  }, [isError]);
+
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
   };
+
   const handleBlur = (e: object) => {
     formik.handleBlur(e);
-    if (!formik.values.password) {
+    if (!formik.values.password || !formik.values.email) {
       setIsFocused(false);
     }
   };
+
+  const handleFocus = () => {
+    setShowError(false);
+    setIsFocused(true);
+  };
+
+  useEffect(() => {
+    dispatch(resetAuth());
+  }, [dispatch]);
+
   return (
     <>
       <Meta title="Sign up - E-Commerce Ninjas" />
@@ -99,7 +116,8 @@ export const SignUp = () => {
                       className="signup__input"
                       name="email"
                       onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
+                      onBlur={handleBlur}
+                      onFocus={handleFocus}
                       value={formik.values.email}
                     />
                     {formik.touched.email && formik.errors.email ? (
@@ -115,7 +133,7 @@ export const SignUp = () => {
                       name="password"
                       onChange={formik.handleChange}
                       onBlur={handleBlur}
-                      onFocus={() => setIsFocused(true)}
+                      onFocus={handleFocus}
                       value={formik.values.password}
                     />
                     {formik.touched.password && formik.errors.password ? (
@@ -128,7 +146,7 @@ export const SignUp = () => {
                     )}
                   </div>
                 </div>
-                {isError && isClicked ? (
+                {showError ? (
                   <p className="error2">{message}</p>
                 ) : null}
                 {isLoading ? (

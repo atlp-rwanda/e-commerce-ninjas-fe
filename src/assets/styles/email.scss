@@ -72,6 +72,13 @@
         font-size: 1rem;
         color: $text2-color;
     }
+    .loading-text{
+        font-family: $text-family;
+        font-weight: 700;
+        font-size: 2rem;
+        color: $primary-color;
+        margin-top: 1rem;
+    }
 }
 
 .resend-email {

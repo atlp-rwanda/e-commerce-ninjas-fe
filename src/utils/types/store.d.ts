@@ -153,6 +153,13 @@ export interface IPassword{
   confirmNewPassword: string
 }
 
+export interface ILocation {
+  country: string;
+  province: string;
+  district: string;
+  sector: string;
+}
+
 export interface UserService{
   user: IProfile | null,
   isLoading: boolean,

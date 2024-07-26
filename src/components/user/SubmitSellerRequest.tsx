@@ -27,14 +27,6 @@ const SubmitSellerRequest= ({
           }
     
     }
-  useEffect(()=>{
-    if(isSuccess){
-        toast.success(message)
-    }
-    else if(isError){
-        toast.error(message)
-    }
-  },[isSuccess, isError, message])
 
   return (
     <button onClick={handleClick}>

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { createSlice, createAsyncThunk, PayloadAction, isRejectedWithValue } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import userService from "./userService";
 import {  IPassword, IProfile, UserService } from "../../../utils/types/store";
 
@@ -26,7 +26,7 @@ export const updateUserProfile = createAsyncThunk<IProfile, FormData>(
     try {
         const response = await userService.updateUserProfile(formData);
         return response;
-    } catch (error:any) {
+    } catch (error) {
         return rejectWithValue(error.response.data);
     }
 })
@@ -85,9 +85,9 @@ const userSlice = createSlice({
               })
               .addCase(updateUserProfile.fulfilled, (state, action: PayloadAction<any>) => {
                 state.isLoading = false;
+                state.user = action.payload.data.user;
+                state.message = action.payload.message || null
                 state.isSuccess = true;
-                state.user = action.payload;
-                state.message = action.payload || "User profile updated successfully"
               })
               .addCase(updateUserProfile.rejected, (state, action: PayloadAction<any>) => {
                 state.isLoading = false;
@@ -103,7 +103,7 @@ const userSlice = createSlice({
                 state.isLoading = false,
                 state.isError = null,
                 state.user = action.payload,
-                state.message= action.payload || "password updated successfully"
+                state.message= action.payload.message || "password updated successfully"
                 state.isSuccess = true
             })
             .addCase(updatePassword.rejected, (state, action: PayloadAction<any>)=>{

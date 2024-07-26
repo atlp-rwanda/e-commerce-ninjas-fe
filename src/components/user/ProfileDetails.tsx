@@ -9,6 +9,7 @@ import camera from "../../../public/assets/Camera.png";
 import Rwanda from "../../../public/assets/Rwanda_.png"
 import { TailSpin } from 'react-loader-spinner';
 import { toast } from "react-toastify";
+import { changingProfile } from '../../store/features/auth/authSlice';
 
 const updateProfileSchema = Yup.object().shape({
   firstName: Yup.string().required('Required'),
@@ -21,7 +22,7 @@ const updateProfileSchema = Yup.object().shape({
   currency: Yup.string().required('Required'),
 });
 
-const ProfileDetails = ({ user, isLoading, isSuccess, isError, message }) => {
+const ProfileDetails = ({ user,isLoading, isSuccess, isError, message }) => {
   const dispatch = useAppDispatch();
   const inputRef = useRef(null);
   const [profileImage, setProfileImage] = useState<any>(null);
@@ -48,9 +49,21 @@ const ProfileDetails = ({ user, isLoading, isSuccess, isError, message }) => {
       language: user?.language || "",
       currency: user?.currency || "",
     },
+
     enableReinitialize: true,
     validationSchema: updateProfileSchema,
-    onSubmit: (values) => {
+
+    onSubmit: async (values) => {
+      const initialValues = formik.initialValues;
+      const hasChanged = Object.keys(values).some(
+        key => values[key] !== initialValues[key]
+      );
+
+      if (!hasChanged) {
+        toast.error("No fields have changed.");
+        return;
+      }
+
       const formData = new FormData();
       formData.append("firstName", values.firstName);
       formData.append("lastName", values.lastName);
@@ -61,17 +74,20 @@ const ProfileDetails = ({ user, isLoading, isSuccess, isError, message }) => {
       formData.append("language", values.language);
       formData.append("birthDate", values.birthDate);
 
-      dispatch(updateUserProfile(formData));
-    },
+      const response: any = await dispatch(updateUserProfile(formData));
+      // if(response && response.payload && response.payload.status && response.paylad.message) toast.success(response.payload.message);
+    }
   });
+
 
   const handleFileChange = (event) => {
     const file = event.currentTarget.files[0];
     if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
-      reader.onload = (e: ProgressEvent<FileReader>) => {
+      reader.onload = (e: ProgressEvent<any>) => {
         if (e.target?.result && typeof e.target.result === 'string') {
           setProfileImage(e.target.result);
+          dispatch(changingProfile(e.target.result))
         }
         formik.setFieldValue('profilePicture', file);
       };
@@ -91,15 +107,6 @@ const ProfileDetails = ({ user, isLoading, isSuccess, isError, message }) => {
     }
     return null;
   };
-
-  useEffect(()=>{
-    if(isSuccess){
-        toast.success(message)
-    }
-    else if(isError){
-        toast.error(message)
-    }
-  },[isSuccess, isError,message])
 
   return (
     <form className='profile-details' onSubmit={formik.handleSubmit}>
@@ -159,21 +166,21 @@ const ProfileDetails = ({ user, isLoading, isSuccess, isError, message }) => {
           <div className='options'>
             <label htmlFor="gender">Gender</label>
             <select value={formik.values.gender} onChange={formik.handleChange} onBlur={formik.handleBlur} name='gender' id='gender'>
-              <option value="male" selected>Male</option>
+              <option value="male">Male</option>
               <option value="female">Female</option>
             </select>
           </div>
           <div className='options'>
             <label htmlFor="currency">Currency</label>
             <select value={formik.values.currency} onChange={formik.handleChange} onBlur={formik.handleBlur} name='currency' id='currency'>
-              <option value="USD" selected>USD</option>
+              <option value="USD">USD</option>
               <option value="RWF">RWF</option>
             </select>
           </div>
           <div className='options'>
             <label htmlFor="language">Language</label>
             <select value={formik.values.language} onChange={formik.handleChange} onBlur={formik.handleBlur} name='language' id='language'>
-              <option value="English" selected>English</option>
+              <option value="English">English</option>
               <option value="Kinyarwanda">Kinyarwanda</option>
               <option value="Greek">Greek</option>
             </select>

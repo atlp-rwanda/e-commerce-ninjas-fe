@@ -85,14 +85,6 @@ const ShippingAddress:React.FC<RwandaLocationSelectorProps> = ({ user,isSuccess,
       }, [user]);
 
       useEffect(() => {
-        if (isSuccess) {
-          toast.success(message);
-        } else if (isError) {
-          toast.error(message);
-        }
-      }, [isSuccess, isError, message]);
-
-      useEffect(() => {
         setLocation && setLocation({ country, province, district, sector });
       }, [country, province, district, sector, setLocation]);
     

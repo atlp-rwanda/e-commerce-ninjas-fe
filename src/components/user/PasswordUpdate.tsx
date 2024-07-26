@@ -19,11 +19,13 @@ const passwordSchema = Yup.object({
     .oneOf([Yup.ref('newPassword')], 'Passwords must match'),
 });
 
-const PasswordUpdate = ({ message, isError, isLoading, isSuccess }) => {
+const PasswordUpdate = ({ message, isError,isSuccess }) => {
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(null);
 
   const newPasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -44,26 +46,24 @@ const PasswordUpdate = ({ message, isError, isLoading, isSuccess }) => {
     },
     validationSchema: passwordSchema,
     onSubmit: async (values) => {
-      dispatch(updatePassword(values));
+      setLoading(true);
+      try{
+        dispatch(updatePassword(values));
+      }catch(err){
+        console.log(err)
+      }finally{
+        setLoading(false)
+      }
 
     },
   });
-
-  useEffect(()=>{
-    if(isSuccess){
-        toast.success(message)
-    }
-    else if(isError){
-        toast.error(message)
-    }
-  },[isSuccess, isError, message])
 
   return (
     <form className="password-container" onSubmit={formik.handleSubmit}>
     <div className="title">
       <h1>MY PASSWORD</h1>
       <button type='submit'>
-          {isLoading ? (
+          {loading ? (
             <div className="spinner-container">
               <TailSpin color="#ff6d18" width={20} />
             </div>

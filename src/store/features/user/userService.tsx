@@ -4,9 +4,7 @@ import { IProfile } from "../../../utils/types/store";
 
 const fetchUserProfile = async () => {
     try {
-        console.log("1")
         const response = await axiosInstance.get(`/api/user/user-get-profile`);
-        console.log(response)
         return response.data.data.user
     }
     catch (error) {
@@ -17,8 +15,7 @@ const fetchUserProfile = async () => {
 export const updateUserProfile = async(formData: FormData): Promise<IProfile> => {
     try {
         const response = await axiosInstance.put('/api/user/user-update-profile',formData);
-        console.log("response",response)
-        return response.data.data.user;
+        return response.data;
     }
     catch (error) {
         console.log(error)
@@ -36,7 +33,6 @@ const changePassword = async (oldPassword: string, newPassword: string, confirmP
 const userRequest = async(data)=>{
     try {
         const response = await axiosInstance.post('/api/user/user-submit-seller-request',data);
-        console.log("response",response)
         return response.data.data.user;
     }
     catch (error) {
@@ -48,7 +44,6 @@ const userRequest = async(data)=>{
 const userAddress = async( data: any)=>{
     try {
         const response = await axiosInstance.post('/api/user/user-change-address',data);
-        console.log("response",response)
         return response.data.data.user;
     }
     catch (error) {

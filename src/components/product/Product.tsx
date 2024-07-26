@@ -1,11 +1,11 @@
 /* eslint-disable */
-import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { CiHeart } from 'react-icons/ci';
-import { PiShoppingCartThin } from 'react-icons/pi';
-import { useAppDispatch, useAppSelector } from '../../store/store';
-import { createCart } from '../../store/features/carts/cartSlice'; // Adjust the import path accordingly
-import { toast } from 'react-toastify';
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { CiHeart } from "react-icons/ci";
+import { PiShoppingCartThin } from "react-icons/pi";
+import { useAppDispatch } from "../../store/store";
+import { createCart, getUserCarts } from "../../store/features/carts/cartSlice";
+import { toast } from "react-toastify";
 
 interface ProductProps {
   id: string;
@@ -31,6 +31,9 @@ const Product: React.FC<ProductProps> = ({
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [cartResponseData, setCartResponseData] = useState<any>(null);
+
   const handleMouseEnter = () => {
     intervalRef.current = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -49,18 +52,50 @@ const Product: React.FC<ProductProps> = ({
   };
 
   const handleAddProductToCart = async (productId: string, quantity = 1) => {
-    const response = await dispatch(createCart({ productId, quantity }));
-    if (response.payload.data) {
-      toast.success(response.payload.message);
-      return;
-    } else if (response.payload === 'Not authorized') {
-      toast.error('Please login first');
-      navigate('/login');
-    } else {
-      toast.error(response.payload.message);
-      return;
+    setIsLoading(true);
+    try {
+      const response = await dispatch(
+        createCart({ productId, quantity })
+      ).unwrap();
+
+      if (response.data) {
+        toast.success(response.message);
+        const updatedResponse = await dispatch(getUserCarts()).unwrap();
+        setCartResponseData(updatedResponse.data);
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error: any) {
+      if (error === "Not authorized") {
+        localStorage.setItem("pendingCartProduct", productId);
+        toast.error("Please login first");
+        navigate("/login");
+      } else {
+        toast.error("Something went wrong. Please try again later.");
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchCarts = async () => {
+      try {
+        const response = await dispatch(getUserCarts()).unwrap();
+        setCartResponseData(response.data);
+      } catch (error: any) {
+        console.error("Error fetching carts:", error);
+      }
+    };
+    fetchCarts();
+  }, [dispatch]);
+
+  const isInCart = (productId: string) => {
+    return cartResponseData?.carts?.some((cart: any) =>
+      cart.products.some((product: any) => product.id === productId)
+    );
+  };
+
 
   return (
     <div className="product">
@@ -70,22 +105,35 @@ const Product: React.FC<ProductProps> = ({
         onMouseLeave={handleMouseLeave}
         onClick={() => navigate(`/product/${id}`)}
       >
-        <span className="discount-badge">{discount}%</span>
+        <span className="discount-badge">-{discount}%</span>
         <img
           src={images[currentImageIndex]}
           alt="Product"
           className="product-image"
           onClick={() => navigate(`/product/${id}`)}
-
         />
       </div>
       <div className="product-info">
         <div className="product-add">
-          <div className="icon-container">
-            <PiShoppingCartThin
-              className="icon"
-              onClick={() => handleAddProductToCart(id)}
-            />
+          <div
+            className="icon-container"
+            style={{ background: isLoading ? "#ff6d18" : isInCart(id) ? "#ff6d18" : "transparent" }}
+          >
+            {isLoading ? (
+              <PiShoppingCartThin
+                className={`icon ${isInCart(id) ? "icon-in-cart" : ""}`}
+                style={{ color: "#fff" }}
+                onClick={() => handleAddProductToCart(id)}
+                aria-label={isInCart(id) ? "Remove from cart" : "Add to cart"}
+              />
+            ) : (
+              <PiShoppingCartThin
+                className={`icon ${isInCart(id) ? "icon-in-cart" : ""}`}
+                style={{ color: isInCart(id) ? "#fff" : "#ff6d18" }}
+                onClick={() => handleAddProductToCart(id)}
+                aria-label={isInCart(id) ? "Remove from cart" : "Add to cart"}
+              />
+            )}
           </div>
           <div className="icon-container">
             <CiHeart className="icon" />

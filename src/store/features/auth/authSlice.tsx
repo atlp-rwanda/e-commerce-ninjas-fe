@@ -1,13 +1,11 @@
 /* eslint-disable */
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import authService from "./authService";
-import {
-  AuthService,
-  IEmail,
-  IUser,
-  IUserData,
-} from "../../../utils/types/store";
-import { getErrorMessage } from "../notifications/axios/axiosInstance";
+import { AuthService, IEmail, IUser} from "../../../utils/types/store";
+import { getErrorMessage } from "../../../utils/axios/axiosInstance";
+import { toast } from "react-toastify";
+
+import { resetState, RESET_STATE } from "../../actions/resetAction";
 const initialState: AuthService = {
   user: undefined,
   isError: false,
@@ -20,9 +18,11 @@ const initialState: AuthService = {
   error: "",
 };
 
+type IUserEmailAndPassword = Pick<IUser, 'email' | 'password'>;
+
 export const registerUser = createAsyncThunk(
   "auth/register",
-  async (userData: IUser, thunkApi) => {
+  async (userData: IUserEmailAndPassword, thunkApi) => {
     try {
       const response = await authService.register(userData);
       return response;
@@ -39,7 +39,7 @@ export const loginUser = createAsyncThunk(
       const response = await authService.login(userData);
       return response;
     } catch (error) {
-      return thunkApi.rejectWithValue(error);
+      return thunkApi.rejectWithValue(getErrorMessage(error));
     }
   }
 );
@@ -51,7 +51,7 @@ export const getUserDetails = createAsyncThunk(
       const response = await authService.fetchUserDetails(token);
       return response;
     } catch (error) {
-      return thunkApi.rejectWithValue(error);
+      return thunkApi.rejectWithValue(getErrorMessage(error));
     }
   }
 );
@@ -132,8 +132,9 @@ export const googleAuthCallback = createAsyncThunk(
 
 export const logout = createAsyncThunk("auth/logout", async (_, thunkApi) => {
   try {
-    localStorage.removeItem("token");
-    return true;
+    const response = await authService.logout();
+    thunkApi.dispatch(resetState());
+    return response
   } catch (error) {
     return thunkApi.rejectWithValue(getErrorMessage(error));
   }
@@ -142,7 +143,19 @@ export const logout = createAsyncThunk("auth/logout", async (_, thunkApi) => {
 const userSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    resetAuth: (state) => {
+      state.user = undefined;
+      state.isError = false;
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.isVerified = false;
+      state.message = "";
+      state.token = "";
+      state.isAuthenticated = false;
+      state.error = "";
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, (state) => {
@@ -218,7 +231,7 @@ const userSlice = createSlice({
         (state, action: PayloadAction<any>) => {
           state.isLoading = false;
           state.isSuccess = true;
-          state.user = action.payload;
+          state.token = action.payload.data.token;
           state.message = action.payload.message;
         }
       )
@@ -280,18 +293,36 @@ const userSlice = createSlice({
         state.isError = true;
         state.isLoading = false;
         state.isSuccess = false;
-        state.error =
-          action.payload.response.data.message ||
-          action.payload.response.data.error;
+        state.error = action.payload
+      })
+      .addCase(logout.pending, (state) => {
+        state.isError = false;
+        state.isLoading = true;
+        state.isSuccess = false;
+      })
+      .addCase(logout.fulfilled, (state, action: PayloadAction<any>) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isAuthenticated = false;
+        state.isSuccess = true;
+        state.message = action.payload.message;
+        localStorage.clear();
+        toast.success(action.payload.message);
+
+      })
+      .addCase(RESET_STATE,()=> initialState)
+      .addCase(logout.rejected, (state, action: PayloadAction<any>) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.error = action.payload
       })
       .addCase(getUserDetails.pending, (state) => {
         state.isError = false;
         state.isSuccess = false;
         state.isAuthenticated = false;
       })
-      .addCase(
-        getUserDetails.fulfilled,
-        (state, action: PayloadAction<any>) => {
+      .addCase( getUserDetails.fulfilled, (state, action: PayloadAction<any>) => {
           state.isError = false;
           state.isSuccess = true;
           state.isAuthenticated = true;
@@ -304,8 +335,10 @@ const userSlice = createSlice({
         state.isAuthenticated = false;
         state.user = undefined;
         state.error = action.payload.message;
-      });
+      })
   },
 });
+
+export const { resetAuth } = userSlice.actions;
 
 export default userSlice.reducer;

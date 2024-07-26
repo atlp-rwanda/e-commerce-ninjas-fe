@@ -16,6 +16,11 @@ const login = async (userData: IUser) => {
   return response.data;
 };
 
+const logout = async() => {
+  const response = await axiosInstance.post("/api/auth/logout");
+  return response.data;
+}
+
 const fetchUserDetails = async (token: string) => {
   const response = await axiosInstance.get("/api/user/user-get-profile", {
     headers: { Authorization: `Bearer ${token}` },
@@ -64,9 +69,11 @@ const resetPassword = async (token: string, password: string) => {
   return response.data;
 };
 
+
 const authService = {
   register,
   login,
+  logout,
   verify,
   fetchUserDetails,
   resendVerificationEmail,

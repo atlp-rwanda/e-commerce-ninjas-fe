@@ -1,0 +1,88 @@
+.admin__wrapper {
+    height: 100vh;
+    display: flex;
+
+    .left__side {
+        width: 26rem;
+
+        &::before {
+            position: absolute;
+            content: "";
+            width: 6.5rem;
+            height: 100%;
+            background-color: $primary-color;
+        }
+
+        .icons {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
+            .dashboard,
+            .users,
+            .logout {
+                display: flex;
+                align-items: center;
+                padding-left: 1rem;
+                gap: 2.5rem;
+
+                .icon {
+                    font-size: 1.6rem;
+                    color: $white-color;
+                }
+
+                .icons__title__link {
+                    .text_content {
+                        color: $text-color;
+                        font-size: 1.8rem;
+                        transition: all 0.5s ease-in-out;
+                        text-decoration: none;
+                        cursor: pointer;
+
+                    }
+
+                    .active {
+                        display: flex;
+                        background-color: $menu-hover;
+                        width: 15rem;
+                        padding: 1rem 1rem;
+                        transition: all 0.5s ease-in-out;
+                        align-items: center;
+                        border-radius: .5rem;
+                    }
+                }
+            }
+            .upper{
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 10rem;
+                gap: 2rem;
+            }
+            .logout{
+                position: absolute;
+                bottom: 2rem;
+            }
+        }
+    }
+
+
+    .main__content__dashboard {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
+    .main__dashboard {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+        width: 100%;
+        background-color: $container-color;
+    }
+
+}
+
+@media only screen and (min-width: 76.8rem) {}

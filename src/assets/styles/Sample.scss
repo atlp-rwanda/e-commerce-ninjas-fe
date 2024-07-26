@@ -88,10 +88,14 @@
       padding: 0.5rem 2rem;
       border-radius: 4rem;
       cursor: pointer;
+      background: $white;
     }
   }
 
   .menShoe {
+    img{
+      transform: scaleX(-1);
+    }
 
     .text-container {
       display: flex;
@@ -102,7 +106,7 @@
     }
 
     button {
-      color: $sixth-color;
+      color: $primary-color;
     }
   }
 
@@ -122,6 +126,9 @@
   }
 
   .womenShoe {
+    img{
+      transform: scaleX(-1);
+    }
 
     .text-container {
       display: flex;
@@ -132,7 +139,7 @@
     }
 
     button {
-      color: $primary-color;
+      color: $sixth-color;
     }
   }
 

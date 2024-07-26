@@ -1,7 +1,7 @@
-button {
-  background-color: transparent;
-  border: 0;
-}
+// button {
+//   background-color: transparent;
+//   border: 0;
+// }
 FaCheckSquare {
   color: $primary-color;
 }
@@ -29,6 +29,11 @@ FaCheckSquare {
           padding-left: 5px;
           margin-bottom: 10px;
           font-size: 20px;
+          flex: 1;
+        }
+        .delete {
+          cursor: pointer;
+          font-size: 12px;
         }
       }
       .products-list {
@@ -39,27 +44,29 @@ FaCheckSquare {
           flex-direction: row;
           padding: 10px;
           .check {
-            flex: 1;
             padding: 10px;
           }
           .image {
-            flex: 2;
             border: 2px solid $border-color;
             border-radius: 10px;
+            width: 180px;
+            height: 135px;
             img {
-              width: 200px;
-              height: 120px;
+              width: 100%;
+              height: 100%;
               object-fit: cover;
+              border-radius: 10px;
             }
           }
           .description {
-            flex: 3;
+            flex: 4;
             padding: 5px;
             h4 {
               font-weight: 500;
               margin: 5px;
               margin-bottom: 10px;
               font-size: 18px;
+              cursor: pointer;
             }
             .flexer {
               display: flex;
@@ -82,15 +89,11 @@ FaCheckSquare {
                 }
               }
               .controls {
-                display: flex;
-                flex-direction: column;
                 .quantity {
                   background: $border-color;
                   padding: 3px;
                   border-radius: 20px;
                   margin-bottom: 10px;
-                  font-size: 1.5rem;
-                
                   button {
                     background: $red-color;
                     border: 0;
@@ -104,7 +107,7 @@ FaCheckSquare {
                   input {
                     background: transparent;
                     border: 0;
-                    width: 30px;
+                    width: 20px;
                     padding-left: 10px;
                     text-align: center;
                     align-items: center;
@@ -118,6 +121,9 @@ FaCheckSquare {
                     border: 0;
                     font-size: 20px;
                     cursor: pointer;
+                  }
+                  .delete {
+                    margin-left: 30px;
                   }
                 }
               }
@@ -190,7 +196,6 @@ FaCheckSquare {
     }
   }
 }
-
 @media only screen and (max-width: 720px) {
   .cart-section {
     display: flex;
@@ -226,16 +231,15 @@ FaCheckSquare {
             flex-direction: column;
             padding: 10px;
             .check {
-             display: none;
+              display: none;
             }
             .image {
-              flex: 2;
               border: 2px solid $border-color;
               border-radius: 10px;
               text-align: center;
               img {
-                width: 200px;
-                height: 120px;
+                width: 100%;
+                height: 100%;
                 object-fit: cover;
                 text-align: center;
               }

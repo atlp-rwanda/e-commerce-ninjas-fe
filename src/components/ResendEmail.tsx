@@ -6,7 +6,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { resendVerificationEmail } from "../store/features/auth/authSlice";
+import { resendVerificationEmail, resetAuth } from "../store/features/auth/authSlice";
 import { PuffLoader } from "react-spinners";
 
 const validationSchema = yup.object({
@@ -22,19 +22,20 @@ export const ResendEmail = () => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(resendVerificationEmail(values));
+      dispatch(resendVerificationEmail(values)).then(() => {
+        if(isSuccess) {
+        toast.success(message);
+        }
+        if (isError) {
+          toast.error(message)
+        }
+      })
     },
   })
-
   useEffect(() => {
-    if (isSuccess) {
-      toast.success(message)
-      formik.resetForm()
-    }
-    if (isError) {
-      toast.error(message)
-    }
-  })
+    dispatch(resetAuth());
+  }, [dispatch]);
+  
   return (
     <>
       <Meta title="Resend Email - E-Commerce Ninjas" />
@@ -42,9 +43,9 @@ export const ResendEmail = () => {
         <div className="container">
           {
             isLoading ? (
-              <div className="loading-spinner">
+              <div className="loading-spinner" >
                 <PuffLoader size={100} color="#FF6D18" loading={isLoading} />
-                <p>Please wait...</p>
+                <p className="loading-text">Please wait...</p>
               </div>
             ) : (
               <div className="resend-email">

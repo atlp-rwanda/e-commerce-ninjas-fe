@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { axiosInstance } from "../notifications/axios/axiosInstance";
+import { axiosInstance } from "../../../utils/axios/axiosInstance";
 
 const createCart = async (productId: string, quantity: number) => {
   try {
@@ -13,7 +13,6 @@ const createCart = async (productId: string, quantity: number) => {
     throw error;
   }
 };
-
 
 const getUserCarts = async ()=> {
     try {

@@ -7,6 +7,58 @@ a {
   flex-direction: column;
   border-bottom: 0.12rem solid $fourth-color;
 
+  &__notification {
+    &__box {
+      position: relative;
+      cursor: pointer;
+
+      &::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: 160%;
+            width: 0.15rem;
+            height: 6rem;
+            background-color: #ccc;
+          }
+    }
+
+    &__icon {
+      color: $primary-color;
+      width: 2rem;
+      height: 2rem;
+
+      &__1 {
+        width: 3rem;
+        height: 3rem;
+        transform: translateX(15%);
+      }
+    }
+
+    &__number {
+      font-size: 1rem;
+      color: $white;
+      font-weight: 600;
+      display: inline-block;
+      position: absolute;
+      top: 0;
+      transform: translate(-30%, -10%);
+      z-index: 2;
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 1.8rem;
+        height: 1.8rem;
+        border-radius: 50%;
+        background-color: #dc143c;
+        z-index: -1;
+      }
+    }
+  }
   .notification {
     &__container {
       position: relative;
@@ -20,11 +72,22 @@ a {
     }
     &__dropdown {
       position: absolute;
-      left: -1170%;
+      left: -1195%;
       top: 150%;
       box-shadow: 0 5rem 10rem 0 rgba(0, 0, 0, 0.08);
       z-index: 500;
       transition: all 0.3s ease-in;
+    }
+  }
+  &__notification__box {
+    &::before {
+      content: "";
+      position: absolute;
+      top: -80%;
+      left: 160%;
+      width: 0.15rem;
+      height: 6.5rem;
+      background-color: #ccc;
     }
   }
 
@@ -38,7 +101,7 @@ a {
   }
 
   &__input {
-    flex: 0 0 40%;
+    width: 100%;
   }
 
   &__bottom {
@@ -49,8 +112,13 @@ a {
 
     &__top {
       display: flex;
-      gap: 9rem;
       align-items: center;
+      gap: 5rem;
+      .icons {
+        display: flex;
+        margin-left: auto;
+        padding: 10px;
+      }
     }
 
     &__bottom {
@@ -63,10 +131,10 @@ a {
 
   &__dropdown__container {
     margin-bottom: 1.2rem;
-    padding: 1.6rem 2.4rem;
+    padding: 1.6rem 1.6rem;
     display: flex;
     align-items: center;
-    gap: 3.2rem;
+    gap: 1.3rem;
     justify-content: space-between;
     background-color: $background-color;
     cursor: pointer;
@@ -82,7 +150,7 @@ a {
 
     &__icon {
       font-weight: 600;
-      width: 3.2rem;
+      width: 2.2rem;
       height: 3.2rem;
       color: $primary-color;
       transition: all 0.08s linear;
@@ -120,6 +188,7 @@ a {
     column-gap: 1rem;
     cursor: pointer;
   }
+  
 
   &__icon {
     font-size: 2.8rem;
@@ -145,6 +214,7 @@ a {
   &__container {
     display: flex;
     flex-direction: column;
+    background: red;
     gap: 3.2rem;
   }
 
@@ -183,7 +253,7 @@ a {
 
   &__dropdown {
     position: absolute;
-    width: 80%;
+    width: 76%;
     left: 0;
     top: 105%;
     background-color: #fff;
@@ -240,10 +310,20 @@ a {
     grid-template-columns: auto 1fr;
     grid-template-rows: repeat(2, 1fr);
     align-items: center;
-    column-gap: 1rem;
+    column-gap: 0.8rem;
   }
 
   &__icon {
+    color: $primary-color;
+    width: 3.7rem;
+    height: 3.7rem;
+    grid-column: 1 / 2;
+    grid-row: span 2;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 0.5rem;
+  }
+  &__icon-user {
     color: $primary-color;
     width: 3.2rem;
     height: 3.2rem;
@@ -261,6 +341,13 @@ a {
     color: #888;
   }
 }
+.cart__details {
+  all: unset;
+  margin-right: 2.5rem;
+  margin-left: 2.5rem;
+  margin-top: 15px;
+  cursor: pointer;
+}
 
 .rotate2 {
   transform: rotate(180deg);
@@ -271,14 +358,16 @@ a {
   height: 100%;
   flex: 0 0 10%;
   cursor: pointer;
+  margin-right: 0.5rem;
+  margin-top: 10px;
 
   &::before {
     content: "";
     position: absolute;
-    top: -50%;
+    top: -60%;
     left: -10%;
     width: 0.12rem;
-    height: 6rem;
+    height:6.5rem;
     background-color: #ccc;
   }
 }
@@ -290,9 +379,10 @@ a {
     padding: 1.8rem;
     border-radius: 0.6rem;
     position: absolute;
-    left: -12%;
+    left: -10%;
+    padding-right: 0;
     top: 150%;
-    width: 110%;
+    width: 140%;
     z-index: 500;
     box-shadow: 0 5rem 10rem 0 rgba(0, 0, 0, 0.08);
 
@@ -301,8 +391,8 @@ a {
       position: absolute;
       top: -3%;
       left: 6%;
-      width: 5rem;
-      height: 5rem;
+      width: 4.5rem;
+      height: 4.5rem;
       background-color: $black;
       transform: rotate(45deg);
       z-index: 1;
@@ -331,7 +421,7 @@ a {
   &__link {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
+    gap: 0.4rem;
 
     &:link,
     &:visited {
@@ -342,4 +432,37 @@ a {
       z-index: 2;
     }
   }
+}
+
+.cart__icons_row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  .cart_icon_box {
+    border: 0;
+    flex: 1;
+  }
+  .cart_icon_box::before {
+    content: "";
+    position: absolute;
+    top: -15%;
+    left: 160%;
+    width: 0.15rem;
+    height: 6rem;
+    background-color: transparent;
+  }
+  .cart_box_info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+  }
+}
+.notification_box_cont {
+ margin-top: 15px;
+}
+
+
+
+@media only screen and (max-width: 768px) {
+  
 }

@@ -21,7 +21,8 @@
 }
 
 .section__login {
-  padding: 9.6rem 0;
+  padding: 5rem 0;
+  background-color: $container-color;
 }
 
 .login {
@@ -147,6 +148,7 @@
   &__link {
     &:link,
     &:visited {
+      margin-left: 0.7rem;
       text-decoration: none;
       color: $primary-color;
     }

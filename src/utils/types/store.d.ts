@@ -125,6 +125,7 @@ export interface iCartInitialResource {
   isLoggedOut: boolean;
   cartCounter: number;
   cartTotalMoney:number;
+  cartProductslist: any[];
 }
 
 

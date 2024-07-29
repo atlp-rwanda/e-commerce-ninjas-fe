@@ -11,6 +11,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
+import { addProductToWishlist } from "../store/features/wishlist/wishlistSlice";
 import authService from "../store/features/auth/authService";
 
 const LoginSchema = Yup.object().shape({
@@ -41,9 +42,16 @@ function UserLogin() {
       password: "",
     },
     validationSchema: LoginSchema,
-    onSubmit: (values) => {
-      dispatch(loginUser(values));
-    },
+    onSubmit: async (values) => {
+      const action = await dispatch(loginUser(values));
+      if (loginUser.fulfilled.match(action)) {
+        const pendingWishlistProduct = localStorage.getItem("pendingWishlistProduct");
+        if (pendingWishlistProduct) {
+          await dispatch(addProductToWishlist(pendingWishlistProduct));
+          localStorage.removeItem("pendingWishlistProduct");
+        }
+      }
+    }
   });
 
   useEffect(() => {

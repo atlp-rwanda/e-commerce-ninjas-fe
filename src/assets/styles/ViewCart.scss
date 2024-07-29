@@ -22,18 +22,31 @@ FaCheckSquare {
         flex-wrap: nowrap;
         border-bottom: 2px solid $border-color;
         margin: 10px;
+        gap: 10px;
         .check {
           margin: 5px;
         }
         h2 {
           padding-left: 5px;
-          margin-bottom: 10px;
+          margin-bottom: 12px;
           font-size: 20px;
           flex: 1;
         }
+        .checkout-btn {
+          background: $primary-color;
+          cursor: pointer;
+          width: 12%;
+          color: $white;
+          border-radius: 5px;
+          border: none;
+          height: 20px;
+          margin-top: -1px;
+        }
+
         .delete {
           cursor: pointer;
           font-size: 12px;
+          margin-top: 2px;
         }
       }
       .products-list {
@@ -190,6 +203,7 @@ FaCheckSquare {
         background: $primary-color;
         width: 100%;
         border-radius: 5px;
+        border: none;
         color: $white;
         padding: 10px;
       }
@@ -290,6 +304,7 @@ FaCheckSquare {
                       width: 20px;
                       height: 20px;
                       font-size: 10px;
+                      border: none;
                     }
                     input {
                       background: transparent;

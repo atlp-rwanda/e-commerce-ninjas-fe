@@ -5,6 +5,7 @@ import productReducer from '../features/product/productSlice';
 import authReducer from '../features/auth/authSlice';
 import singleProductReducer from '../features/product/singleProductSlice';
 import notificationReducer from '../features/notifications/notificationSlice';
+import wishlistSlice from '../features/wishlist/wishlistSlice';
 import singleSellerProductReducer from '../features/product/sellerProductSlice';
 import sellerCollectionProducts from '../features/product/sellerCollectionProductsSlice';
 import adminReducer from '../features/admin/adminSlice';
@@ -17,6 +18,7 @@ const appReducer = combineReducers({
   products: productReducer,
   singleProduct: singleProductReducer,
   notification: notificationReducer,
+  wishlist: wishlistSlice,
   singleSellerProduct: singleSellerProductReducer,
   sellerCollectionProducts: sellerCollectionProducts,
   admin: adminReducer,

@@ -14,6 +14,7 @@ const initialState: iCartInitialResource = {
   isLoggedOut: false,
   cartCounter: 0,
   cartTotalMoney: 0,
+  cartProductslist: []
 };
 
 interface CreateCartParams {
@@ -102,12 +103,19 @@ const cartSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.carts.push(action.payload);
-        let cartProductsTotal = 0;
-        let cartTotalAmount = 0;
-        action.payload.data.carts.forEach((cart) => {
+        let cartProductsTotal = 0
+        let cartTotalAmount = 0
+        let cartsProductsList = [];
+        action.payload.data.carts.forEach(cart => {
           cartProductsTotal += cart.products.length;
           cartTotalAmount += cart.total;
         });
+        action.payload.data.carts.forEach(cart => {
+          cart.products.forEach(product => {
+            cartsProductsList.push(product.id)
+          });
+        })
+        state.cartProductslist = cartsProductsList
         state.cartCounter = cartProductsTotal;
         state.cartTotalMoney = cartTotalAmount;
 

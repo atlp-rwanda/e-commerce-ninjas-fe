@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { createCart, getUserCarts } from "../../store/features/carts/cartSlice";
 import { addProductToWishlist, removeProductFromWishlist, fetchWishlistProducts } from '../../store/features/wishlist/wishlistSlice';
 import { toast } from "react-toastify";
+import { useAppSelector } from "../../store/store";
 
 interface ProductProps {
   id: string;
@@ -46,6 +47,8 @@ const Product: React.FC<ProductProps> = ({
 
   const [isLoading, setIsLoading] = useState(false);
   const [cartResponseData, setCartResponseData] = useState<any>(null);
+
+  const { cartProductslist } = useAppSelector((state) => state.cart)
 
   const handleMouseEnter = () => {
     intervalRef.current = setInterval(() => {
@@ -103,45 +106,11 @@ const Product: React.FC<ProductProps> = ({
     fetchCarts();
   }, [dispatch]);
 
+
+
   const isInCart = (productId: string) => {
-    return cartResponseData?.carts?.some((cart: any) =>
-      cart.products.some((product: any) => product.id === productId)
-    );
-  };
-
-
-const handleToggleWishlist = (event: React.MouseEvent) => {
-  event.stopPropagation();
-  if (!isAuthenticated) {
-    localStorage.setItem("pendingWishlistProduct", id);
-    toast.error("Please login first");
-    navigate("/login");
-    return;
-  } 
-
-  if (isInWishlist) {
-    dispatch(removeProductFromWishlist(id)).then((action) => {
-      if (action.meta.requestStatus === 'fulfilled') {
-        toast.success("Product removed from wishlist.");
-        setIsInWishlist(false); 
-      } else {
-        toast.error(action.payload as string);
-      }
-    });
-  } else {
-    dispatch(addProductToWishlist(id)).then((action) => {
-      if (action.meta.requestStatus === 'fulfilled') {
-        toast.success("Product added to wishlist.");
-        setIsInWishlist(true); 
-      } else {
-        toast.error(action.payload as string);
-      }
-    });
+    return cartProductslist?.includes(productId);
   }
-};
-
-
-
   return (
     <div className="product">
       <div

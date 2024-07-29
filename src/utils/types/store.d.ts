@@ -124,13 +124,13 @@ export interface iCartInitialResource {
   message: string | null;
   isLoggedOut: boolean;
   cartCounter: number;
-  cartTotalMoney:number;
+  cartTotalMoney: number;
+  cartProductslist: any[];
 }
-
 
 export interface AdminReponse {
   message?: string;
-  data?: {user:IUser};
+  data?: { user: IUser };
   error?: string;
   status?: number;
 }
@@ -161,11 +161,11 @@ export interface ISingleProductInitialResponse {
 export interface ISellerCollectionProductResponse {
   message?: string;
   data?: {
-    products: ISingleProduct[]
-    previousPage: number,
-    currentPage: number,
-    nextPage: number,
-    limit: number,
+    products: ISingleProduct[];
+    previousPage: number;
+    currentPage: number;
+    nextPage: number;
+    limit: number;
   };
   error?: string;
   status?: number;
@@ -173,11 +173,11 @@ export interface ISellerCollectionProductResponse {
 
 export interface ISellerCollectionProductInitialResponse {
   data?: {
-    products: ISingleProduct[] | null,
-    previousPage: number,
-    currentPage: number,
-    nextPage: number,
-    limit: number,
+    products: ISingleProduct[] | null;
+    previousPage: number;
+    currentPage: number;
+    nextPage: number;
+    limit: number;
   };
   isError: boolean;
   isSuccess: boolean;

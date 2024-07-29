@@ -5,7 +5,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { PulseLoader } from "react-spinners";
-import { resetPassword } from "../store/features/auth/authSlice";
+import { resetAuth, resetPassword } from "../store/features/auth/authSlice";
 import { useFormik } from "formik";
 import passwordChanged from "../../public/assets/images/resetPassword.png";
 import { toast } from "react-toastify";
@@ -54,7 +54,10 @@ const ResetPassword: React.FC = () => {
       setIsFormVisible(false);
     }
   }, [user, isError, isSuccess, isLoading, message]);
-
+  
+  useEffect(() => {
+    dispatch(resetAuth());
+  }, [dispatch]);
   return (
     <>
       <main>

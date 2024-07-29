@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { sendResetLink } from "../store/features/auth/authSlice";
+import { resetAuth, sendResetLink } from "../store/features/auth/authSlice";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { PulseLoader } from "react-spinners";
@@ -43,6 +43,9 @@ const SendResetPasswordLink: React.FC = () => {
       setHideParagraph(false);
     }
   }, [isError, isSuccess, message]);
+  useEffect(() => {
+    dispatch(resetAuth());
+  }, [dispatch]);
 
   return (
     <>

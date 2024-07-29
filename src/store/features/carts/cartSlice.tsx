@@ -45,13 +45,25 @@ export const getUserCarts = createAsyncThunk(
   }
 );
 
+export const checkout = createAsyncThunk(
+  "cart/buyer-cart-checkout",
+  async (cartId: string, thunkApi) => {
+    try {
+      const response = await cartService.productCheckout(cartId);
+      return response;
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
     addCart: (state, action) => {
       state.carts.push(action.payload);
-      state.cartCounter += 1
+      state.cartCounter += 1;
     },
     usergetCarts: (state, action: PayloadAction) => {
       state.carts.push(action.payload);
@@ -70,7 +82,7 @@ const cartSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.carts.push(action.payload);
-        state.cartCounter += 1
+        state.cartCounter += 1;
         state.message = "Cart created successfully";
       })
       .addCase(createCart.rejected, (state, action) => {
@@ -90,16 +102,14 @@ const cartSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.carts.push(action.payload);
-        let cartProductsTotal = 0
-        let cartTotalAmount = 0
-        action.payload.data.carts.forEach(cart => {
+        let cartProductsTotal = 0;
+        let cartTotalAmount = 0;
+        action.payload.data.carts.forEach((cart) => {
           cartProductsTotal += cart.products.length;
           cartTotalAmount += cart.total;
         });
         state.cartCounter = cartProductsTotal;
         state.cartTotalMoney = cartTotalAmount;
-
-
 
         state.message = "";
       })
@@ -108,10 +118,28 @@ const cartSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = "";
+      })
+      .addCase(checkout.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+        state.message = "";
+      })
+      .addCase(checkout.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.carts.push(action.payload);
+        state.message = "";
+      })
+      .addCase(checkout.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = "";
       });
   },
 });
 
-export const { addCart, usergetCarts
-} = cartSlice.actions;
+export const { addCart, usergetCarts } = cartSlice.actions;
 export default cartSlice.reducer;

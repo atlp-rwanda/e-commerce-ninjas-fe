@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { Meta } from "../components/Meta";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { PuffLoader } from "react-spinners";
+import { PuffLoader, PulseLoader } from "react-spinners";
 import { toast } from "react-toastify";
-import { getUserCarts } from "../store/features/carts/cartSlice";
+import { checkout, getUserCarts } from "../store/features/carts/cartSlice";
 import {
   FaCheckSquare,
   FaMinus,
@@ -15,6 +15,8 @@ import {
   FaShippingFast,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Product from "../components/product/Product";
+import { Box, LinearProgress } from "@mui/material";
 
 const UserViewCart: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -23,6 +25,12 @@ const UserViewCart: React.FC = () => {
   const [cartData, setCartData] = useState<any>(null);
   const [cartResponseData, setCartResponseData] = useState<any>(null);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
+  const [checkoutData, setcheckoutData] = useState(null);
+  const [isCheckoutSuccess, setCheckoutSuccess] = useState(null);
+  const [isPreloader, setIsPreloader] = useState(false);
+  const [discount, setDiscount] = useState(0);
+  const [totalProductPrice, setTotalProductPrice] = useState(0);
+  const [arrayOfProduct, setarrayOfProduct] = useState(null);
   const navigate = useNavigate();
 
   const cartState = useAppSelector((state) => state.cart);
@@ -86,16 +94,51 @@ const UserViewCart: React.FC = () => {
     );
   }
 
+  const handleCartCheckOut = async (cartId, index) => {
+    setIsPreloader(true);
+    const response = await dispatch(checkout(cartId));
+    const array = cartResponseData.carts[index];
+    setarrayOfProduct(array);
+    setcheckoutData(response.payload.data.totalAmount);
+    const totalProductPrice = array.products.reduce(
+      (acc, product) => acc + parseFloat(product.price),
+      0
+    );
+    setTotalProductPrice(totalProductPrice);
+    setCheckoutSuccess(true);
+    setIsPreloader(false);
+    toast.success("Checkout is done Successfully");
+  };
   return (
     <>
       <Meta title="View shopping cart - E-Commerce Ninjas" />
+      {isPreloader && (
+          <div className="table__spinner">
+            <Box sx={{ width: "100%" }}>
+              <LinearProgress
+                sx={{
+                  backgroundColor: "#fff",
+                  "& .MuiLinearProgress-bar": {
+                    backgroundColor: "#ff8a46",
+                  },
+                }}
+              />
+            </Box>
+          </div>
+        )}
       <section className="cart-section">
         <div className="cart-products">
-          {cartResponseData.carts.map((cart: any) => (
+          {cartResponseData.carts.map((cart: any, index) => (
             <div key={cart.id} className="cart">
               <div className="title">
                 <FaCheckSquare className="check" color="#ff6d18" />
                 <h2>Shopping Cart</h2>
+                <button
+                  onClick={() => handleCartCheckOut(cart.cartId, index)}
+                  className={`checkout-btn`}>
+                  <span>{"Checkout"}</span>
+                </button>
+
                 <FaTrash color="#ff6d18" className="delete" />
               </div>
               <div className="products-list">
@@ -172,26 +215,27 @@ const UserViewCart: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="order-details">
-            <h3>Order details</h3>
-            <div className="row">
-              <div className="left">Total amount:</div>
-              <div className="right">$5000</div>
+          {isCheckoutSuccess ? (
+            <div className="order-details">
+              <h3>Order details</h3>
+
+              {arrayOfProduct.products.map((product, index) => (
+                <div className="row" key={index}>
+                  <div className="left">{product.name}:</div>
+                  <div className="right">${product.price}</div>
+                </div>
+              ))}
+              <div className="last row">
+                <div className="left">Total Discount:</div>
+                <div className="right">${(totalProductPrice - checkoutData).toFixed(2)}</div>
+              </div>
+              <div className="row">
+                <div className="left">Total amount:</div>
+                <div className="right">${checkoutData.toFixed(2)}</div>
+              </div>
+              <button>Pay Now</button>
             </div>
-            <div className="row">
-              <div className="left">Total amount:</div>
-              <div className="right">$5000</div>
-            </div>
-            <div className="row last">
-              <div className="left">Total amount:</div>
-              <div className="right">$5000</div>
-            </div>
-            <div className="row">
-              <div className="left">Total amount:</div>
-              <div className="right">$5000</div>
-            </div>
-            <button>Checkout</button>
-          </div>
+          ) : null}
         </div>
       </section>
     </>

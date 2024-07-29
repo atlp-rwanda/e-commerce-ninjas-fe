@@ -40,6 +40,15 @@ export const updateUserRole = createAsyncThunk('admin/updateUser', async ({ user
     }
 })
 
+export const updateUserStatus = createAsyncThunk('admin/updateUserStatus',async({ userId, status }: { userId: string, status: string}, thunkApi) => {
+    try {
+        const response = await adminService.updateUserStatus(userId, status);
+        return response;
+    } catch (error) {
+        return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+});
+
 const adminSlice = createSlice({
     name: 'admin',
     initialState,
@@ -79,6 +88,25 @@ const adminSlice = createSlice({
                 toast.success(state.message);
             })
             .addCase(updateUserRole.rejected, (state, action:PayloadAction<AdminReponse>) => {
+                state.isLoading = false;
+                state.message = action.payload.message;
+                toast.error(state.message);
+            })
+            .addCase(updateUserStatus.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateUserStatus.fulfilled, (state, action:PayloadAction<AdminReponse>) => {
+                const { id, status } = action.payload.data.user;
+                const user = state.users.find((user) => user.id === id);
+                if (user) {
+                    user.status = status;
+                }
+                state.isSuccess = true;
+                state.isLoading = false;
+                state.message = action.payload.message;
+                toast.success(state.message);
+            })
+            .addCase(updateUserStatus.rejected, (state, action:PayloadAction<AdminReponse>) => {
                 state.isLoading = false;
                 state.message = action.payload.message;
                 toast.error(state.message);

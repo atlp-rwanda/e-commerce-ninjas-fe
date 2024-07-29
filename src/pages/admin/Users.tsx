@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../store/store";
 import {
   getAllUsers,
   updateUserRole,
+  updateUserStatus,
 } from "../../store/features/admin/adminSlice";
 import Zoom from "@mui/material/Zoom";
 import Tooltip from "@mui/material/Tooltip";
@@ -29,7 +30,6 @@ export default function Users() {
   const [localUserState, setLocalUserState] = useState([]);
   const [open, setOpen] = useState(false);
   const [pendingRoleChange, setPendingRoleChange] = useState(null);
-
   const headers = [
     "N0",
     "Profile",
@@ -59,7 +59,7 @@ export default function Users() {
     );
   }, [users]);
 
-  const handleRoleChange = (userId, newRole) => {
+  const handleRoleChange = (userId: string, newRole:string) => {
     if (newRole === "admin") {
       setPendingRoleChange({ userId, newRole });
       setOpen(true);
@@ -72,10 +72,24 @@ export default function Users() {
     }
   };
 
+  const handleStatusChange = (userId:string, isEnabled:boolean) => {
+    console.log("userID:" ,userId,"status:",isEnabled)
+    setLocalUserState((prevState) =>
+      prevState.map((user) =>
+        user.id === userId? {...user, newStatus: isEnabled ? "enabled" : "disabled" } : user
+      )
+    );
+  };
   const handleSaveClick = (userId) => {
     const user = localUserState.find((user) => user.id === userId);
     if (user) {
-      dispatch(updateUserRole({ userId: user.id, role: user.newRole }));
+      if(user.newRole !== user.role) {
+        dispatch(updateUserRole({ userId: user.id, role: user.newRole }));
+      }
+
+      if(user.newStatus !== user.status) {
+        dispatch(updateUserStatus({ userId: user.id, status: user.newStatus}));
+      }
     }
   };
 
@@ -102,6 +116,10 @@ export default function Users() {
         : email.split("@")[0];
     return name;
   };
+
+  const getDisplayStatus = (user) => {
+    return user.newStatus === "enabled";
+  }
 
   const rows = localUserState
     ? localUserState
@@ -133,8 +151,9 @@ export default function Users() {
           <div className="switch">
             <Switch
               {...{ inputProps: { "aria-label": "Color switch demo" } }}
-              defaultChecked={user.status === "enabled"}
+              checked={getDisplayStatus(user)}
               color="warning"
+              onChange={(e)=>{handleStatusChange(user.id,e.target.checked)}}
             />
           </div>,
           <div className="action__icons">

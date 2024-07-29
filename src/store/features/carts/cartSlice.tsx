@@ -5,6 +5,7 @@ import { getErrorMessage } from "../../../utils/axios/axiosInstance";
 import { toast } from "react-toastify";
 import { iCartInitialResource } from "../../../utils/types/store";
 
+
 const initialState: iCartInitialResource = {
   carts: [],
   isLoading: false,
@@ -14,6 +15,7 @@ const initialState: iCartInitialResource = {
   isLoggedOut: false,
   cartCounter: 0,
   cartTotalMoney: 0,
+  cartProductslist: []
 };
 
 interface CreateCartParams {
@@ -104,12 +106,20 @@ const cartSlice = createSlice({
         state.carts.push(action.payload);
         let cartProductsTotal = 0;
         let cartTotalAmount = 0;
+        let cartsProductsList = [];
         action.payload.data.carts.forEach((cart) => {
           cartProductsTotal += cart.products.length;
           cartTotalAmount += cart.total;
         });
         state.cartCounter = cartProductsTotal;
         state.cartTotalMoney = cartTotalAmount;
+
+        action.payload.data.carts.forEach(cart => {
+          cart.products.forEach(product => {
+            cartsProductsList.push(product.id)
+          });
+        })
+        state.cartProductslist = cartsProductsList
 
         state.message = "";
       })

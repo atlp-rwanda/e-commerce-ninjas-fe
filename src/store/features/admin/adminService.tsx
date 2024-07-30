@@ -17,10 +17,16 @@ const updateUserRole = async (userId: string, role: string) => {
     return response.data;
 }
 
+const updateUserStatus = async (userId: string, status: string) => {
+    const response = await axiosInstance.put(`/api/user/admin-update-user-status/${userId}`, {status});
+    return response.data;
+}
+
 const adminService = {
     getAllUsers,
     getUserById,
     updateUserRole,
+    updateUserStatus,
 }
 
 export default adminService;

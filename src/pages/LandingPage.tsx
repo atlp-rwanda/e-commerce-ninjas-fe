@@ -6,7 +6,6 @@ import Product from "../components/product/Product";
 import Sample from "../components/layout/Sample";
 import { PuffLoader } from "react-spinners";
 import { Meta } from "../components/Meta";
-import useSocket from "../hooks/useSocket";
 import { toast } from "react-toastify";
 import { Navigate, useNavigate } from "react-router-dom";
 import { createCart, getUserCarts } from "../store/features/carts/cartSlice";

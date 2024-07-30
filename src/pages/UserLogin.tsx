@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React, { useEffect, useRef, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { BiSolidShow } from "react-icons/bi";
@@ -13,6 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
 import { addProductToWishlist } from "../store/features/wishlist/wishlistSlice";
 import authService from "../store/features/auth/authService";
+import { joinRoom } from '../utils/socket/socket';
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -36,6 +36,7 @@ function UserLogin() {
     error,
     message,
   } = useAppSelector((state) => state.auth);
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -68,6 +69,7 @@ function UserLogin() {
         toast.success(message);
         navigate("/home");
         formik.resetForm();
+        joinRoom(token);
       }
     },
     [error, isAuthenticated, isError, isSuccess, token]

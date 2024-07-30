@@ -10,6 +10,10 @@ const initialState: ISingleProductInitialResponse = {
     isSuccess: false,
     message: ''
 }
+interface UpdateProductParams {
+    id: string;
+    newProductData: FormData;
+  }
 
 export const fetchSingleSellerProduct = createAsyncThunk<ISingleProductResponse, string>("products/fetchSingleSellerProducts", async (id, { rejectWithValue }) => {
     try {
@@ -19,6 +23,18 @@ export const fetchSingleSellerProduct = createAsyncThunk<ISingleProductResponse,
         return rejectWithValue('Failed to fetch product.');
     }
 });
+
+export const updateSellerProduct = createAsyncThunk<ISingleProductResponse, UpdateProductParams, { rejectValue: string }>(
+    'products/updateSellerProduct',
+    async ({ id, newProductData }, { rejectWithValue }) => {
+      try {
+        const response = await productService.updateSellerProduct(id, newProductData);
+        return response;
+      } catch (error) {
+        return rejectWithValue('Failed to fetch product.');
+      }
+    }
+  );
 
 
 const singleSellerProductSlice = createSlice({

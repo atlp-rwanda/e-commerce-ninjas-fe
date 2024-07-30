@@ -61,6 +61,16 @@ const fetchSellerSingleProduct = async (id: string) => {
   }
 };
 
+const updateSellerProduct = async (id: string, newProductData: FormData) => {
+  try{
+    const response = await axiosInstance.put(`/api/shop/seller-update-product/${id}`, newProductData)
+    return response.data;
+  }
+  catch (error){
+    throw new Error('Failed to update product')
+  }
+}
+
 const productService = {
     fetchProducts,
     fetchSingleProduct,
@@ -68,6 +78,7 @@ const productService = {
     fetchShopInfo,
     searchProduct,
     fetchSellerProducts,
-    fetchSellerSingleProduct
+    fetchSellerSingleProduct,
+    updateSellerProduct
 }
 export default productService;

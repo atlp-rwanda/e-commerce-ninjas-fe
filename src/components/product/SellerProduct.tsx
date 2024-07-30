@@ -39,6 +39,7 @@ const SellerProduct = ({ productId }: { productId: string }) => {
 
     const handleSave = () => {
         console.log('Updated product:', updatedProduct);
+        // API call
     };
 
     return (

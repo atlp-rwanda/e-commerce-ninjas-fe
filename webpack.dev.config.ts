@@ -30,7 +30,7 @@ const config: Configuration = {
               '@babel/preset-react',
               '@babel/preset-typescript',
             ],
-            cacheDirectory: true, // Enable Babel caching
+            cacheDirectory: true,
           },
         },
       },
@@ -52,6 +52,19 @@ const config: Configuration = {
               context: 'public',
               outputPath: 'assets/images/',
               publicPath: '/assets/images/',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(mp3)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'assets/',
+              publicPath: 'assets/',
             },
           },
         ],

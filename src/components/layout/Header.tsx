@@ -44,7 +44,7 @@ const Header: React.FC = () => {
 
   const categories = Array.from({ length: 5 }, (_, i) => i + 1);
   useEffect(() => {
-    if (tokenLogin.trim()) {
+    if (tokenLogin?.trim()) {
       setToken(tokenLogin);
     } else {
       const token = localStorage.getItem('token') || '';

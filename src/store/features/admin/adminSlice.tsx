@@ -48,6 +48,22 @@ export const updateUserStatus = createAsyncThunk('admin/updateUserStatus',async(
         return thunkApi.rejectWithValue(getErrorMessage(error));
     }
 });
+export const getOrderHistory = createAsyncThunk('admin/getOrderHistory', async (_, thunkApi) => {
+    try {
+        const response = await adminService.getOrderHistory();
+        return response;
+    } catch (error) {
+        return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+});
+export const getAllShops = createAsyncThunk('admin/admin-get-shops', async (_, thunkApi) => {
+    try {
+        const response = await adminService.getAllShops();
+        return response;
+    } catch (error) {
+        return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+})
 
 const adminSlice = createSlice({
     name: 'admin',
@@ -110,7 +126,43 @@ const adminSlice = createSlice({
                 state.isLoading = false;
                 state.message = action.payload.message;
                 toast.error(state.message);
-            });
+            })
+            .addCase(getOrderHistory.pending, (state) => {
+                state.isLoading = true;
+                state.isError = false;
+                state.isSuccess = false;
+            })
+            .addCase(getOrderHistory.fulfilled, (state, action:PayloadAction<AdminReponse>) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.users = action.payload.data.user;
+                state.message = action.payload.message;
+
+            })
+            .addCase(getOrderHistory.rejected, (state, action:PayloadAction<any>) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload  || action.payload.message;
+            })
+            .addCase(getAllShops.pending, (state) => {
+                state.isLoading = true;
+                state.isError = false;
+                state.isSuccess = false;
+            })
+            .addCase(getAllShops.fulfilled, (state, action:PayloadAction<AdminReponse>) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.users = action.payload.data.user;
+                state.message = action.payload.message;
+
+            })
+            .addCase(getAllShops.rejected, (state, action:PayloadAction<any>) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload  || action.payload.message;
+            })
 },
 });
 

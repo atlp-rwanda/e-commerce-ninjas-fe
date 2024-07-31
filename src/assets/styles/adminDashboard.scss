@@ -1,88 +1,207 @@
 .admin__wrapper {
-    height: 100vh;
-    display: flex;
+  height: 100vh;
+  display: flex;
 
-    .left__side {
-        width: 26rem;
+  .left__side {
+    width: 26rem;
 
-        &::before {
-            position: absolute;
-            content: "";
-            width: 6.5rem;
-            height: 100%;
-            background-color: $primary-color;
-        }
-
-        .icons {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            width: 100%;
-            .dashboard,
-            .users,
-            .logout {
-                display: flex;
-                align-items: center;
-                padding-left: 1rem;
-                gap: 2.5rem;
-
-                .icon {
-                    font-size: 1.6rem;
-                    color: $white-color;
-                }
-
-                .icons__title__link {
-                    .text_content {
-                        color: $text-color;
-                        font-size: 1.8rem;
-                        transition: all 0.5s ease-in-out;
-                        text-decoration: none;
-                        cursor: pointer;
-
-                    }
-
-                    .active {
-                        display: flex;
-                        background-color: $menu-hover;
-                        width: 15rem;
-                        padding: 1rem 1rem;
-                        transition: all 0.5s ease-in-out;
-                        align-items: center;
-                        border-radius: .5rem;
-                    }
-                }
-            }
-            .upper{
-                display: flex;
-                flex-direction: column;
-                position: absolute;
-                top: 10rem;
-                gap: 2rem;
-            }
-            .logout{
-                position: absolute;
-                bottom: 2rem;
-            }
-        }
+    &::before {
+      position: absolute;
+      content: "";
+      width: 6.5rem;
+      height: 100%;
+      background-color: $primary-color;
     }
 
+    .icons {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+      .dashboard,
+      .users,
+      .logout {
+        display: flex;
+        align-items: center;
+        padding-left: 1rem;
+        gap: 2.5rem;
 
-    .main__content__dashboard {
+        .icon {
+          font-size: 1.6rem;
+          color: $white-color;
+        }
+
+        .icons__title__link {
+          .text_content {
+            color: $text-color;
+            font-size: 1.8rem;
+            transition: all 0.5s ease-in-out;
+            text-decoration: none;
+            cursor: pointer;
+          }
+
+          .active {
+            display: flex;
+            background-color: $menu-hover;
+            width: 15rem;
+            padding: 1rem 1rem;
+            transition: all 0.5s ease-in-out;
+            align-items: center;
+            border-radius: 0.5rem;
+          }
+        }
+      }
+      .upper {
         display: flex;
         flex-direction: column;
-        flex: 1;
+        position: absolute;
+        top: 10rem;
+        gap: 2rem;
+      }
+      .logout {
+        position: absolute;
+        bottom: 2rem;
+      }
     }
+  }
 
-    .main__dashboard {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex: 1;
-        width: 100%;
-        background-color: $container-color;
-    }
+  .main__content__dashboard {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
 
+  .main__dashboard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    width: 100%;
+    background: #f0f0f0;
+  }
 }
 
-@media only screen and (min-width: 76.8rem) {}
+.adminOverview {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+
+  .statisticCards {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    
+    .card {
+      transition: margin-top 0.3s ease;
+    }
+    
+    .card:hover {
+      margin-top: -30px;
+    }
+  }
+  .chart-container {
+    width: 90%;
+    height: auto;
+    border-radius: 30px;
+    background-color: #fff;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-left: 5%;
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #fff;
+      border-bottom: 1px solid #e0e0e0;
+      .sub-header {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        h1 {
+          margin-left: 2%;
+        }
+        .legend {
+          display: flex;
+          align-items: center;
+          flex-direction: row;
+          gap: 20px;
+
+          .dot {
+            height: 10px;
+            width: 10px;
+            border-radius: 50%;
+
+            &.completed {
+              background-color: #ff7300;
+            }
+
+            &.cancelled {
+              background-color: #bfbfbf;
+            }
+          }
+        }
+      }
+
+      .monthDropDown {
+        .dropdown-button {
+          background-color: #ff7300;
+          color: #fff;
+          border: none;
+          padding: 5px 10px;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 14px;
+
+          .arrow-down {
+            margin-left: 5px;
+          }
+        }
+      }
+    }
+  }
+}
+.monthDropDown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-button {
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.arrow-down {
+  margin-left: 5px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #ffffff;
+  // border: 1px solid #cccccc;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.dropdown-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+}
+@media only screen and (min-width: 76.8rem) {
+}

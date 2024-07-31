@@ -10,6 +10,7 @@ import { PulseLoader } from "react-spinners";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import authService from "../store/features/auth/authService";
+import { joinRoom } from '../utils/socket/socket';
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Email must be valid").required("Email is required"),
@@ -76,6 +77,7 @@ function SellerLogin() {
       {message && toast.success(message)}
       navigate(callbackUrl || "/seller/dashboard");
       formik.resetForm();
+      joinRoom(token);
     }
   }, [isChecking, isSuccess, token, isAuthenticated, user, navigate, callbackUrl, message, dispatch]);
 

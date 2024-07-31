@@ -1,7 +1,6 @@
 /* eslint-disable */
-import { axiosInstance } from "../notifications/axios/axiosInstance";
 import { IEmail, IUser, IVerification } from "../../../utils/types/store";
-import { URL } from "../notifications/axios/axiosInstance";
+import { axiosInstance,URL } from "../../../utils/axios/axiosInstance";
 
 const register = async (userData: IUser) => {
   const response = await axiosInstance.post<IUser>(

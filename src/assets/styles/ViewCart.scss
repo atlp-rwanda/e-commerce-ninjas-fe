@@ -9,6 +9,7 @@ FaCheckSquare {
   display: flex;
   flex-direction: row;
   padding: 20px;
+
   .cart-products {
     flex: 2;
     margin: 10px;
@@ -120,8 +121,9 @@ FaCheckSquare {
                   input {
                     background: transparent;
                     border: 0;
-                    width: 20px;
+                    width: 100px;
                     padding-left: 10px;
+                    padding-right: 10px;
                     text-align: center;
                     align-items: center;
                   }
@@ -395,4 +397,10 @@ FaCheckSquare {
       }
     }
   }
+}
+.clear-cart{
+  margin-top: 18px;
+  margin-left: 137.5rem;
+  border: none;
+  
 }

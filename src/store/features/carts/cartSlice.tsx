@@ -14,6 +14,7 @@ const initialState: iCartInitialResource = {
   isLoggedOut: false,
   cartCounter: 0,
   cartTotalMoney: 0,
+  cartProductslist:[]
 };
 
 interface CreateCartParams {
@@ -57,17 +58,57 @@ export const checkout = createAsyncThunk(
   }
 );
 
+export const clearCarts = createAsyncThunk(
+  "cart/userClearCarts",
+  async (_, thunkAPI) => {
+    try {
+      const response = await cartService.clearCarts();
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
+const calculateTotalPrice = (carts: any[]) => {
+  let total = 0;
+  carts.forEach((cart) => {
+    if (cart.products) {
+      cart.products.forEach((product: any) => {
+        total += product.price * product.quantity;
+      });
+    }
+  });
+  return total;
+};
+
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
     addCart: (state, action) => {
       state.carts.push(action.payload);
-      state.cartCounter += 1;
+      // state.cartCounter += 1;
+      state.cartTotalMoney = calculateTotalPrice(state.carts);
     },
-    usergetCarts: (state, action: PayloadAction) => {
+    usergetCarts: (state, action: PayloadAction<any>) => {
       state.carts.push(action.payload);
+      state.cartTotalMoney = calculateTotalPrice(state.carts);
     },
+    updateCartProductQuantity: (state, action: PayloadAction<{ productId: string, quantity: number }>) => {
+      const { productId, quantity } = action.payload;
+      state.carts.forEach(cart => {
+        cart.products.forEach((product: any) => {
+          if (product.id === productId) {
+            product.quantity = quantity;
+            product.price =  product.price*quantity;
+          }
+        });
+      });
+      state.cartTotalMoney = calculateTotalPrice(state.carts);
+      console.log(state.cartTotalMoney);
+      
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -82,7 +123,8 @@ const cartSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.carts.push(action.payload);
-        state.cartCounter += 1;
+        // state.cartCounter += 1;
+        state.cartTotalMoney = calculateTotalPrice(state.carts);
         state.message = "Cart created successfully";
       })
       .addCase(createCart.rejected, (state, action) => {
@@ -101,16 +143,19 @@ const cartSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.carts.push(action.payload);
+        state.carts = action.payload.data.carts;
         let cartProductsTotal = 0;
-        let cartTotalAmount = 0;
-        action.payload.data.carts.forEach((cart) => {
-          cartProductsTotal += cart.products.length;
-          cartTotalAmount += cart.total;
+        let cartMoney  = 0;
+        action.payload.data.carts.forEach((cart: any) => {
+          if (cart.products) {
+            cartProductsTotal += cart.products.length;
+            cart.products.forEach((product: any) => {
+             cartMoney += product.price * product.quantity;
+            });
+          }
         });
         state.cartCounter = cartProductsTotal;
-        state.cartTotalMoney = cartTotalAmount;
-
+        state.cartTotalMoney = cartMoney
         state.message = "";
       })
       .addCase(getUserCarts.rejected, (state, action) => {
@@ -137,9 +182,30 @@ const cartSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = "";
+      })
+      .addCase(clearCarts.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+        state.message = "";
+      })
+      .addCase(clearCarts.fulfilled, (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.carts = [];
+        state.cartCounter = 0;
+        state.cartTotalMoney = 0;
+        state.message = action.payload.message;
+      })
+      .addCase(clearCarts.rejected, (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.payload;
       });
   },
 });
 
-export const { addCart, usergetCarts } = cartSlice.actions;
+export const { addCart, usergetCarts, updateCartProductQuantity } = cartSlice.actions;
 export default cartSlice.reducer;

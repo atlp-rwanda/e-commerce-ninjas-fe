@@ -2,7 +2,7 @@
 import { createSlice,createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import type { IWelcomeMessage, IWelcomeMessageState } from '../../utils/types/store';
 import welcomeService from './welcomeService';
-import { axiosInstance } from './notifications/axios/axiosInstance';
+import { axiosInstance } from '../../utils/axios/axiosInstance';
 
 const initialState: IWelcomeMessageState = {
   welcomeMessage: { status: false, message: '' },

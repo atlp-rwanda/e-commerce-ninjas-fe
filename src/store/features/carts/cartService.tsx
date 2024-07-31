@@ -29,10 +29,21 @@ const productCheckout = async (cartId: string) => {
   );
   return response.data;
 };
+const clearCarts = async ()=> {
+  try {
+      const response = await axiosInstance.delete("/api/cart/buyer-clear-carts");
+      return response
+  }
+  catch (error) {
+      console.error("Error clear carts", error);
+      throw error;
+  }
+}
 
 const cartService = {
   createCart,
   getUserCarts,
   productCheckout,
+  clearCarts
 };
 export default cartService;

@@ -4,7 +4,7 @@ import { Meta } from "../components/Meta";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { PuffLoader, PulseLoader } from "react-spinners";
 import { toast } from "react-toastify";
-import { checkout, getUserCarts } from "../store/features/carts/cartSlice";
+import { checkout, getUserCarts , clearCarts,createCart} from "../store/features/carts/cartSlice";
 import {
   FaCheckSquare,
   FaMinus,
@@ -14,6 +14,7 @@ import {
   FaGift,
   FaShippingFast,
 } from "react-icons/fa";
+import { GiBroom } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
 import Product from "../components/product/Product";
 import { Box, LinearProgress } from "@mui/material";
@@ -31,9 +32,12 @@ const UserViewCart: React.FC = () => {
   const [discount, setDiscount] = useState(0);
   const [totalProductPrice, setTotalProductPrice] = useState(0);
   const [arrayOfProduct, setarrayOfProduct] = useState(null);
+  const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
   const navigate = useNavigate();
 
   const cartState = useAppSelector((state) => state.cart);
+
+  
 
   useEffect(() => {
     const fetchCarts = async () => {
@@ -101,7 +105,7 @@ const UserViewCart: React.FC = () => {
     setarrayOfProduct(array);
     setcheckoutData(response.payload.data.totalAmount);
     const totalProductPrice = array.products.reduce(
-      (acc, product) => acc + parseFloat(product.price),
+      (acc, product) => acc + parseFloat(product.price) * (product.quantity || 1),
       0
     );
     setTotalProductPrice(totalProductPrice);
@@ -109,6 +113,63 @@ const UserViewCart: React.FC = () => {
     setIsPreloader(false);
     toast.success("Checkout is done Successfully");
   };
+
+  const handleAddProductToCart = async (productId: string, quantity:number) => {
+    try {
+      if (quantity < 1) return; 
+      const response = await dispatch(
+        createCart({ productId, quantity })
+      ).unwrap();
+
+      if (response.data) {
+       
+        setQuantities((prevQuantities) => ({
+          ...prevQuantities,
+          [productId]: quantity,
+        }));
+        toast.success(response.message);
+        const updatedResponse = await dispatch(getUserCarts()).unwrap();
+        setCartResponseData(updatedResponse.data);
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error: any) {
+      if (error === "Not authorized") {
+        localStorage.setItem("pendingCartProduct", productId);
+        toast.error("Please login first");
+        navigate("/login");
+      } else {
+        toast.error("Something went wrong. Please try again later.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const incrementQuantity = (productId: string) => {
+    const currentQuantity = quantities[productId] || 1;
+    handleAddProductToCart(productId,currentQuantity+1)
+  };
+
+  const decrementQuantity = (productId: string) => {
+    const currentQuantity = quantities[productId] || 1;
+    if (currentQuantity > 1) {
+      handleAddProductToCart(productId,currentQuantity-1)
+
+    }
+  };
+  const handleClearCart = async () => {
+    try {
+      await dispatch(clearCarts()).unwrap();
+      toast.success("Cart cleared successfully");
+      setCartResponseData({ ...cartResponseData, carts: [] });
+      setTotalProductPrice(0);
+    } catch (error) {
+      console.error("Error clearing cart:", error);
+      toast.error("Failed to clear the cart");
+    }
+  };
+
   return (
     <>
       <Meta title="View shopping cart - E-Commerce Ninjas" />
@@ -126,6 +187,12 @@ const UserViewCart: React.FC = () => {
             </Box>
           </div>
         )}
+         <div className="clear-cart">
+          <button className="delete" type="button" onClick={handleClearCart}>
+            <GiBroom className="deleteIcon" />
+            <p>clear all carts</p>
+          </button>
+          </div>
       <section className="cart-section">
         <div className="cart-products">
           {cartResponseData.carts.map((cart: any, index) => (
@@ -162,15 +229,14 @@ const UserViewCart: React.FC = () => {
                           </div>
                           <div className="controls">
                             <div className="quantity">
-                              <button className="minus" type="button">
+                              <button className="minus" type="button" onClick={() => decrementQuantity(product.id)}>
                                 <FaMinus />
                               </button>
                               <input
-                                type="number"
                                 value={product.quantity}
                                 readOnly
                               />
-                              <button className="plus" type="button">
+                              <button className="plus" type="button" onClick={() => incrementQuantity(product.id)}>
                                 <FaPlus />
                               </button>
                             </div>

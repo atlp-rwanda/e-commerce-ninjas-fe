@@ -35,6 +35,18 @@ export const createCart = createAsyncThunk(
   }
 );
 
+const calculateTotalPrice = (carts: any[]) => {
+  let total = 0;
+  carts.forEach((cart) => {
+    if (cart.products) {
+      cart.products.forEach((product: any) => {
+        total += product.price * product.quantity;
+      });
+    }
+  });
+  return total;
+};
+
 export const getUserCarts = createAsyncThunk(
   "cart/userGetCarts",
   async (_, thunkAPI) => {
@@ -58,6 +70,17 @@ export const checkout = createAsyncThunk(
     }
   }
 );
+export const clearCarts = createAsyncThunk(
+  "cart/userClearCarts",
+  async (_, thunkAPI) => {
+    try {
+      const response = await cartService.clearCarts();
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
 
 const cartSlice = createSlice({
   name: "cart",
@@ -65,11 +88,25 @@ const cartSlice = createSlice({
   reducers: {
     addCart: (state, action) => {
       state.carts.push(action.payload);
-      state.cartCounter += 1;
+      // state.cartCounter += 1;
     },
     usergetCarts: (state, action: PayloadAction) => {
       state.carts.push(action.payload);
     },
+    updateCartProductQuantity: (state, action: PayloadAction<{ productId: string, quantity: number }>) => {
+      const { productId, quantity } = action.payload;
+      state.carts.forEach(cart => {
+        cart.products.forEach((product: any) => {
+          if (product.id === productId) {
+            product.quantity = quantity;
+            product.price =  product.price*quantity;
+          }
+        });
+      });
+      state.cartTotalMoney = calculateTotalPrice(state.carts);
+      console.log(state.cartTotalMoney);
+      
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -84,7 +121,7 @@ const cartSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.carts.push(action.payload);
-        state.cartCounter += 1;
+        // state.cartCounter += 1;
         state.message = "Cart created successfully";
       })
       .addCase(createCart.rejected, (state, action) => {
@@ -147,9 +184,30 @@ const cartSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = "";
+      })
+      .addCase(clearCarts.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+        state.message = "";
+      })
+      .addCase(clearCarts.fulfilled, (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.carts = [];
+        state.cartCounter = 0;
+        state.cartTotalMoney = 0;
+        state.message = action.payload.message;
+      })
+      .addCase(clearCarts.rejected, (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.payload;
       });
   },
 });
 
-export const { addCart, usergetCarts } = cartSlice.actions;
+export const { addCart, usergetCarts,updateCartProductQuantity } = cartSlice.actions;
 export default cartSlice.reducer;

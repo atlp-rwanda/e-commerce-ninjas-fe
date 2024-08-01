@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import authService from "./authService";
-import { AuthService, IEmail, IUser} from "../../../utils/types/store";
+import { AuthService, IEmail, IUser, IUserData, IUserDataState} from "../../../utils/types/store";
 import { getErrorMessage } from "../../../utils/axios/axiosInstance";
 import { toast } from "react-toastify";
 
@@ -154,6 +154,9 @@ const userSlice = createSlice({
       state.token = "";
       state.isAuthenticated = false;
       state.error = "";
+    },
+    changingProfile: (state, action: any)=>{
+      (state.user as any).profilePicture = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -339,6 +342,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { resetAuth } = userSlice.actions;
+export const { resetAuth, changingProfile } = userSlice.actions;
 
 export default userSlice.reducer;

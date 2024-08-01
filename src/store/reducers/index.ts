@@ -10,6 +10,7 @@ import singleSellerProductReducer from '../features/product/sellerProductSlice';
 import sellerCollectionProducts from '../features/product/sellerCollectionProductsSlice';
 import adminReducer from '../features/admin/adminSlice';
 import cartReducer from "../features/carts/cartSlice";
+import userReducer from "../features/user/userSlice"
 import { RESET_STATE } from '../actions/resetAction';
 
 const appReducer = combineReducers({
@@ -23,6 +24,7 @@ const appReducer = combineReducers({
   sellerCollectionProducts: sellerCollectionProducts,
   admin: adminReducer,
   cart: cartReducer,
+  user: userReducer
 });
 
 const rootReducer = (state, action) => {

@@ -127,6 +127,46 @@ export interface iCartInitialResource {
   cartTotalMoney:number;
   cartProductslist: any[];
 }
+export interface IProfile {
+  id: string,
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string,
+  phone: string,
+  profilePicture?: string;
+  gender: string,
+  birthDate: date,
+  language: string,
+  currency: string,
+  addresses: {
+    province,
+    district,
+    sector,
+    street
+  }
+};
+
+export interface IPassword{
+  oldPassword: string,
+  newPassword:string,
+  confirmNewPassword: string
+}
+
+export interface ILocation {
+  country: string;
+  province: string;
+  district: string;
+  sector: string;
+}
+
+export interface UserService{
+  user: IProfile | null,
+  isLoading: boolean,
+    isError: string,
+    isSuccess: boolean,
+    message: string
+}
 
 
 export interface AdminReponse {

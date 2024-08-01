@@ -1,5 +1,5 @@
 /* eslint-disable */
-import {axiosInstance} from "../../../utils/axios/axiosInstance";
+import { axiosInstance, getErrorMessage } from "../../../utils/axios/axiosInstance";
 
 const fetchProducts = async () => {
   try {
@@ -37,7 +37,7 @@ const fetchShopInfo = async (id: string) => {
   }
 };
 
-const searchProduct = async(criteria:any)=>{
+const searchProduct = async (criteria: any) => {
   const response = await axiosInstance.get(`/api/shop/user-search-products?${criteria}`);
   return response.data;
 }
@@ -62,23 +62,42 @@ const fetchSellerSingleProduct = async (id: string) => {
 };
 
 const updateSellerProduct = async (id: string, newProductData: FormData) => {
-  try{
-    const response = await axiosInstance.put(`/api/shop/seller-update-product/${id}`, newProductData)
+  try {
+    const response = await axiosInstance.put(`/api/shop/seller-update-product/${id}`, newProductData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
     return response.data;
   }
-  catch (error){
-    throw new Error('Failed to update product')
+  catch (error) {
+    throw new Error(getErrorMessage(error))
+  }
+}
+
+const addSellerProduct = async (newProductData: FormData) => {
+  try {
+    const response = await axiosInstance.post(`/api/shop/seller-create-product`, newProductData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return response.data;
+  }
+  catch (error) {
+    throw new Error(getErrorMessage(error))
   }
 }
 
 const productService = {
-    fetchProducts,
-    fetchSingleProduct,
-    fetchProductReviews,
-    fetchShopInfo,
-    searchProduct,
-    fetchSellerProducts,
-    fetchSellerSingleProduct,
-    updateSellerProduct
+  fetchProducts,
+  fetchSingleProduct,
+  fetchProductReviews,
+  fetchShopInfo,
+  searchProduct,
+  fetchSellerProducts,
+  fetchSellerSingleProduct,
+  updateSellerProduct,
+  addSellerProduct
 }
 export default productService;

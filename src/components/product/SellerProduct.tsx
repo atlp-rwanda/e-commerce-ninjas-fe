@@ -1,160 +1,228 @@
 /* eslint-disable */
-import React, { useEffect, useState } from 'react'
-import { FaPen, FaTrash } from 'react-icons/fa'
-import ImageSlider from '../images/ImageSlider'
+import React, { useEffect, useState } from 'react';
+import { FaPen, FaSave, FaTrash } from 'react-icons/fa';
+import ImageSlider from '../images/ImageSlider';
 import AddImageSVG from '../svg/AddImageSVG';
 import { ISingleProduct } from '../../utils/types/product';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { ISingleProductInitialResponse } from '../../utils/types/store';
-import { fetchSingleSellerProduct } from '../../store/features/product/sellerProductSlice';
-import { Link } from 'react-router-dom';
+import { addSellerProduct, fetchSingleSellerProduct, resetUpdateState, updateSellerProduct } from '../../store/features/product/sellerProductSlice';
+import { Link, useNavigate } from 'react-router-dom';
 import { PuffLoader } from 'react-spinners';
 import { Meta } from '../Meta';
+import { toast } from 'react-toastify';
+import { getErrorMessage } from '../../utils/axios/axiosInstance';
+
+const initialProductState: ISingleProduct = {
+    id: "",
+    shopId: "",
+    name: "",
+    description: "",
+    price: 0,
+    discount: "",
+    category: "",
+    expiryDate: new Date(),
+    expired: false,
+    bonus: "no bonus",
+    images: [],
+    quantity: 0,
+    status: "",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+};
 
 const SellerProduct = ({ productId }: { productId: string }) => {
     const dispatch = useAppDispatch();
-    const { product, isError, isSuccess, isLoading, message }: ISingleProductInitialResponse = useAppSelector((state: any) => state.singleSellerProduct);
+    const navigate = useNavigate();
+    const isAdd = productId === "add";
+    const { product, isError, isLoading, message, isUpdate, newAddedProduct, isUpdateSuccess, updateError }: ISingleProductInitialResponse = useAppSelector((state: any) => state.singleSellerProduct);
 
-    const [updatedProduct, setUpdatedProduct] = useState<ISingleProduct | null>(null);
+    const [updatedProduct, setUpdatedProduct] = useState<ISingleProduct>(initialProductState);
+    const [updateImages, setUpdateImages] = useState<File[]>([]);
 
     useEffect(() => {
-        dispatch(fetchSingleSellerProduct(productId));
-    }, [dispatch, productId]);
+        if (isUpdate && isUpdateSuccess && !updateError) {
+            toast.success(`Product ${isAdd ? "added" : "updated"}`)
+            isAdd && newAddedProduct && navigate(`/seller/product/${newAddedProduct.id}`)
+        }
+        else if (updateError) {
+            toast.error(updateError || `${isAdd ? "Adding" : "Updating"} a product failed.`)
+        }
+        dispatch(resetUpdateState())
+    }, [isUpdate, isUpdateSuccess, updateError])
 
     useEffect(() => {
-        if (product) {
+        if (!isAdd) {
+            dispatch(fetchSingleSellerProduct(productId));
+        }
+        else {
+            dispatch(resetUpdateState())
+            setUpdatedProduct(initialProductState)
+        }
+    }, [dispatch, productId, isAdd]);
+
+    useEffect(() => {
+        if (product && !isAdd) {
             setUpdatedProduct(product);
         }
-    }, [product]);
+    }, [product, isAdd]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setUpdatedProduct(prev => prev ? ({ ...prev, [name]: value }) : null);
+        setUpdatedProduct(prev => ({ ...prev, [name]: value }));
     };
 
     const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setUpdatedProduct(prev => prev ? ({ ...prev, [name]: new Date(value) }) : null);
+        setUpdatedProduct(prev => ({ ...prev, [name]: new Date(value) }));
     };
 
-    const handleSave = () => {
-        console.log('Updated product:', updatedProduct);
-        // API call
+    const handleSaveOrAdd = async () => {
+        const formData = new FormData();
+        let allowedFields = ['name', 'description', 'price', 'bonus', 'discount', 'category', 'expiryDate'];
+        isAdd && allowedFields.push('quantity');
+        allowedFields.forEach(key => {
+            if (updatedProduct[key] !== undefined) {
+                formData.append(key, updatedProduct[key].toString());
+            }
+        });
+
+        const imageBlobs = await Promise.all(updateImages.map(async (base64String: any) => {
+            const response = await fetch(base64String);
+            const blob = await response.blob();
+            return blob;
+        }));
+
+        imageBlobs.forEach((blob, index) => {
+            formData.append('images', blob, `image${index}.${blob.type.split('/')[1]}`);
+        });
+
+        try {
+            if (isAdd) {
+                dispatch(addSellerProduct(formData));
+            } else {
+                dispatch(updateSellerProduct({ id: productId, newProductData: formData }));
+            }
+        } catch (error) {
+            toast.error(`Error ${isAdd ? 'adding' : 'updating'} product: ${getErrorMessage(error)}`);
+        }
     };
+
+    if (isLoading) {
+        return (
+            <div className="loader">
+                <PuffLoader color="#ff6d18" size={300} loading={isLoading} />
+            </div>
+        );
+    }
+
+    if (isError && !isAdd) {
+        return (
+            <div className="error-message">
+                <p>{message || "Something went wrong. Please try again later."}</p>
+                <Link to="/seller/products" className="btn-link">View all my products</Link>
+            </div>
+        );
+    }
 
     return (
         <>
-            <Meta title={`Product details - ${productId}`} />
-            {isLoading ? (
-                <div className="loader">
-                    <PuffLoader color="#ff6d18" size={300} loading={isLoading} />
+            <Meta title={`Product ${isAdd ? 'Add' : 'Details'} - ${productId}`} />
+            <div className='seller-product-container'>
+                <div className="seller-product-header">
+                    <h1>{isAdd ? 'Add New Product' : 'Product View'}</h1>
+                    <div className="header-btns">
+                        <button className='edit-btn' onClick={handleSaveOrAdd}>
+                            <FaSave /> {isAdd ? "ADD" : "UPDATE"}
+                        </button>
+                        {!isAdd && <button className='delete-btn'><FaTrash /> Delete</button>}
+                    </div>
                 </div>
-            ) : isError ? (
-                <div className="error-message">
-                    <p>{message || "Something went wrong. Please try again later."}</p>
-                    <Link to="/seller/products" className="btn-link">View all my products</Link>
-                </div>
-            ) : (
-                updatedProduct ?
-                    <div className='seller-product-container'>
-                        <div className="seller-product-header">
-                            <h1>Product View</h1>
-                            <div className="header-btns">
-                                <button className='edit-btn' onClick={handleSave}><FaPen /> Save</button>
-                                <button className='delete-btn'><FaTrash /> Delete</button>
-                            </div>
-                        </div>
 
-                        <div className="cards-holder">
-                            <div className="left">
-                                <ContentCard title='General Information'>
-                                    <ContentCard title='Product Name'>
-                                        <input
-                                            type='text'
-                                            name="name"
-                                            value={updatedProduct.name || ''}
-                                            onChange={handleInputChange}
-                                            className='content-card-input'
-                                        />
-                                    </ContentCard>
-                                    <ContentCard title='Product Description'>
-                                        <textarea
-                                            name="description"
-                                            value={updatedProduct.description || ''}
-                                            className='content-card-input'
-                                            rows={11}
-                                            onChange={handleInputChange}
-                                        />
-                                    </ContentCard>
-                                </ContentCard>
-                                <ContentCard title="Pricing and Stock" className='pricing-card'>
-                                    <ContentCard title='Base Pricing'>
-                                        <input
-                                            type='number'
-                                            name="price"
-                                            value={updatedProduct.price || ''}
-                                            onChange={handleInputChange}
-                                            className='content-card-input'
-                                        />
-                                    </ContentCard>
-                                    <ContentCard title='Stock'>
-                                        <input
-                                            type='number'
-                                            name="quantity"
-                                            value={updatedProduct.quantity || ''}
-                                            onChange={handleInputChange}
-                                            className='content-card-input'
-                                        />
-                                    </ContentCard>
-                                    <ContentCard title='Discount'>
-                                        <input
-                                            type='text'
-                                            name="discount"
-                                            value={updatedProduct.discount || ''}
-                                            onChange={handleInputChange}
-                                            className='content-card-input'
-                                        />
-                                    </ContentCard>
-                                    <ContentCard title='Expiry Date'>
-                                        <input
-                                            type='date'
-                                            name="expiryDate"
-                                            value={updatedProduct.expiryDate ? new Date(updatedProduct.expiryDate).toISOString().split('T')[0] : ''}
-                                            onChange={handleDateChange}
-                                            className='content-card-input'
-                                        />
-                                    </ContentCard>
-                                </ContentCard>
-                            </div>
-                            <div className="right">
-                                <ContentCard title='Upload image' className='img-card'>
-                                    <div className="images-holder-div">
-                                        <ProductImages initialImages={updatedProduct.images} />
-                                    </div>
-                                </ContentCard>
-                                <ContentCard title='Category' className='category-card'>
-                                    <ContentCard title='Product category'>
-                                        <input
-                                            type='text'
-                                            name="category"
-                                            value={updatedProduct.category || ''}
-                                            onChange={handleInputChange}
-                                            className='content-card-input'
-                                        />
-                                    </ContentCard>
-                                </ContentCard>
-                            </div>
-                        </div>
+                <div className="cards-holder">
+                    <div className="left">
+                        <ContentCard title='General Information'>
+                            <ContentCard title='Product Name'>
+                                <input
+                                    type='text'
+                                    name="name"
+                                    value={updatedProduct.name}
+                                    onChange={handleInputChange}
+                                    className='content-card-input'
+                                />
+                            </ContentCard>
+                            <ContentCard title='Product Description'>
+                                <textarea
+                                    name="description"
+                                    value={updatedProduct.description}
+                                    className='content-card-input'
+                                    rows={11}
+                                    onChange={handleInputChange}
+                                />
+                            </ContentCard>
+                        </ContentCard>
+                        <ContentCard title="Pricing and Stock" className='pricing-card'>
+                            <ContentCard title='Base Pricing'>
+                                <input
+                                    type='number'
+                                    name="price"
+                                    value={updatedProduct.price}
+                                    onChange={handleInputChange}
+                                    className='content-card-input'
+                                />
+                            </ContentCard>
+                            <ContentCard title='Stock'>
+                                <input
+                                    type='number'
+                                    name="quantity"
+                                    value={updatedProduct.quantity}
+                                    onChange={handleInputChange}
+                                    className='content-card-input'
+                                />
+                            </ContentCard>
+                            <ContentCard title='Discount'>
+                                <input
+                                    type='text'
+                                    name="discount"
+                                    value={updatedProduct.discount}
+                                    onChange={handleInputChange}
+                                    className='content-card-input'
+                                />
+                            </ContentCard>
+                            <ContentCard title='Expiry Date'>
+                                <input
+                                    type='date'
+                                    name="expiryDate"
+                                    value={new Date(updatedProduct.expiryDate).toISOString().split('T')[0]}
+                                    onChange={handleDateChange}
+                                    className='content-card-input'
+                                />
+                            </ContentCard>
+                        </ContentCard>
                     </div>
-                    :
-                    <div className='error-message'>
-                        <p>Product was not found</p>
-                        <Link to="/seller/products" className="btn-link">View all my products</Link>
+                    <div className="right">
+                        <ContentCard title='Upload image' className='img-card'>
+                            <div className="images-holder-div">
+                                <ProductImages initialImages={updatedProduct.images} setUpdateImages={setUpdateImages} />
+                            </div>
+                        </ContentCard>
+                        <ContentCard title='Category' className='category-card'>
+                            <ContentCard title='Product category'>
+                                <input
+                                    type='text'
+                                    name="category"
+                                    value={updatedProduct.category}
+                                    onChange={handleInputChange}
+                                    className='content-card-input'
+                                />
+                            </ContentCard>
+                        </ContentCard>
                     </div>
-            )}
+                </div>
+            </div>
         </>
-    )
-}
+    );
+};
 
 const ContentCard = ({ title, children, className }: { title: string, children: React.ReactNode, className?: string }) => {
     return (
@@ -164,23 +232,44 @@ const ContentCard = ({ title, children, className }: { title: string, children: 
                 {children}
             </div>
         </div>
-    )
-}
+    );
+};
 
-const ProductImages = ({ initialImages }: { initialImages: string[] }) => {
+const ProductImages = ({ initialImages, setUpdateImages }: { initialImages: string[], setUpdateImages: (img: any) => void }) => {
     const [images, setImages] = useState<string[]>(initialImages);
     const [selectedImage, setSelectedImage] = useState(0);
 
     useEffect(() => {
-        setImages(initialImages);
+        const convertToBase64 = async () => {
+            const base64Images = await Promise.all(
+                initialImages.map(async (url) => {
+                    if (url.startsWith('data:')) {
+                        return url; // Already in base64 format
+                    }
+                    const response = await fetch(url);
+                    const blob = await response.blob();
+                    return new Promise<string>((resolve) => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result as string);
+                        reader.readAsDataURL(blob);
+                    });
+                })
+            );
+            setImages(base64Images);
+            setUpdateImages(base64Images);
+        };
+
+        convertToBase64();
         setSelectedImage(0);
-    }, [initialImages]);
+    }, [initialImages, setUpdateImages]);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setImages(prevImages => [...prevImages, reader.result as string]);
+                const newImages = [...images, reader.result as string];
+                setImages(newImages);
+                setUpdateImages(newImages);
             };
             reader.readAsDataURL(e.target.files[0]);
         }
@@ -189,7 +278,7 @@ const ProductImages = ({ initialImages }: { initialImages: string[] }) => {
     return (
         <div className='images-container'>
             <div className="thumbnails-container">
-                {images && images.length > 0 && images.map((src, index) => (
+                {images.map((src, index) => (
                     <img
                         key={index}
                         src={src}
@@ -212,10 +301,10 @@ const ProductImages = ({ initialImages }: { initialImages: string[] }) => {
             </div>
 
             <div className="main-image-container">
-                <ImageSlider images={images} selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
+                {<ImageSlider images={images} selectedImage={selectedImage} setSelectedImage={setSelectedImage} />}
             </div>
         </div>
     );
 };
 
-export default SellerProduct
+export default SellerProduct;

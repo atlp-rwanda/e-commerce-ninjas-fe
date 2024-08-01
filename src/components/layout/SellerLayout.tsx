@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useState } from 'react';
 import { AiFillDashboard } from "react-icons/ai";
-import { FaProductHunt } from "react-icons/fa";
+import { FaPlusCircle, FaProductHunt } from "react-icons/fa";
 import { IoLogOutSharp } from "react-icons/io5";
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import SellerHeader from './SellerHeader';
@@ -38,6 +38,9 @@ export const SellerLayout = () => {
                             <div>
                                 <Link to={"/seller/products"}><FaProductHunt size={32} className='icon' /></Link>
                             </div>
+                            <div>
+                                <Link to={"/seller/product/add"}><FaPlusCircle size={32} className='icon' /></Link>
+                            </div>
                         </div>
                         <div className='icons__bottom'>
                             <IoLogOutSharp size={32} className='icon' onClick={handleLogout} />
@@ -51,7 +54,10 @@ export const SellerLayout = () => {
                                 <Link to={"/seller/dashboard"} className={`text_content ${pathname === "/seller/dashboard" ? "active" : ""}`} >Dashboard</Link>
                             </div>
                             <div>
-                                <Link to={"/seller/products"} className={`text_content ${pathname.startsWith("/seller/product") ? "active" : ""}`} >Products</Link>
+                                <Link to={"/seller/products"} className={`text_content ${pathname.startsWith("/seller/product") && pathname !== "/seller/product/add" ? "active" : ""}`} >Products</Link>
+                            </div>
+                            <div>
+                                <Link to={"/seller/product/add"} className={`text_content ${pathname === "/seller/product/add" ? "active" : ""}`} >Add Product</Link>
                             </div>
                         </div>
                         <div className='dashboard__lower__link'>

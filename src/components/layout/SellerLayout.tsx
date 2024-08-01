@@ -9,6 +9,7 @@ import useSellerAuthCheck from '../../hooks/useSellerAuthCheck';
 import { logout } from '../../store/features/auth/authSlice';
 import { useAppDispatch } from '../../store/store';
 import { PuffLoader } from 'react-spinners';
+import { disconnect } from '../../utils/socket/socket';
 
 export const SellerLayout = () => {
     const dispatch = useAppDispatch();
@@ -18,7 +19,10 @@ export const SellerLayout = () => {
 
     const handleLogout = () => {
         dispatch(logout());
-        navigate("/seller/login");
+        disconnect();
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
     };
 
     if (!isAuthorized) {

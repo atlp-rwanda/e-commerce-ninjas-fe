@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../store/store";
 import { logout } from "../../store/features/auth/authSlice";
 import { PuffLoader } from "react-spinners";
+import { disconnect } from '../../utils/socket/socket';
 
 const Logout: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -13,6 +14,7 @@ const Logout: React.FC = () => {
   useEffect(() => {
     const performLogout = async () => {
       await dispatch(logout());
+      disconnect();
       setLoading(false);
       navigate("/");
     };

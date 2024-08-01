@@ -12,6 +12,7 @@ type Notification = {
   createdAt: string;
   isRead: boolean;
 };
+
 const formatTime = (dateString: string): string => {
   const date = new Date(dateString);
   const now = new Date();
@@ -44,7 +45,12 @@ const Notifications: React.FC = () => {
     setDisplayCount(displayCount + 4);
   };
 
-  const sortedNotifications = notifications ? notifications.slice().sort((a: Notification, b: Notification) => Number(a.isRead) - Number(b.isRead)) : [];
+  const sortedNotifications = notifications ? notifications.slice().sort((a: Notification, b: Notification) => {
+    if (a.isRead === b.isRead) {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    }
+    return Number(a.isRead) - Number(b.isRead);
+  }) : [];
 
   const filteredNotifications = sortedNotifications.filter((notification: Notification) => 
     filter === 'All' || 

@@ -1,43 +1,57 @@
 /* eslint-disable */
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import socket, { joinRoom } from '../utils/socket/socket';
-import { addNotification, checkPasswordExpiryAndLogout, handleNotifications } from '../store/features/notifications/notificationSlice';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import socket, { joinRoom, disconnect } from '../utils/socket/socket';
 import { toast } from 'react-toastify';
-import { AppDispatch } from '../store/store';
-import { logout } from '../store/features/auth/authSlice';
+import { fetchNotifications } from '../store/features/notifications/notificationSlice';
 import "react-toastify/dist/ReactToastify.css";
 
 const useSocket = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
+  const { token } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      return;
+    if (!token) return;
+
+    if (socket.disconnected) {
+      socket.connect();
     }
 
     joinRoom(token);
 
-    dispatch(handleNotifications() as any).then((notifications: any) => {
-      dispatch(checkPasswordExpiryAndLogout(notifications));
-    });
-
-    socket.on('passwordExpiry', (data) => {
-      dispatch(addNotification(data));
-      toast.warning(data, {
-        autoClose: 30000,    
+    const handleNotification = (event: string) => {
+      toast.success(`${event}`, {
+        autoClose: 3000,
       });
-      if (data.includes('your password has expired')) {
-        localStorage.removeItem('token');
-        dispatch(logout());
-      }
+      dispatch(fetchNotifications());
+    };
+
+    const events = [
+      'productAdded',
+      'productRemoved',
+      'productExpired',
+      'productUpdated',
+      'productStatusChanged',
+      'productBought',
+      'passwordChanged',
+      'passwordExpiry',
+      'UserChangeRole',
+      'UserChangeStatus',
+      'accountVerified',
+      'orderStatusUpdated'
+    ];
+
+    events.forEach(event => {
+      socket.on(event, () => handleNotification(event));
     });
 
     return () => {
-      socket.off('passwordExpiry');
+      events.forEach(event => {
+        socket.off(event);
+      });
+      disconnect();
     };
-  }, [dispatch]);
+  }, [dispatch, token]);
 
   return null;
 };

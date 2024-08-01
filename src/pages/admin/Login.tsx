@@ -12,6 +12,7 @@ import { PulseLoader } from "react-spinners";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Meta } from "../../components/Meta";
+import { joinRoom } from "../../utils/socket/socket";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -53,6 +54,7 @@ function AdminLogin() {
       localStorage.setItem("token", token);
       navigate("/admin/dashboard");
       formik.resetForm();
+      joinRoom(token);
     }
   }, [token, isAuthenticated, error, isError, isSuccess]);
   if (isAuthenticated && localStorage.getItem("token")) {

@@ -21,6 +21,7 @@ import { fetchNotifications } from '../../store/features/notifications/notificat
 import { getUserDetails } from '../../store/features/auth/authSlice';
 import { useLocation, Link } from 'react-router-dom';
 import logo from "../../../public/assets/images/logo.png";
+import useSocket from '../../hooks/useSocket';
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const Header: React.FC = () => {
   const User: any = { ...user };
 
   const { cartCounter, cartTotalMoney } = useAppSelector((state) => state.cart)
-
+  useSocket();
   const categories = Array.from({ length: 5 }, (_, i) => i + 1);
   useEffect(() => {
     if (tokenLogin?.trim()) {

@@ -13,7 +13,6 @@ import IconButton from "@mui/material/IconButton";
 import { styled } from "@mui/material/styles";
 import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import io from "socket.io-client";
-import { URL } from "../../utils/axios/axiosInstance";
 import { getUserDetails } from "../../store/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { IUser } from "../../utils/types/store";
@@ -24,6 +23,10 @@ import { Box, CircularProgress } from "@mui/material";
 import { GrZoomIn } from "react-icons/gr";
 import { VscCollapseAll } from "react-icons/vsc";
 import { toast } from "react-toastify";
+import { URL } from "../../utils/axios/axiosInstance";
+import { clearImages } from "../../store/actions/resetAction";
+import { IoIosCloseCircle } from "react-icons/io";
+import EmojiPicker, { EmojiStyle, Theme } from "emoji-picker-react";
 
 const LiveChat = () => {
   const [messages, setMessages] = useState([]);
@@ -36,16 +39,19 @@ const LiveChat = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [lastReadTimestamp, setLastReadTimestamp] = useState(null);
-  const [isNotificationEnabled, setIsNotificationEnabled] = useState(false);
+  const [isNotificationEnabled, setIsNotificationEnabled] = useState(true);
   const [allImages, setAllImages] = useState([]);
-  const notificationRef = useRef(new Audio(notification));
   const fileInputRef = useRef(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const notificationRef = useRef(null);
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const { images, loading, error } = useAppSelector((state) => state.chat);
   const chatMessagesRef = useRef(null);
+  const inputRef = useRef(null);
+  const lastMessageRef = useRef(null);
   const dispatch = useAppDispatch();
-  const user: IUser | null = useAppSelector((state) => state?.auth?.user);
+  const user: IUser = useAppSelector((state) => state?.auth?.user);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -55,13 +61,21 @@ const LiveChat = () => {
   };
 
   useEffect(() => {
-    dispatch(getUserDetails(localStorage.getItem("token")));
+    const token = localStorage.getItem("token");
+    setTimeout(() => {
+      dispatch(getUserDetails(token));
+    }, 100);
   }, [dispatch]);
 
   useEffect(() => {
     if (user) {
       setCurrentUserId(user.id);
       setIsLoggedIn(true);
+    }else{
+      setIsLoggedIn(false);
+      setIsChatOpen(false);
+      setIsMinimized(false);
+      setUnreadCount(0);
     }
   }, [user]);
 
@@ -69,82 +83,81 @@ const LiveChat = () => {
     if (images.length > 0) {
       setAllImages(images);
     }
-    if (allImages.length > 0) {
-      localStorage.setItem("uploadedImages", JSON.stringify(allImages));
-    }
-  }, [images, allImages]);
+  }, [images]);
 
   useEffect(() => {
-    const newSocket = io(`${URL}/chats`, {
-      auth: {
-        token: localStorage.getItem("token"),
-      },
-    });
-
-    setSocket(newSocket);
-
-    newSocket.on("connect", () => {
-      newSocket.emit("requestPastMessages");
-    });
-
-    newSocket.on("userJoined", (data) => {
-      setUsers((prevUsers) => [...prevUsers, data.user]);
-    });
-
-    newSocket.on("userLeft", (data) => {
-      setUsers((prevUsers) =>
-        prevUsers.filter((user) => user.id !== data.user.id)
-      );
-    });
-
-    newSocket.on("chatMessage", (data) => {
-      const newMessage = {
-        id: Date.now(),
-        userId: data.user.id,
-        text: data.message.message,
-        username: data.user.firstName || data.user.role,
-        timestamp: new Date(data.message.createdAt).toISOString(),
-        profileImage: data.user.profilePicture,
-      };
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-      if (data.user.id !== currentUserId) {
+    if(isLoggedIn){
+      const newSocket = io(`${URL}/chats`, {
+        auth: {
+          token: localStorage.getItem("token"),
+        },
+      });
+  
+      setSocket(newSocket);
+  
+      newSocket.on("connect", () => {
+        newSocket.emit("requestPastMessages");
+      });
+  
+      newSocket.on("userJoined", (data) => {
+        setUsers((prevUsers) => [...prevUsers, data.user]);
+      });
+  
+      newSocket.on("userLeft", (data) => {
+        setUsers((prevUsers) =>
+          prevUsers.filter((user) => user.id !== data.user.id)
+        );
+      });
+  
+      newSocket.on("chatMessage", (data) => {
         if (isNotificationEnabled && (!isChatOpen || isMinimized)) {
           notificationRef.current.play();
+         }
+        const newMessage = {
+          id: Date.now(),
+          userId: data.user.id,
+          text: data.message.message,
+          username: data.user.firstName || data.user.role,
+          timestamp: new Date(data.message.createdAt).toISOString(),
+          profileImage: data.user.profilePicture,
+        };
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+        if (data.user.id !== currentUserId) {
+          
+          if (
+            !lastReadTimestamp ||
+            new Date(newMessage.timestamp) > lastReadTimestamp
+          ) {
+            setUnreadCount((prevCount) => prevCount + 1);
+          }
         }
-        if (
-          !lastReadTimestamp ||
-          new Date(newMessage.timestamp) > lastReadTimestamp
-        ) {
-          setUnreadCount((prevCount) => prevCount + 1);
+      });
+  
+      newSocket.on("pastMessages", (data) => {
+        const oldMessages = data.map((msg) => ({
+          id: msg.id || Date.now(),
+          userId: msg.userId,
+          username: msg.user.firstName || msg.user.role,
+          text: msg.message,
+          timestamp: new Date(msg.createdAt).toISOString(),
+          profileImage: msg.user.profilePicture,
+        }));
+        setMessages(oldMessages);
+      });
+  
+      newSocket.on("connect_error", (error) => {
+        if (error.message === "Authentication error") {
+          console.log("Authentication error detected. Closing chat.");
+          setIsLoggedIn(false);
         }
-      }
-    });
-
-    newSocket.on("pastMessages", (data) => {
-      console.log("Received past messages:", data);
-      const oldMessages = data.map((msg) => ({
-        id: msg.id || Date.now(),
-        userId: msg.userId,
-        username: msg.user.firstName || msg.user.role,
-        text: msg.message,
-        timestamp: new Date(msg.createdAt).toISOString(),
-        profileImage: msg.user.profilePicture,
-      }));
-      setMessages(oldMessages);
-    });
-
-    newSocket.on("connect_error", (error) => {
-      if (error.message === "Authentication error") {
-        console.log("Authentication error detected. Closing chat.");
-        setIsLoggedIn(false);
-      }
-      console.log("connection error", error);
-    });
-
-    return () => {
-      newSocket.disconnect();
-    };
-  }, []);
+        console.log("connection error", error);
+      });
+  
+      return () => {
+        newSocket.disconnect();
+      };
+    }
+  }, [isLoggedIn]);
 
   useEffect(() => {
     const savedTimestamp = localStorage.getItem(
@@ -153,17 +166,14 @@ const LiveChat = () => {
     if (savedTimestamp) setLastReadTimestamp(new Date(savedTimestamp));
   }, [currentUserId]);
 
-  useEffect(() => {
-    const storedImages = localStorage.getItem("uploadedImages");
-    if (storedImages) {
-      const imagesArray = JSON.parse(storedImages);
-      setAllImages(imagesArray);
-    }
-  }, [dispatch]);
-
   const sendMessage = () => {
-    console.log(currentMessage);
-    if ((currentMessage && currentMessage.trim() === "") || !socket) return;
+    if (
+      (currentMessage &&
+        currentMessage.trim() === "" &&
+        allImages.length === 0) ||
+      !socket
+    )
+      return;
     const currentUser = users.find((user) => user.id === currentUserId);
 
     if (currentUser) {
@@ -183,16 +193,53 @@ const LiveChat = () => {
       socket.emit("chatMessage", combinedMessage);
       setMessages((prevMessages) => [...prevMessages, newMessage]);
       setCurrentMessage("");
-      setAllImages([]);
-      localStorage.removeItem("uploadedImages");
+      dispatch(clearImages());
+      setTimeout(() => {
+        localStorage.removeItem("uploadedImages");
+        setAllImages([]);
+      }, 100);
     } else {
       console.log("User not found in the user list.");
     }
   };
 
-  const handleChangeMessage = (message: string) => {
-    setCurrentMessage(message);
+  useEffect(() => {
+    const storedImages = localStorage.getItem("uploadedImages");
+    if (storedImages) {
+      const imagesArray = JSON.parse(storedImages);
+      setAllImages(imagesArray);
+    }
+  }, [dispatch]);
+
+  useEffect(()=>{
+    if(messages.length > 0 && isChatOpen){
+      lastMessageRef.current?.scrollIntoView({behavior:"smooth",block:"end"})
+    }
+  },[messages,isChatOpen]);
+  const handleChangeMessage = (event) => {
+    setCurrentMessage(event.target.value);
   };
+  const handleEmojiClick = (emojiData) => {
+    if (inputRef.current) {
+      const input = inputRef.current;
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+      const newValue =
+        currentMessage.slice(0, start) +
+        emojiData.emoji +
+        currentMessage.slice(end);
+      setCurrentMessage(newValue);
+
+      setTimeout(() => {
+        input.setSelectionRange(
+          start + emojiData.emoji.length,
+          start + emojiData.emoji.length
+        );
+        input.focus();
+      }, 0);
+    }
+  };
+
   const isUnread = (messageTimestamp: any) => {
     return (
       !lastReadTimestamp ||
@@ -269,6 +316,7 @@ const LiveChat = () => {
     };
   }, [isChatOpen, messages]);
 
+
   useEffect(() => {
     const chatContainer = chatMessagesRef.current;
     if (isChatOpen && chatContainer) {
@@ -313,19 +361,6 @@ const LiveChat = () => {
 
   const toggleNotificationSound = () => {
     setIsNotificationEnabled((prev) => !prev);
-    if (notificationRef.current) {
-      const playPromise = notificationRef.current.play();
-
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => {
-            console.log("Audio played successfully.");
-          })
-          .catch((error) => {
-            console.log("Audio play failed:", error);
-          });
-      }
-    }
   };
 
   const handleImageClick = (image) => {
@@ -336,6 +371,13 @@ const LiveChat = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedImage(null);
+  };
+
+  const removeImage = (index: number) => {
+    setAllImages((prev) => prev.filter((_, i) => i !== index));
+    const updatedImages = allImages.filter((_, i) => i !== index);
+    localStorage.setItem("uploadedImages", JSON.stringify(updatedImages));
+    dispatch(clearImages);
   };
 
   return (
@@ -435,22 +477,26 @@ const LiveChat = () => {
                           <span className="username">
                             {msg.username?.toLowerCase()}
                           </span>
-                          <span>{messageText}</span>
+                          <span style={{ marginBottom: ".5rem" }}>
+                            {messageText}
+                          </span>
                           {(msg.images?.length > 0 || textImage.length > 0) && (
                             <div className="images-container">
-                              {(msg.images || textImage).map((image, idx) => (
-                                <div key={idx} className="imageDisplay">
-                                  <img
-                                    src={image}
-                                    alt={`Image ${idx}`}
-                                    onClick={() => handleImageClick(image)}
-                                  />
-                                  <GrZoomIn
-                                    className="zoomIn"
-                                    onClick={() => handleImageClick(image)}
-                                  />
-                                </div>
-                              ))}
+                              {(msg.images || textImage).map(
+                                (image: string, idx: number) => (
+                                  <div key={idx} className="imageDisplay">
+                                    <img
+                                      src={image}
+                                      alt={`Image ${idx}`}
+                                      onClick={() => handleImageClick(image)}
+                                    />
+                                    <GrZoomIn
+                                      className="zoomIn"
+                                      onClick={() => handleImageClick(image)}
+                                    />
+                                  </div>
+                                )
+                              )}
                             </div>
                           )}
                           <span className="timestamp">
@@ -463,30 +509,68 @@ const LiveChat = () => {
                               .toUpperCase()}
                           </span>
                         </div>
+                        {index === messages.length - 1 && <div ref={lastMessageRef} />}
                       </div>
                     </React.Fragment>
                   );
                 })}
               </div>
               <div className="chat-inputs">
-                {allImages
-                  ? allImages.map((msg, index) => (
-                      <div key={index} className="imageDisplay">
-                        <img src={msg} alt={`Image ${index}`} />
-                      </div>
-                    ))
-                  : null}
+                {allImages && allImages.length > 0 && (
+                  <div className="imagesDiv">
+                    {allImages
+                      ? allImages.map((msg, index) => (
+                          <div key={index} className="imageDisplay">
+                            <img src={msg} alt={`Image ${index}`} />
+                            <span
+                              className="closeIcon"
+                              onClick={() => {
+                                removeImage(index);
+                              }}
+                            >
+                              <IoIosCloseCircle />
+                            </span>
+                          </div>
+                        ))
+                      : null}
+                  </div>
+                )}
                 <div className="chat-input">
-                  <InputEmoji
+                  <input
+                    type="text"
                     value={currentMessage}
                     onChange={handleChangeMessage}
                     placeholder="Type a message..."
-                    onEnter={sendMessage}
-                    cleanOnEnter
-                    shouldReturn={false}
-                    shouldConvertEmojiToImage={false}
-                    borderColor="#ff6d18"
+                    onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                    ref={inputRef}
+                    style={{
+                      fontFamily:
+                        "Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif",
+                    }}
                   />
+                  <SendTooltip title="emoji" TransitionComponent={Zoom}>
+                    <IconButton
+                      onClick={() => setIsEmojiPickerOpen((prev) => !prev)}
+                    >
+                      <span
+                        style={{
+                          fontSize: "4.5rem",
+                          textAlign: "center",
+                          color: "#01260b",
+                        }}
+                      >
+                        ☺️
+                      </span>
+                    </IconButton>
+                  </SendTooltip>
+                  <div className="emoji-picker-container">
+                    <EmojiPicker
+                      open={isEmojiPickerOpen}
+                      theme={Theme.DARK}
+                      emojiStyle={EmojiStyle.GOOGLE}
+                      onEmojiClick={handleEmojiClick}
+                    />
+                  </div>
                   <input
                     type="file"
                     ref={fileInputRef}
@@ -518,17 +602,19 @@ const LiveChat = () => {
           )}
         </div>
       )}
-      <audio ref={notificationRef} src={notification} preload="auto" />
       {isModalOpen && (
         <div className="modal">
           <div className="modal-content">
             <span className="close" onClick={closeModal}>
-              &times;
+              <IoIosCloseCircle />
             </span>
             <img src={selectedImage} alt="Selected" className="modal-image" />
           </div>
         </div>
       )}
+      <audio ref={notificationRef}>
+        <source src={notification} type="audio/mpeg" />
+      </audio>
     </div>
   );
 };

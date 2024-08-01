@@ -19,7 +19,7 @@
     transition: fill 0.3s;
   }
 
-  .unreadCount{
+  .unreadCount {
     position: absolute;
     top: -8px;
     right: -8px;
@@ -72,15 +72,19 @@
     .chat-messages,
     .chat-input {
       display: none;
+
+      
     }
-    .chat-header{
+
+    .chat-header {
       p {
         color: $white-color;
         font-weight: bold;
         font-size: 1.8rem;
         margin: 0;
       }
-      .chat-controls{
+
+      .chat-controls {
         margin: 0;
       }
     }
@@ -92,6 +96,7 @@
     border-radius: 10px 10px 0 0;
     display: flex;
     justify-content: space-between;
+
     p {
       margin-left: 2rem;
       color: $white-color;
@@ -100,7 +105,8 @@
       display: flex;
       align-items: center;
     }
-    .chat-controls{
+
+    .chat-controls {
       gap: 1rem !important;
     }
   }
@@ -122,7 +128,7 @@
       text-align: center;
       margin-bottom: 10px;
     }
-    
+
     .unread-badge {
       display: inline-block;
       padding: 5px 0;
@@ -132,7 +138,7 @@
       font-size: 12px;
       text-transform: uppercase;
     }
-    
+
     .unread-badge::before,
     .unread-badge::after {
       content: "";
@@ -143,11 +149,11 @@
       vertical-align: middle;
       margin: 0 20px;
     }
-    
+
     .chat-message {
       display: flex;
       align-items: center;
-      margin: 10px;
+      margin: 1rem .5rem;
       max-width: 100%;
       position: relative;
 
@@ -178,15 +184,16 @@
           background-color: $primary-color-light;
           color: $text-color;
           border-radius: 5px 5px 5px 5px;
-          text-align: right;
           padding: 5px 15px;
           position: relative;
           font-size: 2rem;
+          max-width: 40rem;
           right: .9rem;
 
-          .images-container{
+          .images-container {
             display: flex;
-            img{
+
+            img {
               height: 26rem;
               width: 25rem;
               object-fit: contain;
@@ -194,7 +201,8 @@
               cursor: pointer;
               transition: transform 0.2s ease-in-out;
             }
-            .zoomIn{
+
+            .zoomIn {
               position: absolute;
               transform: scale(0);
               cursor: pointer;
@@ -205,9 +213,11 @@
               color: $primary-color;
             }
           }
+
           .imageDisplay img:hover {
-            transform: scale(1.05);
+            transform: scale(1.01);
           }
+
           .imageDisplay:hover .zoomIn {
             transform: scale(1);
             transition: transform 0.2s ease-in-out;
@@ -234,12 +244,15 @@
           padding: 5px 15px;
           position: relative;
           font-size: 2rem;
-          left: .9rem;
+          left: .8rem;
+          max-width: 40rem;
 
-          .images-container{
+
+          .images-container {
             display: flex;
             gap: 5px;
-            img{
+
+            img {
               width: 25rem;
               height: 26rem;
               object-fit: contain;
@@ -247,7 +260,8 @@
               cursor: pointer;
               transition: transform 0.2s ease-in-out;
             }
-            .zoomIn{
+
+            .zoomIn {
               position: absolute;
               transform: scale(0);
               cursor: pointer;
@@ -258,8 +272,9 @@
               color: $primary-color;
             }
           }
+
           .imageDisplay img:hover {
-            transform: scale(1.05);
+            transform: scale(1.01);
           }
 
           .imageDisplay:hover .zoomIn {
@@ -279,7 +294,8 @@
           }
         }
       }
-      .username{
+
+      .username {
         display: block;
         font-weight: bold;
         color: $text-color;
@@ -287,6 +303,7 @@
         font-size: 1.2rem;
         opacity: .75;
       }
+
       .timestamp {
         display: block;
         font-size: 0.65em;
@@ -294,10 +311,11 @@
         opacity: 0.7;
         color: $text-color;
       }
+
       .unread {
         background-color: #f0f0f0;
       }
-      
+
     }
   }
 
@@ -307,17 +325,69 @@
     border-top: 1px solid #ddd;
     flex-direction: column;
 
-    .imageDisplay{
-      img{
-        width: 10rem;
+    .imagesDiv {
+      display: flex;
+      flex-direction: row;
+      gap: 10px; 
+      overflow-x: auto; 
+      max-width: 100%; 
+      padding: 10px; 
+      box-sizing: border-box;
+
+      .imageDisplay {
+        position: relative;
+        width: 15rem;
         height: 15rem;
-        border-radius: .5rem;
+        flex: 0 0 auto;
+        img {
+          width: 100%;
+          height: 100%;
+          border-radius: .5rem;
+        }
+  
+        .closeIcon {
+          position: absolute;
+          top: -1rem;
+          right: -1rem;
+          color: invert(1);
+          font-size: 30px;
+          font-weight: bold;
+          cursor: pointer;
+          border: none;
+          outline: none;
+        }
+  
+        .closeIcon:hover,
+        .closeIcon:focus {
+          color: $primary-color;
+          text-decoration: none;
+          transform: rotate(180deg);
+          transition: transform 0.2s ease-in-out;
+        }
       }
     }
-    .chat-input{
+
+
+    .chat-input {
       display: flex;
+      justify-content: center;
+      align-items: center;
       padding: 10px;
-      
+
+      input{
+        flex: 1;
+        padding: 1.5rem;
+        border-radius: 5rem;
+        border: 1px solid $primary-color;
+        margin-right: 10px;
+        font-size: 1.8rem;
+        height: 2rem;
+      }
+      .emoji-picker-container {
+        position: absolute;
+        top: 4%;
+        z-index: 1000;
+      }
       .send-btn {
         color: $primary-color;
         font-size: 5rem;
@@ -326,7 +396,7 @@
     }
 
   }
-  
+
 }
 
 .modal {
@@ -365,11 +435,10 @@
   position: absolute;
   top: 10px;
   right: 20px;
-  color: white;
+  color: invert(1);
   font-size: 30px;
   font-weight: bold;
   cursor: pointer;
-  background-color: transparent;
   border: none;
   outline: none;
 }

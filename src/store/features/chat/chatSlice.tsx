@@ -40,6 +40,7 @@ const chatSlice = createSlice({
       .addCase(uploadImage.fulfilled, (state, action) => {
         state.loading = false;
         state.images.push(action.payload);
+        localStorage.setItem("uploadedImages", JSON.stringify(state.images));
       })
       .addCase(uploadImage.rejected, (state, action) => {
         state.loading = false;

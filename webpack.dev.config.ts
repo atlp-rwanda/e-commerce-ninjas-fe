@@ -91,7 +91,7 @@ const config: Configuration = {
       ],
     }),
   ],
-  devtool: 'eval-cheap-module-source-map', // Use a faster devtool setting
+  devtool: 'eval-cheap-module-source-map',
   devServer: {
     static: path.join(__dirname, 'dist'),
     historyApiFallback: {
@@ -102,10 +102,10 @@ const config: Configuration = {
     hot: true,
   },
   cache: {
-    type: 'filesystem', // Enable filesystem caching
+    type: 'filesystem',
   },
   optimization: {
-    usedExports: true, // Enable tree shaking
+    usedExports: true,
   },
 };
 

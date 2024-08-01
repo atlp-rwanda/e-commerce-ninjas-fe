@@ -11,7 +11,8 @@ import sellerCollectionProducts from '../features/product/sellerCollectionProduc
 import adminReducer from '../features/admin/adminSlice';
 import cartReducer from "../features/carts/cartSlice";
 import chatReducer from '../features/chat/chatSlice';
-import { RESET_STATE } from '../actions/resetAction';
+import userReducer from "../features/user/userSlice"
+import { CLEAR_IMAGES, RESET_STATE } from '../actions/resetAction';
 
 const appReducer = combineReducers({
   initialMessage: welcomeReducer,
@@ -25,11 +26,18 @@ const appReducer = combineReducers({
   admin: adminReducer,
   cart: cartReducer,
   chat: chatReducer,
+  user: userReducer
 });
 
 const rootReducer = (state, action) => {
   if (action.type === RESET_STATE) {
     state = undefined;
+  }
+  if(action.type === CLEAR_IMAGES) {
+    return {
+      ...state,
+      images: []
+    };
   }
   return appReducer(state, action);
 };

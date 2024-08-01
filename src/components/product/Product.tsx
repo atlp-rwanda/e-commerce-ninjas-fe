@@ -46,6 +46,7 @@ const Product: React.FC<ProductProps> = ({
 
   const [isLoading, setIsLoading] = useState(false);
   const [cartResponseData, setCartResponseData] = useState<any>(null);
+  const { cartProductslist } = useAppSelector((state) => state.cart)
 
   const handleMouseEnter = () => {
     intervalRef.current = setInterval(() => {
@@ -104,41 +105,39 @@ const Product: React.FC<ProductProps> = ({
   }, [dispatch]);
 
   const isInCart = (productId: string) => {
-    return cartResponseData?.carts?.some((cart: any) =>
-      cart.products.some((product: any) => product.id === productId)
-    );
-  };
-
-
-const handleToggleWishlist = (event: React.MouseEvent) => {
-  event.stopPropagation();
-  if (!isAuthenticated) {
-    localStorage.setItem("pendingWishlistProduct", id);
-    toast.error("Please login first");
-    navigate("/login");
-    return;
-  } 
-
-  if (isInWishlist) {
-    dispatch(removeProductFromWishlist(id)).then((action) => {
-      if (action.meta.requestStatus === 'fulfilled') {
-        toast.success("Product removed from wishlist.");
-        setIsInWishlist(false); 
-      } else {
-        toast.error(action.payload as string);
-      }
-    });
-  } else {
-    dispatch(addProductToWishlist(id)).then((action) => {
-      if (action.meta.requestStatus === 'fulfilled') {
-        toast.success("Product added to wishlist.");
-        setIsInWishlist(true); 
-      } else {
-        toast.error(action.payload as string);
-      }
-    });
+    return cartProductslist?.includes(productId);
   }
-};
+
+
+  const handleToggleWishlist = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    if (!isAuthenticated) {
+      localStorage.setItem("pendingWishlistProduct", id);
+      toast.error("Please login first");
+      navigate("/login");
+      return;
+    }
+
+    if (isInWishlist) {
+      dispatch(removeProductFromWishlist(id)).then((action) => {
+        if (action.meta.requestStatus === 'fulfilled') {
+          toast.success("Product removed from wishlist.");
+          setIsInWishlist(false);
+        } else {
+          toast.error(action.payload as string);
+        }
+      });
+    } else {
+      dispatch(addProductToWishlist(id)).then((action) => {
+        if (action.meta.requestStatus === 'fulfilled') {
+          toast.success("Product added to wishlist.");
+          setIsInWishlist(true);
+        } else {
+          toast.error(action.payload as string);
+        }
+      });
+    }
+  };
 
 
 

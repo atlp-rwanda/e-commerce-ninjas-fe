@@ -6,6 +6,7 @@
   padding: 0;
   margin: 0;
   outline: none;
+  border: none
 }
 
 html {
@@ -35,6 +36,7 @@ body {
 
 ::-webkit-scrollbar {
   width: 0.2rem;
+  display: none;
 }
 
 ::-webkit-scrollbar-track {

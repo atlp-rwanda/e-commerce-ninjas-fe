@@ -85,6 +85,13 @@ const SellerProduct = ({ productId }: { productId: string }) => {
             }
         });
 
+        if(isAdd && (!updatedProduct.name || !updatedProduct.description || !updatedProduct.price || !updatedProduct.bonus || !updatedProduct.discount || !updatedProduct.category || !updatedProduct.expiryDate || !updatedProduct.quantity)){
+            toast.error('Fill all fields please')
+        }
+        if(isAdd && setUpdateImages.length < 4){
+            toast.error('Upload atleast 4 images please')
+        }
+
         if (isImagesUpdated) {
             const imageBlobs = await Promise.all(updateImages.map(async (base64String: any) => {
                 const response = await fetch(base64String);

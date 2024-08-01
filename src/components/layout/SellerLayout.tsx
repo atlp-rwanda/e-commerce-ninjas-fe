@@ -42,9 +42,6 @@ export const SellerLayout = () => {
                             <div>
                                 <Link to={"/seller/products"}><FaProductHunt size={32} className='icon' /></Link>
                             </div>
-                            <div>
-                                <Link to={"/seller/product/add"}><FaPlusCircle size={32} className='icon' /></Link>
-                            </div>
                         </div>
                         <div className='icons__bottom'>
                             <IoLogOutSharp size={32} className='icon' onClick={handleLogout} />
@@ -58,10 +55,7 @@ export const SellerLayout = () => {
                                 <Link to={"/seller/dashboard"} className={`text_content ${pathname === "/seller/dashboard" ? "active" : ""}`} >Dashboard</Link>
                             </div>
                             <div>
-                                <Link to={"/seller/products"} className={`text_content ${pathname.startsWith("/seller/product") && pathname !== "/seller/product/add" ? "active" : ""}`} >Products</Link>
-                            </div>
-                            <div>
-                                <Link to={"/seller/product/add"} className={`text_content ${pathname === "/seller/product/add" ? "active" : ""}`} >Add Product</Link>
+                                <Link to={"/seller/products"} className={`text_content ${pathname.startsWith("/seller/product") ? "active" : ""}`} >Products</Link>
                             </div>
                         </div>
                         <div className='dashboard__lower__link'>

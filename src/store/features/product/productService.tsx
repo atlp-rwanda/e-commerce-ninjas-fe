@@ -75,6 +75,16 @@ const updateSellerProduct = async (id: string, newProductData: FormData) => {
   }
 }
 
+const updateSellerProductStatus = async (id: string, newStatus: string) => {
+  try {
+    const response = await axiosInstance.put(`/api/shop/seller-update-product-status/${id}`, {status: newStatus});
+    return response.data;
+  }
+  catch (error) {
+    throw new Error(getErrorMessage(error))
+  }
+}
+
 const addSellerProduct = async (newProductData: FormData) => {
   try {
     const response = await axiosInstance.post(`/api/shop/seller-create-product`, newProductData, {
@@ -98,6 +108,7 @@ const productService = {
   fetchSellerProducts,
   fetchSellerSingleProduct,
   updateSellerProduct,
-  addSellerProduct
+  addSellerProduct,
+  updateSellerProductStatus
 }
 export default productService;

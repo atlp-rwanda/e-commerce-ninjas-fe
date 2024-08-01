@@ -20,6 +20,11 @@ interface UpdateProductParams {
     newProductData: FormData;
 }
 
+interface UpdateProductStatusParams {
+    id: string;
+    newStatus: string;
+}
+
 export const fetchSingleSellerProduct = createAsyncThunk<ISingleProductResponse, string>("products/fetchSingleSellerProducts", async (id, { rejectWithValue }) => {
     try {
         const response = await productService.fetchSellerSingleProduct(id);
@@ -34,6 +39,18 @@ export const updateSellerProduct = createAsyncThunk<ISingleProductResponse, Upda
     async ({ id, newProductData }, { rejectWithValue }) => {
         try {
             const response = await productService.updateSellerProduct(id, newProductData);
+            return response;
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+);
+
+export const updateSellerProductStatus = createAsyncThunk<ISingleProductResponse, UpdateProductStatusParams, { rejectValue: string }>(
+    'products/updateSellerProductStatus',
+    async ({ id, newStatus }, { rejectWithValue }) => {
+        try {
+            const response = await productService.updateSellerProductStatus(id, newStatus);
             return response;
         } catch (error) {
             return rejectWithValue(error);
@@ -97,6 +114,24 @@ const singleSellerProductSlice = createSlice({
             .addCase(updateSellerProduct.rejected, (state, action: PayloadAction<any>) => {
                 state.isLoading = false;
                 state.updateError = action.payload.message || null;
+                state.isUpdate = true;
+                state.isUpdateSuccess = false;
+            })
+
+            .addCase(updateSellerProductStatus.pending, (state) => {
+                state.isUpdate = true;
+                state.isUpdateSuccess = false;
+                state.isLoading = true;
+            })
+            .addCase(updateSellerProductStatus.fulfilled, (state, action: PayloadAction<any>) => {
+                state.isUpdate = true;
+                state.isUpdateSuccess = true;
+                state.isLoading = false;
+                state.message = action.payload.message || "Status Updated successfully";
+            })
+            .addCase(updateSellerProductStatus.rejected, (state, action: PayloadAction<any>) => {
+                state.isLoading = false;
+                state.updateError = action.payload.error || null;
                 state.isUpdate = true;
                 state.isUpdateSuccess = false;
             })

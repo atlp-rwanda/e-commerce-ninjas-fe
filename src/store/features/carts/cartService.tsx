@@ -29,21 +29,40 @@ const productCheckout = async (cartId: string) => {
   );
   return response.data;
 };
-const clearCarts = async ()=> {
+const clearCart = async (cartId: string) => {
+try {
+  const response = await axiosInstance.delete(`api/cart/buyer-clear-cart/${cartId}`);
+  return response.data;
+} catch (error) {
+  throw error
+}
+}
+const clearCartProduct = async (cartId: string, productId: string) => {
+ try {
+  const response = await axiosInstance.delete(`api/cart/buyer-clear-cart-product/${cartId}/${productId}`);
+  return response.data;
+ } catch (error) {
+  throw error
+ }
+}
+const clearCarts = async () => {
   try {
-      const response = await axiosInstance.delete("/api/cart/buyer-clear-carts");
-      return response
+    const response = await axiosInstance.delete("/api/cart/buyer-clear-carts");
+    return response
   }
   catch (error) {
-      console.error("Error clear carts", error);
-      throw error;
+    console.error("Error clear carts", error);
+    throw error;
   }
 }
+
 
 const cartService = {
   createCart,
   getUserCarts,
   productCheckout,
-  clearCarts
+  clearCarts,
+  clearCart,
+  clearCartProduct
 };
 export default cartService;

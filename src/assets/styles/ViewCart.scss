@@ -1,14 +1,9 @@
-// button {
-//   background-color: transparent;
-//   border: 0;
-// }
 FaCheckSquare {
   color: $primary-color;
 }
 .cart-section {
   display: flex;
   flex-direction: row;
-  // padding: 20px;
   .cart-products {
     flex: 2;
     margin: 10px;
@@ -116,6 +111,7 @@ FaCheckSquare {
                     width: 20px;
                     height: 20px;
                     font-size: 12px;
+                    cursor:pointer;
                   }
                   input {
                     background: transparent;
@@ -134,6 +130,7 @@ FaCheckSquare {
                     background: transparent;
                     border: 0;
                     font-size: 20px;
+                    margin-right: 3rem;
                     cursor: pointer;
                   }
                   .delete {
@@ -207,6 +204,7 @@ FaCheckSquare {
         border: none;
         color: $white;
         padding: 10px;
+        
       }
     }
   }
@@ -392,32 +390,33 @@ FaCheckSquare {
           border-radius: 5px;
           color: $white;
           padding: 10px;
+         
         }
       }
     }
   }
 }
-.clear-cart{
+.clear-cart {
   margin-top: 1rem;
   margin-left: 26.5rem;
   border: none;
- justify-content: center;
- align-items: center;
- display: flex;
- width: 100%;
-  .delete{
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  width: 100%;
+  .delete {
     border: none;
     background-color: $primary-color;
     color: $white;
-   font-size: 1.5rem;
-    padding:1rem;
+    font-size: 1.5rem;
+    padding: 1rem;
     border-radius: 5px;
     display: flex;
-
+    cursor: pointer;
   }
-  .deleteIcon{
+  .deleteIcon {
     font-size: 2rem;
     margin-right: 1rem;
-  
+    cursor: pointer;
   }
 }

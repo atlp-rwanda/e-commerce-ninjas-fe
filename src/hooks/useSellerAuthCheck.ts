@@ -32,7 +32,7 @@ function useSellerAuthCheck() {
         if (!isChecking) {
             if (!isAuthenticated || !token || !user || (user as any).role !== "seller") {
                 const message = !isAuthenticated ? 'You must login first' : 'You must login as a seller';
-                toast.info(message);
+                // toast.info(message);
                 navigate(`/seller/login?callbackUrl=${callbackUrl}`);
                 setIsAuthorized(false);
             } else {

@@ -47,7 +47,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ options, onSelect, value })
     <div className="custom-select-wrapper" ref={wrapperRef}>
       <div className="custom-select" onClick={() => setIsOpen(!isOpen)}>
         <div className="select-selected">
-          {selectedLabel}
+          {selectedLabel} 
           <RiArrowDropDownLine className="dropdown-icon" />
         </div>
         {isOpen && (

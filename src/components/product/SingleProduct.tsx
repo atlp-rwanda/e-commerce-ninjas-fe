@@ -279,14 +279,22 @@ const ProductDetails = ({
       </div>
       <div className="action-buttons">
       <button
-          className="wishlist-button"
+          className="btn-toggle-wishlist"
           onClick={handleToggleWishlist}
           disabled={wishlistLoading}
         >
           {wishlistLoading ? (
-            <PuffLoader color="#fff" size={20} />
+            "Processing..."
+          ) : isInWishlist ? (
+            <>
+              <FaHeart />
+              <span>Remove from wishlist</span>
+            </>
           ) : (
-            <span> {isInWishlist ? <FaHeart /> : <FaRegHeart />} {isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}</span>
+            <>
+              <FaRegHeart />
+              <span>Add to wishlist</span>
+            </>
           )}
         </button>
         <button

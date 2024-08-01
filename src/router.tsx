@@ -13,9 +13,7 @@ import SendResetPasswordLink from './pages/SendResetPasswordLink';
 import ResetPassword from './pages/ResetPassword';
 import {ProtectedRoute} from "./utils/protectRoute/ProtectedRoute";
 import ViewProduct from './pages/ViewProduct';
-import UserLogin from './pages/UserLogin';
-import SellerLogin from './pages/SellerLogin';
-import AdminLogin from './pages/admin/Login';
+import Login from './pages/Login';
 import UserViewCart from './pages/UserViewCart';
 import Search from "./pages/Search";
 import SellerViewProduct from "./pages/seller/SellerViewProduct";
@@ -34,7 +32,7 @@ const AppRouter: React.FC = () => {
           <Route index element={<LandingPage />} />
           <Route path="/home" element={<LandingPage />} />
           <Route path="signup" element={<SignUp />} />
-          <Route path="login" element={<UserLogin />} />
+          <Route path="login" element={<Login />} />
           <Route path="verify-email" element={<EmailVerifying />} />
           <Route path="resend-email" element={<ResendEmail />} />
           <Route path="/api/auth/verify-email/:token" element={<VerifyEmail />} />
@@ -45,8 +43,7 @@ const AppRouter: React.FC = () => {
           <Route path="search" element={<Search />} />
           <Route path="logout" element={<Logout />} />
           <Route path="shopping-cart" element={<UserViewCart />} />
-         <Route path="*" element={<NotFound />} />
-            <Route path="seller/login" element={<SellerLogin />} />
+         <Route path="*" element={<NotFound />} />            
         </Route>
         <Route path="/seller" element={<SellerLayout/>}>
             <Route index element={<Navigate to="dashboard" replace />} />
@@ -54,9 +51,8 @@ const AppRouter: React.FC = () => {
             <Route path="product/:id" element={<SellerViewProduct />} />
             <Route path="products" element={<SellerCollection />} />
           </Route>
-        <Route path="/admin">
-          <Route index element={<AdminLogin />} />
-          <Route path="dashboard" element={<ProtectedRoute redirectPath="/admin"><AdminDashboard /></ProtectedRoute>}>
+        <Route path="/admin">          
+          <Route path="dashboard" element={<ProtectedRoute redirectPath="/login"><AdminDashboard /></ProtectedRoute>}>
             <Route index element={<OverViewDashboard />} />
             <Route path="users" element={<Users />} />
           </Route>

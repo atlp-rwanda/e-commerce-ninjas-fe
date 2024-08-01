@@ -23,9 +23,11 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import truncateString from "../../utils/text/truncateString";
 import { Meta } from "../../components/Meta";
+import useAdminAuthCheck from "../../hooks/useAdminAuthCheck";
 
 export default function Users() {
   const dispatch = useAppDispatch();
+  const isAuthorized = useAdminAuthCheck();
   const { users, isLoading } = useAppSelector((state) => state?.admin);
   const [localUserState, setLocalUserState] = useState([]);
   const [open, setOpen] = useState(false);

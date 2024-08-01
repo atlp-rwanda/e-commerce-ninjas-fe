@@ -287,13 +287,14 @@ const userSlice = createSlice({
         state.isAuthenticated = true;
         state.isSuccess = true;
         state.message = action.payload.message;
-        state.token = action.payload.data.token;
+        state.token = action.payload.token;
+        state.user = action.payload.user;
       })
       .addCase(loginUser.rejected, (state, action: PayloadAction<any>) => {
         state.isError = true;
         state.isLoading = false;
         state.isSuccess = false;
-        state.error = action.payload
+        state.error = action.payload;
       })
       .addCase(logout.pending, (state) => {
         state.isError = false;
@@ -317,25 +318,20 @@ const userSlice = createSlice({
         state.isSuccess = false;
         state.error = action.payload
       })
-      .addCase(getUserDetails.pending, (state) => {
-        state.isError = false;
-        state.isSuccess = false;
-        state.isAuthenticated = false;
-      })
       .addCase( getUserDetails.fulfilled, (state, action: PayloadAction<any>) => {
-          state.isError = false;
-          state.isSuccess = true;
-          state.isAuthenticated = true;
-          state.user = action.payload.data.user;
-        }
-      )
-      .addCase(getUserDetails.rejected, (state, action: PayloadAction<any>) => {
-        state.isError = true;
-        state.isSuccess = false;
-        state.isAuthenticated = false;
-        state.user = undefined;
-        state.error = action.payload.message;
-      })
+        state.isError = false;
+        state.isSuccess = true;
+        state.isAuthenticated = true;
+        state.user = action.payload.data.user;
+      }
+    )
+    .addCase(getUserDetails.rejected, (state, action: PayloadAction<any>) => {
+      state.isError = true;
+      state.isSuccess = false;
+      state.isAuthenticated = false;
+      state.user = undefined;
+      state.error = action.payload.message;
+    })
   },
 });
 

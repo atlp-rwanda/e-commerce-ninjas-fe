@@ -1,43 +1,30 @@
 /* eslint-disable */
 import React, { useEffect, useState } from "react";
-import { BiSolidShow, BiSolidHide } from "react-icons/bi";
 import { FcGoogle } from "react-icons/fc";
-import { toast } from "react-toastify";
+import { BiSolidShow, BiSolidHide } from "react-icons/bi";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { loginUser, getUserDetails, resetAuth } from "../store/features/auth/authSlice";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { PulseLoader } from "react-spinners";
+import { loginUser } from "../store/features/auth/authSlice";
+import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { Link, useNavigate } from "react-router-dom";
+import { PulseLoader } from "react-spinners";
 import authService from "../store/features/auth/authService";
+import { joinRoom } from "../utils/socket/socket";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email("Email must be valid").required("Email is required"),
   password: Yup.string().required("Password is required"),
 });
 
-function SellerLogin() {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const callbackUrl = queryParams.get('callbackUrl');
+
+function Login() {
   const [isClicked, setIsClicked] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [badUser, setBadUser] = useState(false);
-  const [isChecking, setIsChecking] = useState(true);
   const navigate = useNavigate();
-
   const dispatch = useAppDispatch();
-  const {
-    isLoading,
-    isError,
-    isSuccess,
-    isAuthenticated,
-    token,
-    error,
-    message,
-    user
-  } = useAppSelector((state) => state.auth);
+  const { isLoading, isError, isSuccess, isAuthenticated, token, error, message, user } = useAppSelector((state) => state.auth);
 
   const formik = useFormik({
     initialValues: {
@@ -45,45 +32,30 @@ function SellerLogin() {
       password: "",
     },
     validationSchema: LoginSchema,
-    onSubmit: (values) => {
-      dispatch(loginUser(values));
-    },
+    onSubmit: async (values) => {
+      const action = await dispatch(loginUser(values));
+      if (loginUser.fulfilled.match(action)) {
+          const token = action.payload.token; 
+          localStorage.setItem("token", token);
+          toast.success('Login successfully');
+          joinRoom(token);
+          if (action.payload.user.role === "buyer") {
+              navigate("/home");
+          } else if (action.payload.user.role === "seller") {
+              navigate("/seller/dashboard");
+          } else if (action.payload.user.role === "admin") {
+              navigate("/admin/dashboard");
+          }
+      }
+  }
   });
 
   useEffect(() => {
-    dispatch(resetAuth());
-  }, [dispatch]);
-
-  useEffect(() => {
-    async function checkAuth() {
-      if (token) {
-        await dispatch(getUserDetails(token));
-      }
-      setIsChecking(false);
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/home");
     }
-
-    checkAuth();
-  }, [dispatch, token]);
-
-  useEffect(() => {
-    if (!isChecking && isSuccess && isAuthenticated) {
-      if (user && (user as any).role !== "seller") {
-        setBadUser(true);
-        dispatch(resetAuth());
-        return;
-      }
-      localStorage.setItem("token", token);
-      {message && toast.success(message)}
-      navigate(callbackUrl || "/seller/dashboard");
-      formik.resetForm();
-    }
-  }, [isChecking, isSuccess, token, isAuthenticated, user, navigate, callbackUrl, message, dispatch]);
-
-  useEffect(() => {
-    if (!isChecking && isAuthenticated && user && (user as any).role === 'seller') {
-      navigate(callbackUrl || "/seller/dashboard");
-    }
-  }, [isChecking, isAuthenticated, user, navigate, callbackUrl]);
+  }, [navigate]);
 
   function handleIsFocused() {
     setIsFocused(true);
@@ -94,39 +66,25 @@ function SellerLogin() {
     setIsVisible((isVisible) => !isVisible);
   }
 
-  if (isChecking) {
-    return <PulseLoader size={10} color="#007bff" />;
-  }
 
   return (
     <section className="section__login">
       <div className="mini-container login">
         <div className="login__left">
           <p className="login__heading">
-            Simplify management with our dashboard.
+            Login to your account to access our platform
           </p>
           <p className="login__text">
-            Simplify your e-commerce management with our user-friendly seller
-            dashboard.
+            Simplify your e-commerce account with our user-friendly website.
           </p>
           <img
-            src="../assets/images/sellerLogin.png"
+            src="../assets/images/loginPhoto.png"
             alt="login picture"
             className="login__img"
           />
         </div>
         <div className="login__right">
           <header className="login__header">
-            <div className="header__logo login__logo">
-              <img
-                src="../assets/images/logo.png"
-                alt="Ecommerce logo"
-                className="header__logo__img"
-              />
-              <p className="header__logo__text">
-                e-Commerce <span>Ninjas</span>
-              </p>
-            </div>
             <p className="login__heading">Welcome back</p>
             <p className="login__secondary">Please login to your account</p>
           </header>
@@ -151,9 +109,9 @@ function SellerLogin() {
                 className="form__input"
                 id="password"
                 name="password"
+                value={formik.values.password}
                 onChange={formik.handleChange}
                 onFocus={handleIsFocused}
-                value={formik.values.password}
                 onBlur={formik.handleBlur}
               />
               {isFocused ? (
@@ -177,7 +135,6 @@ function SellerLogin() {
                 </Link>
               </p>
             </div>
-            {badUser && (<p className="error">You must login as a seller</p>)}
             {formik.touched.email && formik.errors.email ? (
               <p className="error">{formik.errors.email}</p>
             ) : formik.touched.password && formik.errors.password ? (
@@ -201,10 +158,10 @@ function SellerLogin() {
             <p className="login__social__text">Login with google</p>
           </div>
           <p className="login__register">
-            New to e-commerce Ninjas?{" "}
-            <a href="#" className="login__link">
+            New to e-commerce Ninjas?
+            <Link to="/signup" className="login__link">
               Register
-            </a>
+            </Link>
           </p>
         </div>
       </div>
@@ -212,4 +169,4 @@ function SellerLogin() {
   );
 }
 
-export default SellerLogin;
+export default Login;

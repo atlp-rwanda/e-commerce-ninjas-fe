@@ -39,11 +39,14 @@ const SellerProduct = ({ productId }: { productId: string }) => {
 
     const [updatedProduct, setUpdatedProduct] = useState<ISingleProduct>(initialProductState);
     const [updateImages, setUpdateImages] = useState<File[]>([]);
+    const [isImagesUpdated, setIsImagesUpdated] = useState<boolean>(false);
+    const [isThereAnyUpdate, setIsThereAnyUpdate] = useState<boolean>(false);
 
     useEffect(() => {
         if (isUpdate && isUpdateSuccess && !updateError) {
             toast.success(`Product ${isAdd ? "added" : "updated"}`)
             isAdd && newAddedProduct && navigate(`/seller/product/${newAddedProduct.id}`)
+            !isAdd && dispatch(fetchSingleSellerProduct(productId));
         }
         else if (updateError) {
             toast.error(updateError || `${isAdd ? "Adding" : "Updating"} a product failed.`)
@@ -70,32 +73,29 @@ const SellerProduct = ({ productId }: { productId: string }) => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setUpdatedProduct(prev => ({ ...prev, [name]: value }));
-    };
-
-    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setUpdatedProduct(prev => ({ ...prev, [name]: new Date(value) }));
+        setIsThereAnyUpdate(true)
     };
 
     const handleSaveOrAdd = async () => {
         const formData = new FormData();
-        let allowedFields = ['name', 'description', 'price', 'bonus', 'discount', 'category', 'expiryDate'];
-        isAdd && allowedFields.push('quantity');
+        let allowedFields = ['name', 'description', 'price', 'bonus', 'discount', 'category', 'expiryDate', 'quantity'];
         allowedFields.forEach(key => {
             if (updatedProduct[key] !== undefined) {
                 formData.append(key, updatedProduct[key].toString());
             }
         });
 
-        const imageBlobs = await Promise.all(updateImages.map(async (base64String: any) => {
-            const response = await fetch(base64String);
-            const blob = await response.blob();
-            return blob;
-        }));
+        if (isImagesUpdated) {
+            const imageBlobs = await Promise.all(updateImages.map(async (base64String: any) => {
+                const response = await fetch(base64String);
+                const blob = await response.blob();
+                return blob;
+            }));
 
-        imageBlobs.forEach((blob, index) => {
-            formData.append('images', blob, `image${index}.${blob.type.split('/')[1]}`);
-        });
+            isImagesUpdated && imageBlobs.forEach((blob, index) => {
+                formData.append('images', blob, `image${index}.${blob.type.split('/')[1]}`);
+            });
+        }
 
         try {
             if (isAdd) {
@@ -132,7 +132,7 @@ const SellerProduct = ({ productId }: { productId: string }) => {
                 <div className="seller-product-header">
                     <h1>{isAdd ? 'Add New Product' : 'Product View'}</h1>
                     <div className="header-btns">
-                        <button className='edit-btn' onClick={handleSaveOrAdd}>
+                        <button disabled={!isThereAnyUpdate && !isImagesUpdated} className={`edit-btn ${!isThereAnyUpdate && !isImagesUpdated && 'disabled'}`} onClick={handleSaveOrAdd}>
                             <FaSave /> {isAdd ? "ADD" : "UPDATE"}
                         </button>
                         {!isAdd && <button className='delete-btn'><FaTrash /> Delete</button>}
@@ -193,8 +193,8 @@ const SellerProduct = ({ productId }: { productId: string }) => {
                                 <input
                                     type='date'
                                     name="expiryDate"
-                                    value={new Date(updatedProduct.expiryDate).toISOString().split('T')[0]}
-                                    onChange={handleDateChange}
+                                    value={updatedProduct.expiryDate && new Date(updatedProduct.expiryDate).toISOString().split('T')[0]}
+                                    onChange={handleInputChange}
                                     className='content-card-input'
                                 />
                             </ContentCard>
@@ -203,7 +203,7 @@ const SellerProduct = ({ productId }: { productId: string }) => {
                     <div className="right">
                         <ContentCard title='Upload image' className='img-card'>
                             <div className="images-holder-div">
-                                <ProductImages initialImages={updatedProduct.images} setUpdateImages={setUpdateImages} />
+                                <ProductImages initialImages={updatedProduct.images} setUpdateImages={setUpdateImages} setIsImagesUpdated={setIsImagesUpdated} />
                             </div>
                         </ContentCard>
                         <ContentCard title='Category' className='category-card'>
@@ -235,7 +235,7 @@ const ContentCard = ({ title, children, className }: { title: string, children: 
     );
 };
 
-const ProductImages = ({ initialImages, setUpdateImages }: { initialImages: string[], setUpdateImages: (img: any) => void }) => {
+const ProductImages = ({ initialImages, setUpdateImages, setIsImagesUpdated }: { initialImages: string[], setUpdateImages: (img: any) => void, setIsImagesUpdated: (newState: boolean) => void }) => {
     const [images, setImages] = useState<string[]>(initialImages);
     const [selectedImage, setSelectedImage] = useState(0);
 
@@ -270,8 +270,19 @@ const ProductImages = ({ initialImages, setUpdateImages }: { initialImages: stri
                 const newImages = [...images, reader.result as string];
                 setImages(newImages);
                 setUpdateImages(newImages);
+                setIsImagesUpdated(true)
             };
             reader.readAsDataURL(e.target.files[0]);
+        }
+    };
+
+    const handleRemoveImage = (indexToRemove: number) => {
+        const newImages = images.filter((_, index) => index !== indexToRemove);
+        setImages(newImages);
+        setUpdateImages(newImages);
+        setIsImagesUpdated(true);
+        if (selectedImage >= newImages.length) {
+            setSelectedImage(newImages.length - 1);
         }
     };
 
@@ -279,13 +290,20 @@ const ProductImages = ({ initialImages, setUpdateImages }: { initialImages: stri
         <div className='images-container'>
             <div className="thumbnails-container">
                 {images.map((src, index) => (
-                    <img
-                        key={index}
-                        src={src}
-                        alt={`Product Thumbnail ${index + 1}`}
-                        className={`thumbnail-image ${selectedImage === index ? 'active' : ''}`}
-                        onMouseEnter={() => setSelectedImage(index)}
-                    />
+                    <div key={index} className="thumbnail-wrapper">
+                        <img
+                            src={src}
+                            alt={`Product Thumbnail ${index + 1}`}
+                            className={`thumbnail-image ${selectedImage === index ? 'active' : ''}`}
+                            onMouseEnter={() => setSelectedImage(index)}
+                        />
+                        <button 
+                            className="remove-image-button"
+                            onClick={() => handleRemoveImage(index)}
+                        >
+                            ×
+                        </button>
+                    </div>
                 ))}
                 <div className="thumbnail-image image-input-div">
                     <label htmlFor='image'>

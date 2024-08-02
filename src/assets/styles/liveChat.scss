@@ -21,8 +21,8 @@
 
   .unreadCount {
     position: absolute;
-    top: -8px;
-    right: -8px;
+    top: -5px;
+    right: -5px;
     background-color: red;
     color: white;
     border-radius: 50%;
@@ -31,6 +31,8 @@
     text-align: center;
     line-height: 20px;
     font-weight: bold;
+    font-size: 1.3rem;
+    border: 3px solid $white-color;
   }
 }
 
@@ -137,6 +139,7 @@
       font-weight: bold;
       font-size: 12px;
       text-transform: uppercase;
+      
     }
 
     .unread-badge::before,

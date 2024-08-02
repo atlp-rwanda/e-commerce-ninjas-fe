@@ -27,6 +27,7 @@ import { OverViewDashboard } from "./pages/admin/OverView";
 import Users from "./pages/admin/Users";
 import Logout from './components/layout/Logout';
 import UserProfile from './pages/UserEditProfile';
+import ProductsPage from './pages/Products';
 const AppRouter: React.FC = () => {
   return (
     <div>
@@ -34,6 +35,7 @@ const AppRouter: React.FC = () => {
         <Route path="/" element={<Layout />}>
           <Route index element={<LandingPage />} />
           <Route path="/home" element={<LandingPage />} />
+          <Route path="/products" element={<ProductsPage />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="login" element={<UserLogin />} />
           <Route path="verify-email" element={<EmailVerifying />} />

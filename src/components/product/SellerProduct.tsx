@@ -87,9 +87,12 @@ const SellerProduct = ({ productId }: { productId: string }) => {
 
         if(isAdd && (!updatedProduct.name || !updatedProduct.description || !updatedProduct.price || !updatedProduct.bonus || !updatedProduct.discount || !updatedProduct.category || !updatedProduct.expiryDate || !updatedProduct.quantity)){
             toast.error('Fill all fields please')
+            return;
         }
-        if(isAdd && setUpdateImages.length < 4){
+        if(isAdd && updateImages.length < 4){
+            toast.error(updateImages.length)
             toast.error('Upload atleast 4 images please')
+            return;
         }
 
         if (isImagesUpdated) {

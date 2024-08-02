@@ -174,7 +174,7 @@ const UserViewCart: React.FC = () => {
       await dispatch(clearCarts()).unwrap();
       const response1 = await  dispatch(getUserCarts()).unwrap();
       setCartResponseData(response1.data);
-
+      
       toast.success("Cart cleared successfully");
       setCartResponseData({ ...cartResponseData, carts: [] });
       setTotalProductPrice(0);
@@ -183,11 +183,13 @@ const UserViewCart: React.FC = () => {
       toast.error("Failed to clear the cart");
     }
   };
+
   const handleClearSingleCart = async (cartId) => {
   
     try {
         await dispatch(clearCart(cartId));
         const response1 = await  dispatch(getUserCarts()).unwrap();
+        setCheckoutSuccess(false);
         setCartResponseData(response1.data);
         const remainingCarts = cartResponseData.carts.filter((cart)=>cart.cartId !== cartId)
         setCartResponseData({...cartResponseData,carts:remainingCarts});
@@ -199,12 +201,16 @@ const UserViewCart: React.FC = () => {
         toast.error("Failed to clear the cart");
     }
 };
-const handleClearCartProduct = async(cartId,productId)=>{
+
+const handleClearCartProduct = async(cartId,productId,cartProductsList)=>{
   try {
+    if(cartProductsList.length <=1) {
+      await handleClearSingleCart(cartId);
+      return;
+    }
     const response = await dispatch(clearCartProduct({cartId,productId}))
     const response1 = await  dispatch(getUserCarts()).unwrap();
     setCartResponseData(response1.data);
-    console.log("Clear product",response);
     toast.success("product cleared successfully");
   } catch (error) {
     toast.error("Failed to clear the product ");
@@ -212,7 +218,7 @@ const handleClearCartProduct = async(cartId,productId)=>{
   }
 }
 
-
+let cartProductsList=null;
 const handleClose = () => {
  
   setOpen(false);
@@ -289,7 +295,7 @@ const handleClose = () => {
                               </button>
                             </div>
                             <div className="other">
-                              <button className="delete" type="button" onClick={()=>handleClearCartProduct(cart.cartId,product.id)}>
+                              <button className="delete" type="button" onClick={()=>handleClearCartProduct(cart.cartId,product.id,cart.products)}>
                                 <FaTrash color="#ff6d18" />
                               </button>
                             </div>

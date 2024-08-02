@@ -191,18 +191,31 @@
                         margin-left: 1rem;
                     }
                 }
-                .profile-order {
+                .progress-bar-container {
+                    display: flex;
+                    align-items: center;
                     font-size: 1.4rem;
-                    color: $text-color;
-                    margin: 0;
-                    cursor: pointer;
                     margin-top: 1rem;
+                    color: $text-color;
                     .order-progress {
                         color: $primary-color;
-                        margin-left: 1rem;
+                        margin-left: 0.5rem;
+                        margin-right: 0.5rem;
                     }
-                }
-
+                  }
+                
+                  .progress-bar {
+                    width: 3rem;
+                    height: 1rem;
+                    background-color: #e0e0e0;
+                    border-radius: 0.5rem;
+                    overflow: hidden;
+                  }
+                
+                  .progress-bar-fill {
+                    height: 100%;
+                    transition: width 0.3s ease;
+                  }
             }
 
             .right-products {

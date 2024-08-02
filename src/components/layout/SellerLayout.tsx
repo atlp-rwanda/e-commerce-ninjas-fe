@@ -51,7 +51,20 @@ export const SellerLayout = () => {
     return formattedName.length > 8 ? formattedName.substring(0, 8) + '...' : formattedName;
   }
 
-  const availableProducts = data.products?.filter(product => product.status === 'available');
+  const availableProducts = data.products
+    ?.filter(product => product.status === 'available')
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 5);
+
+  const completionPercentage = 12; 
+
+  const getCompletionColor = (percentage) => {
+    if (percentage >= 80) return "#00FF00";
+    if (percentage >= 50) return "#FFFF00";
+    return "#FF0000"; // Red
+  };
+
+  const progressBarColor = getCompletionColor(completionPercentage);
 
   return (
     <div className="seller__wrapper">
@@ -115,33 +128,42 @@ export const SellerLayout = () => {
           </div>
           <section className="right__side">
             <div className="right-profile">
-             {user && User.profilePicture ? (
-                <img src={User.profilePicture}  alt="Profile" className="profile-image" />
+              {user && User.profilePicture ? (
+                <img src={User.profilePicture} alt="Profile" className="profile-image" />
               ) : (
                 <FaRegUser className="profile-image" />
-             )}
+              )}
               <span className="profile-name">
-              {user
-                  ? formatName(User?.firstName || User?.email?.split('@')[0])
-                  : "Account"}
+                {user ? formatName(User?.firstName || User?.email?.split('@')[0]) : "Account"}
               </span>
               <IconButton className="profile-edit">
                 Edit Profile
                 <EditIcon className="icon-edit" />
               </IconButton>
-              <p className="profile-order">
-                Order Completed: <span className="order-progress">80%</span>
-              </p>
+              <div className="progress-bar-container">
+                Order Completed: <span className="order-progress">{completionPercentage}%</span>
+                <div
+                  className="progress-bar"
+                >
+                  <div
+                    className="progress-bar-fill"
+                    style={{
+                      width: `${completionPercentage}%`,
+                      backgroundColor: progressBarColor,
+                    }}
+                  ></div>
+                </div>
+              </div>
             </div>
             <div className="right-products">
-                <p className="right-header">Products Available</p>
-                <div className="product-header">
-                    <p>No</p>
-                    <p>Product Name</p>
-                    <p>Status</p>
-                </div>
-                {isLoading ? (
-                  <div className="loader">
+              <p className="right-header">Recent Products</p>
+              <div className="product-header">
+                <p>No</p>
+                <p>Product Name</p>
+                <p>Status</p>
+              </div>
+              {isLoading ? (
+                <div className="loader">
                   <PuffLoader color="#ff6d18" size={25} loading={isLoading} />
                 </div>
               ) : isError ? (

@@ -28,7 +28,7 @@ import Users from './pages/admin/Users';
 import Logout from './components/layout/Logout';
 import UserProfile from './pages/UserEditProfile';
 import ProductsPage from './pages/Products';
-import UserCartPaymentSuccess from './pages/UserCartPaymentSuccess';
+import UserVIewOrders from './pages/UserViewOrders';
 import TrackerOrder from "../src/pages/trackerOrder"
 const AppRouter: React.FC = () => {
   return (
@@ -50,6 +50,14 @@ const AppRouter: React.FC = () => {
             path="/api/auth/google/callback"
             element={<GoogleCallback />}
           />
+          <Route
+            path="/api/auth/verify-email/:token"
+            element={<VerifyEmail />}
+          />
+          <Route
+            path="/api/auth/google/callback"
+            element={<GoogleCallback />}
+          />
           <Route path="/reset-password" element={<SendResetPasswordLink />} />
           <Route
             path="/api/auth/reset-password/:token"
@@ -59,13 +67,23 @@ const AppRouter: React.FC = () => {
           <Route path="search" element={<Search />} />
           <Route path="logout" element={<Logout />} />
           <Route path="shopping-cart" element={<UserViewCart />} />
-          <Route path="/profile-settings" element={<ProtectedRoute redirectPath="/login"><UserProfile /></ProtectedRoute>}/>
+          <Route path="my-orders" element={<UserVIewOrders />} />
+          <Route
+            path="/profile-settings"
+            element={
+              <ProtectedRoute redirectPath="/login">
+                <UserProfile />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<NotFound />} />
           <Route path="seller/login" element={<SellerLogin />} />
-          <Route path="api/cart/payment-success" element={<UserCartPaymentSuccess />} />
           <Route path="*" element={<NotFound />} />
           <Route path="seller/login" element={<SellerLogin />} />
-          <Route path="trackOrder" element={<TrackerOrder/>} />
+          <Route path="*" element={<NotFound />} />
+          <Route path="seller/login" element={<SellerLogin />} />
+          <Route path="*" element={<NotFound />} />
+          <Route path="seller/login" element={<SellerLogin />} />
         </Route>
         <Route path="/seller" element={<SellerLayout />}>
           <Route index element={<Navigate to="dashboard" replace />} />

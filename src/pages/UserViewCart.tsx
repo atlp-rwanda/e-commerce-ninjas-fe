@@ -278,12 +278,12 @@ const UserViewCart: React.FC = () => {
         toast.error(response.message);
       }
     } catch (error: any) {
-      if (error === "Not authorized") {
-        localStorage.setItem("pendingCartProduct", productId);
-        toast.error("Please login first");
-        navigate("/login");
+      if (error === 'Not authorized') {
+        localStorage.setItem('pendingCartProduct', productId);
+        toast.error('Please login first');
+        navigate('/login');
       } else {
-        toast.error("Something went wrong. Please try again later.");
+        toast.error('Something went wrong. Please try again later.');
       }
     } finally {
       setIsLoading(false);

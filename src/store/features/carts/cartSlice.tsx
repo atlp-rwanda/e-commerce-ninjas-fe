@@ -1,8 +1,8 @@
 /* eslint-disable */
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import cartService from './cartService';
-import { getErrorMessage } from '../../../utils/axios/axiosInstance';
-import { iCartInitialResource } from '../../../utils/types/store';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import cartService from "./cartService";
+import { getErrorMessage } from "../../../utils/axios/axiosInstance";
+import { iCartInitialResource } from "../../../utils/types/store";
 
 const initialState: iCartInitialResource = {
   carts: [],
@@ -14,6 +14,7 @@ const initialState: iCartInitialResource = {
   cartCounter: 0,
   cartTotalMoney: 0,
   cartProductslist: [],
+  orders: null,
 };
 
 interface CreateCartParams {
@@ -145,14 +146,41 @@ export const updateCartStatus = createAsyncThunk(
   }
 );
 
-export const userSaveOrder = createAsyncThunk('cart/saveOrder', async(data:any,thunkApi)=> {
-  try {
-    const response = await cartService.saveOrder(data);
-    return response;
-  } catch (error) {
-    return thunkApi.rejectWithValue(getErrorMessage(error));
+export const userSaveOrder = createAsyncThunk(
+  'cart/saveOrder',
+  async (data: any, thunkApi) => {
+    try {
+      const response = await cartService.saveOrder(data);
+      return response;
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
   }
-})
+);
+
+export const getUserOrders = createAsyncThunk(
+  'cart/GetOrders',
+  async (_, thunkApi) => {
+    try {
+      const response = await cartService.getUserOrders();
+      return response;
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
+export const userTrackOrderStatus = createAsyncThunk(
+  'cart/userTrackOrderStatus',
+  async (id, thunkApi) => {
+    try {
+      const response = await cartService.userTrackOrderStatus(id);
+      return response;
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
 
 const cartSlice = createSlice({
   name: 'cart',
@@ -178,6 +206,9 @@ const cartSlice = createSlice({
         });
       });
       state.cartTotalMoney = calculateTotalPrice(state.carts);
+    },
+    userGetOrders: (state, action) => {
+      state.orders = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -315,6 +346,41 @@ const cartSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = action.payload;
+      })
+      .addCase(getUserOrders.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+      })
+      .addCase(getUserOrders.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.orders = action.payload;
+        state.message = 'Orders retrieved successfully';
+      })
+      .addCase(getUserOrders.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = '';
+      })
+      .addCase(userTrackOrderStatus.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+      })
+      .addCase(userTrackOrderStatus.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.message = 'Order status updated successfully';
+      })
+      .addCase(userTrackOrderStatus.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = '';
       });
   },
 });

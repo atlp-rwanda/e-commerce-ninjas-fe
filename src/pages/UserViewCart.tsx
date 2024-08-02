@@ -128,7 +128,7 @@ const UserViewCart: React.FC = () => {
         )}
       <section className="cart-section">
         <div className="cart-products">
-          {cartResponseData.carts.map((cart: any, index) => (
+          {cartResponseData?.carts?.length > 0 && cartResponseData.carts.map((cart: any, index) => (
             <div key={cart.id} className="cart">
               <div className="title">
                 <FaCheckSquare className="check" color="#ff6d18" />

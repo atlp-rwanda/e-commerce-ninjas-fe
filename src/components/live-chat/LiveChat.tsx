@@ -237,6 +237,7 @@ const LiveChat = () => {
         );
         input.focus();
       }, 0);
+      setIsEmojiPickerOpen((prev)=>!prev)
     }
   };
 
@@ -537,6 +538,7 @@ const LiveChat = () => {
                 )}
                 <div className="chat-input">
                   <input
+                  className="input"
                     type="text"
                     value={currentMessage}
                     onChange={handleChangeMessage}
@@ -569,6 +571,7 @@ const LiveChat = () => {
                       theme={Theme.DARK}
                       emojiStyle={EmojiStyle.GOOGLE}
                       onEmojiClick={handleEmojiClick}
+                      
                     />
                   </div>
                   <input

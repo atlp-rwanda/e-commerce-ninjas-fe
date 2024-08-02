@@ -73,7 +73,6 @@ export default function Users() {
   };
 
   const handleStatusChange = (userId:string, isEnabled:boolean) => {
-    console.log("userID:" ,userId,"status:",isEnabled)
     setLocalUserState((prevState) =>
       prevState.map((user) =>
         user.id === userId? {...user, newStatus: isEnabled ? "enabled" : "disabled" } : user

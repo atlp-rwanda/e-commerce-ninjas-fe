@@ -34,7 +34,7 @@ export const AdminDashboard = () => {
     dispatch(logout());
     setTimeout(() => {
       navigate("/");
-    }, 1000);
+    }, 2000);
   };
 
   useEffect(() => {

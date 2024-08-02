@@ -186,7 +186,7 @@ export interface IAdminInitialResponse {
 
 export interface ISingleProductResponse {
   message?: string;
-  data?: { product: ISingleProduct[] };
+  data?: { product: ISingleProduct[] | ISingleProduct };
   error?: string;
   status?: number;
 }
@@ -197,6 +197,11 @@ export interface ISingleProductInitialResponse {
   isSuccess: boolean;
   isLoading: boolean;
   message: string | null;
+  newProduct?: ISingleProduct | null;
+  newAddedProduct?: ISingleProduct | null;
+  isUpdate?: boolean;
+  isUpdateSuccess?: boolean;
+  updateError?: string;
 }
 
 export interface ISellerCollectionProductResponse {

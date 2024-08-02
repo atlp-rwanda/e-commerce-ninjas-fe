@@ -71,7 +71,7 @@ export interface ISingleProduct {
   price: number;
   discount?: string;
   category: string;
-  expiryDate?: Date;
+  expiryDate?: Date | string;
   expired: boolean;
   bonus?: string;
   images: string[];

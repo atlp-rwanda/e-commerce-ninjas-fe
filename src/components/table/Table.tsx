@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { IoIosArrowRoundBack, IoIosArrowRoundForward } from "react-icons/io";
 import { Empty } from "antd";
 
-const Table = ({ headers, rows, title }) => {
+const Table = ({ headers, rows, title, tableButton }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
   const totalPages = Math.ceil(rows.length / rowsPerPage);
@@ -24,6 +24,10 @@ const Table = ({ headers, rows, title }) => {
     <>
       <div className="table__header__">
         <h2 className="table__title">{title}</h2>
+        {tableButton && 
+        <div className="table_button">
+          {tableButton}
+        </div>}
         <div className="pagination">
           <span>Page</span>
           <select
@@ -91,6 +95,7 @@ const Table = ({ headers, rows, title }) => {
 Table.propTypes = {
   headers: PropTypes.arrayOf(PropTypes.string).isRequired,
   rows: PropTypes.arrayOf(PropTypes.array).isRequired,
+  tableButton: PropTypes.any,
 };
 
 export default Table;

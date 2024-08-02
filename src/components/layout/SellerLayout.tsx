@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useState } from 'react';
 import { AiFillDashboard } from "react-icons/ai";
-import { FaProductHunt } from "react-icons/fa";
+import { FaPlusCircle, FaProductHunt } from "react-icons/fa";
 import { IoLogOutSharp } from "react-icons/io5";
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import SellerHeader from './SellerHeader';

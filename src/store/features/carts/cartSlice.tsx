@@ -107,6 +107,15 @@ export const clearCarts = createAsyncThunk(
   }
 );
 
+export const payCart = createAsyncThunk("cart/buyerPayCart", async (cartId:string, thunkApi)=> {
+  try {
+    const response = await cartService.userPayCart(cartId)
+    return response;
+  } catch (error) {
+    return thunkApi.rejectWithValue(getErrorMessage(error));
+  }
+})
+
 const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -116,7 +125,7 @@ const cartSlice = createSlice({
     },
     usergetCarts: (state, action: PayloadAction) => {
       state.carts.push(action.payload);
-    },
+    }
     updateCartProductQuantity: (state, action: PayloadAction<{ productId: string; quantity: number }>) => {
       const { productId, quantity } = action.payload;
       state.carts.forEach((cart) => {
@@ -265,7 +274,26 @@ const cartSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = action.payload;
-      });
+      })
+      .addCase(payCart.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+        state.message = "";
+      })
+      .addCase(payCart.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.message = "Payment successful";
+      })
+      .addCase(payCart.rejected,(state,action)=> {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = "";
+        toast.error("Payment failed");
+      })
   },
 });
 

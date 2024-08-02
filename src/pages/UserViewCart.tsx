@@ -1,10 +1,14 @@
 /* eslint-disable */
-import React, { useEffect, useState } from "react";
-import { Meta } from "../components/Meta";
-import { useAppDispatch, useAppSelector } from "../store/store";
-import { PuffLoader, PulseLoader } from "react-spinners";
-import { toast } from "react-toastify";
-import { checkout, getUserCarts , clearCarts,createCart,clearCart,clearCartProduct} from "../store/features/carts/cartSlice";
+import React, { useEffect, useState } from 'react';
+import { Meta } from '../components/Meta';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { PuffLoader, PulseLoader } from 'react-spinners';
+import { toast } from 'react-toastify';
+import {
+  checkout,
+  getUserCarts,
+  payCart,
+, clearCarts,createCart,clearCart,clearCartProduct} from '../store/features/carts/cartSlice';
 import {
   FaCheckSquare,
   FaMinus,
@@ -13,16 +17,17 @@ import {
   FaTrash,
   FaGift,
   FaShippingFast,
-} from "react-icons/fa";
+} from 'react-icons/fa';
 import { GiBroom } from "react-icons/gi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Product from "../components/product/Product";
-import { Box, LinearProgress } from "@mui/material";
+import Product from '../components/product/Product';
+import { Box, LinearProgress } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 import Button from "@mui/material/Button";
 import Dispatch from 'react';
 
@@ -44,7 +49,10 @@ const UserViewCart: React.FC = () => {
   const [open,setOpen] = useState(false)
   
 
+  const [cartToPay, setCartToPay] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [currentEndpoint, setCurrentEndpoint] = useState('');
 
   const cartState = useAppSelector((state) => state.cart);
 
@@ -54,29 +62,45 @@ const UserViewCart: React.FC = () => {
     const fetchCarts = async () => {
       try {
         setIsLoading(true);
+
         const response = await dispatch(getUserCarts());
         const response1 = await dispatch(getUserCarts()).unwrap();
-        if (response.payload === "Not authorized") {
+        if (response.payload === 'Not authorized') {
           setIsLoggedOut(true);
-          toast.error("Please login first");
-          navigate("/login");
+          toast.error('Please login first');
+          navigate('/login');
         }
         setCartResponseData(response1.data);
         setIsLoading(false);
       } catch (error: any) {
-        if (error === "Not authorized") {
+        if (error === 'Not authorized') {
           setIsLoggedOut(true);
-          toast.error("Please login first");
-          navigate("/login");
+          toast.error('Please login first');
+          navigate('/login');
         }
-        console.error("Error fetching carts:", error);
+        console.error('Error fetching carts:', error);
         setIsLoading(false);
         setIsError(true);
         toast.error(error.message);
       }
     };
     fetchCarts();
-  }, [dispatch]);
+  }, [dispatch, navigate]);
+
+  useEffect(() => {
+    // Correctly set the current endpoint based on location.search
+    const endpoint = location.search.slice(1);
+    setCurrentEndpoint(endpoint);
+
+    // Check the current endpoint for success or cancel
+    if (endpoint === 'success') {
+      toast.success('Cart payment success');
+      navigate('/shopping-cart');
+    } else if (endpoint === 'cancel') {
+      toast.error('Cart payment is cancelled');
+      navigate('/shopping-cart');
+    }
+  }, [location.search, navigate]);
 
   if (isLoading) {
     return (
@@ -93,6 +117,7 @@ const UserViewCart: React.FC = () => {
       </div>
     );
   }
+  
   if (isLoggedOut) {
     return (
       <div className="error-message">
@@ -120,9 +145,10 @@ const UserViewCart: React.FC = () => {
       0
     );
     setTotalProductPrice(totalProductPrice);
+    setCartToPay(cartId);
     setCheckoutSuccess(true);
     setIsPreloader(false);
-    toast.success("Checkout is done Successfully");
+    toast.success('Checkout is done Successfully');
   };
 
   const handleAddProductToCart = async (productId: string, quantity:number) => {
@@ -224,23 +250,38 @@ const handleClose = () => {
   setOpen(false);
 };
 
+
+  const handlePayCart = async () => {
+    try {
+      setIsPreloader(true);
+      console.log('Cart to Pay', cartToPay);
+      const response = await dispatch(payCart(cartToPay)).unwrap();
+      window.location.href = response.payment_url;
+      toast.success('Cart payment initiated successfully');
+      setIsPreloader(false);
+    } catch (error) {
+      setIsPreloader(false);
+      toast.error(error);
+    }
+  };
+
   return (
     <>
       <Meta title="View shopping cart - E-Commerce Ninjas" />
       {isPreloader && (
-          <div className="table__spinner">
-            <Box sx={{ width: "100%" }}>
-              <LinearProgress
-                sx={{
-                  backgroundColor: "#fff",
-                  "& .MuiLinearProgress-bar": {
-                    backgroundColor: "#ff8a46",
-                  },
-                }}
-              />
-            </Box>
-          </div>
-        )}
+        <div className="table__spinner">
+          <Box sx={{ width: '100%' }}>
+            <LinearProgress
+              sx={{
+                backgroundColor: '#fff',
+                '& .MuiLinearProgress-bar': {
+                  backgroundColor: '#ff8a46',
+                },
+              }}
+            />
+          </Box>
+        </div>
+      )}
          <div className="clear-cart">
           <button className="delete" type="button" onClick={()=>setOpen(true)} >
             <GiBroom className="deleteIcon" />
@@ -256,8 +297,9 @@ const handleClose = () => {
                 <h2>Shopping Cart</h2>
                 <button
                   onClick={() => handleCartCheckOut(cart.cartId, index)}
-                  className={`checkout-btn`}>
-                  <span>{"Checkout"}</span>
+                  className={`checkout-btn`}
+                >
+                  <span>{'Checkout'}</span>
                 </button>
 
                 <FaTrash color="#ff6d18" className="delete" onClick={()=>handleClearSingleCart(cart.cartId)}/>
@@ -344,13 +386,15 @@ const handleClose = () => {
               ))}
               <div className="last row">
                 <div className="left">Total Discount:</div>
-                <div className="right">${(totalProductPrice - checkoutData).toFixed(2)}</div>
+                <div className="right">
+                  ${(totalProductPrice - checkoutData).toFixed(2)}
+                </div>
               </div>
               <div className="row">
                 <div className="left">Total amount:</div>
                 <div className="right">${checkoutData.toFixed(2)}</div>
               </div>
-              <button>Pay Now</button>
+              <button onClick={() => handlePayCart()}>Pay Now</button>
             </div>
           ) : null}
             <Dialog

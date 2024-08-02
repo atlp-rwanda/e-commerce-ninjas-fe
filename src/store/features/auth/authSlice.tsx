@@ -322,14 +322,15 @@ const userSlice = createSlice({
         state.userId = action.payload.data.userId || "";
         if(state.message !== "Check your Email for OTP Confirmation"){
           state.isAuthenticated = true;
-          state.token = action.payload.data.token;
+          state.token = action.payload.token;
+          state.user = action.payload.user;
         }
       })
       .addCase(loginUser.rejected, (state, action: PayloadAction<any>) => {
         state.isError = true;
         state.isLoading = false;
         state.isSuccess = false;
-        state.error = action.payload
+        state.error = action.payload;
       })
       .addCase(logout.pending, (state) => {
         state.isError = false;

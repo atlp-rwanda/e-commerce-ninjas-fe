@@ -12,8 +12,11 @@ const register = async (userData: IUser) => {
 };
 
 const login = async (userData: IUser) => {
-  const response = await axiosInstance.post<IUser>("/api/auth/login", userData);
-  return response.data;
+  const response = await axiosInstance.post<{ data: { token: string } }>("/api/auth/login", userData);
+  const { token } = response.data.data;
+  console.log(token);
+  const userDetails = await fetchUserDetails(token);
+  return { token, user: userDetails.data.user };
 };
 
 const logout = async () => {

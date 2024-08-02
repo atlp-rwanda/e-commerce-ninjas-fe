@@ -1,21 +1,18 @@
 /* eslint-disable */
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../store/store";
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { toast } from "react-toastify";
 import { getUserDetails } from "../store/features/auth/authSlice";
 
-function useSellerAuthCheck() {
+function useAdminAuthCheck() {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const location = useLocation();
     const { pathname } = location;
-    const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+    const { user, isAuthenticated, token } = useAppSelector((state) => state.auth);
     const [isChecking, setIsChecking] = useState(true);
     const [isAuthorized, setIsAuthorized] = useState(false);
-
-    const callbackUrl = useMemo(() => encodeURIComponent(pathname), [pathname]);
-    const token = localStorage.getItem('token')
 
     const checkAuth = useCallback(async () => {
         if (token) {
@@ -30,18 +27,18 @@ function useSellerAuthCheck() {
 
     useEffect(() => {
         if (!isChecking) {
-            if (!isAuthenticated || !token || !user || (user as any).role !== "seller") {
-                const message = !isAuthenticated ? 'You must login first' : 'You must login as a seller';
-                // toast.info(message);
-                navigate(`/login?callbackUrl=${callbackUrl}`);
+            if (!isAuthenticated || !user || (user as any).role !== "admin") {
+                const message = !isAuthenticated ? 'You must login first' : 'You must login as an admin';
+                toast.info(message);
+                navigate(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
                 setIsAuthorized(false);
             } else {
                 setIsAuthorized(true);
             }
         }
-    }, [isChecking, isAuthenticated, user, navigate, callbackUrl]);
+    }, [isChecking, isAuthenticated, user, navigate, pathname]);
 
     return isAuthorized;
 }
 
-export default useSellerAuthCheck;
+export default useAdminAuthCheck;

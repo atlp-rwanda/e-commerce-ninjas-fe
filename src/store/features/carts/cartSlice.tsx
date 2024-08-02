@@ -3,13 +3,14 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import cartService from "./cartService";
 import { getErrorMessage } from "../../../utils/axios/axiosInstance";
 import { iCartInitialResource } from "../../../utils/types/store";
+import { toast } from 'react-toastify';
 
 const initialState: iCartInitialResource = {
   carts: [],
   isLoading: false,
   isError: false,
   isSuccess: false,
-  message: "",
+  message: '',
   isLoggedOut: false,
   cartCounter: 0,
   cartTotalMoney: 0,
@@ -22,7 +23,7 @@ interface CreateCartParams {
 }
 
 export const createCart = createAsyncThunk(
-  "cart/create-cart",
+  'cart/create-cart',
   async ({ productId, quantity }: CreateCartParams, thunkAPI) => {
     try {
       const cart = await cartService.createCart(productId, quantity);
@@ -46,7 +47,7 @@ const calculateTotalPrice = (carts: any[]) => {
 };
 
 export const getUserCarts = createAsyncThunk(
-  "cart/userGetCarts",
+  'cart/userGetCarts',
   async (_, thunkAPI) => {
     try {
       const carts = await cartService.getUserCarts();
@@ -58,7 +59,7 @@ export const getUserCarts = createAsyncThunk(
 );
 
 export const checkout = createAsyncThunk(
-  "cart/buyer-cart-checkout",
+  'cart/buyer-cart-checkout',
   async (cartId: string, thunkApi) => {
     try {
       const response = await cartService.productCheckout(cartId);
@@ -117,7 +118,7 @@ export const payCart = createAsyncThunk("cart/buyerPayCart", async (cartId:strin
 })
 
 const cartSlice = createSlice({
-  name: "cart",
+  name: 'cart',
   initialState,
   reducers: {
     addCart: (state, action) => {
@@ -125,7 +126,7 @@ const cartSlice = createSlice({
     },
     usergetCarts: (state, action: PayloadAction) => {
       state.carts.push(action.payload);
-    }
+    },
     updateCartProductQuantity: (state, action: PayloadAction<{ productId: string; quantity: number }>) => {
       const { productId, quantity } = action.payload;
       state.carts.forEach((cart) => {
@@ -145,7 +146,7 @@ const cartSlice = createSlice({
         state.isLoading = true;
         state.isError = false;
         state.isSuccess = false;
-        state.message = "";
+        state.message = '';
       })
       .addCase(createCart.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -158,13 +159,13 @@ const cartSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        state.message = "";
+        state.message = '';
       })
       .addCase(getUserCarts.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
         state.isSuccess = false;
-        state.message = "";
+        state.message = '';
       })
       .addCase(getUserCarts.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -188,32 +189,32 @@ const cartSlice = createSlice({
         });
         state.cartProductslist = cartsProductsList;
 
-        state.message = "";
+        state.message = '';
       })
       .addCase(getUserCarts.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        state.message = "";
+        state.message = '';
       })
       .addCase(checkout.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
         state.isSuccess = false;
-        state.message = "";
+        state.message = '';
       })
       .addCase(checkout.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
         state.carts.push(action.payload);
-        state.message = "";
+        state.message = '';
       })
       .addCase(checkout.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        state.message = "";
+        state.message = '';
       })
       .addCase(clearCart.pending, (state) => {
         state.isLoading = true;
@@ -279,22 +280,21 @@ const cartSlice = createSlice({
         state.isLoading = true;
         state.isError = false;
         state.isSuccess = false;
-        state.message = "";
+        state.message = '';
       })
-      .addCase(payCart.fulfilled, (state, action) => {
+      .addCase(createProductStripe.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.message = "Payment successful";
+        state.message = 'Payment initated successfully';
       })
-      .addCase(payCart.rejected,(state,action)=> {
+      .addCase(createProductStripe.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        state.message = "";
-        toast.error("Payment failed");
+        state.message = '';
       })
-  },
+  }
 });
 
 export const { addCart, usergetCarts, updateCartProductQuantity } = cartSlice.actions;

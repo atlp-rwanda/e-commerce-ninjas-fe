@@ -7,7 +7,8 @@ import { toast } from 'react-toastify';
 import {
   checkout,
   getUserCarts,
-  payCart,
+  createProductStripe,
+  createSessionStripe,
 , clearCarts,createCart,clearCart,clearCartProduct} from '../store/features/carts/cartSlice';
 import {
   FaCheckSquare,
@@ -34,24 +35,28 @@ import Dispatch from 'react';
 
 const UserViewCart: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [isLoggedOut, setIsLoggedOut] = useState(false);
+  const [isPreloader, setIsPreloader] = useState(false);
+  const [isCheckoutSuccess, setCheckoutSuccess] = useState(false);
+
   const [cartData, setCartData] = useState<any>(null);
   const [cartResponseData, setCartResponseData] = useState(null);
-  const [isLoggedOut, setIsLoggedOut] = useState(false);
-  const [checkoutData, setcheckoutData] = useState(null);
-  const [isCheckoutSuccess, setCheckoutSuccess] = useState(null);
-  const [isPreloader, setIsPreloader] = useState(false);
+  const [checkoutData, setCheckoutData] = useState<number | null>(null);
   const [discount, setDiscount] = useState(0);
   const [totalProductPrice, setTotalProductPrice] = useState(0);
-  const [arrayOfProduct, setarrayOfProduct] = useState(null);
+  const [arrayOfProduct, setArrayOfProduct] = useState<any>(null);
   const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
   const [open,setOpen] = useState(false)
   
 
-  const [cartToPay, setCartToPay] = useState(null);
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [cartToPay, setCartToPay] = useState<string | null>(null);
+  const [amountToPay, setAmountToPay] = useState<string | null>(null);
+  const [stripePrice, setStripePrice] = useState<string | null>(null);
   const [currentEndpoint, setCurrentEndpoint] = useState('');
 
   const cartState = useAppSelector((state) => state.cart);
@@ -62,45 +67,114 @@ const UserViewCart: React.FC = () => {
     const fetchCarts = async () => {
       try {
         setIsLoading(true);
-
         const response = await dispatch(getUserCarts());
         const response1 = await dispatch(getUserCarts()).unwrap();
+
         if (response.payload === 'Not authorized') {
           setIsLoggedOut(true);
           toast.error('Please login first');
           navigate('/login');
+          return;
         }
         setCartResponseData(response1.data);
         setIsLoading(false);
       } catch (error: any) {
-        if (error === 'Not authorized') {
+        if (error.message === 'Not authorized') {
           setIsLoggedOut(true);
           toast.error('Please login first');
           navigate('/login');
+        } else {
+          console.error('Error fetching carts:', error);
+          toast.error('Failed to load cart products. Please try again later.');
         }
-        console.error('Error fetching carts:', error);
+
         setIsLoading(false);
         setIsError(true);
-        toast.error(error.message);
       }
     };
+
     fetchCarts();
   }, [dispatch, navigate]);
 
-  useEffect(() => {
-    // Correctly set the current endpoint based on location.search
-    const endpoint = location.search.slice(1);
-    setCurrentEndpoint(endpoint);
+  const handleCartCheckOut = async (
+    cartId: string,
+    index: number,
+    productsArr: Array<{
+      name: string;
+      description: string;
+      image: string;
+      price: string;
+    }>
+  ) => {
+    setIsPreloader(true);
+    try {
+      const response = await dispatch(checkout(cartId));
+      if (!response.payload) {
+        throw new Error('Checkout failed');
+      }
 
-    // Check the current endpoint for success or cancel
-    if (endpoint === 'success') {
-      toast.success('Cart payment success');
-      navigate('/shopping-cart');
-    } else if (endpoint === 'cancel') {
-      toast.error('Cart payment is cancelled');
-      navigate('/shopping-cart');
+      const totalCartAmount = response.payload.data.totalAmount;
+      const array = cartResponseData.carts[index];
+
+      setArrayOfProduct(array);
+      setCheckoutData(totalCartAmount);
+
+      const totalProductPrice = array.products.reduce(
+        (acc, product) => acc + parseFloat(product.price),
+        0
+      );
+      setTotalProductPrice(totalProductPrice);
+
+      const names = productsArr.map((product) => product.name).join(',');
+      // const descriptions = productsArr
+      //   .map((product) => product.description)
+      //   .join(',');
+      const descriptions = 'No description found';
+      const image1 = productsArr[0]?.image;
+      const image2 = productsArr[1]?.image;
+      console.log('Products', productsArr);
+      console.log('descriptions' + descriptions);
+      console.log('Names' + names);
+
+      const unit_amount = `${Math.round(totalProductPrice)}`;
+
+      setAmountToPay(unit_amount);
+      console.log('Unit amount', unit_amount);
+      const data = {
+        name: names,
+        description: descriptions,
+        image1,
+        image2,
+        unit_amount: unit_amount,
+      };
+      const stripeProduct = await dispatch(createProductStripe(data));
+      console.log('Sss', stripeProduct);
+
+      setStripePrice(stripeProduct.payload.data.product.default_price);
+
+      setCartToPay(cartId);
+      setCheckoutSuccess(true);
+
+      toast.success('Checkout is done Successfully');
+    } catch (error) {
+      console.error('Checkout failed', error);
+      toast.error('Checkout failed');
+    } finally {
+      setIsPreloader(false);
     }
-  }, [location.search, navigate]);
+  };
+
+  const handlePayCart = async () => {
+    const data = {
+      successUrl: 'http://localhost:5000/shopping-cart',
+      cancelUrl: 'http://localhost:5000/shopping-cart',
+      email: 'email@gmail.com',
+      price: stripePrice,
+    };
+    console.log('price: ' + stripePrice);
+    const response = await dispatch(createSessionStripe(data));
+    console.log('response', response);
+  };
 
   if (isLoading) {
     return (
@@ -117,11 +191,11 @@ const UserViewCart: React.FC = () => {
       </div>
     );
   }
-  
+
   if (isLoggedOut) {
     return (
       <div className="error-message">
-        <p>Please login or create account first.</p>
+        <p>Please login or create an account first.</p>
       </div>
     );
   }
@@ -296,10 +370,12 @@ const handleClose = () => {
                 <FaCheckSquare className="check" color="#ff6d18" />
                 <h2>Shopping Cart</h2>
                 <button
-                  onClick={() => handleCartCheckOut(cart.cartId, index)}
-                  className={`checkout-btn`}
+                  onClick={() =>
+                    handleCartCheckOut(cart.cartId, index, cart.products)
+                  }
+                  className="checkout-btn"
                 >
-                  <span>{'Checkout'}</span>
+                  <span>Checkout</span>
                 </button>
 
                 <FaTrash color="#ff6d18" className="delete" onClick={()=>handleClearSingleCart(cart.cartId)}/>
@@ -374,10 +450,9 @@ const handleClose = () => {
               </div>
             </div>
           </div>
-          {isCheckoutSuccess ? (
+          {isCheckoutSuccess && (
             <div className="order-details">
               <h3>Order details</h3>
-
               {arrayOfProduct.products.map((product, index) => (
                 <div className="row" key={index}>
                   <div className="left">{product.name}:</div>
@@ -392,11 +467,11 @@ const handleClose = () => {
               </div>
               <div className="row">
                 <div className="left">Total amount:</div>
-                <div className="right">${checkoutData.toFixed(2)}</div>
+                <div className="right">${checkoutData?.toFixed(2)}</div>
               </div>
-              <button onClick={() => handlePayCart()}>Pay Now</button>
+              <button onClick={handlePayCart}>Pay Now</button>
             </div>
-          ) : null}
+          )}
             <Dialog
           open={open}
           onClose={handleClose}

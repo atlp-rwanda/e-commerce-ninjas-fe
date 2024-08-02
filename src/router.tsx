@@ -28,6 +28,7 @@ import Users from './pages/admin/Users';
 import Logout from './components/layout/Logout';
 import UserProfile from './pages/UserEditProfile';
 import ProductsPage from './pages/Products';
+import UserCartPaymentSuccess from './pages/UserCartPaymentSuccess';
 const AppRouter: React.FC = () => {
   return (
     <div>
@@ -60,6 +61,7 @@ const AppRouter: React.FC = () => {
           <Route path="/profile-settings" element={<ProtectedRoute redirectPath="/login"><UserProfile /></ProtectedRoute>}/>
           <Route path="*" element={<NotFound />} />
           <Route path="seller/login" element={<SellerLogin />} />
+          <Route path="api/cart/payment-success" element={<UserCartPaymentSuccess />} />
           <Route path="*" element={<NotFound />} />
           <Route path="seller/login" element={<SellerLogin />} />
         </Route>

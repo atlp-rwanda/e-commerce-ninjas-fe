@@ -133,6 +133,17 @@ export const createSessionStripe = createAsyncThunk(
     }
   }
 );
+export const updateCartStatus = createAsyncThunk(
+  'cart/updateCartStatus',
+  async (data: any, thunkApi) => {
+    try {
+      const response = await await cartService.updateCartStatus(data);
+      return response;
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
 
 const cartSlice = createSlice({
   name: 'cart',

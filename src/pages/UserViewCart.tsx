@@ -13,6 +13,7 @@ import {
   clearCartProduct,
   createProductStripe,
   createSessionStripe,
+  updateCartStatus,
 } from '../store/features/carts/cartSlice';
 import {
   FaCheckSquare,
@@ -34,6 +35,8 @@ import Product from '../components/product/Product';
 import { Box, LinearProgress } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dispatch from 'react';
+import { fetchUserProfile } from '../store/features/user/userSlice';
+import { useLocation } from 'react-router-dom';
 
 const UserViewCart: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -56,6 +59,7 @@ const UserViewCart: React.FC = () => {
   const [currentEndpoint, setCurrentEndpoint] = useState('');
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const cartState = useAppSelector((state) => state.cart);
 
@@ -103,6 +107,7 @@ const UserViewCart: React.FC = () => {
       if (!response.payload) {
         throw new Error('Checkout failed');
       }
+      localStorage.setItem('cartToPay', cartId);
 
       const totalCartAmount = response.payload.data.totalAmount;
       const array = cartResponseData.carts[index];
@@ -119,8 +124,8 @@ const UserViewCart: React.FC = () => {
       const names = productsArr.map((product) => product.name).join(', ');
       // const descriptions = productsArr
       //   .map((product) => product.description)
-      //   .join(',');
-      const descriptions = 'No description found';
+      //   .join(', ');
+      const descriptions = ' ';
       const image1 = productsArr[0]?.image;
       const image2 = productsArr[1]?.image;
       console.log('Products', productsArr);
@@ -153,8 +158,8 @@ const UserViewCart: React.FC = () => {
         'Stripe price after setting',
         localStorage.getItem('stripePrice')
       );
+      console.log("Sesss cart",cartId);
 
-      localStorage.setItem('cartToPay', cartId);
 
       setCheckoutSuccess(true);
 
@@ -170,17 +175,20 @@ const UserViewCart: React.FC = () => {
   const handlePayCart = async () => {
     try {
       setIsPreloader(true);
+      const profile: any = await dispatch(fetchUserProfile());
       const data = {
         successUrl: 'http://localhost:5000/shopping-cart?success',
         cancelUrl: 'http://localhost:5000/shopping-cart?cancel',
-        customerEmail: localStorage.getItem('loggedEmail'),
+        customerEmail: profile.payload.email,
         price: localStorage.getItem('stripePrice'),
       };
-      console.log('Email', localStorage.getItem('loggedEmail'));
+      console.log('Email', profile.payload.email);
       console.log('price: ' + localStorage.getItem('stripePrice'));
       const response = await dispatch(createSessionStripe(data));
+      console.log('WQ', response);
       const url = response.payload.data.session.url;
-      window.location.href = url;
+      console.log(url);
+      // window.location.href = url;
     } catch (error) {
       console.error('Checkout failed', error);
       toast.error('Checkout failed');
@@ -188,6 +196,36 @@ const UserViewCart: React.FC = () => {
       setIsPreloader(false);
     }
   };
+  useEffect(() => {
+    checkPayFailOrSuccess();
+  });
+  const checkPayFailOrSuccess = async () => {
+    const success = location.search;
+    console.log('Success', success);
+    const cancel = new URLSearchParams(window.location.search).get('cancel');
+    if (success) {
+      setIsPreloader(true);
+      const cartId = localStorage.getItem('cartToPay');
+      const data = {
+        cartId: cartId,
+        status: 'Paid',
+      };
+      console.log('Cartrtid', cartId);
+      const cartStatus = await dispatch(updateCartStatus(data));
+      console.log('UPdate cart', cartStatus);
+      toast.success('Payment successful');
+      // navigate('/shopping-cart');
+      setIsPreloader(true);
+    } else if (cancel) {
+      toast.error('Payment cancelled');
+    } else {
+      console.log('No success or cancel query parameters found');
+    }
+  };
+
+  useEffect(() => {
+    checkPayFailOrSuccess();
+  }, []);
 
   if (isLoading) {
     return (
@@ -219,8 +257,6 @@ const UserViewCart: React.FC = () => {
       </div>
     );
   }
-
-
 
   const handleAddProductToCart = async (
     productId: string,
@@ -354,9 +390,11 @@ const UserViewCart: React.FC = () => {
             <div key={cart.id} className="cart">
               <div className="title">
                 <FaCheckSquare className="check" color="#ff6d18" />
-                <h2>Shopping Cart</h2>
+                <h2>Shopping Cart - {cart.id}</h2>
                 <button
-                  onClick={() => handleCartCheckOut(cart.cartId, index, cart.products)}
+                  onClick={() =>
+                    handleCartCheckOut(cart.id, index, cart.products)
+                  }
                   className={`checkout-btn`}
                 >
                   <span>{'Checkout'}</span>
@@ -380,7 +418,7 @@ const UserViewCart: React.FC = () => {
                       </div>
                       <div className="description">
                         <h4 onClick={() => navigate(`/product/${product.id}`)}>
-                          {product.name}
+                          {product.description}
                         </h4>
                         <div className="flexer">
                           <div className="left">

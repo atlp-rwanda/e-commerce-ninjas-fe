@@ -30,31 +30,34 @@ const productCheckout = async (cartId: string) => {
   return response.data;
 };
 const clearCart = async (cartId: string) => {
-try {
-  const response = await axiosInstance.delete(`api/cart/buyer-clear-cart/${cartId}`);
-  return response.data;
-} catch (error) {
-  throw error
-}
-}
-const clearCartProduct = async (cartId: string, productId: string) => {
- try {
-  const response = await axiosInstance.delete(`api/cart/buyer-clear-cart-product/${cartId}/${productId}`);
-  return response.data;
- } catch (error) {
-  throw error
- }
-}
-const clearCarts = async () => {
   try {
-    const response = await axiosInstance.delete("/api/cart/buyer-clear-carts");
-    return response
-  }
-  catch (error) {
-    console.error("Error clear carts", error);
+    const response = await axiosInstance.delete(
+      `api/cart/buyer-clear-cart/${cartId}`
+    );
+    return response.data;
+  } catch (error) {
     throw error;
   }
-}
+};
+const clearCartProduct = async (cartId: string, productId: string) => {
+  try {
+    const response = await axiosInstance.delete(
+      `api/cart/buyer-clear-cart-product/${cartId}/${productId}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+const clearCarts = async () => {
+  try {
+    const response = await axiosInstance.delete('/api/cart/buyer-clear-carts');
+    return response;
+  } catch (error) {
+    console.error('Error clear carts', error);
+    throw error;
+  }
+};
 
 const createStripeProduct = async (data) => {
   const response = await axiosInstance.post('/api/cart/create-stripe-product', {
@@ -72,11 +75,6 @@ const createStripeProduct = async (data) => {
     },
   });
 
-  return response.data;
-};
-
-const saveCartOrder = async () => {
-  const response = await axiosInstance.post(`/api/cart/webhook`);
   return response.data;
 };
 
@@ -111,7 +109,6 @@ const cartService = {
   clearCarts,
   clearCart,
   clearCartProduct,
-  saveCartOrder,
   createStripeProduct,
   createStripeSession,
 };

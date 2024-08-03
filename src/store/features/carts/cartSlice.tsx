@@ -1,9 +1,8 @@
 /* eslint-disable */
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import cartService from "./cartService";
-import { getErrorMessage } from "../../../utils/axios/axiosInstance";
-import { iCartInitialResource } from "../../../utils/types/store";
-import { toast } from 'react-toastify';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import cartService from './cartService';
+import { getErrorMessage } from '../../../utils/axios/axiosInstance';
+import { iCartInitialResource } from '../../../utils/types/store';
 
 const initialState: iCartInitialResource = {
   carts: [],
@@ -71,12 +70,12 @@ export const checkout = createAsyncThunk(
 );
 
 export const clearCart = createAsyncThunk(
-  "cart/buyer-clear-cart",
+  'cart/buyer-clear-cart',
   async (cartId: string, thunkApi) => {
     try {
       const response = await cartService.clearCart(cartId);
-      await cartService.getUserCarts()
-      
+      await cartService.getUserCarts();
+
       return response;
     } catch (error) {
       return thunkApi.rejectWithValue(getErrorMessage(error));
@@ -85,8 +84,11 @@ export const clearCart = createAsyncThunk(
 );
 
 export const clearCartProduct = createAsyncThunk(
-  "cart/buyer-clear-cart-product",
-  async ({ cartId, productId }: { cartId: string; productId: string }, thunkApi) => {
+  'cart/buyer-clear-cart-product',
+  async (
+    { cartId, productId }: { cartId: string; productId: string },
+    thunkApi
+  ) => {
     try {
       const response = await cartService.clearCartProduct(cartId, productId);
       return response;
@@ -97,7 +99,7 @@ export const clearCartProduct = createAsyncThunk(
 );
 
 export const clearCarts = createAsyncThunk(
-  "cart/userClearCarts",
+  'cart/userClearCarts',
   async (_, thunkAPI) => {
     try {
       const response = await cartService.clearCarts();
@@ -108,14 +110,29 @@ export const clearCarts = createAsyncThunk(
   }
 );
 
-export const payCart = createAsyncThunk("cart/buyerPayCart", async (cartId:string, thunkApi)=> {
-  try {
-    const response = await cartService.userPayCart(cartId)
-    return response;
-  } catch (error) {
-    return thunkApi.rejectWithValue(getErrorMessage(error));
+export const createProductStripe = createAsyncThunk(
+  'cart/createCartProduct',
+  async (data: any, thunkApi) => {
+    try {
+      const response = await cartService.createStripeProduct(data);
+      return response;
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
   }
-})
+);
+
+export const createSessionStripe = createAsyncThunk(
+  'cart/createSessionStripe',
+  async (data: any, thunkApi) => {
+    try {
+      const response = await cartService.createStripeSession(data);
+      return response;
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
 
 const cartSlice = createSlice({
   name: 'cart',
@@ -127,7 +144,10 @@ const cartSlice = createSlice({
     usergetCarts: (state, action: PayloadAction) => {
       state.carts.push(action.payload);
     },
-    updateCartProductQuantity: (state, action: PayloadAction<{ productId: string; quantity: number }>) => {
+    updateCartProductQuantity: (
+      state,
+      action: PayloadAction<{ productId: string; quantity: number }>
+    ) => {
       const { productId, quantity } = action.payload;
       state.carts.forEach((cart) => {
         cart.products.forEach((product: any) => {
@@ -153,7 +173,7 @@ const cartSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.carts.push(action.payload);
-        state.message = "Cart created successfully";
+        state.message = 'Cart created successfully';
       })
       .addCase(createCart.rejected, (state, action) => {
         state.isLoading = false;
@@ -220,46 +240,45 @@ const cartSlice = createSlice({
         state.isLoading = true;
         state.isError = false;
         state.isSuccess = false;
-        state.message = "";
+        state.message = '';
       })
       .addCase(clearCart.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
 
-       
         state.message = action.payload.message;
       })
       .addCase(clearCart.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        state.message = "";
+        state.message = '';
       })
       .addCase(clearCartProduct.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
         state.isSuccess = false;
-        state.message = "";
+        state.message = '';
       })
       .addCase(clearCartProduct.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
         state.carts.push(action.payload);
-        state.message = "";
+        state.message = '';
       })
       .addCase(clearCartProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        state.message = "";
+        state.message = '';
       })
       .addCase(clearCarts.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
         state.isSuccess = false;
-        state.message = "";
+        state.message = '';
       })
       .addCase(clearCarts.fulfilled, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
@@ -275,27 +294,10 @@ const cartSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = action.payload;
-      })
-      .addCase(payCart.pending, (state) => {
-        state.isLoading = true;
-        state.isError = false;
-        state.isSuccess = false;
-        state.message = '';
-      })
-      .addCase(createProductStripe.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isError = false;
-        state.isSuccess = true;
-        state.message = 'Payment initated successfully';
-      })
-      .addCase(createProductStripe.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.isSuccess = false;
-        state.message = '';
       });
   },
 });
 
-export const { addCart, usergetCarts, updateCartProductQuantity } = cartSlice.actions;
+export const { addCart, usergetCarts, updateCartProductQuantity } =
+  cartSlice.actions;
 export default cartSlice.reducer;

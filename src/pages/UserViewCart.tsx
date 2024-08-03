@@ -7,9 +7,13 @@ import { toast } from 'react-toastify';
 import {
   checkout,
   getUserCarts,
+  clearCarts,
+  createCart,
+  clearCart,
+  clearCartProduct,
   createProductStripe,
   createSessionStripe,
-, clearCarts,createCart,clearCart,clearCartProduct} from '../store/features/carts/cartSlice';
+} from '../store/features/carts/cartSlice';
 import {
   FaCheckSquare,
   FaMinus,
@@ -19,49 +23,41 @@ import {
   FaGift,
   FaShippingFast,
 } from 'react-icons/fa';
-import { GiBroom } from "react-icons/gi";
+import { GiBroom } from 'react-icons/gi';
 import { useNavigate } from 'react-router-dom';
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import Product from '../components/product/Product';
 import { Box, LinearProgress } from '@mui/material';
-import { useLocation } from 'react-router-dom';
-import Button from "@mui/material/Button";
+import Button from '@mui/material/Button';
 import Dispatch from 'react';
-
 
 const UserViewCart: React.FC = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
-
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const [isLoggedOut, setIsLoggedOut] = useState(false);
-  const [isPreloader, setIsPreloader] = useState(false);
-  const [isCheckoutSuccess, setCheckoutSuccess] = useState(false);
-
   const [cartData, setCartData] = useState<any>(null);
   const [cartResponseData, setCartResponseData] = useState(null);
-  const [checkoutData, setCheckoutData] = useState<number | null>(null);
+  const [isLoggedOut, setIsLoggedOut] = useState(false);
+  const [checkoutData, setCheckoutData] = useState(null);
+  const [isCheckoutSuccess, setCheckoutSuccess] = useState(null);
+  const [isPreloader, setIsPreloader] = useState(false);
   const [discount, setDiscount] = useState(0);
   const [totalProductPrice, setTotalProductPrice] = useState(0);
-  const [arrayOfProduct, setArrayOfProduct] = useState<any>(null);
+  const [arrayOfProduct, setArrayOfProduct] = useState(null);
   const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
-  const [open,setOpen] = useState(false)
-  
-
+  const [open, setOpen] = useState(false);
   const [cartToPay, setCartToPay] = useState<string | null>(null);
   const [amountToPay, setAmountToPay] = useState<any>(null);
   const [stripePrice, setStripePrice] = useState<string>('');
   const [currentEndpoint, setCurrentEndpoint] = useState('');
 
-  const cartState = useAppSelector((state) => state.cart);
+  const navigate = useNavigate();
 
-  
+  const cartState = useAppSelector((state) => state.cart);
 
   useEffect(() => {
     const fetchCarts = async () => {
@@ -69,32 +65,27 @@ const UserViewCart: React.FC = () => {
         setIsLoading(true);
         const response = await dispatch(getUserCarts());
         const response1 = await dispatch(getUserCarts()).unwrap();
-
         if (response.payload === 'Not authorized') {
           setIsLoggedOut(true);
           toast.error('Please login first');
           navigate('/login');
-          return;
         }
         setCartResponseData(response1.data);
         setIsLoading(false);
       } catch (error: any) {
-        if (error.message === 'Not authorized') {
+        if (error === 'Not authorized') {
           setIsLoggedOut(true);
           toast.error('Please login first');
           navigate('/login');
-        } else {
-          console.error('Error fetching carts:', error);
-          toast.error('Failed to load cart products. Please try again later.');
         }
-
+        console.error('Error fetching carts:', error);
         setIsLoading(false);
         setIsError(true);
+        toast.error(error.message);
       }
     };
-
     fetchCarts();
-  }, [dispatch, navigate]);
+  }, [dispatch]);
 
   const handleCartCheckOut = async (
     cartId: string,
@@ -213,11 +204,10 @@ const UserViewCart: React.FC = () => {
       </div>
     );
   }
-
   if (isLoggedOut) {
     return (
       <div className="error-message">
-        <p>Please login or create an account first.</p>
+        <p>Please login or create account first.</p>
       </div>
     );
   }
@@ -230,32 +220,19 @@ const UserViewCart: React.FC = () => {
     );
   }
 
-  const handleCartCheckOut = async (cartId, index) => {
-    setIsPreloader(true);
-    const response = await dispatch(checkout(cartId));
-    const array = cartResponseData?.carts[index];
-    setarrayOfProduct(array);
-    setcheckoutData(response.payload.data.totalAmount);
-    const totalProductPrice = array.products.reduce(
-      (acc, product) => acc + parseFloat(product.price) * (product.quantity || 1),
-      0
-    );
-    setTotalProductPrice(totalProductPrice);
-    setCartToPay(cartId);
-    setCheckoutSuccess(true);
-    setIsPreloader(false);
-    toast.success('Checkout is done Successfully');
-  };
 
-  const handleAddProductToCart = async (productId: string, quantity:number) => {
+
+  const handleAddProductToCart = async (
+    productId: string,
+    quantity: number
+  ) => {
     try {
-      if (quantity < 1) return; 
+      if (quantity < 1) return;
       const response = await dispatch(
         createCart({ productId, quantity })
       ).unwrap();
 
       if (response.data) {
-       
         setQuantities((prevQuantities) => ({
           ...prevQuantities,
           [productId]: quantity,
@@ -267,12 +244,12 @@ const UserViewCart: React.FC = () => {
         toast.error(response.message);
       }
     } catch (error: any) {
-      if (error === "Not authorized") {
-        localStorage.setItem("pendingCartProduct", productId);
-        toast.error("Please login first");
-        navigate("/login");
+      if (error === 'Not authorized') {
+        localStorage.setItem('pendingCartProduct', productId);
+        toast.error('Please login first');
+        navigate('/login');
       } else {
-        toast.error("Something went wrong. Please try again later.");
+        toast.error('Something went wrong. Please try again later.');
       }
     } finally {
       setIsLoading(false);
@@ -281,84 +258,71 @@ const UserViewCart: React.FC = () => {
 
   const incrementQuantity = (productId: string) => {
     const currentQuantity = quantities[productId] || 1;
-    handleAddProductToCart(productId,currentQuantity+1)
+    handleAddProductToCart(productId, currentQuantity + 1);
   };
 
   const decrementQuantity = (productId: string) => {
     const currentQuantity = quantities[productId] || 1;
     if (currentQuantity > 1) {
-      handleAddProductToCart(productId,currentQuantity-1)
-
+      handleAddProductToCart(productId, currentQuantity - 1);
     }
   };
   const handleClearCart = async () => {
     try {
       await dispatch(clearCarts()).unwrap();
-      const response1 = await  dispatch(getUserCarts()).unwrap();
+      const response1 = await dispatch(getUserCarts()).unwrap();
       setCartResponseData(response1.data);
-      
-      toast.success("Cart cleared successfully");
+
+      toast.success('Cart cleared successfully');
       setCartResponseData({ ...cartResponseData, carts: [] });
       setTotalProductPrice(0);
     } catch (error) {
-      console.error("Error clearing cart:", error);
-      toast.error("Failed to clear the cart");
+      console.error('Error clearing cart:', error);
+      toast.error('Failed to clear the cart');
     }
   };
 
   const handleClearSingleCart = async (cartId) => {
-  
     try {
-        await dispatch(clearCart(cartId));
-        const response1 = await  dispatch(getUserCarts()).unwrap();
-        setCheckoutSuccess(false);
-        setCartResponseData(response1.data);
-        const remainingCarts = cartResponseData.carts.filter((cart)=>cart.cartId !== cartId)
-        setCartResponseData({...cartResponseData,carts:remainingCarts});
-        
-    
-        toast.success("Cart cleared successfully");
+      await dispatch(clearCart(cartId));
+      const response1 = await dispatch(getUserCarts()).unwrap();
+      setCheckoutSuccess(false);
+      setCartResponseData(response1.data);
+      const remainingCarts = cartResponseData.carts.filter(
+        (cart) => cart.cartId !== cartId
+      );
+      setCartResponseData({ ...cartResponseData, carts: remainingCarts });
+
+      toast.success('Cart cleared successfully');
     } catch (error) {
-        console.error("Error clearing cart:", error);
-        toast.error("Failed to clear the cart");
+      console.error('Error clearing cart:', error);
+      toast.error('Failed to clear the cart');
     }
-};
+  };
 
-const handleClearCartProduct = async(cartId,productId,cartProductsList)=>{
-  try {
-    if(cartProductsList.length <=1) {
-      await handleClearSingleCart(cartId);
-      return;
-    }
-    const response = await dispatch(clearCartProduct({cartId,productId}))
-    const response1 = await  dispatch(getUserCarts()).unwrap();
-    setCartResponseData(response1.data);
-    toast.success("product cleared successfully");
-  } catch (error) {
-    toast.error("Failed to clear the product ");
-    throw error 
-  }
-}
-
-let cartProductsList=null;
-const handleClose = () => {
- 
-  setOpen(false);
-};
-
-
-  const handlePayCart = async () => {
+  const handleClearCartProduct = async (
+    cartId,
+    productId,
+    cartProductsList
+  ) => {
     try {
-      setIsPreloader(true);
-      console.log('Cart to Pay', cartToPay);
-      const response = await dispatch(payCart(cartToPay)).unwrap();
-      window.location.href = response.payment_url;
-      toast.success('Cart payment initiated successfully');
-      setIsPreloader(false);
+      if (cartProductsList.length <= 1) {
+        await handleClearSingleCart(cartId);
+        return;
+      }
+      const response = await dispatch(clearCartProduct({ cartId, productId }));
+      const response1 = await dispatch(getUserCarts()).unwrap();
+      setCartResponseData(response1.data);
+      toast.success('product cleared successfully');
     } catch (error) {
-      setIsPreloader(false);
-      toast.error(error);
+      toast.error('Failed to clear the product ');
+      throw error;
     }
+  };
+
+  let cartProductsList = null;
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -378,12 +342,12 @@ const handleClose = () => {
           </Box>
         </div>
       )}
-         <div className="clear-cart">
-          <button className="delete" type="button" onClick={()=>setOpen(true)} >
-            <GiBroom className="deleteIcon" />
-            <p>Delete all Carts</p>
-          </button>
-          </div>
+      <div className="clear-cart">
+        <button className="delete" type="button" onClick={() => setOpen(true)}>
+          <GiBroom className="deleteIcon" />
+          <p>Delete all Carts</p>
+        </button>
+      </div>
       <section className="cart-section">
         <div className="cart-products">
           {cartResponseData?.carts?.map((cart: any, index) => (
@@ -392,15 +356,17 @@ const handleClose = () => {
                 <FaCheckSquare className="check" color="#ff6d18" />
                 <h2>Shopping Cart</h2>
                 <button
-                  onClick={() =>
-                    handleCartCheckOut(cart.cartId, index, cart.products)
-                  }
-                  className="checkout-btn"
+                  onClick={() => handleCartCheckOut(cart.cartId, index, cart.products)}
+                  className={`checkout-btn`}
                 >
-                  <span>Checkout</span>
+                  <span>{'Checkout'}</span>
                 </button>
 
-                <FaTrash color="#ff6d18" className="delete" onClick={()=>handleClearSingleCart(cart.cartId)}/>
+                <FaTrash
+                  color="#ff6d18"
+                  className="delete"
+                  onClick={() => handleClearSingleCart(cart.cartId)}
+                />
               </div>
               <div className="products-list">
                 {cart.products.map((product: any) => {
@@ -423,19 +389,34 @@ const handleClose = () => {
                           </div>
                           <div className="controls">
                             <div className="quantity">
-                              <button className="minus" type="button" onClick={() => decrementQuantity(product.id)}>
+                              <button
+                                className="minus"
+                                type="button"
+                                onClick={() => decrementQuantity(product.id)}
+                              >
                                 <FaMinus />
                               </button>
-                              <input
-                                value={product.quantity}
-                                readOnly
-                              />
-                              <button className="plus" type="button" onClick={() => incrementQuantity(product.id)}>
+                              <input value={product.quantity} readOnly />
+                              <button
+                                className="plus"
+                                type="button"
+                                onClick={() => incrementQuantity(product.id)}
+                              >
                                 <FaPlus />
                               </button>
                             </div>
                             <div className="other">
-                              <button className="delete" type="button" onClick={()=>handleClearCartProduct(cart.cartId,product.id,cart.products)}>
+                              <button
+                                className="delete"
+                                type="button"
+                                onClick={() =>
+                                  handleClearCartProduct(
+                                    cart.cartId,
+                                    product.id,
+                                    cart.products
+                                  )
+                                }
+                              >
                                 <FaTrash color="#ff6d18" />
                               </button>
                             </div>
@@ -472,9 +453,10 @@ const handleClose = () => {
               </div>
             </div>
           </div>
-          {isCheckoutSuccess && (
+          {isCheckoutSuccess ? (
             <div className="order-details">
               <h3>Order details</h3>
+
               {arrayOfProduct.products.map((product, index) => (
                 <div className="row" key={index}>
                   <div className="left">{product.name}:</div>
@@ -489,60 +471,60 @@ const handleClose = () => {
               </div>
               <div className="row">
                 <div className="left">Total amount:</div>
-                <div className="right">${checkoutData?.toFixed(2)}</div>
+                <div className="right">${checkoutData.toFixed(2)}</div>
               </div>
               <button onClick={handlePayCart}>Pay Now</button>
             </div>
-          )}
-            <Dialog
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">
-            {"Delete all Carts"}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText
-              id="alert-dialog-description"
-              sx={{ fontSize: "1.6rem" }}
-            >
-              Are you sure you want to delete all Carts ?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={handleClose}
-              sx={{
-                backgroundColor: "primary.main",
-                color: "#fff",
-                fontSize: "1.2rem",
-                "&:hover": {
-                  backgroundColor: "primary.dark",
-                  color: "#fff",
-                },
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleClearCart}
-              sx={{
-                backgroundColor: "#ff6d18",
-                color: "#fff",
-                fontSize: "1.2rem",
-                "&:hover": {
-                  backgroundColor: "#e65b00",
-                  color: "#fff",
-                },
-              }}
-              autoFocus
-            >
-              Confirm
-            </Button>
-          </DialogActions>
-        </Dialog>
+          ) : null}
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {'Delete all Carts'}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText
+                id="alert-dialog-description"
+                sx={{ fontSize: '1.6rem' }}
+              >
+                Are you sure you want to delete all Carts ?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={handleClose}
+                sx={{
+                  backgroundColor: 'primary.main',
+                  color: '#fff',
+                  fontSize: '1.2rem',
+                  '&:hover': {
+                    backgroundColor: 'primary.dark',
+                    color: '#fff',
+                  },
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleClearCart}
+                sx={{
+                  backgroundColor: '#ff6d18',
+                  color: '#fff',
+                  fontSize: '1.2rem',
+                  '&:hover': {
+                    backgroundColor: '#e65b00',
+                    color: '#fff',
+                  },
+                }}
+                autoFocus
+              >
+                Confirm
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
       </section>
     </>

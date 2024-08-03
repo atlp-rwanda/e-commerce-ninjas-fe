@@ -293,8 +293,8 @@ const cartSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = '';
-      })
-  }
+      });
+  },
 });
 
 export const { addCart, usergetCarts, updateCartProductQuantity } = cartSlice.actions;

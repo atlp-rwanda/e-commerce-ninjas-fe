@@ -57,15 +57,14 @@ const clearCarts = async () => {
 }
 
 const createStripeProduct = async (data) => {
-  console.log("Unnn",data)
   const response = await axiosInstance.post('/api/cart/create-stripe-product', {
     planInfo: {
-      name: data.name,
       active: true,
-      url: 'https://www.url-publicly-accessible-webpage-for-this-service.com',
-      description: data.description,
+      name: data.name,
       'images[0]': data.image1,
       'images[1]': data.image2,
+      url: 'https://e-commerce-ninja-fn-staging.netlify.app',
+      description: data.description,
       default_price_data: {
         unit_amount: data.unit_amount,
         currency: 'usd',
@@ -82,14 +81,14 @@ const saveCartOrder = async () => {
 };
 
 const createStripeSession = async (data) => {
-  console.log("Data sesion",data)
+  console.log('Data sesion', data);
   const response = await axiosInstance.post(
     '/api/cart/checkout-stripe-session',
     {
       sessionInfo: {
         success_url: data.successUrl,
         cancel_url: data.cancelUrl,
-        customer_email: data.email,
+        customer_email: data.customerEmail,
         mode: 'payment',
         ui_mode: 'hosted',
         payment_method_types: ['card'],

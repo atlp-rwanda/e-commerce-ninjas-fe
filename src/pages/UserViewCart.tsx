@@ -55,8 +55,8 @@ const UserViewCart: React.FC = () => {
   
 
   const [cartToPay, setCartToPay] = useState<string | null>(null);
-  const [amountToPay, setAmountToPay] = useState<string | null>(null);
-  const [stripePrice, setStripePrice] = useState<string | null>(null);
+  const [amountToPay, setAmountToPay] = useState<any>(null);
+  const [stripePrice, setStripePrice] = useState<string>('');
   const [currentEndpoint, setCurrentEndpoint] = useState('');
 
   const cartState = useAppSelector((state) => state.cart);
@@ -125,7 +125,7 @@ const UserViewCart: React.FC = () => {
       );
       setTotalProductPrice(totalProductPrice);
 
-      const names = productsArr.map((product) => product.name).join(',');
+      const names = productsArr.map((product) => product.name).join(', ');
       // const descriptions = productsArr
       //   .map((product) => product.description)
       //   .join(',');
@@ -136,23 +136,35 @@ const UserViewCart: React.FC = () => {
       console.log('descriptions' + descriptions);
       console.log('Names' + names);
 
-      const unit_amount = `${Math.round(totalProductPrice)}`;
+      const unit_amount = Math.round(totalCartAmount * 100);
 
       setAmountToPay(unit_amount);
-      console.log('Unit amount', unit_amount);
-      const data = {
-        name: names,
-        description: descriptions,
-        image1,
-        image2,
-        unit_amount: unit_amount,
-      };
-      const stripeProduct = await dispatch(createProductStripe(data));
-      console.log('Sss', stripeProduct);
+      const stripeProduct = await dispatch(
+        createProductStripe({
+          name: names,
+          description: descriptions,
+          image1,
+          image2,
+          unit_amount: unit_amount,
+        })
+      );
+      console.log('Created product', stripeProduct);
 
-      setStripePrice(stripeProduct.payload.data.product.default_price);
+      console.log(
+        'Stripe price before setting',
+        stripeProduct.payload.data.product.default_price
+      );
+      localStorage.setItem(
+        'stripePrice',
+        stripeProduct.payload.data.product.default_price
+      );
+      console.log(
+        'Stripe price after setting',
+        localStorage.getItem('stripePrice')
+      );
 
-      setCartToPay(cartId);
+      localStorage.setItem('cartToPay', cartId);
+
       setCheckoutSuccess(true);
 
       toast.success('Checkout is done Successfully');
@@ -165,15 +177,25 @@ const UserViewCart: React.FC = () => {
   };
 
   const handlePayCart = async () => {
-    const data = {
-      successUrl: 'http://localhost:5000/shopping-cart',
-      cancelUrl: 'http://localhost:5000/shopping-cart',
-      email: 'email@gmail.com',
-      price: stripePrice,
-    };
-    console.log('price: ' + stripePrice);
-    const response = await dispatch(createSessionStripe(data));
-    console.log('response', response);
+    try {
+      setIsPreloader(true);
+      const data = {
+        successUrl: 'http://localhost:5000/shopping-cart?success',
+        cancelUrl: 'http://localhost:5000/shopping-cart?cancel',
+        customerEmail: localStorage.getItem('loggedEmail'),
+        price: localStorage.getItem('stripePrice'),
+      };
+      console.log('Email', localStorage.getItem('loggedEmail'));
+      console.log('price: ' + localStorage.getItem('stripePrice'));
+      const response = await dispatch(createSessionStripe(data));
+      const url = response.payload.data.session.url;
+      window.location.href = url;
+    } catch (error) {
+      console.error('Checkout failed', error);
+      toast.error('Checkout failed');
+    } finally {
+      setIsPreloader(false);
+    }
   };
 
   if (isLoading) {

@@ -69,6 +69,13 @@ const resetPassword = async (token: string, password: string) => {
   return response.data;
 };
 
+const verifyOTP = async (userId: string, otp: string) => {
+  const response = await axiosInstance.post(
+    `/api/auth/verify-otp/${userId}`,
+    { otp }
+  );
+  return response.data;
+};
 
 const authService = {
   register,
@@ -81,6 +88,7 @@ const authService = {
   googleAuthCallback,
   sendResetLink,
   resetPassword,
+  verifyOTP,
 };
 
 export default authService;

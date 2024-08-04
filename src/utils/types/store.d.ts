@@ -76,6 +76,7 @@ export interface AuthService {
   message: string;
   error: string;
   token: string;
+  userId?: any;
 }
 
 export interface IEmail {

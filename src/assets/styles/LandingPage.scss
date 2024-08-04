@@ -1,11 +1,50 @@
 .landing-container {
   padding: 3rem 2rem 4rem 5rem;
   background-color: $container-color;
+
   .loader {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+  }
+
+  .load-more {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    cursor: pointer;
+
+    button {
+      background-color: $primary-color;
+      color: $white-color;
+      border: none;
+      padding: 0.8rem 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: $primary-color-dark;
+      padding: 0.8rem 2rem;
+      transition: all 0.5s ease-in-out;
+      animation: bounce 1s infinite;
+
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
   }
 
   .error-message {
@@ -21,10 +60,12 @@
     padding: 2rem;
   }
 
+
   .head {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
 
     h1 {
       font-size: 3.6rem;
@@ -51,7 +92,8 @@
     label {
       width: 15rem;
     }
-    .span{
+
+    .span {
       width: 20rem;
     }
   }
@@ -161,7 +203,19 @@
     width: 40vw;
   }
 
+
   .not-found-text {
+    font-family: $text-family;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+    color: $text2-color;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
     font-family: $text-family;
     font-weight: 700;
     font-size: 1.2rem;
@@ -175,7 +229,18 @@
     transition: all 0.3s ease-in-out;
   }
 
+
   .btn-link {
+    border: none;
+    background-color: $primary-color;
+    padding: 1rem 4rem;
+    text-decoration: none;
+    color: $white-color;
+    font-family: $text-family;
+    font-weight: 700;
+    font-size: 1.2rem;
+    border-radius: 2rem;
+    cursor: pointer;
     border: none;
     background-color: $primary-color;
     padding: 1rem 4rem;
@@ -194,12 +259,18 @@
     border: 1px solid $border-color;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
     transition: all 0.3s ease-in-out;
+    background-color: $white-color;
+    color: $primary-color;
+    border: 1px solid $border-color;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease-in-out;
   }
 }
 
 @media screen and (max-width: 768px) {
   .landing-container {
     padding: 3rem 4rem 4rem 4rem;
+
 
     .head {
       h1 {

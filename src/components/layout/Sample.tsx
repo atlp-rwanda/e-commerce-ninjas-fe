@@ -12,8 +12,12 @@ import leftBottom from "../../../public/assets/images/left-bottom.png";
 import rightBottom from "../../../public/assets/images/right-bottom.png";
 const images = [
   '/assets/middle.png',
-  '/assets/shoe2.jpeg',
-  '/assets/shoe3.jpeg'
+  '/assets/images/1293.jpg',
+  '/assets/images/add-cart-buy-now-online-commerce-graphic-concept.jpg',
+  '/assets/images/cropped-image-woman-inputting-card-information-key-phone-laptop-while-shopping-online.jpg',
+  '/assets/images/cyber-monday-shopping-sales.jpg',
+  '/assets/images/happy-man-with-handbags-dancing-after-shopping-spree.jpg',
+  '/assets/images/laptop-shopping-bags-online-shopping-concept.jpg',
 ];
 
 const Sample: React.FC = () => {
@@ -69,7 +73,8 @@ const Sample: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="sample2" style={{ backgroundImage: `url(${images[currentIndex]})` }}>
+        <div className="sample2">
+          <img src={images[currentIndex]} alt="" />
           <div className="arrow left" onClick={handleLeftClick}>
             <FaChevronCircleLeft className="icon-arrow" />
           </div>

@@ -21,9 +21,22 @@ const ProductsPage: React.FC = () => {
   const [maxPrice, setMaxPrice] = useState(0);
   const [minPrice, setMinPrice] = useState(0);
 
+  const [visibleProducts, setVisibleProducts] = useState<number>(20);
+
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (products.length > 0) {
+      const calculatedMaxPrice = products.reduce((max, product) => Math.max(max, product.price), 0);
+      const calculatedMinPrice = products.reduce((min, product) => Math.min(min, product.price), calculatedMaxPrice);
+
+      setMaxPrice(calculatedMaxPrice);
+      setMinPrice(calculatedMinPrice);
+      setPriceRange([calculatedMinPrice, calculatedMaxPrice]);
+    }
+  }, [products]);
 
   useEffect(() => {
     if (products.length > 0) {
@@ -60,6 +73,7 @@ const ProductsPage: React.FC = () => {
     }
   };
 
+
   useEffect(() => {
     const checkProductToCartPending = async () => {
       const pendingProduct = localStorage.getItem("pendingCartProduct");
@@ -81,8 +95,13 @@ const ProductsPage: React.FC = () => {
     return price >= priceRange[0] && price <= priceRange[1];
   });
 
+  const handleLoadMore = () => {
+    setVisibleProducts((prevVisibleProducts) => prevVisibleProducts + 20);
+  };
+
   return (
     <>
+      <Meta title="Products - E-Commerce Ninjas" />
       <Meta title="Products - E-Commerce Ninjas" />
       <div className="landing-container">
         {isLoading ? (
@@ -112,11 +131,29 @@ const ProductsPage: React.FC = () => {
                 />
                 <span className="span">${priceRange[0]} - ${priceRange[1]}</span>
               </div>
+              <h1>Products</h1>
+            </div>
+            <div className="filters">
+              <div>
+                <label>Price Range: </label>
+                <input
+                  type="range"
+                  min={minPrice}
+                  max={maxPrice}
+                  value={priceRange[1]}
+                  onChange={(e) =>
+                    setPriceRange([priceRange[0], Number(e.target.value)])
+                  }
+                />
+                <span className="span">${priceRange[0]} - ${priceRange[1]}</span>
+              </div>
             </div>
             <div className="product-list">
               {isSuccess &&
                 Array.isArray(filteredProducts) &&
-                filteredProducts.map((product: any) => (
+                filteredProducts
+                .slice(0,visibleProducts)
+                .map((product: any) => (
                   <Product
                     key={product.id}
                     id={product.id}
@@ -129,6 +166,9 @@ const ProductsPage: React.FC = () => {
                   />
                 ))}
             </div>
+            {visibleProducts < products.length && ( <div className="load-more">
+              <button onClick={handleLoadMore}>Load More</button>
+            </div>)}
           </div>
         )}
       </div>

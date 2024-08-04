@@ -1,31 +1,30 @@
 .sampleImages1 {
   display: flex;
-  width: 100%;
+  width: 100vw;
   color: $white;
   background-color: $white;
-  z-index: -1;
   gap: 1rem;
-  height: 30rem;
+  height: 40rem;
 
   .sample1, .sample3 {
     flex: 1;
     display: flex;
     flex-direction: column;
-    width: 30%;
-    z-index: 100;
+    width: 20%;
+    height: 40rem;
     gap: 1rem;
   }
 
   .sample2 {
-    flex: 1;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 30%;
-    z-index: 100;
+    width: 40%;
     display: flex;
     position: relative;
 
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+    }
     .arrow {
       position: absolute;
       top: 50%;
@@ -72,14 +71,13 @@
       display: flex;
       align-items: center;
       position: relative;
-      z-index: 100;
+      height: 40rem;
       img{
         width: 100%;
-        height: 14.5rem;
-        object-fit: cover;
+        height: 100%;
       }
     p {
-      font-size: 1.4rem;
+      font-size: 1.8rem;
     }
 
     button {
@@ -103,6 +101,7 @@
       flex-direction: column;
       align-items: flex-start;
       left: 3rem;
+      gap: 1rem;
     }
 
     button {
@@ -118,6 +117,8 @@
       align-items: flex-start;
       position: absolute;
       left: 3rem;
+      gap: 1rem;
+
     }
 
     button {
@@ -136,6 +137,8 @@
       align-items: flex-end;
       position: absolute;
       right: 3rem;
+      gap: 1rem;
+
     }
 
     button {
@@ -144,7 +147,6 @@
   }
 
   .accessories {
-    // background-image: url('../../public/assets/right-bottom.png');
 
     .text-container {
       display: flex;
@@ -152,8 +154,10 @@
       align-items: flex-end;
       position: absolute;
       right: 3rem;
+      gap: 1rem;
+
       p {
-        padding-right: 1.5rem;
+        padding-right: .1rem;
       }
 
       button {

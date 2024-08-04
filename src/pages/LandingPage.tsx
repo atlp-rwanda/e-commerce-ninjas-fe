@@ -17,6 +17,7 @@ const LandingPage: React.FC = () => {
   const { products, isError, isSuccess, isLoading, message } = useAppSelector(
     (state: any) => state.products
   );
+  const [visibleProducts, setVisibleProducts] = useState<number>(20);
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
@@ -60,6 +61,10 @@ const LandingPage: React.FC = () => {
     checkProductToCartPending();
   }, []);
 
+  const handleLoadMore = () => {
+    setVisibleProducts((prevVisibleProducts) => prevVisibleProducts + 20);
+  };
+
   return (
     <>
       <Meta title="Home - E-Commerce Ninjas" />
@@ -81,7 +86,9 @@ const LandingPage: React.FC = () => {
             <div className="product-list">
               {isSuccess &&
                 Array.isArray(products) &&
-                products?.map((product: any) => (
+                products
+                .slice(0,visibleProducts)
+                .map((product: any) => (
                   <Product
                     key={product.id}
                     id={product.id}
@@ -94,6 +101,9 @@ const LandingPage: React.FC = () => {
                   />
                 ))}
             </div>
+            {visibleProducts < products.length && ( <div className="load-more">
+              <button onClick={handleLoadMore}>Load More</button>
+            </div>)}
           </div>
         )}
       </div>

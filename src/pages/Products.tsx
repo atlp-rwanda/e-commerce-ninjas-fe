@@ -21,6 +21,8 @@ const ProductsPage: React.FC = () => {
   const [maxPrice, setMaxPrice] = useState(0);
   const [minPrice, setMinPrice] = useState(0);
 
+  const [visibleProducts, setVisibleProducts] = useState<number>(20);
+
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
@@ -81,6 +83,10 @@ const ProductsPage: React.FC = () => {
     return price >= priceRange[0] && price <= priceRange[1];
   });
 
+  const handleLoadMore = () => {
+    setVisibleProducts((prevVisibleProducts) => prevVisibleProducts + 20);
+  };
+
   return (
     <>
       <Meta title="Products - E-Commerce Ninjas" />
@@ -116,7 +122,9 @@ const ProductsPage: React.FC = () => {
             <div className="product-list">
               {isSuccess &&
                 Array.isArray(filteredProducts) &&
-                filteredProducts.map((product: any) => (
+                filteredProducts
+                .slice(0,visibleProducts)
+                .map((product: any) => (
                   <Product
                     key={product.id}
                     id={product.id}
@@ -129,6 +137,9 @@ const ProductsPage: React.FC = () => {
                   />
                 ))}
             </div>
+            {visibleProducts < products.length && ( <div className="load-more">
+              <button onClick={handleLoadMore}>Load More</button>
+            </div>)}
           </div>
         )}
       </div>

@@ -26,9 +26,24 @@ $text-family: 'Averia Serif Libre';
 $white-color: #FFFFFF;
 $border-color: #D9D9D9;
 $red-color:red;
+$grayColor:gray;
 $primary-color-half: rgb(248,244,244);
 $red-color:red;
 $menu-hover: #FE975B;
 $green-color: rgb(3, 216, 3);
 $green-middle-color: rgba(3, 216, 3, 0.3);
 $red-middle-color: rgba(216, 8, 3, 0.3);
+
+
+$toastify-color-light: #fff;
+$toastify-color-dark: #121212;
+$toastify-color-info: #3498db;
+$toastify-color-success: orange;
+$toastify-color-warning: #f1c40f;
+$toastify-color-error: #e74c3c;
+
+
+$toastify-icon-color-info: var($toastify-color-info);
+$toastify-icon-color-success: var($toastify-color-success);
+$toastify-icon-color-warning: var($toastify-color-warning);
+$toastify-icon-color-error: var($toastify-color-error);

@@ -1,11 +1,50 @@
 .landing-container {
   padding: 3rem 2rem 4rem 5rem;
   background-color: $container-color;
+
   .loader {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+  }
+
+  .load-more {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    cursor: pointer;
+
+    button {
+      background-color: $primary-color;
+      color: $white-color;
+      border: none;
+      padding: 0.8rem 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: $primary-color-dark;
+      padding: 0.8rem 2rem;
+      transition: all 0.5s ease-in-out;
+      animation: bounce 1s infinite;
+
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
   }
 
   .error-message {
@@ -51,7 +90,8 @@
     label {
       width: 15rem;
     }
-    .span{
+
+    .span {
       width: 20rem;
     }
   }

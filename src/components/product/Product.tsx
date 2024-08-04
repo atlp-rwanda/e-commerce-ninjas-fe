@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { createCart, getUserCarts } from "../../store/features/carts/cartSlice";
 import { addProductToWishlist, removeProductFromWishlist, fetchWishlistProducts } from '../../store/features/wishlist/wishlistSlice';
 import { toast } from "react-toastify";
+import aos from "aos"
 
 interface ProductProps {
   id: string;
@@ -36,6 +37,9 @@ const Product: React.FC<ProductProps> = ({
   const isProductInWishlist = wishlist.some((item: any) => item.id === id);
   const [isInWishlist, setIsInWishlist] = useState(isProductInWishlist);
 
+  useEffect(()=>{
+    aos.init({ once: true });
+  },[]);
   useEffect(() => {
     setIsInWishlist(isProductInWishlist);
   }, [isProductInWishlist]);
@@ -142,7 +146,7 @@ const Product: React.FC<ProductProps> = ({
 
 
   return (
-    <div className="product">
+    <div className="product" data-aos="fade-down" data-aos-easing="linear" data-aos-duration="1000">
       <div
         className="product-image-container"
         onMouseEnter={handleMouseEnter}

@@ -29,6 +29,7 @@ import Logout from './components/layout/Logout';
 import UserProfile from './pages/UserEditProfile';
 import ProductsPage from './pages/Products';
 import UserCartPaymentSuccess from './pages/UserCartPaymentSuccess';
+import TrackerOrder from "../src/pages/trackerOrder"
 const AppRouter: React.FC = () => {
   return (
     <div>
@@ -64,6 +65,7 @@ const AppRouter: React.FC = () => {
           <Route path="api/cart/payment-success" element={<UserCartPaymentSuccess />} />
           <Route path="*" element={<NotFound />} />
           <Route path="seller/login" element={<SellerLogin />} />
+          <Route path="trackOrder" element={<TrackerOrder/>} />
         </Route>
         <Route path="/seller" element={<SellerLayout />}>
           <Route index element={<Navigate to="dashboard" replace />} />

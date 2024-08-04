@@ -14,6 +14,7 @@ import {
   createProductStripe,
   createSessionStripe,
   updateCartStatus,
+  userSaveOrder,
 } from '../store/features/carts/cartSlice';
 import {
   FaCheckSquare,
@@ -64,33 +65,33 @@ const UserViewCart: React.FC = () => {
   const cartState = useAppSelector((state) => state.cart);
 
   useEffect(() => {
-    const fetchCarts = async () => {
-      try {
-        setIsLoading(true);
-        const response = await dispatch(getUserCarts());
-        const response1 = await dispatch(getUserCarts()).unwrap();
-        if (response.payload === 'Not authorized') {
-          setIsLoggedOut(true);
-          toast.error('Please login first');
-          navigate('/login');
-        }
-        setCartResponseData(response1.data);
-        setIsLoading(false);
-      } catch (error: any) {
-        if (error === 'Not authorized') {
-          setIsLoggedOut(true);
-          toast.error('Please login first');
-          navigate('/login');
-        }
-        console.error('Error fetching carts:', error);
-        setIsLoading(false);
-        setIsError(true);
-        toast.error(error.message);
-      }
-    };
     fetchCarts();
+    checkPayFailOrSuccess();
   }, [dispatch]);
-
+  const fetchCarts = async () => {
+    try {
+      setIsLoading(true);
+      const response = await dispatch(getUserCarts());
+      const response1 = await dispatch(getUserCarts()).unwrap();
+      if (response.payload === 'Not authorized') {
+        setIsLoggedOut(true);
+        toast.error('Please login first');
+        navigate('/login');
+      }
+      setCartResponseData(response1.data);
+      setIsLoading(false);
+    } catch (error: any) {
+      if (error === 'Not authorized') {
+        setIsLoggedOut(true);
+        toast.error('Please login first');
+        navigate('/login');
+      }
+      console.error('Error fetching carts:', error);
+      setIsLoading(false);
+      setIsError(true);
+      toast.error(error.message);
+    }
+  };
   const handleCartCheckOut = async (
     cartId: string,
     index: number,
@@ -99,16 +100,20 @@ const UserViewCart: React.FC = () => {
       description: string;
       image: string;
       price: string;
+      shopId: string;
     }>
   ) => {
     setIsPreloader(true);
     try {
       const response = await dispatch(checkout(cartId));
       if (!response.payload) {
-        throw new Error('Checkout failed');
+        throw new Error(
+          'Checkout failed, Check your internet connection or tryagainlater'
+        );
       }
       localStorage.setItem('cartToPay', cartId);
 
+      localStorage.setItem('productsToSave', JSON.stringify(productsArr));
       const totalCartAmount = response.payload.data.totalAmount;
       const array = cartResponseData.carts[index];
 
@@ -122,15 +127,13 @@ const UserViewCart: React.FC = () => {
       setTotalProductPrice(totalProductPrice);
 
       const names = productsArr.map((product) => product.name).join(', ');
-      // const descriptions = productsArr
-      //   .map((product) => product.description)
-      //   .join(', ');
-      const descriptions = ' ';
+      const descriptions = productsArr
+        .map((product) => product.description)
+        .join(', ');
       const image1 = productsArr[0]?.image;
       const image2 = productsArr[1]?.image;
-      console.log('Products', productsArr);
-      console.log('descriptions' + descriptions);
-      console.log('Names' + names);
+      const shopidToSave: any = productsArr[0]?.shopId;
+      localStorage.setItem('shopIdToSave', shopidToSave);
 
       const unit_amount = Math.round(totalCartAmount * 100);
 
@@ -144,22 +147,10 @@ const UserViewCart: React.FC = () => {
           unit_amount: unit_amount,
         })
       );
-      console.log('Created product', stripeProduct);
-
-      console.log(
-        'Stripe price before setting',
-        stripeProduct.payload.data.product.default_price
-      );
       localStorage.setItem(
         'stripePrice',
         stripeProduct.payload.data.product.default_price
       );
-      console.log(
-        'Stripe price after setting',
-        localStorage.getItem('stripePrice')
-      );
-      console.log("Sesss cart",cartId);
-
 
       setCheckoutSuccess(true);
 
@@ -177,55 +168,59 @@ const UserViewCart: React.FC = () => {
       setIsPreloader(true);
       const profile: any = await dispatch(fetchUserProfile());
       const data = {
-        successUrl: 'http://localhost:5000/shopping-cart?success',
-        cancelUrl: 'http://localhost:5000/shopping-cart?cancel',
+        successUrl: 'https://e-commerce-ninja-fn-staging.netlify.app/shopping-cart?success',
+        cancelUrl: 'https://e-commerce-ninja-fn-staging.netlify.app/shopping-cart?cancel',
         customerEmail: profile.payload.email,
         price: localStorage.getItem('stripePrice'),
       };
-      console.log('Email', profile.payload.email);
-      console.log('price: ' + localStorage.getItem('stripePrice'));
       const response = await dispatch(createSessionStripe(data));
-      console.log('WQ', response);
       const url = response.payload.data.session.url;
-      console.log(url);
-      // window.location.href = url;
+      window.location.href = url;
     } catch (error) {
       console.error('Checkout failed', error);
-      toast.error('Checkout failed');
+      toast.error('Payment initialization failed, try again later');
     } finally {
       setIsPreloader(false);
     }
   };
-  useEffect(() => {
-    checkPayFailOrSuccess();
-  });
+
   const checkPayFailOrSuccess = async () => {
-    const success = location.search;
-    console.log('Success', success);
-    const cancel = new URLSearchParams(window.location.search).get('cancel');
-    if (success) {
+    const params = window.location.search.slice(1);
+    if (params === 'success') {
       setIsPreloader(true);
       const cartId = localStorage.getItem('cartToPay');
+      const products = localStorage.getItem('productsToSave');
+      const shopId = localStorage.getItem('shopIdToSave');
+      if (!cartId || !products || !shopId) {
+        navigate('/shopping-cart');
+        toast.error('Unkonwn error occured saving order');
+        return;
+      }
       const data = {
         cartId: cartId,
         status: 'Paid',
       };
-      console.log('Cartrtid', cartId);
       const cartStatus = await dispatch(updateCartStatus(data));
-      console.log('UPdate cart', cartStatus);
-      toast.success('Payment successful');
-      // navigate('/shopping-cart');
-      setIsPreloader(true);
-    } else if (cancel) {
-      toast.error('Payment cancelled');
-    } else {
-      console.log('No success or cancel query parameters found');
+      const order = await dispatch(
+        userSaveOrder({
+          cartId: cartId,
+          paymentMethodId: 'Stripe',
+          products: products,
+          shopId: shopId,
+        })
+      );
+      toast.success('Cart Payment successful');
+      localStorage.removeItem('cartToPay');
+      localStorage.removeItem('productsToSave');
+      localStorage.removeItem('shopIdToSave');
+      navigate('/shopping-cart');
+      setIsPreloader(false);
+    } else if (params === 'cancel') {
+      toast.error('Payment cancelled successfully');
+      navigate('/shopping-cart');
+      setIsPreloader(false);
     }
   };
-
-  useEffect(() => {
-    checkPayFailOrSuccess();
-  }, []);
 
   if (isLoading) {
     return (
@@ -238,7 +233,7 @@ const UserViewCart: React.FC = () => {
   if (isError) {
     return (
       <div className="error-message">
-        <p>Failed to load cart products. Please try again later.</p>
+        <p>No cart found.</p>
       </div>
     );
   }
@@ -304,22 +299,18 @@ const UserViewCart: React.FC = () => {
     }
   };
   const handleClearCart = async () => {
-    try {
-      await dispatch(clearCarts()).unwrap();
-      const response1 = await dispatch(getUserCarts()).unwrap();
-      setCartResponseData(response1.data);
-
-      toast.success('Cart cleared successfully');
-      setCartResponseData({ ...cartResponseData, carts: [] });
-      setTotalProductPrice(0);
-    } catch (error) {
-      console.error('Error clearing cart:', error);
-      toast.error('Failed to clear the cart');
-    }
+    setIsPreloader(true);
+    await dispatch(clearCarts()).unwrap();
+    setIsPreloader(false);
+    await fetchCarts();
+    toast.success('Cart cleared successfully');
+    navigate('/shopping-cart');
+    handleClose();
   };
 
   const handleClearSingleCart = async (cartId) => {
     try {
+      setIsPreloader(true);
       await dispatch(clearCart(cartId));
       const response1 = await dispatch(getUserCarts()).unwrap();
       setCheckoutSuccess(false);
@@ -328,11 +319,13 @@ const UserViewCart: React.FC = () => {
         (cart) => cart.cartId !== cartId
       );
       setCartResponseData({ ...cartResponseData, carts: remainingCarts });
-
+      setIsPreloader(false);
       toast.success('Cart cleared successfully');
     } catch (error) {
       console.error('Error clearing cart:', error);
       toast.error('Failed to clear the cart');
+    } finally {
+      setIsPreloader(false);
     }
   };
 
@@ -342,6 +335,7 @@ const UserViewCart: React.FC = () => {
     cartProductsList
   ) => {
     try {
+      setIsPreloader(true);
       if (cartProductsList.length <= 1) {
         await handleClearSingleCart(cartId);
         return;
@@ -353,6 +347,8 @@ const UserViewCart: React.FC = () => {
     } catch (error) {
       toast.error('Failed to clear the product ');
       throw error;
+    } finally {
+      setIsPreloader(false);
     }
   };
 
@@ -390,15 +386,21 @@ const UserViewCart: React.FC = () => {
             <div key={cart.id} className="cart">
               <div className="title">
                 <FaCheckSquare className="check" color="#ff6d18" />
-                <h2>Shopping Cart - {cart.id}</h2>
-                <button
-                  onClick={() =>
-                    handleCartCheckOut(cart.id, index, cart.products)
-                  }
-                  className={`checkout-btn`}
-                >
-                  <span>{'Checkout'}</span>
-                </button>
+                <h2>Shopping Cart</h2>
+                {cart.status === 'Paid' ? (
+                  <button className="checkout-btn" disabled>
+                    Paid
+                  </button>
+                ) : (
+                  <button
+                    onClick={() =>
+                      handleCartCheckOut(cart.cartId, index, cart.products)
+                    }
+                    className={`checkout-btn`}
+                  >
+                    <span>{'Checkout'}</span>
+                  </button>
+                )}
 
                 <FaTrash
                   color="#ff6d18"
@@ -418,47 +420,49 @@ const UserViewCart: React.FC = () => {
                       </div>
                       <div className="description">
                         <h4 onClick={() => navigate(`/product/${product.id}`)}>
-                          {product.description}
+                          {product.name}
                         </h4>
                         <div className="flexer">
                           <div className="left">
                             <span className="discount">{product.discount}</span>
                             <div className="price">${product.price}</div>
                           </div>
-                          <div className="controls">
-                            <div className="quantity">
-                              <button
-                                className="minus"
-                                type="button"
-                                onClick={() => decrementQuantity(product.id)}
-                              >
-                                <FaMinus />
-                              </button>
-                              <input value={product.quantity} readOnly />
-                              <button
-                                className="plus"
-                                type="button"
-                                onClick={() => incrementQuantity(product.id)}
-                              >
-                                <FaPlus />
-                              </button>
+                          {cart.status !== 'Paid' && (
+                            <div className="controls">
+                              <div className="quantity">
+                                <button
+                                  className="minus"
+                                  type="button"
+                                  onClick={() => decrementQuantity(product.id)}
+                                >
+                                  <FaMinus />
+                                </button>
+                                <input value={product.quantity} readOnly />
+                                <button
+                                  className="plus"
+                                  type="button"
+                                  onClick={() => incrementQuantity(product.id)}
+                                >
+                                  <FaPlus />
+                                </button>
+                              </div>
+                              <div className="other">
+                                <button
+                                  className="delete"
+                                  type="button"
+                                  onClick={() =>
+                                    handleClearCartProduct(
+                                      cart.cartId,
+                                      product.id,
+                                      cart.products
+                                    )
+                                  }
+                                >
+                                  <FaTrash color="#ff6d18" />
+                                </button>
+                              </div>
                             </div>
-                            <div className="other">
-                              <button
-                                className="delete"
-                                type="button"
-                                onClick={() =>
-                                  handleClearCartProduct(
-                                    cart.cartId,
-                                    product.id,
-                                    cart.products
-                                  )
-                                }
-                              >
-                                <FaTrash color="#ff6d18" />
-                              </button>
-                            </div>
-                          </div>
+                          )}
                         </div>
                       </div>
                     </div>

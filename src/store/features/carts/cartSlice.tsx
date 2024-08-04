@@ -145,6 +145,15 @@ export const updateCartStatus = createAsyncThunk(
   }
 );
 
+export const userSaveOrder = createAsyncThunk('cart/saveOrder', async(data:any,thunkApi)=> {
+  try {
+    const response = await cartService.saveOrder(data);
+    return response;
+  } catch (error) {
+    return thunkApi.rejectWithValue(getErrorMessage(error));
+  }
+})
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,

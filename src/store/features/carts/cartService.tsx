@@ -52,6 +52,7 @@ const clearCartProduct = async (cartId: string, productId: string) => {
 const clearCarts = async () => {
   try {
     const response = await axiosInstance.delete('/api/cart/buyer-clear-carts');
+    console.log('MRR', response);
     return response;
   } catch (error) {
     console.error('Error clear carts', error);
@@ -143,6 +144,17 @@ const updateCartStatus = async (data) => {
   });
   return response.data;
 };
+
+const saveOrder = async (data) => {
+  const response = await axiosInstance.post('/api/cart/user-create-order', {
+    cartId: data.cartId,
+    paymentMethodId: data.paymentMethodId,
+    products: data.products,
+    status: 'pending',
+    shopId: data.shopId,
+  });
+  return response.data;
+};
 const cartService = {
   createCart,
   getUserCarts,
@@ -153,5 +165,6 @@ const cartService = {
   createStripeProduct,
   createStripeSession,
   updateCartStatus,
+  saveOrder,
 };
 export default cartService;

@@ -16,25 +16,25 @@
     }
     .Toastify__toast--warning {
       text-align: center;
-      color: yellow;
-      background: gray;
+      color: $white-color;
+      background: $toastify-color-warning;
     }
     .Toastify__toast--error {
-      color: rgb(178, 3, 3);
+      color: $white-color;
       text-align: center;
       background:$toastify-color-error;
     }
     .Toastify__progress-bar--info {
-        background: blue;
+        background: $primary-color-light;
       }
       .Toastify__progress-bar--success {
         background: $primary-color-light;
       }
       .Toastify__progress-bar--warning {
-        background: var(--toastify-color-progress-warning);
+        background: $primary-color-light;
       }
       .Toastify__progress-bar--error {
-        background: $red-color;
+        background: $primary-color-light;
       }
       .Toastify__toast-icon{
         svg{

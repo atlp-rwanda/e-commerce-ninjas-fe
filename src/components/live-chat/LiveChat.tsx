@@ -27,6 +27,7 @@ import { URL } from "../../utils/axios/axiosInstance";
 import { clearImages } from "../../store/actions/resetAction";
 import { IoIosCloseCircle } from "react-icons/io";
 import EmojiPicker, { EmojiStyle, Theme } from "emoji-picker-react";
+import { Empty } from "antd";
 
 const LiveChat = () => {
   const [messages, setMessages] = useState([]);
@@ -71,7 +72,7 @@ const LiveChat = () => {
     if (user) {
       setCurrentUserId(user.id);
       setIsLoggedIn(true);
-    }else{
+    } else {
       setIsLoggedIn(false);
       setIsChatOpen(false);
       setIsMinimized(false);
@@ -86,33 +87,33 @@ const LiveChat = () => {
   }, [images]);
 
   useEffect(() => {
-    if(isLoggedIn){
+    if (isLoggedIn) {
       const newSocket = io(`${URL}/chats`, {
         auth: {
           token: localStorage.getItem("token"),
         },
       });
-  
+
       setSocket(newSocket);
-  
+
       newSocket.on("connect", () => {
         newSocket.emit("requestPastMessages");
       });
-  
+
       newSocket.on("userJoined", (data) => {
         setUsers((prevUsers) => [...prevUsers, data.user]);
       });
-  
+
       newSocket.on("userLeft", (data) => {
         setUsers((prevUsers) =>
           prevUsers.filter((user) => user.id !== data.user.id)
         );
       });
-  
+
       newSocket.on("chatMessage", (data) => {
         if (isNotificationEnabled && (!isChatOpen || isMinimized)) {
           notificationRef.current.play();
-         }
+        }
         const newMessage = {
           id: Date.now(),
           userId: data.user.id,
@@ -123,7 +124,6 @@ const LiveChat = () => {
         };
         setMessages((prevMessages) => [...prevMessages, newMessage]);
         if (data.user.id !== currentUserId) {
-          
           if (
             !lastReadTimestamp ||
             new Date(newMessage.timestamp) > lastReadTimestamp
@@ -132,7 +132,7 @@ const LiveChat = () => {
           }
         }
       });
-  
+
       newSocket.on("pastMessages", (data) => {
         const oldMessages = data.map((msg) => ({
           id: msg.id || Date.now(),
@@ -144,7 +144,7 @@ const LiveChat = () => {
         }));
         setMessages(oldMessages);
       });
-  
+
       newSocket.on("connect_error", (error) => {
         if (error.message === "Authentication error") {
           console.log("Authentication error detected. Closing chat.");
@@ -152,7 +152,7 @@ const LiveChat = () => {
         }
         console.log("connection error", error);
       });
-  
+
       return () => {
         newSocket.disconnect();
       };
@@ -211,11 +211,14 @@ const LiveChat = () => {
     }
   }, [dispatch]);
 
-  useEffect(()=>{
-    if(messages.length > 0 && isChatOpen){
-      lastMessageRef.current?.scrollIntoView({behavior:"smooth",block:"end"})
+  useEffect(() => {
+    if (messages.length > 0 && isChatOpen) {
+      lastMessageRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
     }
-  },[messages,isChatOpen]);
+  }, [messages, isChatOpen]);
   const handleChangeMessage = (event) => {
     setCurrentMessage(event.target.value);
   };
@@ -237,7 +240,7 @@ const LiveChat = () => {
         );
         input.focus();
       }, 0);
-      setIsEmojiPickerOpen((prev)=>!prev)
+      setIsEmojiPickerOpen((prev) => !prev);
     }
   };
 
@@ -316,7 +319,6 @@ const LiveChat = () => {
       }
     };
   }, [isChatOpen, messages]);
-
 
   useEffect(() => {
     const chatContainer = chatMessagesRef.current;
@@ -438,83 +440,96 @@ const LiveChat = () => {
           {!isMinimized && (
             <>
               <div className="chat-messages" ref={chatMessagesRef}>
-                {messages.map((msg, index) => {
-                  let textImage = [];
-                  let messageText = msg.text;
-                  const isFirstUnread =
-                    isUnread(msg.timestamp) &&
-                    (index === 0 || !isUnread(messages[index - 1]?.timestamp));
-                  if (messageText?.includes(" + ")) {
-                    const [imagesPart, ...messageParts] =
-                      messageText.split(" + ");
-                    textImage = imagesPart
-                      .split(", ")
-                      .filter((url) => url.startsWith("http"));
-                    messageText = messageParts.join(" + ");
-                  }
+                {messages.length > 0 ? (
+                  messages.map((msg, index) => {
+                    let textImage = [];
+                    let messageText = msg.text;
+                    const isFirstUnread =
+                      isUnread(msg.timestamp) &&
+                      (index === 0 ||
+                        !isUnread(messages[index - 1]?.timestamp));
+                    if (messageText?.includes(" + ")) {
+                      const [imagesPart, ...messageParts] =
+                        messageText.split(" + ");
+                      textImage = imagesPart
+                        .split(", ")
+                        .filter((url) => url.startsWith("http"));
+                      messageText = messageParts.join(" + ");
+                    }
 
-                  return (
-                    <React.Fragment key={msg.id}>
-                      {isFirstUnread && (
-                        <div className="unread-badge-container">
-                          <span className="unread-badge">New</span>
-                        </div>
-                      )}
-                      <div
-                        className={`chat-message ${isUnread(msg.timestamp) ? "unread" : ""} ${
-                          msg.userId === currentUserId
-                            ? "chat-message-right"
-                            : "chat-message-left"
-                        }`}
-                      >
-                        <div className="profile-image">
-                          <img
-                            src={msg.profileImage}
-                            alt="User profile"
-                            className="user-profile-img"
-                          />
-                        </div>
-                        <div className="message-content">
-                          <span className="username">
-                            {msg.username?.toLowerCase()}
-                          </span>
-                          <span style={{ marginBottom: ".5rem" }}>
-                            {messageText}
-                          </span>
-                          {(msg.images?.length > 0 || textImage.length > 0) && (
-                            <div className="images-container">
-                              {(msg.images || textImage).map(
-                                (image: string, idx: number) => (
-                                  <div key={idx} className="imageDisplay">
-                                    <img
-                                      src={image}
-                                      alt={`Image ${idx}`}
-                                      onClick={() => handleImageClick(image)}
-                                    />
-                                    <GrZoomIn
-                                      className="zoomIn"
-                                      onClick={() => handleImageClick(image)}
-                                    />
-                                  </div>
-                                )
-                              )}
-                            </div>
+                    return (
+                      <React.Fragment key={msg.id}>
+                        {isFirstUnread && (
+                          <div className="unread-badge-container">
+                            <span className="unread-badge">New</span>
+                          </div>
+                        )}
+                        <div
+                          className={`chat-message ${isUnread(msg.timestamp) ? "unread" : ""} ${
+                            msg.userId === currentUserId
+                              ? "chat-message-right"
+                              : "chat-message-left"
+                          }`}
+                        >
+                          <div className="profile-image">
+                            <img
+                              src={msg.profileImage}
+                              alt="User profile"
+                              className="user-profile-img"
+                            />
+                          </div>
+                          <div className="message-content">
+                            <span className="username">
+                              {msg.username?.toLowerCase()}
+                            </span>
+                            <span style={{ marginBottom: ".5rem" }}>
+                              {messageText}
+                            </span>
+                            {(msg.images?.length > 0 ||
+                              textImage.length > 0) && (
+                              <div className="images-container">
+                                {(msg.images || textImage).map(
+                                  (image: string, idx: number) => (
+                                    <div key={idx} className="imageDisplay">
+                                      <img
+                                        src={image}
+                                        alt={`Image ${idx}`}
+                                        onClick={() => handleImageClick(image)}
+                                      />
+                                      <GrZoomIn
+                                        className="zoomIn"
+                                        onClick={() => handleImageClick(image)}
+                                      />
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                            )}
+                            <span className="timestamp">
+                              {new Date(msg.timestamp)
+                                .toLocaleTimeString([], {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  hour12: true,
+                                })
+                                .toUpperCase()}
+                            </span>
+                          </div>
+                          {index === messages.length - 1 && (
+                            <div ref={lastMessageRef} />
                           )}
-                          <span className="timestamp">
-                            {new Date(msg.timestamp)
-                              .toLocaleTimeString([], {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                hour12: true,
-                              })
-                              .toUpperCase()}
-                          </span>
                         </div>
-                        {index === messages.length - 1 && <div ref={lastMessageRef} />}
-                      </div>
-                    </React.Fragment>
-                  );
-                })}
+                      </React.Fragment>
+                    );
+                  })
+                ) : (
+                  <div className="no-chats-message">
+                    <Empty
+                      image={Empty.PRESENTED_IMAGE_SIMPLE}
+                      description={"No chats available. Start a conversation🤖"}
+                    />
+                  </div>
+                )}
               </div>
               <div className="chat-inputs">
                 {allImages && allImages.length > 0 && (
@@ -538,7 +553,7 @@ const LiveChat = () => {
                 )}
                 <div className="chat-input">
                   <input
-                  className="input"
+                    className="input"
                     type="text"
                     value={currentMessage}
                     onChange={handleChangeMessage}
@@ -571,7 +586,6 @@ const LiveChat = () => {
                       theme={Theme.DARK}
                       emojiStyle={EmojiStyle.GOOGLE}
                       onEmojiClick={handleEmojiClick}
-                      
                     />
                   </div>
                   <input

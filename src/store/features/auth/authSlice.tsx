@@ -16,6 +16,7 @@ const initialState: AuthService = {
   token: "",
   isAuthenticated: false,
   error: "",
+  userId: "",
 };
 
 type IUserEmailAndPassword = Pick<IUser, 'email' | 'password'>;
@@ -139,6 +140,21 @@ export const logout = createAsyncThunk("auth/logout", async (_, thunkApi) => {
     return thunkApi.rejectWithValue(getErrorMessage(error));
   }
 });
+
+export const verifyOTP = createAsyncThunk(
+  "auth/verify-otp",
+  async (
+    { userId, otp }: { userId: string; otp: string },
+    thunkApi
+  ) => {
+    try {
+      const response = await authService.verifyOTP(userId, otp);
+      return response;
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
 
 const userSlice = createSlice({
   name: "auth",
@@ -291,6 +307,7 @@ const userSlice = createSlice({
         state.isSuccess = true;
         state.message = action.payload.message;
         state.token = action.payload.data.token;
+        state.userId = action.payload.data.userId || "";
       })
       .addCase(loginUser.rejected, (state, action: PayloadAction<any>) => {
         state.isError = true;
@@ -338,6 +355,26 @@ const userSlice = createSlice({
         state.isAuthenticated = false;
         state.user = undefined;
         state.error = action.payload.message;
+      })
+
+      .addCase(verifyOTP.pending, (state) => {
+        state.isError = false;
+        state.isLoading = true;
+        state.isSuccess = false;
+      })
+      .addCase(verifyOTP.fulfilled, (state, action: PayloadAction<any>) => {
+        state.isError = false;
+        state.isLoading = false;
+        state.isAuthenticated = true;
+        state.isSuccess = true;
+        state.message = action.payload.message;
+        state.token = action.payload.data.token;
+      })
+      .addCase(verifyOTP.rejected, (state, action: PayloadAction<any>) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.error = action.payload
       })
   },
 });

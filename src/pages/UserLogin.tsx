@@ -1,24 +1,24 @@
 /* eslint-disable */
-import React, { useEffect, useRef, useState } from "react";
-import { FcGoogle } from "react-icons/fc";
-import { BiSolidShow } from "react-icons/bi";
-import { BiSolidHide } from "react-icons/bi";
-import { useAppDispatch, useAppSelector } from "../store/store";
-import { loginUser } from "../store/features/auth/authSlice";
-import { toast } from "react-toastify";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { Link, useNavigate } from "react-router-dom";
-import { PulseLoader } from "react-spinners";
-import { addProductToWishlist } from "../store/features/wishlist/wishlistSlice";
-import authService from "../store/features/auth/authService";
+import React, { useEffect, useRef, useState } from 'react';
+import { FcGoogle } from 'react-icons/fc';
+import { BiSolidShow } from 'react-icons/bi';
+import { BiSolidHide } from 'react-icons/bi';
+import { useAppDispatch, useAppSelector } from '../store/store';
+import { loginUser } from '../store/features/auth/authSlice';
+import { toast } from 'react-toastify';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { Link, useNavigate } from 'react-router-dom';
+import { PulseLoader } from 'react-spinners';
+import { addProductToWishlist } from '../store/features/wishlist/wishlistSlice';
+import authService from '../store/features/auth/authService';
 import { joinRoom } from '../utils/socket/socket';
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
-    .email("Email must be valid")
-    .required("Email is required"),
-  password: Yup.string().required("Password is required"),
+    .email('Email must be valid')
+    .required('Email is required'),
+  password: Yup.string().required('Password is required'),
 });
 
 function UserLogin() {
@@ -39,35 +39,39 @@ function UserLogin() {
 
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
     validationSchema: LoginSchema,
     onSubmit: async (values) => {
+      const { email } = values;
+      localStorage.setItem('loggedEmail', email);
       const action = await dispatch(loginUser(values));
       if (loginUser.fulfilled.match(action)) {
-        const pendingWishlistProduct = localStorage.getItem("pendingWishlistProduct");
+        const pendingWishlistProduct = localStorage.getItem(
+          'pendingWishlistProduct'
+        );
         if (pendingWishlistProduct) {
           await dispatch(addProductToWishlist(pendingWishlistProduct));
-          localStorage.removeItem("pendingWishlistProduct");
+          localStorage.removeItem('pendingWishlistProduct');
         }
       }
-    }
+    },
   });
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (token) {
-      navigate("/home");
+      navigate('/home');
     }
   }, [navigate]);
 
   useEffect(
     function () {
       if (isSuccess && token && isAuthenticated) {
-        localStorage.setItem("token", token);
+        localStorage.setItem('token', token);
         toast.success(message);
-        navigate("/home");
+        navigate('/home');
         formik.resetForm();
         joinRoom(token);
       }
@@ -121,7 +125,7 @@ function UserLogin() {
             </div>
             <div className="form__group">
               <input
-                type={isVisible ? "text" : "password"}
+                type={isVisible ? 'text' : 'password'}
                 placeholder="Password"
                 className="form__input"
                 id="password"
@@ -144,7 +148,7 @@ function UserLogin() {
                   />
                 )
               ) : (
-                ""
+                ''
               )}
               <p className="form__text">
                 <Link to="/reset-password" className="form__link">
@@ -161,11 +165,11 @@ function UserLogin() {
             ) : null}
             <button
               type="submit"
-              className={`btn form__btn${isLoading ? " loading" : ""}`}
+              className={`btn form__btn${isLoading ? ' loading' : ''}`}
               disabled={isLoading}
               onClick={() => setIsClicked(true)}
             >
-              <span>{isLoading ? "Loading " : "Login"}</span>
+              <span>{isLoading ? 'Loading ' : 'Login'}</span>
               <PulseLoader size={6} color="#ffe2d1" loading={isLoading} />
             </button>
           </form>

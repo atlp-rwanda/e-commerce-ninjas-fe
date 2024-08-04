@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 import { resetState, RESET_STATE } from "../../actions/resetAction";
 const initialState: AuthService = {
-  user: undefined,
+  user: null,
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -325,7 +325,7 @@ const userSlice = createSlice({
         state.isSuccess = false;
         state.isAuthenticated = false;
       })
-      .addCase( getUserDetails.fulfilled, (state, action: PayloadAction<any>) => {
+      .addCase( getUserDetails.fulfilled, (state, action: PayloadAction<IUser>) => {
           state.isError = false;
           state.isSuccess = true;
           state.isAuthenticated = true;

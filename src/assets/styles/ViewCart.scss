@@ -1,255 +1,333 @@
 FaCheckSquare {
   color: $primary-color;
 }
-.cart-section {
-  display: flex;
-  flex-direction: row;
-  .cart-products {
-    flex: 2;
-    margin: 10px;
-    .cart {
-      border: 1px solid $border-color;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      .title {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        border-bottom: 2px solid $border-color;
-        margin: 10px;
-        gap: 10px;
-        .check {
-          margin: 5px;
-        }
-        h2 {
-          padding-left: 5px;
-          margin-bottom: 12px;
-          font-size: 20px;
-          flex: 1;
-        }
-        .checkout-btn {
-          background: $primary-color;
-          cursor: pointer;
-          width: 8%;
-          color: $white;
-          border-radius: 5px;
-          border: none;
-          height: 20px;
-          margin-top: -1px;
-        }
 
-        .delete {
-          cursor: pointer;
-          font-size: 12px;
-          margin-top: 2px;
-        }
-      }
-      .products-list {
-        display: flex;
-        flex-direction: column;
-        .product-box {
-          display: flex;
-          flex-direction: row;
-          padding: 10px;
-          .check {
-            padding: 10px;
-          }
-          .image {
-            border: 2px solid $border-color;
-            border-radius: 10px;
-            width: 180px;
-            height: 135px;
-            img {
-              width: 100%;
-              height: 100%;
-              object-fit: cover;
-              border-radius: 10px;
-            }
-          }
-          .description {
-            flex: 4;
-            padding: 5px;
-            h4 {
-              font-weight: 500;
-              margin: 5px;
-              margin-bottom: 10px;
-              font-size: 18px;
-              cursor: pointer;
-            }
-            .flexer {
-              display: flex;
-              flex-direction: row;
-              flex-wrap: nowrap;
-              .left {
-                flex: 1;
-                .discount {
-                  background: $icon-color-unopacity;
-                  padding: 3px;
-                  border-radius: 5px;
-                  margin: 5px;
-                  margin-bottom: 10px;
-                  font-size: 16px;
-                }
-                .price {
-                  margin: 5px;
-                  margin-bottom: 10px;
-                  font-size: 16px;
-                }
-              }
-              .controls {
-                .quantity {
-                  background: $border-color;
-                  padding: 3px;
-                  border-radius: 20px;
-                  margin-bottom: 10px;
-                  button {
-                    background: $red-color;
-                    border: 0;
-                    border-radius: 50%;
-                    color: $background-color;
-                    padding: 5px;
-                    width: 20px;
-                    height: 20px;
-                    font-size: 12px;
-                    cursor:pointer;
-                  }
-                  input {
-                    background: transparent;
-                    border: 0;
-                    width: 20px;
-                    padding-left: 10px;
-                    padding-right: 10px;
-                    text-align: center;
-                    align-items: center;
-                  }
-                }
-                .other {
-                  text-align: right;
-                  button {
-                    color: $primary-color;
-                    background: transparent;
-                    border: 0;
-                    font-size: 20px;
-                    margin-right: 3rem;
-                    cursor: pointer;
-                  }
-                  .delete {
-                    margin-left: 30px;
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  .checkout-details {
-    flex: 1;
-    margin: 10px;
-    .voucher-shipping {
-      border: 2px solid $border-color;
-      border-radius: 10px;
-      padding: 5px;
-      .box {
-        p {
-          color: $black;
-          font-size: 16px;
-          padding: 5px;
-        }
-        .info {
-          display: flex;
-          flex-direction: row;
-          flex-wrap: nowrap;
-          font-size: 14px;
-          padding: 10px;
-          border: 2px solid $border-color;
-          border-radius: 10px;
-          .icon {
-            color: $red-color;
-          }
-          .text {
-            margin-left: 5px;
-          }
-        }
-      }
-    }
-    .order-details {
-      border: 2px solid $border-color;
-      padding: 10px;
-      border-radius: 10px;
-      margin-top: 10px;
-      h3 {
-        color: $primary-color;
-        font-size: 18px;
-        padding: 5px;
-      }
-      .row {
-        display: flex;
-        font-weight: 600;
-        font-size: 16px;
-        color: $black;
-        padding: 5px;
-        .left {
-          flex: 1;
-        }
-      }
-      .last {
-        border-bottom: 2px solid $border-color;
-      }
-      button {
-        background: $primary-color;
-        width: 100%;
-        border-radius: 5px;
-        border: none;
-        color: $white;
-        padding: 10px;
-        
-      }
-    }
-  }
-}
-@media only screen and (max-width: 720px) {
-  .cart-section {
+.cart-section {
+  background-color: $secondary-color-light;
+
+  .clear-cart {
+    border: none;
+    justify-content: end;
+    align-items: end;
     display: flex;
-    flex-direction: column;
-    padding: 20px;
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: $secondary-color-light;
+
+    .delete {
+      border: none;
+      background-color: $primary-color;
+      color: $white;
+      font-size: 1.5rem;
+      padding: 1rem;
+      border-radius: 5px;
+      display: flex;
+      cursor: pointer;
+    }
+
+    .deleteIcon {
+      font-size: 2rem;
+      margin-right: 1rem;
+      cursor: pointer;
+    }
+  }
+
+  .cartSection {
+    display: flex;
     .cart-products {
       flex: 2;
       margin: 10px;
+
       .cart {
         border: 1px solid $border-color;
         border-radius: 10px;
         margin-bottom: 10px;
+        margin-left: 1rem;
+
         .title {
           display: flex;
           flex-direction: row;
           flex-wrap: nowrap;
           border-bottom: 2px solid $border-color;
           margin: 10px;
+          gap: 10px;
+
           .check {
             margin: 5px;
           }
+
+          h2 {
+            padding-left: 5px;
+            margin-bottom: 12px;
+            font-size: 20px;
+            flex: 1;
+          }
+
+          .checkout-btn {
+            background: $primary-color;
+            cursor: pointer;
+            width: 8%;
+            color: $white;
+            border-radius: 5px;
+            border: none;
+            height: 20px;
+            margin-top: -1px;
+          }
+
+          .delete {
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 2px;
+          }
+        }
+
+        .products-list {
+          display: flex;
+          flex-direction: column;
+
+          .product-box {
+            display: flex;
+            flex-direction: row;
+            padding: 10px;
+
+            .check {
+              padding: 10px;
+            }
+
+            .image {
+              border: 2px solid $border-color;
+              border-radius: 10px;
+              width: 180px;
+              height: 135px;
+
+              img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 10px;
+              }
+            }
+
+            .description {
+              flex: 4;
+              padding: 5px;
+
+              h4 {
+                font-weight: 500;
+                margin: 5px;
+                margin-bottom: 10px;
+                font-size: 18px;
+                cursor: pointer;
+              }
+
+              .flexer {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+
+                .left {
+                  flex: 1;
+
+                  .discount {
+                    background: $icon-color-unopacity;
+                    padding: 3px;
+                    border-radius: 5px;
+                    margin: 5px;
+                    margin-bottom: 10px;
+                    font-size: 16px;
+                  }
+
+                  .price {
+                    margin: 5px;
+                    margin-bottom: 10px;
+                    font-size: 16px;
+                  }
+                }
+
+                .controls {
+                  .quantity {
+                    background: $border-color;
+                    padding: 3px;
+                    border-radius: 20px;
+                    margin-bottom: 10px;
+
+                    button {
+                      background: $red-color;
+                      border: 0;
+                      border-radius: 50%;
+                      color: $background-color;
+                      padding: 5px;
+                      width: 20px;
+                      height: 20px;
+                      font-size: 12px;
+                      cursor: pointer;
+                    }
+
+                    input {
+                      background: transparent;
+                      border: 0;
+                      width: 20px;
+                      padding-left: 10px;
+                      padding-right: 10px;
+                      text-align: center;
+                      align-items: center;
+                    }
+                  }
+
+                  .other {
+                    text-align: right;
+
+                    button {
+                      color: $primary-color;
+                      background: transparent;
+                      border: 0;
+                      font-size: 20px;
+                      margin-right: 3rem;
+                      cursor: pointer;
+                    }
+
+                    .delete {
+                      margin-left: 30px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .checkout-details {
+      flex: 1;
+      margin: 10px;
+
+      .voucher-shipping {
+        border: 2px solid $border-color;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-top: 5rem;
+
+        .box {
+          p {
+            color: $black;
+            font-size: 16px;
+            padding: 1rem;
+          }
+
+          .info {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            font-size: 14px;
+            padding: 1.5rem;
+            border: 2px solid $border-color;
+            border-radius: 10px;
+
+            .icon {
+              color: $red-color;
+            }
+
+            .text {
+              margin-left: 5px;
+            }
+          }
+        }
+      }
+
+      .order-details {
+        border: 2px solid $border-color;
+        padding: 10px;
+        border-radius: 10px;
+        margin-top: 10px;
+
+        h3 {
+          color: $primary-color;
+          font-size: 18px;
+          padding: 5px;
+        }
+
+        .row {
+          display: flex;
+          font-weight: 600;
+          font-size: 16px;
+          color: $black;
+          padding: 5px;
+
+          .left {
+            flex: 1;
+          }
+        }
+
+        .last {
+          border-bottom: 2px solid $border-color;
+        }
+
+        button {
+          background: $primary-color;
+          width: 100%;
+          border-radius: 5px;
+          border: none;
+          color: $white;
+          padding: 10px;
+
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 720px) {
+  .cart-section {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+
+    .cart-products {
+      flex: 2;
+      margin: 10px;
+
+      .cart {
+        border: 1px solid $border-color;
+        border-radius: 10px;
+        margin-bottom: 10px;
+
+        .title {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          border-bottom: 2px solid $border-color;
+          margin: 10px;
+
+          .check {
+            margin: 5px;
+          }
+
           h2 {
             padding-left: 5px;
             margin-bottom: 10px;
             font-size: 20px;
           }
         }
+
         .products-list {
           display: flex;
           flex-direction: column;
+
           .product-box {
             display: flex;
             flex-direction: column;
             padding: 10px;
+
             .check {
               display: none;
             }
+
             .image {
               border: 2px solid $border-color;
               border-radius: 10px;
               text-align: center;
+
               img {
                 width: 100%;
                 height: 100%;
@@ -257,21 +335,26 @@ FaCheckSquare {
                 text-align: center;
               }
             }
+
             .description {
               flex: 3;
               padding: 5px;
+
               h4 {
                 font-weight: 500;
                 margin: 5px;
                 margin-bottom: 10px;
                 font-size: 18px;
               }
+
               .flexer {
                 display: flex;
                 flex-direction: row;
                 flex-wrap: nowrap;
+
                 .left {
                   flex: 1;
+
                   .discount {
                     background: $icon-color-unopacity;
                     padding: 3px;
@@ -280,20 +363,24 @@ FaCheckSquare {
                     margin-bottom: 10px;
                     font-size: 14px;
                   }
+
                   .price {
                     margin: 5px;
                     margin-bottom: 10px;
                     font-size: 14px;
                   }
                 }
+
                 .controls {
                   display: flex;
                   flex-direction: column;
+
                   .quantity {
                     background: $border-color;
                     padding: 3px;
                     border-radius: 20px;
                     margin-bottom: 10px;
+
                     button {
                       background: $red-color;
                       border: 0;
@@ -305,6 +392,7 @@ FaCheckSquare {
                       font-size: 10px;
                       border: none;
                     }
+
                     input {
                       background: transparent;
                       border: 0;
@@ -315,8 +403,10 @@ FaCheckSquare {
                       align-items: center;
                     }
                   }
+
                   .other {
                     text-align: right;
+
                     button {
                       color: $primary-color;
                       background: transparent;
@@ -332,18 +422,22 @@ FaCheckSquare {
         }
       }
     }
+
     .checkout-details {
       flex: 1;
       margin: 10px;
+
       .voucher-shipping {
         border: 2px solid $border-color;
         border-radius: 10px;
         padding: 5px;
+
         .box {
           p {
             color: $black;
             font-size: 16px;
           }
+
           .info {
             display: flex;
             flex-direction: row;
@@ -352,71 +446,55 @@ FaCheckSquare {
             padding: 10px;
             border: 2px solid $border-color;
             border-radius: 10px;
+
             .icon {
               color: $red-color;
             }
+
             .text {
               margin-left: 5px;
             }
           }
         }
       }
+
       .order-details {
         border: 2px solid $border-color;
         padding: 10px;
         border-radius: 10px;
         margin-top: 10px;
+
         h3 {
           color: $primary-color;
           font-size: 18px;
           padding: 5px;
         }
+
         .row {
           display: flex;
           font-weight: 600;
           font-size: 16px;
           color: $black;
           padding: 5px;
+
           .left {
             flex: 1;
           }
         }
+
         .last {
           border-bottom: 2px solid $border-color;
         }
+
         button {
           background: $primary-color;
           width: 100%;
           border-radius: 5px;
           color: $white;
           padding: 10px;
-         
+
         }
       }
     }
-  }
-}
-.clear-cart {
-  margin-top: 1rem;
-  margin-left: 26.5rem;
-  border: none;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  width: 100%;
-  .delete {
-    border: none;
-    background-color: $primary-color;
-    color: $white;
-    font-size: 1.5rem;
-    padding: 1rem;
-    border-radius: 5px;
-    display: flex;
-    cursor: pointer;
-  }
-  .deleteIcon {
-    font-size: 2rem;
-    margin-right: 1rem;
-    cursor: pointer;
   }
 }

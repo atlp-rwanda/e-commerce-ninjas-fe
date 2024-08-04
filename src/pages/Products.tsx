@@ -3,23 +3,38 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { fetchProducts } from "../store/features/product/productSlice";
 import Product from "../components/product/Product";
-import Sample from "../components/layout/Sample";
 import { PuffLoader } from "react-spinners";
 import { Meta } from "../components/Meta";
 import { toast } from "react-toastify";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { createCart, getUserCarts } from "../store/features/carts/cartSlice";
 
 const ProductsPage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate()
-  const [cartResponseData, setCartResponseData] = useState<any>(null)
+  const navigate = useNavigate();
+  const [cartResponseData, setCartResponseData] = useState<any>(null);
   const { products, isError, isSuccess, isLoading, message } = useAppSelector(
     (state: any) => state.products
   );
+
+  const [priceRange, setPriceRange] = useState([0, 0]);
+  const [maxPrice, setMaxPrice] = useState(0);
+  const [minPrice, setMinPrice] = useState(0);
+
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (products.length > 0) {
+      const calculatedMaxPrice = products.reduce((max, product) => Math.max(max, product.price), 0);
+      const calculatedMinPrice = products.reduce((min, product) => Math.min(min, product.price), calculatedMaxPrice);
+
+      setMaxPrice(calculatedMaxPrice);
+      setMinPrice(calculatedMinPrice);
+      setPriceRange([calculatedMinPrice, calculatedMaxPrice]);
+    }
+  }, [products]);
 
   const handleAddProductToCart = async (productId: string, quantity = 1) => {
     try {
@@ -44,6 +59,7 @@ const ProductsPage: React.FC = () => {
       }
     }
   };
+
   useEffect(() => {
     const checkProductToCartPending = async () => {
       const pendingProduct = localStorage.getItem("pendingCartProduct");
@@ -60,10 +76,14 @@ const ProductsPage: React.FC = () => {
     checkProductToCartPending();
   }, []);
 
+  const filteredProducts = products.filter((product: any) => {
+    const price = parseFloat(product.price);
+    return price >= priceRange[0] && price <= priceRange[1];
+  });
+
   return (
     <>
-      <Meta title="Home - E-Commerce Ninjas" />
-      <Sample />
+      <Meta title="Products - E-Commerce Ninjas" />
       <div className="landing-container">
         {isLoading ? (
           <div className="loader">
@@ -76,12 +96,27 @@ const ProductsPage: React.FC = () => {
         ) : (
           <div>
             <div className="head">
-              <h1>All products</h1>
+              <h1>Products</h1>
+            </div>
+            <div className="filters">
+              <div>
+                <label>Price Range: </label>
+                <input
+                  type="range"
+                  min={minPrice}
+                  max={maxPrice}
+                  value={priceRange[1]}
+                  onChange={(e) =>
+                    setPriceRange([priceRange[0], Number(e.target.value)])
+                  }
+                />
+                <span className="span">${priceRange[0]} - ${priceRange[1]}</span>
+              </div>
             </div>
             <div className="product-list">
               {isSuccess &&
-                Array.isArray(products) &&
-                products?.map((product: any) => (
+                Array.isArray(filteredProducts) &&
+                filteredProducts.map((product: any) => (
                   <Product
                     key={product.id}
                     id={product.id}

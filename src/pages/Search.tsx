@@ -54,7 +54,7 @@ const SearchBar: React.FC = () => {
     if (products && products.length > 0) {
       const sortedPrices = Array.from(
         new Set(products.map((product: any) => product.price))
-      ).sort((a, b) => a - b);
+      ).sort((a:number, b:number) => a - b) as number[];
       setSelectPrice(sortedPrices);
   
       const priceOptions = sortedPrices.map(price => ({ label: `$${price}`, value: price.toString() }));
@@ -67,10 +67,10 @@ const SearchBar: React.FC = () => {
       }
   
       const sortedDiscounts = Array.from(
-        new Set(products.map((product: any) => product.discount))
+        new Set(products.map((product: any) => { return typeof product.discount === 'string' ? Number(product.discount) : product.discount;}))
       )
-        .sort((a, b) => parseInt(a) - parseInt(b))
-        .map((discount) => ({ label: `${discount}`, value: discount }));
+        .sort((a:number, b:number) => a - b)
+        .map((discount) => ({ label: `${discount}`, value: String(discount) }));
       setDiscountOptions(sortedDiscounts);
     }
   }, [products]);
@@ -112,9 +112,11 @@ const SearchBar: React.FC = () => {
 
   useEffect(() => {
     if (filteredProducts && filteredProducts.length > 0) {
-      const sortedPrices = Array.from(
-        new Set(filteredProducts.map((product: any) => product.price))
-      ).sort((a, b) => a - b);
+      const uniquePrice = Array.from(
+        new Set(filteredProducts.map((product: any) =>{ return typeof product.price === 'string' ? Number(product.price) : product.price;}))
+      );
+      const sortedPrices: any[] = uniquePrice
+      .sort((a:number, b:number) => a - b);
       setSelectPrice(sortedPrices);
   
       const priceOptions = sortedPrices.map(price => ({ label: `$${price}`, value: price.toString() }));
@@ -127,15 +129,13 @@ const SearchBar: React.FC = () => {
       }
   
       const sortedDiscounts = Array.from(
-        new Set(filteredProducts.map((product: any) => product.discount))
+        new Set(filteredProducts.map((product: any) => { return typeof product.price === 'string' ? Number(product.price) : product.price;}))
       )
-        .sort((a, b) => parseInt(a) - parseInt(b))
-        .map((discount) => ({ label: `${discount}`, value: discount }));
+        .sort((a:number, b:number) => a - b)
+        .map((discount) => ({ label: `${discount}`, value: String(discount) }));
       setDiscountOptions([{label:'Discount', value: ''},...sortedDiscounts]);
     }
   }, [filteredProducts]);
-
-
 
   return (
     <>

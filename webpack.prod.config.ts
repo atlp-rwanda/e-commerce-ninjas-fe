@@ -76,6 +76,19 @@ const config: Configuration = {
           }
         ],
       },
+      {
+        test: /\.(mp3)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'assets/',
+              publicPath: 'assets/',
+            },
+          },
+        ],
+      },
     ],
   },
   resolve: {

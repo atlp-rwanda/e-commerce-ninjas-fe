@@ -34,8 +34,8 @@ export interface IUser {
   id?: string;
   firstName?: string;
   lastName?: string;
-  email: string;
-  password: string;
+  email?: string;
+  password?: string;
   phone?: number;
   profilePicture?: string;
   gender?: string;
@@ -53,12 +53,12 @@ export interface IUser {
 }
 
 export interface IUserData {
-  data: object;
+  data: {user:IUser};
   message: string;
 }
 
 export interface IUserDataState {
-  user: IUserData | undefined;
+  user: IUserData | null;
 }
 
 export interface IVerification {

@@ -1,19 +1,19 @@
 .product {
-  border: 1px solid $border-color;
   border-radius: 1rem;
   overflow: hidden;
   width: 26rem;
   margin-top: 2rem;
-  box-shadow: 0.5rem 0.5rem 0.5rem rgba(0, 0, 0, 0.2);
-  background-color: $white;
+  box-shadow: 0.1rem 0.1rem 0.5rem rgba(0, 0, 0, 0.2);
+  background-color: $secondary-color-light;
   &:hover {
     transform: scale(1.05);
     box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease-in-out;
   }
 
   .product-image-container {
     position: relative;
-    height: 18.8rem;
+    height: 25rem;
     cursor: pointer;
 
     .discount-badge {
@@ -39,7 +39,7 @@
 
   .product-info {
     padding: 1rem;
-    background-color: $secondary-color-light;
+    
 
     .product-name {
       font-size: 1.7rem;

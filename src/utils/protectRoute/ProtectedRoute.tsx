@@ -50,7 +50,7 @@ const ProtectedRoute = ({ redirectPath = '/', children }) => {
   }
 
   if (!isAuthenticated) {
-    toast.info('You need to be logged in to access this page');
+    toast.info('Please log in to access this page.');
     return <Navigate to={redirectPath} replace />;
   }
   if (isError && message === 'Not authorized') {

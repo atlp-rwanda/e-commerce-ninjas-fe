@@ -98,6 +98,14 @@ const addSellerProduct = async (newProductData: FormData) => {
     throw new Error(getErrorMessage(error))
   }
 }
+const sellerGetAllProducts = async () => {
+  const response = await axiosInstance.get(`/api/shop/seller-get-products`);
+  return response.data;
+}
+const sellerGetOrderHistory = async () => {
+  const response = await axiosInstance.get(`/api/shop/seller-get-orderHistory`);
+  return response.data;
+}
 
 const productService = {
   fetchProducts,
@@ -109,6 +117,8 @@ const productService = {
   fetchSellerSingleProduct,
   updateSellerProduct,
   addSellerProduct,
-  updateSellerProductStatus
+  updateSellerProductStatus,
+  sellerGetAllProducts,
+ sellerGetOrderHistory
 }
 export default productService;

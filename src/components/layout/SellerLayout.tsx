@@ -56,7 +56,7 @@ export const SellerLayout = () => {
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 5);
 
-  const completionPercentage = 12; 
+  const completionPercentage = 80; 
 
   const getCompletionColor = (percentage) => {
     if (percentage >= 80) return "#00FF00";

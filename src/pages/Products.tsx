@@ -102,7 +102,6 @@ const ProductsPage: React.FC = () => {
   return (
     <>
       <Meta title="Products - E-Commerce Ninjas" />
-      <Meta title="Products - E-Commerce Ninjas" />
       <div className="landing-container">
         {isLoading ? (
           <div className="loader">
@@ -115,22 +114,6 @@ const ProductsPage: React.FC = () => {
         ) : (
           <div>
             <div className="head">
-              <h1>Products</h1>
-            </div>
-            <div className="filters">
-              <div>
-                <label>Price Range: </label>
-                <input
-                  type="range"
-                  min={minPrice}
-                  max={maxPrice}
-                  value={priceRange[1]}
-                  onChange={(e) =>
-                    setPriceRange([priceRange[0], Number(e.target.value)])
-                  }
-                />
-                <span className="span">${priceRange[0]} - ${priceRange[1]}</span>
-              </div>
               <h1>Products</h1>
             </div>
             <div className="filters">

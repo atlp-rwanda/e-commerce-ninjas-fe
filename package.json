@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "webpack serve --config webpack.dev.config.ts",
     "test": "jest --watchAll=false --coverage",
-    "build": "webpack --config webpack.prod.config.ts",
+    "build": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js --config webpack.prod.config.ts",
     "lint": "eslint src --ext ts,tsx --ignore-pattern 'node_modules'",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
@@ -37,6 +37,7 @@
     "react-router-dom": "^6.24.0",
     "react-spinners": "^0.14.1",
     "react-toastify": "^10.0.5",
+    "recharts": "^2.12.7",
     "save-dev": "0.0.1-security",
     "socket.io-client": "^4.7.5",
     "yup": "^1.4.0"

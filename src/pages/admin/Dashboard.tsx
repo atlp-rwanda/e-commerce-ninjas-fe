@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { Backdrop, Box, CircularProgress, Typography } from "@mui/material";
 import { Meta } from "../../components/Meta";
 
+
 export const AdminDashboard = () => {
   const dispatch = useAppDispatch();
   const { isLoading, message, isError } = useAppSelector(
@@ -44,7 +45,7 @@ export const AdminDashboard = () => {
       return;
     }
   }, [isError, message, navigate]);
-
+ 
   return (
     <>
       <Meta title="Admin - Dashboard" />
@@ -111,7 +112,8 @@ export const AdminDashboard = () => {
         <section className="main__content__dashboard">
           <Header />
           <main className="main__dashboard">
-            <Outlet />
+          
+           <Outlet />
           </main>
         </section>
       </div>

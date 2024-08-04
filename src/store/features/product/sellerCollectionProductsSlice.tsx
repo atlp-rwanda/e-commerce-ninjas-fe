@@ -26,7 +26,22 @@ export const fetchSellerCollectionProduct = createAsyncThunk<ISellerCollectionPr
         return thunkApi.rejectWithValue(getErrorMessage(error));
     }
 });
-
+export const sellerGetAllProducts = createAsyncThunk('seller/seller-get-products', async (_, thunkApi) => {
+    try {
+        const response = await productService.sellerGetAllProducts();
+        return response;
+    } catch (error) {
+        return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+})
+export const sellerGetOrderHistory = createAsyncThunk('seller/seller-get-orderHisory', async (_, thunkApi) => {
+    try {
+        const response = await productService.sellerGetOrderHistory();
+        return response;
+    } catch (error) {
+        return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+})
 
 const sellerCollectionProductsSlice = createSlice({
     name: "sellerCollectionProducts",
@@ -45,6 +60,38 @@ const sellerCollectionProductsSlice = createSlice({
                 state.data = action.payload.data;
             })
             .addCase(fetchSellerCollectionProduct.rejected, (state, action: PayloadAction<any>) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = false;
+                state.message = action.payload.message || null
+            })
+            .addCase(sellerGetAllProducts.pending, (state) => {
+                state.isLoading = true;
+                state.isError = null;
+                state.isSuccess = false;
+            })
+            .addCase(sellerGetAllProducts.fulfilled, (state, action: PayloadAction<ISellerCollectionProductResponse>) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.data = action.payload.data;
+            })
+            .addCase(sellerGetAllProducts.rejected, (state, action: PayloadAction<any>) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = false;
+                state.message = action.payload.message || null
+            })
+            .addCase(sellerGetOrderHistory.pending, (state) => {
+                state.isLoading = true;
+                state.isError = null;
+                state.isSuccess = false;
+            })
+            .addCase(sellerGetOrderHistory.fulfilled, (state, action: PayloadAction<ISellerCollectionProductResponse>) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.data = action.payload.data;
+            })
+            .addCase(sellerGetOrderHistory.rejected, (state, action: PayloadAction<any>) => {
                 state.isLoading = false;
                 state.isError = false;
                 state.isSuccess = false;

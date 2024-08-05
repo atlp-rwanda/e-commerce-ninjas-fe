@@ -17,6 +17,7 @@ const initialState: AuthService = {
   isAuthenticated: false,
   error: "",
   userId: "",
+  fail: false
 };
 
 type IUserEmailAndPassword = Pick<IUser, 'email' | 'password'>;
@@ -185,6 +186,7 @@ const userSlice = createSlice({
       state.token = "";
       state.isAuthenticated = false;
       state.error = "";
+      state.fail= false;
     },
     changingProfile: (state, action: any)=>{
       (state.user as any).profilePicture = action.payload
@@ -279,7 +281,7 @@ const userSlice = createSlice({
       )
       .addCase(sendResetLink.pending, (state) => {
         state.isLoading = true;
-        state.isError = false;
+        state.fail = false;
         state.isSuccess = false;
       })
       .addCase(sendResetLink.fulfilled, (state, action: PayloadAction<any>) => {
@@ -290,24 +292,23 @@ const userSlice = createSlice({
       .addCase(sendResetLink.rejected, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.isSuccess = false;
-        state.isError = true;
+        state.fail = true;
         state.message = action.payload;
       })
       .addCase(resetPassword.pending, (state) => {
         state.isLoading = true;
-        state.isError = false;
+        state.fail = false;
         state.isSuccess = false;
       })
       .addCase(resetPassword.fulfilled, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.user = action.payload;
         state.message = action.payload.message;
       })
       .addCase(resetPassword.rejected, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.isSuccess = false;
-        state.isError = true;
+        state.fail = true;
         state.message = action.payload;
       })
       .addCase(loginUser.pending, (state) => {

@@ -23,7 +23,7 @@ const ResetPassword: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const { user, isError, isSuccess, isLoading, message } = useAppSelector(
+  const { user, fail, isSuccess, isLoading, message } = useAppSelector(
     (state) => state?.auth
   );
   const [isFormVisible, setIsFormVisible] = useState(true);
@@ -46,14 +46,14 @@ const ResetPassword: React.FC = () => {
     },
   });
   useEffect(() => {
-    if (isError) {
+    if (fail) {
       formik.setStatus(message);
     }
     if (isSuccess) {
       toast.success(message);
       setIsFormVisible(false);
     }
-  }, [user, isError, isSuccess, isLoading, message]);
+  }, [user, fail, isSuccess, isLoading, message]);
   
   useEffect(() => {
     dispatch(resetAuth());
@@ -115,7 +115,7 @@ const ResetPassword: React.FC = () => {
                 </button>
               </div>
               <div>
-                {showError || isError ? (
+                {showError || fail ? (
                   <p className="error">{formik.status}</p>
                 ) : null}
               </div>

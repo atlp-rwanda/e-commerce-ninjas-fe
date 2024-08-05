@@ -37,6 +37,7 @@ function SearchInput({ className, placeholder }: SearchInputProps) {
     e.preventDefault();
     if (search.trim()) {
       navigate(`/search?name=${search.trim()}`);
+      setSearch("");
     }
   };
 

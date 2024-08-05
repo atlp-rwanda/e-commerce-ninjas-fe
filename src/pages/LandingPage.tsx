@@ -94,7 +94,7 @@ const LandingPage: React.FC = () => {
                     id={product.id}
                     images={product.images}
                     name={product.name}
-                    price={`$${product.price}`}
+                    price={product.price}
                     stock={Number(product.quantity)}
                     description={product.description}
                     discount={Number(product.discount.replace("%", ""))}

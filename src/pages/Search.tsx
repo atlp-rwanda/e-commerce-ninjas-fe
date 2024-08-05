@@ -66,12 +66,12 @@ const SearchBar: React.FC = () => {
         setMaxPriceOptions([{ label: 'Max', value: '' }, ...priceOptions]);
       }
   
-      const sortedDiscounts = Array.from(
-        new Set(products.map((product: any) => { return typeof product.discount === 'string' ? Number(product.discount) : product.discount;}))
+      const sortedDiscounts: any = Array.from(
+        new Set(products.map((product: any) => product.discount))
       )
-        .sort((a:number, b:number) => a - b)
-        .map((discount) => ({ label: `${discount}`, value: String(discount) }));
-      setDiscountOptions(sortedDiscounts);
+        .sort((a:string, b:string) => parseInt(a) - parseInt(b))
+        .map((discount) => ({ label: `${discount}`, value: discount }));
+        setDiscountOptions([{ label: 'Discount', value: '' },...sortedDiscounts]);
     }
   }, [products]);
 
@@ -119,7 +119,7 @@ const SearchBar: React.FC = () => {
       .sort((a:number, b:number) => a - b);
       setSelectPrice(sortedPrices);
   
-      const priceOptions = sortedPrices.map(price => ({ label: `$${price}`, value: price.toString() }));
+      const priceOptions = sortedPrices.map(price => ({ label: `${price} RWF`, value: price.toString() }));
       setMinPriceOptions([{ label: 'Min', value: '' }, ...priceOptions]);
   
       if (sortedPrices.length > 1) {
@@ -127,13 +127,12 @@ const SearchBar: React.FC = () => {
       } else {
         setMaxPriceOptions([{ label: 'Max', value: '' }, ...priceOptions]);
       }
-  
-      const sortedDiscounts = Array.from(
-        new Set(filteredProducts.map((product: any) => { return typeof product.price === 'string' ? Number(product.price) : product.price;}))
+      const sortedDiscounts: any = Array.from(
+        new Set(products.map((product: any) => product.discount))
       )
-        .sort((a:number, b:number) => a - b)
-        .map((discount) => ({ label: `${discount}`, value: String(discount) }));
-      setDiscountOptions([{label:'Discount', value: ''},...sortedDiscounts]);
+        .sort((a:string, b:string) => parseInt(a) - parseInt(b))
+        .map((discount) => ({ label: `${discount}`, value: discount }));
+        setDiscountOptions([{ label: 'Discount', value: '' },...sortedDiscounts]);
     }
   }, [filteredProducts]);
 
@@ -194,7 +193,7 @@ const SearchBar: React.FC = () => {
                       id={product.id}
                       images={product.images}
                       name={product.name}
-                      price={`$${product.price}`}
+                      price={product.price}
                       stock={Number(product.quantity)}
                       description={product.description}
                       discount={Number(product.discount.replace("%", ""))}

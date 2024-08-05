@@ -128,7 +128,7 @@ const ProductsPage: React.FC = () => {
                     setPriceRange([priceRange[0], Number(e.target.value)])
                   }
                 />
-                <span className="span">${priceRange[0]} - ${priceRange[1]}</span>
+                <span className="span">{priceRange[0]}RWF - {priceRange[1]}RWF</span>
               </div>
             </div>
             <div className="product-list">
@@ -142,7 +142,7 @@ const ProductsPage: React.FC = () => {
                     id={product.id}
                     images={product.images}
                     name={product.name}
-                    price={`$${product.price}`}
+                    price={product.price}
                     stock={Number(product.quantity)}
                     description={product.description}
                     discount={Number(product.discount.replace("%", ""))}

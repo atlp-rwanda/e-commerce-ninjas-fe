@@ -229,9 +229,9 @@ const Header: React.FC = () => {
                   <span className="cart__description">
                     {isAuthenticated
                       ? cartTotalMoney !== null
-                        ? `$${cartTotalMoney.toFixed(2)}`
-                        : '$0'
-                      : '$0'}
+                        ? `${cartTotalMoney.toFixed(2)} RWF`
+                        : '0 RWF'
+                      : '0 RWF'}
                   </span>
                 </div>
               </div>

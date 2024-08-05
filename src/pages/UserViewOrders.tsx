@@ -184,7 +184,7 @@ const UserVIewOrders: React.FC = () => {
                             <h3>{product.name}</h3>
                             <br />
                             <span>x{product.quantity}</span>
-                            <span className="o-price">${product.price}</span>
+                            <span className="o-price">{product.price} RWF</span>
                           </p>
                         </div>
                         <div className="order-details">
@@ -232,7 +232,7 @@ const UserVIewOrders: React.FC = () => {
                             <h3>{product.name}</h3>
                             <br />
                             <span>x{product.quantity}</span>
-                            <span className="o-price">${product.price}</span>
+                            <span className="o-price">{product.price} RWF</span>
                           </p>
                         </div>
                         <div className="order-details">

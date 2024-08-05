@@ -194,7 +194,7 @@ const Product: React.FC<ProductProps> = ({
           {name}
         </div>
         <div className="product-details">
-          <p className="product-price">{price}</p>
+          <p className="product-price">{price} RWF</p>
           <p className="product-stock">
             <span className="stock">Stock: </span>
             {stock}

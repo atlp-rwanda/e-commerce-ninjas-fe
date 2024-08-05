@@ -8,6 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { toast } from "react-toastify";
 import { TailSpin } from 'react-loader-spinner';
+import { logout } from '../../store/features/auth/authSlice';
+import { disconnect } from '../../utils/socket/socket';
+import { useNavigate } from 'react-router-dom';
 
 const passwordSchema = Yup.object({
   oldPassword: Yup.string().required('Old password is required'),
@@ -19,13 +22,13 @@ const passwordSchema = Yup.object({
     .oneOf([Yup.ref('newPassword')], 'Passwords must match'),
 });
 
-const PasswordUpdate = ({ message, isError,isSuccess }) => {
+const PasswordUpdate = ({ message, isError, isSuccess }) => {
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false)
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(null);
+  const navigate = useNavigate()
 
   const newPasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -46,13 +49,23 @@ const PasswordUpdate = ({ message, isError,isSuccess }) => {
     },
     validationSchema: passwordSchema,
     onSubmit: async (values) => {
-      setLoading(true);
       try{
+        setTimeout(()=>{
+          setLoading(true)
+        },200)
         dispatch(updatePassword(values));
       }catch(err){
         console.log(err)
       }finally{
         setLoading(false)
+        toast.success("Password updated Successfully you will be logged out in few second ")
+        setTimeout(()=>{
+          dispatch(logout())
+          disconnect()
+        },4000)
+        setTimeout(()=>{
+          navigate("/login")
+        }, 5500)
       }
 
     },
@@ -75,7 +88,7 @@ const PasswordUpdate = ({ message, isError,isSuccess }) => {
     <div className="password">
       <div className='password-layout'>
         <div className="password-inp">
-          <label htmlFor="oldPassword">old password</label>
+          <label htmlFor="oldPassword">Old Password</label>
           <div className="input-n">
             <input
               type={showPassword ? 'text' : 'password'}
@@ -103,7 +116,7 @@ const PasswordUpdate = ({ message, isError,isSuccess }) => {
         <div >
           <div className='conf-pwd'>
             <div className="password-inp">
-              <label htmlFor="newPassword">new Password</label>
+              <label htmlFor="newPassword">New Password</label>
               <div className="input-n">
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
@@ -127,7 +140,7 @@ const PasswordUpdate = ({ message, isError,isSuccess }) => {
               {formik.errors.newPassword && <div className='error'>{formik.errors.newPassword}</div>}
             </div>
             <div className="password-inp">
-              <label htmlFor="confirmNewPassword">confirm New Password</label>
+              <label htmlFor="confirmNewPassword">Confirm New Password</label>
               <div className="input-n">
                 <input
                   type={showConfirmNewPassword ? 'text' : 'password'}

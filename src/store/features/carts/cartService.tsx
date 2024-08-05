@@ -71,7 +71,7 @@ const createStripeProduct = async (data) => {
       description: data.description,
       default_price_data: {
         unit_amount: data.unit_amount,
-        currency: 'usd',
+        currency: 'rwf',
       },
     },
   })

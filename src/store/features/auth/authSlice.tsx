@@ -219,11 +219,13 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.message = action.payload.message;
+        toast.success(state.message)
       })
       .addCase(verifyEmail.rejected, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+        toast.error(state.message)
       })
       .addCase(resendVerificationEmail.pending, (state) => {
         state.isLoading = true;
@@ -251,34 +253,30 @@ const userSlice = createSlice({
       })
       .addCase(googleAuth.fulfilled, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
-        state.isAuthenticated = true;
       })
       .addCase(googleAuth.rejected, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
-        state.isError = true;
+
       })
       .addCase(googleAuthCallback.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
         state.isSuccess = false;
       })
-      .addCase(
-        googleAuthCallback.fulfilled,
-        (state, action: PayloadAction<any>) => {
+    .addCase(googleAuthCallback.fulfilled,(state, action: PayloadAction<any>) => {
           state.isLoading = false;
           state.isSuccess = true;
+          state.isAuthenticated = true;
           state.token = action.payload.data.token;
           state.message = action.payload.message;
-        }
-      )
-      .addCase(
-        googleAuthCallback.rejected,
-        (state, action: PayloadAction<any>) => {
+          toast.success(state.message)
+        })
+      .addCase( googleAuthCallback.rejected,(state, action: PayloadAction<any>) => {
           state.isLoading = false;
           state.isError = true;
           state.message = action.payload;
-        }
-      )
+          toast.error(state.message)
+        })
       .addCase(sendResetLink.pending, (state) => {
         state.isLoading = true;
         state.fail = false;

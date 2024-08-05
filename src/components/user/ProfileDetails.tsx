@@ -2,7 +2,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useAppDispatch} from '../../store/store';
+import { useAppDispatch } from '../../store/store';
 import { updateUserProfile, fetchUserProfile } from '../../store/features/user/userSlice';
 import avatar from "../../../public/assets/avatar.jpg";
 import camera from "../../../public/assets/Camera.png";
@@ -22,10 +22,11 @@ const updateProfileSchema = Yup.object().shape({
   currency: Yup.string().required('Required'),
 });
 
-const ProfileDetails = ({ user,isLoading, isSuccess, isError, message }) => {
+const ProfileDetails = ({ user, isSuccess, isError, message }) => {
   const dispatch = useAppDispatch();
   const inputRef = useRef(null);
   const [profileImage, setProfileImage] = useState<any>(null);
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     dispatch(fetchUserProfile());
@@ -74,8 +75,14 @@ const ProfileDetails = ({ user,isLoading, isSuccess, isError, message }) => {
       formData.append("language", values.language);
       formData.append("birthDate", values.birthDate);
 
-      const response: any = await dispatch(updateUserProfile(formData));
-      // if(response && response.payload && response.payload.status && response.paylad.message) toast.success(response.payload.message);
+      setTimeout(()=>{
+        setLoading(true)
+      },2000)
+      await dispatch(updateUserProfile(formData))
+      .finally(()=>{
+        setLoading(false)
+      });
+
     }
   });
 
@@ -113,7 +120,7 @@ const ProfileDetails = ({ user,isLoading, isSuccess, isError, message }) => {
       <div className='title'>
         <h1>MY PROFILE DETAILS</h1>
         <button type='submit'>
-          {isLoading ? (
+          {loading ? (
             <div className="spinner-container">
               <TailSpin color="#ff6d18" width={20} />
             </div>
@@ -166,6 +173,7 @@ const ProfileDetails = ({ user,isLoading, isSuccess, isError, message }) => {
           <div className='options'>
             <label htmlFor="gender">Gender</label>
             <select value={formik.values.gender} onChange={formik.handleChange} onBlur={formik.handleBlur} name='gender' id='gender'>
+              <option value=""></option>
               <option value="male">Male</option>
               <option value="female">Female</option>
             </select>
@@ -173,6 +181,7 @@ const ProfileDetails = ({ user,isLoading, isSuccess, isError, message }) => {
           <div className='options'>
             <label htmlFor="currency">Currency</label>
             <select value={formik.values.currency} onChange={formik.handleChange} onBlur={formik.handleBlur} name='currency' id='currency'>
+              <option value=""></option>
               <option value="USD">USD</option>
               <option value="RWF">RWF</option>
             </select>
@@ -180,6 +189,7 @@ const ProfileDetails = ({ user,isLoading, isSuccess, isError, message }) => {
           <div className='options'>
             <label htmlFor="language">Language</label>
             <select value={formik.values.language} onChange={formik.handleChange} onBlur={formik.handleBlur} name='language' id='language'>
+              <option value=""></option>
               <option value="English">English</option>
               <option value="Kinyarwanda">Kinyarwanda</option>
               <option value="Greek">Greek</option>

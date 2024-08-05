@@ -36,9 +36,9 @@ const UserProfile = () => {
   return (
     <>
       <section className='profile-container'>
-        <ProfileDetails user={user} isSuccess={isSuccess} isLoading={isLoading} isError={isError} message={message} />
+        <ProfileDetails user={user} isSuccess={isSuccess} isError={isError} message={message} />
         <PasswordUpdate message={message} isSuccess={isSuccess} isError={isError}/>
-        <ShippingAddress user={user} isLoading={isLoading} isSuccess={isSuccess} isError={isError} message={message} setLocation={setLocation} />
+        <ShippingAddress user={user} isSuccess={isSuccess} isError={isError} message={message} setLocation={setLocation} />
         <div className="seller__request">
           <SubmitSellerRequest
             user={requestData}

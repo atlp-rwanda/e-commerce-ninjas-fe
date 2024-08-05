@@ -156,6 +156,21 @@ export const verifyOTP = createAsyncThunk(
   }
 );
 
+export const change2FAStatus = createAsyncThunk(
+  "auth/change-2fa-status",
+  async (
+    { newStatus }: { newStatus: boolean },
+    thunkApi
+  ) => {
+    try {
+      const response = await authService.change2FAStatus(newStatus);
+      return response;
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "auth",
   initialState,

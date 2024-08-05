@@ -1,18 +1,31 @@
 /* eslint-disable */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { BiSolidShow } from "react-icons/bi";
-import { BiSolidHide } from "react-icons/bi";
+import { BiSolidShow, BiSolidHide } from "react-icons/bi";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { loginUser } from "../store/features/auth/authSlice";
+import {
+  loginUser,
+  verifyOTP,
+  getUserDetails,
+  resetAuth,
+} from "../store/features/auth/authSlice";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
-import { addProductToWishlist } from "../store/features/wishlist/wishlistSlice";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
+} from "@mui/material";
 import authService from "../store/features/auth/authService";
-import { joinRoom } from '../utils/socket/socket';
+import { joinRoom } from "../utils/socket/socket";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -25,6 +38,10 @@ function Login() {
   const [isClicked, setIsClicked] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [openOTPDialog, setOpenOTPDialog] = useState(false);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [otpError, setOtpError] = useState("");
+  const [otpLoading, setOtpLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const {
@@ -35,8 +52,10 @@ function Login() {
     token,
     error,
     message,
-  } = useAppSelector((state) => state.auth);
-
+    userId,
+    isOtpFail
+  } = useAppSelector((state) => state?.auth);
+  const [user, setUser] = useState(null);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -44,42 +63,32 @@ function Login() {
     },
     validationSchema: LoginSchema,
     onSubmit: async (values) => {
-      const action = await dispatch(loginUser(values));
-      if (loginUser.fulfilled.match(action)) {
-        const token = action.payload.token; 
-          localStorage.setItem("token", token);
-          toast.success('Login successfully');
-          joinRoom(token);
-          if (action.payload.user.role === "buyer") {
-              navigate("/home");
-          } else if (action.payload.user.role === "seller") {
-              navigate("/seller/dashboard");
-          } else if (action.payload.user.role === "admin") {
-              navigate("/admin/dashboard");
-          }
-      }
-    }
-  });
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/home");
-    }
-  }, [navigate]);
-
-  useEffect(
-    function () {
-      if (isSuccess && token && isAuthenticated) {
-        localStorage.setItem("token", token);
-        toast.success(message);
-        navigate("/home");
-        formik.resetForm();
-        joinRoom(token);
-      }
+      const { email } = values;
+      localStorage.setItem("loggedEmail", email);
+      await dispatch(loginUser(values)).then((res: any) => {
+        toast.success(res.payload.message);
+      });
     },
-    [error, isAuthenticated, isError, isSuccess, token]
-  );
+  });
+  useEffect(() => {
+    if (isSuccess && token && isAuthenticated) {
+      localStorage.setItem("token", token);
+      dispatch(getUserDetails(token)).then((res) => {
+        const userData = res.payload.data.user;
+
+        if (userData?.role === "admin") {
+          navigate("/admin/dashboard");
+        } else if (userData?.role === "seller") {
+          navigate("/seller/dashboard");
+        } else {
+          navigate("/home");
+        }
+        setUser(userData);
+      });
+      formik.resetForm();
+      joinRoom(token);
+    }
+  }, [isSuccess, token, isAuthenticated, user, navigate, message]);
 
   function handleIsFocused() {
     setIsFocused(true);
@@ -89,6 +98,43 @@ function Login() {
   function handleIsVisible() {
     setIsVisible((isVisible) => !isVisible);
   }
+
+  useEffect(() => {
+    if (isSuccess && message === "Check your Email for OTP Confirmation") {
+      setOpenOTPDialog(true);
+    }
+  }, [isSuccess, message]);
+
+  const handleOtpChange = (index, value) => {
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+    setOtpError("");
+    if (value && index < 5) {
+      const nextInput = document.getElementById(`otp-${index + 1}`);
+      if (nextInput) nextInput.focus();
+    }
+  };
+
+  const handleVerifyOTP = async () => {
+    const otpString = otp.join("");
+    dispatch(resetAuth)
+    if (otpString.length === 6) {
+      setOtpLoading(true);
+      setOtpError("");
+      await dispatch(verifyOTP({ userId, otp: otpString }))
+      if(isOtpFail){
+        setOtpError(message)
+        setOtpLoading(false);
+      }else if(!isOtpFail && isSuccess) {
+        setOpenOTPDialog(false);
+        setOtp(["", "", "", "", "", ""]);
+        toast.success(message);
+      }
+    } else {
+      setOtpError("Please enter a valid 6-digit OTP");
+    }
+  };
 
   return (
     <section className="section__login">
@@ -188,6 +234,123 @@ function Login() {
           </p>
         </div>
       </div>
+
+      <Dialog
+        open={openOTPDialog}
+        onClose={() => setOpenOTPDialog(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        PaperProps={{
+          style: {
+            borderRadius: "12px",
+            padding: "24px",
+            maxWidth: "400px",
+          },
+        }}
+      >
+        <DialogTitle
+          id="alert-dialog-title"
+          sx={{ fontSize: "2rem", fontWeight: "bold", color: "#ff6d18" }}
+        >
+          Verify OTP
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText
+            id="alert-dialog-description"
+            sx={{ fontSize: "1.2rem", marginBottom: "20px" }}
+          >
+            Please enter the 6-digit OTP sent to your email to verify your
+            account.
+          </DialogContentText>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "8px",
+              marginBottom: "20px",
+            }}
+          >
+            {otp?.map((digit, index) => (
+              <TextField
+                key={index}
+                id={`otp-${index}`}
+                value={digit}
+                onChange={(e) => handleOtpChange(index, e.target.value)}
+                inputProps={{
+                  maxLength: 1,
+                  style: { textAlign: "center", fontSize: "1.5rem" },
+                }}
+                sx={{
+                  width: "40px",
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#ff6d18",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#e65b00",
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#e65b00",
+                    },
+                  },
+                }}
+              />
+            ))}
+          </Box>
+          {otpError && (
+            <DialogContentText
+              id="alert-dialog-error"
+              sx={{
+                fontSize: "1.2rem",
+                marginBottom: "20px",
+                color: "red",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              {otpError}
+            </DialogContentText>
+          )}
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: "center", gap: "16px" }}>
+          <Button
+            onClick={() => {
+              setOpenOTPDialog(false);
+              setOtp(["", "", "", "", "", ""]);
+              setOtpError("");
+            }}
+            sx={{
+              backgroundColor: "#f0f0f0",
+              color: "#333",
+              fontSize: "1.2rem",
+              padding: "8px 24px",
+              borderRadius: "8px",
+              "&:hover": {
+                backgroundColor: "#e0e0e0",
+              },
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleVerifyOTP}
+            sx={{
+              backgroundColor: "#ff6d18",
+              color: "#fff",
+              fontSize: "1.2rem",
+              padding: "8px 24px",
+              borderRadius: "8px",
+              "&:hover": {
+                backgroundColor: "#e65b00",
+              },
+            }}
+            autoFocus
+          >
+            {otpLoading ? "Verifying" : "Verify"}
+            <PulseLoader size={6} color="#ffe2d1" loading={otpLoading} />
+          </Button>
+        </DialogActions>
+      </Dialog>
     </section>
   );
 }

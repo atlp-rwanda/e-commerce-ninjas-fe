@@ -78,6 +78,8 @@ export interface AuthService {
   token: string;
   userId?: any;
   fail:boolean;
+  isOtpFail:boolean;
+  isOtpSuccess:boolean;
 }
 
 export interface IEmail {

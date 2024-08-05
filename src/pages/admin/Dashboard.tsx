@@ -15,7 +15,7 @@ import useAdminAuthCheck from "../../hooks/useAdminAuthCheck";
 
 export const AdminDashboard = () => {
   const dispatch = useAppDispatch();
-  const isAuthorized = useAdminAuthCheck();
+  // const isAuthorized = useAdminAuthCheck();
   const { isLoading, message, isError } = useAppSelector(
     (state) => state.admin
   );
@@ -69,7 +69,7 @@ export const AdminDashboard = () => {
                     className={`text_content ${isActive === 1 ? "active" : ""}`}
                     onClick={() => handleClick(1, "/admin/dashboard")}
                   >
-                    Admin Dashboard
+                    Dashboard
                   </Link>
                 </div>
               </div>

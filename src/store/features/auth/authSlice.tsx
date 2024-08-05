@@ -17,7 +17,9 @@ const initialState: AuthService = {
   isAuthenticated: false,
   error: "",
   userId: "",
-  fail: false
+  fail: false,
+  isOtpFail:false,
+  isOtpSuccess:false,
 };
 
 type IUserEmailAndPassword = Pick<IUser, 'email' | 'password'>;
@@ -187,6 +189,8 @@ const userSlice = createSlice({
       state.isAuthenticated = false;
       state.error = "";
       state.fail= false;
+      state.isOtpFail = false;
+      state.isOtpSuccess = false;
     },
     changingProfile: (state, action: any)=>{
       (state.user as any).profilePicture = action.payload
@@ -322,8 +326,8 @@ const userSlice = createSlice({
         state.userId = action.payload.data.userId || "";
         if(state.message !== "Check your Email for OTP Confirmation"){
           state.isAuthenticated = true;
-          state.token = action.payload.token;
-          state.user = action.payload.user;
+          state.token = action.payload.data.token;
+          state.user = action.payload.data.user;
         }
       })
       .addCase(loginUser.rejected, (state, action: PayloadAction<any>) => {
@@ -375,12 +379,20 @@ const userSlice = createSlice({
       })
 
       .addCase(verifyOTP.fulfilled, (state, action: PayloadAction<any>) => {
-        state.isError = false;
+        state.isOtpFail = false;
         state.isLoading = false;
         state.isAuthenticated = true;
-        state.isSuccess = true;
+        state.isOtpSuccess = true;
         state.message = action.payload.message;
         state.token = action.payload.data.token;
+        console.log(action.payload)
+      })
+      .addCase(verifyOTP.rejected, (state, action: PayloadAction<any>) => {
+        state.isOtpFail = true;
+        state.isLoading = false;
+        state.isOtpSuccess = false;
+        state.message = action.payload;
+        toast.error(action.payload)
       })
       
   },

@@ -29,7 +29,7 @@ function useAdminAuthCheck() {
         if (!isChecking) {
             if (!isAuthenticated || !user || (user as any).role !== "admin") {
                 const message = !isAuthenticated ? 'You must login first' : 'You must login as an admin';
-                toast.info(message);
+                // toast.info(message);
                 navigate(`/login?callbackUrl=${encodeURIComponent(pathname)}`);
                 setIsAuthorized(false);
             } else {

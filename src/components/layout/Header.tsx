@@ -24,6 +24,7 @@ import logo from "../../../public/assets/images/logo.png";
 import useSocket from '../../hooks/useSocket';
 import { toast } from 'react-toastify';
 import { PulseLoader } from 'react-spinners';
+
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -32,22 +33,16 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const location = useLocation();
-  const {
-    isAuthenticated,
-    user,
-    token: tokenLogin,
-  } = useAppSelector((state) => state.auth);
+  const { isAuthenticated, user, token: tokenLogin } = useAppSelector((state) => state.auth);
   const { notifications } = useAppSelector((state) => state.notification);
   const [token, setToken] = useState('');
   const [is2FAEnabled, setIs2FAEnabled] = useState(false);
   const [is2FALoading, setIs2FALoading] = useState(false);
   const navEl = useRef<HTMLDivElement | null>(null);
-
-  const User: any = { ...user };
-
-  const { cartCounter, cartTotalMoney } = useAppSelector((state) => state.cart)
+  const { cartCounter, cartTotalMoney } = useAppSelector((state) => state.cart);
   useSocket();
   const categories = Array.from({ length: 5 }, (_, i) => i + 1);
+
   useEffect(() => {
     if (tokenLogin?.trim()) {
       setToken(tokenLogin);
@@ -61,7 +56,6 @@ const Header: React.FC = () => {
     async function getUserDetail() {
       if (token?.trim()) await dispatch(getUserDetails(token));
     }
-
     getUserDetail();
   }, [token, dispatch]);
 
@@ -93,9 +87,7 @@ const Header: React.FC = () => {
     }
   }
 
-  const unreadCount = notifications
-    ? notifications.filter((notification) => !notification.isRead).length
-    : 0;
+  const unreadCount = notifications ? notifications.filter((notification) => !notification.isRead).length : 0;
 
   function formatName(name: string) {
     const trimmedName = name?.trim();
@@ -106,32 +98,25 @@ const Header: React.FC = () => {
   const switch2FA = async () => {
     const successMessage = `2FA ${is2FAEnabled ? "Disabled" : "Enabled, Login now."}`;
     setIs2FALoading(true);
-    const res = await dispatch(change2FAStatus({ newStatus: !is2FAEnabled }))
+    const res = await dispatch(change2FAStatus({ newStatus: !is2FAEnabled }));
     setIs2FALoading(false);
     if (res.type === "auth/change-2fa-status/fulfilled") {
-      toast.success((!is2FAEnabled ? `${res.payload.message}, Login now.` : res.payload.message) || successMessage)
-      if (!is2FAEnabled) { navigate('/logout') }
-      setIs2FAEnabled(res.payload.data.user.is2FAEnabled || !is2FAEnabled)
+      toast.success((!is2FAEnabled ? `${res.payload.message}, Login now.` : res.payload.message) || successMessage);
+      if (!is2FAEnabled) { navigate('/logout'); }
+      setIs2FAEnabled(res.payload.data.user.is2FAEnabled || !is2FAEnabled);
+    } else {
+      toast.error(res.payload);
     }
-    else {
-      toast.error(res.payload)
-    }
-  }
+  };
 
-  useEffect(() => { if (user) setIs2FAEnabled(user.is2FAEnabled) }, [user])
+  useEffect(() => { if (user) setIs2FAEnabled(user.is2FAEnabled); }, [user]);
 
   return (
     <header className="header">
       <div className="header__top">
         <Link className="header__logo" to="/">
-          <img
-            src={logo}
-            alt="Ecommerce logo"
-            className="header__logo__img"
-          />
-          <p className="header__logo__text">
-            e-Commerce <span>Ninjas</span>
-          </p>
+          <img src={logo} alt="Ecommerce logo" className="header__logo__img" />
+          <p className="header__logo__text">e-Commerce <span>Ninjas</span></p>
         </Link>
         <div className="header__content">
           <div className="header__box header__location">
@@ -156,30 +141,18 @@ const Header: React.FC = () => {
       <div className="header__bottom">
         <div className="header__bottom__top">
           <div className="header__menu">
-            <div
-              className="header__dropdown__container"
-              onClick={handleSetIsOpen}
-            >
-              <span className="header__selected__text">
-                Shopping Categories
-              </span>
-
-              <FaChevronDown
-                className={`header__selected__icon${isOpen ? ' rotate2' : ''}`}
-              />
+            <div className="header__dropdown__container" onClick={handleSetIsOpen}>
+              <span className="header__selected__text">Shopping Categories</span>
+              <FaChevronDown className={`header__selected__icon${isOpen ? ' rotate2' : ''}`} />
             </div>
             {isOpen && (
               <div className="header__dropdown">
                 <ul className="dropdown__list">
-                  {categories.map((category, i) => {
-                    return (
-                      <li key={i}>
-                        <a href="#" className="dropdown__link">
-                          {i + 1}. Shopping category
-                        </a>
-                      </li>
-                    );
-                  })}
+                  {categories.map((category, i) => (
+                    <li key={i}>
+                      <a href="#" className="dropdown__link">{i + 1}. Shopping category</a>
+                    </li>
+                  ))}
                 </ul>
               </div>
             )}
@@ -188,13 +161,8 @@ const Header: React.FC = () => {
           <div className="icons">
             {isAuthenticated && (
               <div className="header__notification__box notification_box_cont">
-                <IoIosNotifications
-                  className="header__notification__icon header__notification__icon__1"
-                  onClick={toggleNotifications}
-                />
-                <span className="header__notification__number">
-                  {unreadCount}
-                </span>
+                <IoIosNotifications className="header__notification__icon header__notification__icon__1" onClick={toggleNotifications} />
+                <span className="header__notification__number">{unreadCount}</span>
                 {isNotificationOpen && (
                   <div className="notification__dropdown">
                     <Notifications />
@@ -202,26 +170,17 @@ const Header: React.FC = () => {
                 )}
               </div>
             )}
-
             <Link className="cart__container cart__details" to="/shopping-cart">
               <div className="cart__icons_row">
                 {isAuthenticated ? (
                   <div className="header__notification__box cart_icon_box">
-                    <IoCartOutline
-                      className="header__notification__icon header__notification__icon__1"
-                    />
-                    <span className="header__notification__number">
-                      {cartCounter}
-                    </span>
+                    <IoCartOutline className="header__notification__icon header__notification__icon__1" />
+                    <span className="header__notification__number">{cartCounter}</span>
                   </div>
                 ) : (
                   <div className="header__notification__box cart_icon_box">
-                    <IoCartOutline
-                      className="header__notification__icon header__notification__icon__1"
-                    />
-                    <span className="header__notification__number">
-                      0
-                    </span>
+                    <IoCartOutline className="header__notification__icon header__notification__icon__1" />
+                    <span className="header__notification__number">0</span>
                   </div>
                 )}
                 <div className="cart_box_info">
@@ -237,20 +196,16 @@ const Header: React.FC = () => {
               </div>
             </Link>
 
-            <div
-              className="cart__container user__container"
-              onClick={handleSetIsOpen2}
-            >
-              {user && User.profilePicture ? (
-                <img src={User.profilePicture} className="cart__icon" />
+            <div className="cart__container user__container" onClick={handleSetIsOpen2}>
+              {user && user.profilePicture ? (
+                <img src={user.profilePicture} className="cart__icon" alt="User Profile" />
               ) : (
                 <FaRegUser className="cart__icon-user" />
               )}
-
               <span className="cart__text">{user ? 'Hi, ' : 'User'}</span>
               <span className="cart__description">
                 {user
-                  ? formatName(User?.firstName || User?.email?.split('@')[0])
+                  ? formatName(user?.firstName || user?.email?.split('@')[0])
                   : "Account"}
               </span>
               {isAuthenticated && isOpen2 && (
@@ -275,12 +230,11 @@ const Header: React.FC = () => {
                       </NavLink>
                     </li>
                     <li>
-                      <NavLink to={'/logout'} className="order__link">
+                      <NavLink to="/logout" className="order__link">
                         <IoLogOutSharp className="order__icon" />
                         <span className="order__text">Logout</span>
                       </NavLink>
                     </li>
-
                   </ul>
                   <button
                     type="button"
@@ -312,57 +266,39 @@ const Header: React.FC = () => {
               <ul className="header__list">
                 {isAuthenticated && (
                   <li className="nav__item" onClick={handleSetIsMenuOpen}>
-                    <NavLink
-                      to="/home"
-                      className={({ isActive }) => (isActive ? "active" : "")}
-                    >
+                    <NavLink to="/home" className={({ isActive }) => (isActive ? "active" : "")}>
                       Home
                     </NavLink>
                   </li>
                 )}
                 <li className="nav__item" onClick={handleSetIsMenuOpen}>
-                  <NavLink
-                    to="/shops"
-                    className={({ isActive }) => (isActive ? 'active' : '')}
-                  >
+                  <NavLink to="/shops" className={({ isActive }) => (isActive ? 'active' : '')}>
                     Shops
                   </NavLink>
                 </li>
                 <li className="nav__item" onClick={handleSetIsMenuOpen}>
-                  <NavLink
-                    to="/products"
-                    className={({ isActive }) =>
-                      isActive
+                  <NavLink to="/products" className={({ isActive }) =>
+                    isActive
+                      ? 'active'
+                      : location.pathname.startsWith('/product')
                         ? 'active'
-                        : location.pathname.startsWith('/product')
-                          ? 'active'
-                          : ''
-                    }
-                  >
+                        : ''
+                  }>
                     Products
                   </NavLink>
                 </li>
                 <li className="nav__item" onClick={handleSetIsMenuOpen}>
-                  <NavLink
-                    to="/services"
-                    className={({ isActive }) => (isActive ? 'active' : '')}
-                  >
+                  <NavLink to="/services" className={({ isActive }) => (isActive ? 'active' : '')}>
                     Services
                   </NavLink>
                 </li>
                 <li className="nav__item" onClick={handleSetIsMenuOpen}>
-                  <NavLink
-                    to="/contact-us"
-                    className={({ isActive }) => (isActive ? 'active' : '')}
-                  >
+                  <NavLink to="/contact-us" className={({ isActive }) => (isActive ? 'active' : '')}>
                     Contact-Us
                   </NavLink>
                 </li>
                 <li className="nav__item" onClick={handleSetIsMenuOpen}>
-                  <NavLink
-                    to="/about-us"
-                    className={({ isActive }) => (isActive ? 'active' : '')}
-                  >
+                  <NavLink to="/about-us" className={({ isActive }) => (isActive ? 'active' : '')}>
                     About-us
                   </NavLink>
                 </li>

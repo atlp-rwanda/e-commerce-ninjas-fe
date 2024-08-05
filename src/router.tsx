@@ -63,6 +63,7 @@ const AppRouter: React.FC = () => {
           <Route path="products" element={<SellerCollection />} />
         </Route>
         <Route path="/admin">
+         <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<ProtectedRoute redirectPath="/login"><AdminDashboard /></ProtectedRoute>}>
             <Route index element={<OverViewDashboard />} />
             <Route path="users" element={<Users />} />

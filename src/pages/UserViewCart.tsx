@@ -192,6 +192,9 @@ const UserViewCart: React.FC = () => {
       const cartId = localStorage.getItem('cartToPay');
       const products = localStorage.getItem('productsToSave');
       const shopId = localStorage.getItem('shopIdToSave');
+      console.log("Caert id", cartId);
+      console.log("Product ", products)
+      console.log("Shop id ", shopId)
       if (!cartId || !products || !shopId) {
         navigate('/shopping-cart');
         toast.error('Unknown error occurred saving order');
@@ -440,7 +443,7 @@ const UserViewCart: React.FC = () => {
                               <span className="discount">
                                 {product.discount}
                               </span>
-                              <div className="price">${product.price}</div>
+                              <div className="price">{product.price} RWF</div>
                               <div className="description">
                                 {product.description}
                               </div>

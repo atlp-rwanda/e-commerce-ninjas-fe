@@ -17,6 +17,7 @@ const initialState: AuthService = {
   isAuthenticated: false,
   error: "",
   userId: "",
+  fail: false
 };
 
 type IUserEmailAndPassword = Pick<IUser, 'email' | 'password'>;
@@ -156,6 +157,21 @@ export const verifyOTP = createAsyncThunk(
   }
 );
 
+export const change2FAStatus = createAsyncThunk(
+  "auth/change-2fa-status",
+  async (
+    { newStatus }: { newStatus: boolean },
+    thunkApi
+  ) => {
+    try {
+      const response = await authService.change2FAStatus(newStatus);
+      return response;
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "auth",
   initialState,
@@ -170,6 +186,7 @@ const userSlice = createSlice({
       state.token = "";
       state.isAuthenticated = false;
       state.error = "";
+      state.fail= false;
     },
     changingProfile: (state, action: any)=>{
       (state.user as any).profilePicture = action.payload
@@ -264,7 +281,7 @@ const userSlice = createSlice({
       )
       .addCase(sendResetLink.pending, (state) => {
         state.isLoading = true;
-        state.isError = false;
+        state.fail = false;
         state.isSuccess = false;
       })
       .addCase(sendResetLink.fulfilled, (state, action: PayloadAction<any>) => {
@@ -275,24 +292,23 @@ const userSlice = createSlice({
       .addCase(sendResetLink.rejected, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.isSuccess = false;
-        state.isError = true;
+        state.fail = true;
         state.message = action.payload;
       })
       .addCase(resetPassword.pending, (state) => {
         state.isLoading = true;
-        state.isError = false;
+        state.fail = false;
         state.isSuccess = false;
       })
       .addCase(resetPassword.fulfilled, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.user = action.payload;
         state.message = action.payload.message;
       })
       .addCase(resetPassword.rejected, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.isSuccess = false;
-        state.isError = true;
+        state.fail = true;
         state.message = action.payload;
       })
       .addCase(loginUser.pending, (state) => {
@@ -303,11 +319,13 @@ const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action: PayloadAction<any>) => {
         state.isError = false;
         state.isLoading = false;
-        state.isAuthenticated = true;
         state.isSuccess = true;
         state.message = action.payload.message;
-        state.token = action.payload.data.token;
         state.userId = action.payload.data.userId || "";
+        if(state.message !== "Check your Email for OTP Confirmation"){
+          state.isAuthenticated = true;
+          state.token = action.payload.data.token;
+        }
       })
       .addCase(loginUser.rejected, (state, action: PayloadAction<any>) => {
         state.isError = true;
@@ -357,11 +375,6 @@ const userSlice = createSlice({
         state.error = action.payload.message;
       })
 
-      .addCase(verifyOTP.pending, (state) => {
-        state.isError = false;
-        state.isLoading = true;
-        state.isSuccess = false;
-      })
       .addCase(verifyOTP.fulfilled, (state, action: PayloadAction<any>) => {
         state.isError = false;
         state.isLoading = false;
@@ -370,12 +383,7 @@ const userSlice = createSlice({
         state.message = action.payload.message;
         state.token = action.payload.data.token;
       })
-      .addCase(verifyOTP.rejected, (state, action: PayloadAction<any>) => {
-        state.isError = true;
-        state.isLoading = false;
-        state.isSuccess = false;
-        state.error = action.payload
-      })
+      
   },
 });
 

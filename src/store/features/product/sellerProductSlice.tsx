@@ -53,7 +53,7 @@ export const updateSellerProductStatus = createAsyncThunk<ISingleProductResponse
             const response = await productService.updateSellerProductStatus(id, newStatus);
             return response;
         } catch (error) {
-            return rejectWithValue(error);
+            return rejectWithValue(getErrorMessage(error));
         }
     }
 );
@@ -65,7 +65,7 @@ export const addSellerProduct = createAsyncThunk<ISingleProductResponse, FormDat
             const response = await productService.addSellerProduct(newProductData);
             return response;
         } catch (error) {
-            return rejectWithValue(error);
+            return rejectWithValue(getErrorMessage(error));
         }
     }
 );
@@ -75,7 +75,7 @@ const singleSellerProductSlice = createSlice({
     name: "singleProduct",
     initialState,
     reducers: {
-        resetUpdateState : (state)=> {
+        resetUpdateState: (state) => {
             state.updateError = null;
             state.isUpdate = false;
             state.isUpdateSuccess = false;
@@ -121,7 +121,6 @@ const singleSellerProductSlice = createSlice({
             .addCase(updateSellerProductStatus.pending, (state) => {
                 state.isUpdate = true;
                 state.isUpdateSuccess = false;
-                state.isLoading = true;
             })
             .addCase(updateSellerProductStatus.fulfilled, (state, action: PayloadAction<any>) => {
                 state.isUpdate = true;
@@ -139,7 +138,6 @@ const singleSellerProductSlice = createSlice({
             .addCase(addSellerProduct.pending, (state) => {
                 state.isUpdate = true;
                 state.isUpdateSuccess = false;
-                state.isLoading = true;
             })
             .addCase(addSellerProduct.fulfilled, (state, action: PayloadAction<any>) => {
                 state.isUpdate = true;
@@ -156,6 +154,6 @@ const singleSellerProductSlice = createSlice({
     }
 })
 
-export const {resetUpdateState} = singleSellerProductSlice.actions;
+export const { resetUpdateState } = singleSellerProductSlice.actions;
 
 export default singleSellerProductSlice.reducer;

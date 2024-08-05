@@ -29,6 +29,8 @@ function UserLogin() {
   const [isVisible, setIsVisible] = useState(false);
   const [openOTPDialog, setOpenOTPDialog] = useState(false);
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [otpError, setOtpError] = useState("");
+  const [otpLoading, setOtpLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const {
@@ -103,6 +105,7 @@ function UserLogin() {
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
+    setOtpError("");
     if (value && index < 5) {
       const nextInput = document.getElementById(`otp-${index + 1}`);
       if (nextInput) nextInput.focus();
@@ -112,16 +115,19 @@ function UserLogin() {
   const handleVerifyOTP = async () => {
     const otpString = otp.join('');
     if (otpString.length === 6) {
+      setOtpLoading(true);
+      setOtpError("");
       const res = await dispatch(verifyOTP({ userId, otp: otpString }));
+      setOtpLoading(false);
       if (res.type = 'auth/verify-otp/rejected') {
-        toast.error(res.payload)
+        setOtpError(res.payload)
       }
       else {
         setOpenOTPDialog(false);
       }
       setOtp(['', '', '', '', '', ''])
     } else {
-      toast.error("Please enter a valid 6-digit OTP");
+      setOtpError("Please enter a valid 6-digit OTP");
     }
   };
 
@@ -272,10 +278,16 @@ function UserLogin() {
               />
             ))}
           </Box>
+          {
+            otpError &&
+            <DialogContentText id="alert-dialog-error" sx={{ fontSize: '1.2rem', marginBottom: '20px', color: 'red', display: 'flex', justifyContent: 'center' }}>
+              {otpError}
+            </DialogContentText>
+          }
         </DialogContent>
         <DialogActions sx={{ justifyContent: 'center', gap: '16px' }}>
           <Button
-            onClick={() => { setOpenOTPDialog(false); setOtp(['', '', '', '', '', '']); }}
+            onClick={() => { setOpenOTPDialog(false); setOtp(['', '', '', '', '', '']); setOtpError("");}}
             sx={{
               backgroundColor: '#f0f0f0',
               color: '#333',
@@ -303,8 +315,8 @@ function UserLogin() {
             }}
             autoFocus
           >
-            {isLoading ? "Verifying" : "Verify"}
-            <PulseLoader size={6} color="#ffe2d1" loading={isLoading} />
+            {otpLoading ? "Verifying" : "Verify"}
+            <PulseLoader size={6} color="#ffe2d1" loading={otpLoading} />
           </Button>
         </DialogActions>
       </Dialog>

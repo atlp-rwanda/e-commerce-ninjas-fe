@@ -230,7 +230,8 @@
 
         .error {
           color: red !important;
-          padding: 0 !important;
+          padding-left: 2rem !important;
+          margin-left: -2rem;
           background: none;
           font-size: 2rem;
         }

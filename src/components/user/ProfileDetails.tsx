@@ -22,10 +22,11 @@ const updateProfileSchema = Yup.object().shape({
   currency: Yup.string().required('Required'),
 });
 
-const ProfileDetails = ({ user, isLoading, isSuccess, isError, message }) => {
+const ProfileDetails = ({ user, isSuccess, isError, message }) => {
   const dispatch = useAppDispatch();
   const inputRef = useRef(null);
   const [profileImage, setProfileImage] = useState<any>(null);
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     dispatch(fetchUserProfile());
@@ -74,8 +75,14 @@ const ProfileDetails = ({ user, isLoading, isSuccess, isError, message }) => {
       formData.append("language", values.language);
       formData.append("birthDate", values.birthDate);
 
-      const response: any = await dispatch(updateUserProfile(formData));
-      // if(response && response.payload && response.payload.status && response.paylad.message) toast.success(response.payload.message);
+      setTimeout(()=>{
+        setLoading(true)
+      },2000)
+      await dispatch(updateUserProfile(formData))
+      .finally(()=>{
+        setLoading(false)
+      });
+
     }
   });
 
@@ -113,7 +120,7 @@ const ProfileDetails = ({ user, isLoading, isSuccess, isError, message }) => {
       <div className='title'>
         <h1>MY PROFILE DETAILS</h1>
         <button type='submit'>
-          {isLoading ? (
+          {loading ? (
             <div className="spinner-container">
               <TailSpin color="#ff6d18" width={20} />
             </div>

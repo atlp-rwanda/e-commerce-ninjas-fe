@@ -125,8 +125,9 @@ export interface iCartInitialResource {
   message: string | null;
   isLoggedOut: boolean;
   cartCounter: number;
-  cartTotalMoney:number;
+  cartTotalMoney: number;
   cartProductslist: any[];
+  orders: any
 }
 export interface IProfile {
   id: string,
@@ -148,9 +149,9 @@ export interface IProfile {
   }
 };
 
-export interface IPassword{
+export interface IPassword {
   oldPassword: string,
-  newPassword:string,
+  newPassword: string,
   confirmNewPassword: string
 }
 
@@ -161,18 +162,18 @@ export interface ILocation {
   sector: string;
 }
 
-export interface UserService{
+export interface UserService {
   user: IProfile | null,
   isLoading: boolean,
-    isError: string,
-    isSuccess: boolean,
-    message: string
+  isError: string,
+  isSuccess: boolean,
+  message: string
 }
 
 
 export interface AdminReponse {
   message?: string;
-  data?: {user:IUser};
+  data?: { user: IUser };
   error?: string;
   status?: number;
 }

@@ -1,0 +1,118 @@
+.my-orders-section {
+  h1 {
+    color: $primary-color;
+    text-align: center;
+    font-size: 22px;
+    padding: 10px;
+  }
+  .order {
+    width: 90%;
+    margin: auto;
+    font-size: 14px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    .head {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      background: $border-color;
+      text-transform: uppercase;
+      font-size: 12px;
+
+      div {
+        flex: 1;
+        color: $black;
+        font-weight: bold;
+        font-size: 12px;
+        padding-left: 5px;
+      }
+
+      .or {
+        flex: 2;
+      }
+    }
+
+    .order-body {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      background: $white;
+
+      div {
+        flex: 1;
+        color: $black;
+        padding: 5px;
+        border: 1px solid $border-color;
+        min-height: 100px;
+        margin: -1px 0 0 -1px; // Adjust to remove gaps between borders
+      }
+
+      .order-product {
+        display: flex;
+        flex-direction: row;
+        font-size: 12px;
+
+        img {
+          width: 48%;
+          height: 80px;
+          object-fit: cover;
+        }
+
+        p {
+          padding-left: 10px;
+
+          h3 {
+            margin-top: 5px;
+            font-size: 12px;
+          }
+
+          span {
+            font-weight: bold;
+          }
+
+          .o-price {
+            margin-left: 20px;
+          }
+        }
+      }
+
+      .order-details {
+        a {
+          top: 20px;
+          position: relative;
+          text-transform: uppercase;
+          text-decoration: underline;
+          font-size: 12px;
+        }
+      }
+
+      .date-placed {
+        span {
+          top: 20px;
+          position: relative;
+        }
+      }
+
+      .track {
+        button {
+          padding: 5px;
+          border: 2px solid $primary-color;
+          color: $primary-color;
+          border-radius: 5px;
+          margin-top: 20px;
+          cursor: pointer;
+        }
+
+        .disabled {
+          cursor: default;
+          color: $primary-color-opacity;
+          border: 2px solid $primary-color-opacity;
+        }
+      }
+    }
+  }
+}

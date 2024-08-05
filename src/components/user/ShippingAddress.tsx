@@ -13,7 +13,6 @@ interface RwandaLocationSelectorProps {
     user: IProfile,
     isSuccess: boolean,
     isError: string,
-    isLoading: boolean,
     message: string
   }
   
@@ -35,7 +34,7 @@ interface RwandaLocationSelectorProps {
   
   const rwandaData: RwandaData = data;
 
-const ShippingAddress:React.FC<RwandaLocationSelectorProps> = ({ user,isSuccess, isError, isLoading,message,setLocation }) => {
+const ShippingAddress:React.FC<RwandaLocationSelectorProps> = ({ user,isSuccess, isError,message,setLocation }) => {
 
     const dispatch = useAppDispatch();
     const [country, setCountry] = useState('Rwanda');
@@ -43,6 +42,7 @@ const ShippingAddress:React.FC<RwandaLocationSelectorProps> = ({ user,isSuccess,
     const [district, setDistrict] = useState('');
     const [sector, setSector] = useState('');
     const [street, setStreet] = useState("")
+    const [loading, setLoading] = useState(false)
 
     const handleProvinceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setProvince(e.target.value);
@@ -70,7 +70,13 @@ const ShippingAddress:React.FC<RwandaLocationSelectorProps> = ({ user,isSuccess,
             return;
           }
         try {
-            dispatch(addUserAddress({ id: user.id, data: {province, district, sector, street}}));
+          setTimeout(()=>{
+            setLoading(true)
+          },200)
+            dispatch(addUserAddress({ id: user.id, data: {province, district, sector, street}}))
+            .finally(()=>{
+              setLoading(false)
+            });
           } catch (error) {
             toast.error(isError);
           }
@@ -93,7 +99,7 @@ const ShippingAddress:React.FC<RwandaLocationSelectorProps> = ({ user,isSuccess,
           <div className='title'>
             <h1>MY SHIPPING ADDRESS</h1>
             <button type='submit'>
-          {isLoading ? (
+          {loading ? (
             <div className="spinner-container">
               <TailSpin color="#ff6d18" width={20} />
             </div>

@@ -1,0 +1,67 @@
+@import "./Colors";
+
+.confirm-dialog {
+    margin-left: 27rem;
+    border-radius: 2.2rem;
+    margin-top: 9rem;
+    width: 80%;
+    height: 87vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    font-size: 1.6rem;
+
+    .confirm-dialog-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+
+        .modal-header {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 1.5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .icon__delete {
+                color: $red-color;
+                font-size: 3rem;
+            }
+        }
+        p{
+            padding: 1rem 0;
+            i{
+                text-transform: uppercase;
+                font-weight: bold;
+            }
+        }
+        .modal-footer{
+            float: right;
+            button {
+            margin: 0 10px;
+            padding: .7rem 3rem; 
+            border: none;
+            border-radius: 1rem;
+            font-family: $text-family;
+        }
+        .delete-btn{
+            background: $red-middle-color;
+            color: $red-color;
+        }
+        .cancel-btn{
+            background: lighten($fifth-color, 19%);
+            color: $fifth-color;
+        }
+    }
+    }
+}

@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import productService from "./productService";
-import { IProduct, SearchCriteria } from "../../../utils/types/product";
+import { IProduct, ISingleProduct, SearchCriteria } from "../../../utils/types/product";
 import { getErrorMessage } from "../../../utils/axios/axiosInstance";
 
 const initialState: { products: IProduct[] | null; isLoading: boolean; isError: boolean | null; isSuccess: boolean; message: string } = {
@@ -68,7 +68,8 @@ const productSlice = createSlice({
                 state.isError = true;
                 state.message = action.payload;
                 state.isSuccess = false;
-            });
+            })
+            ;
     }
 })
 

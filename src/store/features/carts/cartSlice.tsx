@@ -1,8 +1,8 @@
 /* eslint-disable */
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import cartService from "./cartService";
-import { getErrorMessage } from "../../../utils/axios/axiosInstance";
-import { iCartInitialResource } from "../../../utils/types/store";
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import cartService from './cartService';
+import { getErrorMessage } from '../../../utils/axios/axiosInstance';
+import { iCartInitialResource } from '../../../utils/types/store';
 
 const initialState: iCartInitialResource = {
   carts: [],
@@ -172,7 +172,7 @@ export const getUserOrders = createAsyncThunk(
 
 export const userTrackOrderStatus = createAsyncThunk(
   'cart/userTrackOrderStatus',
-  async (id, thunkApi) => {
+  async (id: any, thunkApi) => {
     try {
       const response = await cartService.userTrackOrderStatus(id);
       return response;
@@ -243,7 +243,7 @@ const cartSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.carts = action.payload.data.carts;
-        console.log(state.carts)
+        console.log(state.carts);
         let cartProductsTotal = 0;
         let cartTotalAmount = 0;
         let cartsProductsList = [];

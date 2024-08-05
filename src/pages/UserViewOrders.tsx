@@ -143,7 +143,7 @@ const UserVIewOrders: React.FC = () => {
               {JSON.parse(order.products).map((product, index) => (
                 <div key={index} className="order-item">
                   <div className="head">
-                    <div className="">Order No: {order.id}</div>
+                    <div className="">Order No: {order.id.split('-')[0]}</div>
                     <div className="">Details</div>
                     <div className="">Placed on</div>
                     <div className="">Status: {order.status}</div>
@@ -163,9 +163,7 @@ const UserVIewOrders: React.FC = () => {
                       </p>
                     </div>
                     <div className="order-details">
-                      <Link to={`/track-order/${order.id}`}>
-                        View Order Details
-                      </Link>
+                      <Link to={''}>View Order Details</Link>
                     </div>
                     <div className="date-placed">
                       <span>{new Date(order.createdAt).toDateString()}</span>
@@ -174,6 +172,9 @@ const UserVIewOrders: React.FC = () => {
                       <button
                         className={
                           order.status === 'Cancelled' ? 'disabled' : ''
+                        }
+                        onClick={() =>
+                          navigate(`/trackOrder/${order.id}/${product.id}`)
                         }
                         disabled={order.status === 'Cancelled'}
                       >

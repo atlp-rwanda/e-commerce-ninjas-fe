@@ -74,8 +74,7 @@ const createStripeProduct = async (data) => {
         currency: 'usd',
       },
     },
-  });
-
+  })
   return response.data;
 };
 

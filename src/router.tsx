@@ -68,6 +68,7 @@ const AppRouter: React.FC = () => {
           <Route path="logout" element={<Logout />} />
           <Route path="shopping-cart" element={<UserViewCart />} />
           <Route path="my-orders" element={<UserVIewOrders />} />
+          <Route path="trackOrder/:orderId/:productId" element={<TrackerOrder/>} />
           <Route
             path="/profile-settings"
             element={

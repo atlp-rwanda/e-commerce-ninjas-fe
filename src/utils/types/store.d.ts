@@ -77,6 +77,7 @@ export interface AuthService {
   error: string;
   token: string;
   userId?: any;
+  fail:boolean;
 }
 
 export interface IEmail {

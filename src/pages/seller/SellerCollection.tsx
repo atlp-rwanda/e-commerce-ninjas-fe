@@ -64,7 +64,7 @@ export default function SellerCollection() {
 
             <div className="action__icons">
                 <Tooltip TransitionComponent={Zoom} title="Edit" arrow >
-                    <IconButton>
+                    <IconButton onClick={() => { navigate(`/seller/product/${product.id}`) }}>
                         <EditIcon className='icon__edit' />
                     </IconButton>
                 </Tooltip>

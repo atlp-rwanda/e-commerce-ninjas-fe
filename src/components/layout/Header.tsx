@@ -104,12 +104,13 @@ const Header: React.FC = () => {
   }
 
   const switch2FA = async () => {
-    const successMessage = `2FA ${is2FAEnabled ? "Disabled" : "Enabled"}`;
+    const successMessage = `2FA ${is2FAEnabled ? "Disabled" : "Enabled, Login now."}`;
     setIs2FALoading(true);
     const res = await dispatch(change2FAStatus({ newStatus: !is2FAEnabled }))
     setIs2FALoading(false);
     if (res.type === "auth/change-2fa-status/fulfilled") {
-      toast.success(res.payload.message || successMessage)
+      toast.success((!is2FAEnabled ? `${res.payload.message}, Login now.` : res.payload.message) || successMessage)
+      if (!is2FAEnabled) { navigate('/logout') }
       setIs2FAEnabled(res.payload.data.user.is2FAEnabled || !is2FAEnabled)
     }
     else {

@@ -35,24 +35,14 @@ const SellerProduct = ({ productId }: { productId: string }) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const isAdd = productId === "add";
-    const { product, isError, isLoading, message, isUpdate, newAddedProduct, isUpdateSuccess, updateError }: ISingleProductInitialResponse = useAppSelector((state: any) => state.singleSellerProduct);
+    const { product, isError, isLoading, message, newAddedProduct }: ISingleProductInitialResponse = useAppSelector((state: any) => state.singleSellerProduct);
 
     const [updatedProduct, setUpdatedProduct] = useState<ISingleProduct>(initialProductState);
     const [updateImages, setUpdateImages] = useState<File[]>([]);
     const [isImagesUpdated, setIsImagesUpdated] = useState<boolean>(false);
     const [isThereAnyUpdate, setIsThereAnyUpdate] = useState<boolean>(false);
 
-    useEffect(() => {
-        if (isUpdate && isUpdateSuccess && !updateError) {
-            toast.success(`Product ${isAdd ? "added" : "updated"}`)
-            isAdd && newAddedProduct && navigate(`/seller/product/${newAddedProduct.id}`)
-            !isAdd && dispatch(fetchSingleSellerProduct(productId));
-        }
-        else if (updateError) {
-            toast.error(updateError || `${isAdd ? "Adding" : "Updating"} a product failed.`)
-        }
-        dispatch(resetUpdateState())
-    }, [isUpdate, isUpdateSuccess, updateError])
+    const [updateLoading, setUpdateLoading] = useState(false);
 
     useEffect(() => {
         if (!isAdd) {
@@ -85,11 +75,11 @@ const SellerProduct = ({ productId }: { productId: string }) => {
             }
         });
 
-        if(isAdd && (!updatedProduct.name || !updatedProduct.description || !updatedProduct.price || !updatedProduct.bonus || !updatedProduct.discount || !updatedProduct.category || !updatedProduct.expiryDate || !updatedProduct.quantity)){
+        if (isAdd && (!updatedProduct.name || !updatedProduct.description || !updatedProduct.price || !updatedProduct.bonus || !updatedProduct.discount || !updatedProduct.category || !updatedProduct.expiryDate || !updatedProduct.quantity)) {
             toast.error('Fill all fields please')
             return;
         }
-        if(isAdd && updateImages.length < 4){
+        if (isAdd && updateImages.length < 4) {
             toast.error(updateImages.length)
             toast.error('Upload atleast 4 images please')
             return;
@@ -108,13 +98,28 @@ const SellerProduct = ({ productId }: { productId: string }) => {
         }
 
         try {
+            setUpdateLoading(true);
             if (isAdd) {
-                dispatch(addSellerProduct(formData));
+                const res = await dispatch(addSellerProduct(formData));
+                console.dir(res)
+                if (res.type === 'products/addSellerProduct/rejected') {
+                    toast.error(res.payload as string || "Failed to add product, try again")
+                }
+                else {
+                    navigate(`/seller/product/${(res.payload as any).data.product.id}`)
+                }
             } else {
-                dispatch(updateSellerProduct({ id: productId, newProductData: formData }));
+                const res = await dispatch(updateSellerProduct({ id: productId, newProductData: formData }));
+                if (res.type === 'products/updateSellerProduct/rejected') {
+                    toast.error(res.payload as string || "Failed to update product, try again")
+                }
             }
+            dispatch(resetUpdateState())
         } catch (error) {
             toast.error(`Error ${isAdd ? 'adding' : 'updating'} product: ${getErrorMessage(error)}`);
+        }
+        finally {
+            setUpdateLoading(false);
         }
     };
 
@@ -142,8 +147,8 @@ const SellerProduct = ({ productId }: { productId: string }) => {
                 <div className="seller-product-header">
                     <h1>{isAdd ? 'Add New Product' : 'Product View'}</h1>
                     <div className="header-btns">
-                        <button disabled={!isThereAnyUpdate && !isImagesUpdated} className={`edit-btn ${!isThereAnyUpdate && !isImagesUpdated && 'disabled'}`} onClick={handleSaveOrAdd}>
-                            <FaSave /> {isAdd ? "ADD" : "UPDATE"}
+                        <button disabled={(!isThereAnyUpdate && !isImagesUpdated) || updateLoading} className={`edit-btn ${!isThereAnyUpdate && !isImagesUpdated && 'disabled'}`} onClick={handleSaveOrAdd}>
+                            <FaSave /> {isAdd ? "ADD" : "UPDATE"}{updateLoading && "ING..."}
                         </button>
                         {!isAdd && <button className='delete-btn'><FaTrash /> Delete</button>}
                     </div>
@@ -273,8 +278,17 @@ const ProductImages = ({ initialImages, setUpdateImages, setIsImagesUpdated }: {
         setSelectedImage(0);
     }, [initialImages, setUpdateImages]);
 
+    const allowedExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.bmp', '.tiff'];
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
+            const file = e.target.files[0];
+            const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
+
+            if (!allowedExtensions.includes(fileExtension)) {
+                toast.error('Invalid file type. Allowed types: ' + allowedExtensions.join(', '));
+                return;
+            }
+
             const reader = new FileReader();
             reader.onloadend = () => {
                 const newImages = [...images, reader.result as string];
@@ -282,7 +296,7 @@ const ProductImages = ({ initialImages, setUpdateImages, setIsImagesUpdated }: {
                 setUpdateImages(newImages);
                 setIsImagesUpdated(true)
             };
-            reader.readAsDataURL(e.target.files[0]);
+            reader.readAsDataURL(file);
         }
     };
 
@@ -307,7 +321,7 @@ const ProductImages = ({ initialImages, setUpdateImages, setIsImagesUpdated }: {
                             className={`thumbnail-image ${selectedImage === index ? 'active' : ''}`}
                             onMouseEnter={() => setSelectedImage(index)}
                         />
-                        <button 
+                        <button
                             className="remove-image-button"
                             onClick={() => handleRemoveImage(index)}
                         >

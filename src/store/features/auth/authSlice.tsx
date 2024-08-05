@@ -319,11 +319,13 @@ const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action: PayloadAction<any>) => {
         state.isError = false;
         state.isLoading = false;
-        state.isAuthenticated = true;
         state.isSuccess = true;
         state.message = action.payload.message;
-        state.token = action.payload.data.token;
         state.userId = action.payload.data.userId || "";
+        if(state.message !== "Check your Email for OTP Confirmation"){
+          state.isAuthenticated = true;
+          state.token = action.payload.data.token;
+        }
       })
       .addCase(loginUser.rejected, (state, action: PayloadAction<any>) => {
         state.isError = true;
@@ -373,11 +375,6 @@ const userSlice = createSlice({
         state.error = action.payload.message;
       })
 
-      .addCase(verifyOTP.pending, (state) => {
-        state.isError = false;
-        state.isLoading = true;
-        state.isSuccess = false;
-      })
       .addCase(verifyOTP.fulfilled, (state, action: PayloadAction<any>) => {
         state.isError = false;
         state.isLoading = false;
@@ -386,12 +383,7 @@ const userSlice = createSlice({
         state.message = action.payload.message;
         state.token = action.payload.data.token;
       })
-      .addCase(verifyOTP.rejected, (state, action: PayloadAction<any>) => {
-        state.isError = true;
-        state.isLoading = false;
-        state.isSuccess = false;
-        state.error = action.payload
-      })
+      
   },
 });
 

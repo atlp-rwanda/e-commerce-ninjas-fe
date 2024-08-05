@@ -16,7 +16,7 @@ const ResetPasswordSchema = Yup.object().shape({
 const SendResetPasswordLink: React.FC = () => {
   const [hideParagraph, setHideParagraph] = useState(true);
   const dispatch = useAppDispatch();
-  const { user, isError, isSuccess, isLoading, message } = useAppSelector(
+  const { user, fail, isSuccess, isLoading, message } = useAppSelector(
     (state) => state?.auth
   );
   const formik = useFormik({
@@ -24,17 +24,13 @@ const SendResetPasswordLink: React.FC = () => {
       email: "",
     },
     validationSchema: ResetPasswordSchema,
-    onSubmit: (values, { setStatus }) => {
-      dispatch(sendResetLink(values.email)).then(() => {
-        if (isError) {
-          setStatus(message);
-        }
-      });
-    },
+    onSubmit: (values) => {
+      dispatch(sendResetLink(values.email))
+    }
   });
 
   useEffect(() => {
-    if (isError) {
+    if (fail) {
       formik.setStatus(message);
     }
     if (isSuccess) {
@@ -42,7 +38,7 @@ const SendResetPasswordLink: React.FC = () => {
       formik.resetForm();
       setHideParagraph(false);
     }
-  }, [isError, isSuccess, message]);
+  }, [fail, isSuccess, message]);
   useEffect(() => {
     dispatch(resetAuth());
   }, [dispatch]);
@@ -73,7 +69,7 @@ const SendResetPasswordLink: React.FC = () => {
                 Email Address
               </label>
             </div>
-            {isError && <p className="error">{formik.status}</p>}
+            {fail? (<p className="error">{formik.status}</p>):null}
             <br />
             <button
               className={`reset-Button${isLoading ? " loading" : ""}`}

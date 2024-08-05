@@ -98,9 +98,9 @@ const Header: React.FC = () => {
     : 0;
 
   function formatName(name: string) {
-    const trimmedName = name.trim();
-    const formattedName = trimmedName.replace(/\s+/g, '.');
-    return formattedName.length > 5 ? formattedName.substring(0, 5) + '...' : formattedName;
+    const trimmedName = name?.trim();
+    const formattedName = trimmedName?.replace(/\s+/g, '.');
+    return formattedName?.length > 5 ? formattedName?.substring(0, 5) + '...' : formattedName;
   }
 
   const switch2FA = async () => {

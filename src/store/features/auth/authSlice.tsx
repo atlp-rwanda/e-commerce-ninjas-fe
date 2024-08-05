@@ -322,8 +322,8 @@ const userSlice = createSlice({
         state.userId = action.payload.data.userId || "";
         if(state.message !== "Check your Email for OTP Confirmation"){
           state.isAuthenticated = true;
-          state.token = action.payload.token;
-          state.user = action.payload.user;
+          state.token = action.payload.data.token;
+          state.user = action.payload.data.user;
         }
       })
       .addCase(loginUser.rejected, (state, action: PayloadAction<any>) => {

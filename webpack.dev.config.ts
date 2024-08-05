@@ -107,6 +107,17 @@ const config: Configuration = {
   optimization: {
     usedExports: true,
   },
+  watchOptions: {
+    ignored: [
+      '**/node_modules',
+      '**/.github',
+      '**/.circleci',
+      '**/.vscode',
+      '**/.storybook'
+    ],
+    aggregateTimeout: 300,
+    poll: 1000,
+  }
 };
 
 export default config;

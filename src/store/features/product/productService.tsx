@@ -62,17 +62,12 @@ const fetchSellerSingleProduct = async (id: string) => {
 };
 
 const updateSellerProduct = async (id: string, newProductData: FormData) => {
-  try {
     const response = await axiosInstance.put(`/api/shop/seller-update-product/${id}`, newProductData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     });
     return response.data;
-  }
-  catch (error) {
-    throw new Error(getErrorMessage(error))
-  }
 }
 
 const updateSellerProductStatus = async (id: string, newStatus: string) => {
@@ -86,17 +81,12 @@ const updateSellerProductStatus = async (id: string, newStatus: string) => {
 }
 
 const addSellerProduct = async (newProductData: FormData) => {
-  try {
     const response = await axiosInstance.post(`/api/shop/seller-create-product`, newProductData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     });
     return response.data;
-  }
-  catch (error) {
-    throw new Error(getErrorMessage(error))
-  }
 }
 const sellerGetAllProducts = async () => {
   const response = await axiosInstance.get(`/api/shop/seller-get-products`);

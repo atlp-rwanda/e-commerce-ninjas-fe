@@ -48,9 +48,38 @@ const UserVIewOrders: React.FC = () => {
   const [orderResponseData, setOrderResponseData] = useState(null);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
   const [isPreloader, setIsPreloader] = useState(false);
+  const [cartResponseData, setCartResponseData] = useState(null);
+
   const navigate = useNavigate();
 
   const cartState = useAppSelector((state) => state.cart);
+  useEffect(() => {
+    fetchCarts();
+  }, [dispatch]);
+  const fetchCarts = async () => {
+    try {
+      setIsLoading(true);
+      const response = await dispatch(getUserCarts());
+      const response1 = await dispatch(getUserCarts()).unwrap();
+      if (response.payload === 'Not authorized') {
+        setIsLoggedOut(true);
+        toast.error('Please login first');
+        navigate('/login');
+      }
+      setCartResponseData(response1.data);
+      setIsLoading(false);
+    } catch (error: any) {
+      if (error === 'Not authorized') {
+        setIsLoggedOut(true);
+        toast.error('Please login first');
+        navigate('/login');
+      }
+      console.error('Error fetching carts:', error);
+      setIsLoading(false);
+      setIsError(true);
+      toast.error(error.message);
+    }
+  };
 
   useEffect(() => {
     fetchOrders();
@@ -102,7 +131,7 @@ const UserVIewOrders: React.FC = () => {
       </div>
     );
   }
-  if(orderResponseData.length < 1) {
+  if (orderResponseData.length < 1) {
     return (
       <div className="error-message">
         <p>No orders found.</p>

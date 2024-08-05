@@ -207,7 +207,6 @@ FaCheckSquare {
         border-radius: 10px;
         padding: 1rem;
         margin-top: 5rem;
-
         .box {
           p {
             color: $black;
@@ -237,10 +236,10 @@ FaCheckSquare {
 
       .order-details {
         border: 2px solid $border-color;
-        padding: 10px;
         border-radius: 10px;
+        margin: 0;
         margin-top: 10px;
-
+        width: 90%;
         h3 {
           color: $primary-color;
           font-size: 18px;
@@ -431,7 +430,6 @@ FaCheckSquare {
         border: 2px solid $border-color;
         border-radius: 10px;
         padding: 5px;
-
         .box {
           p {
             color: $black;
@@ -462,6 +460,7 @@ FaCheckSquare {
         border: 2px solid $border-color;
         padding: 10px;
         border-radius: 10px;
+        margin: 0;
         margin-top: 10px;
 
         h3 {

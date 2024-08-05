@@ -169,8 +169,10 @@ const UserViewCart: React.FC = () => {
       setIsPreloader(true);
       const profile: any = await dispatch(fetchUserProfile());
       const data = {
-        successUrl: 'https://e-commerce-ninja-fn-staging.netlify.app/shopping-cart?success',
-        cancelUrl: 'https://e-commerce-ninja-fn-staging.netlify.app/shopping-cart?cancel',
+        successUrl:
+          'https://e-commerce-ninja-fn-staging.netlify.app/shopping-cart?success',
+        cancelUrl:
+          'https://e-commerce-ninja-fn-staging.netlify.app/shopping-cart?cancel',
         customerEmail: profile.payload.email,
         price: localStorage.getItem('stripePrice'),
       };
@@ -192,6 +194,9 @@ const UserViewCart: React.FC = () => {
       const cartId = localStorage.getItem('cartToPay');
       const products = localStorage.getItem('productsToSave');
       const shopId = localStorage.getItem('shopIdToSave');
+      console.log('Caert id', cartId);
+      console.log('Product ', products);
+      console.log('Shop id ', shopId);
       if (!cartId || !products || !shopId) {
         navigate('/shopping-cart');
         toast.error('Unknown error occurred saving order');
@@ -201,7 +206,7 @@ const UserViewCart: React.FC = () => {
         cartId: cartId,
         status: 'Paid',
       };
-      
+
       const response = await dispatch(getUserCarts());
       const response1 = await dispatch(getUserCarts()).unwrap();
       setCartResponseData(response1.data);

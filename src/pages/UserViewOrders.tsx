@@ -74,7 +74,7 @@ const UserVIewOrders: React.FC = () => {
       console.error('Error fetching orders:', error);
       setIsLoading(false);
       setIsError(true);
-      toast.error("Error getting orders, check your internet");
+      toast.error('Error getting orders, check your internet');
     } finally {
       setIsLoading(false);
     }
@@ -102,6 +102,13 @@ const UserVIewOrders: React.FC = () => {
       </div>
     );
   }
+  if(orderResponseData.length < 1) {
+    return (
+      <div className="error-message">
+        <p>No orders found.</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -126,50 +133,103 @@ const UserVIewOrders: React.FC = () => {
         <div className="order">
           {orderResponseData?.map((order) => (
             <React.Fragment key={order.id}>
-              {JSON.parse(order.products).map((product, index) => (
-                <div key={index} className="order-item">
-                  <div className="head">
-                    <div className="">Order No: {order.id.split('-')[0]}</div>
-                    <div className="">Details</div>
-                    <div className="">Placed on</div>
-                    <div className="">Status: {order.status}</div>
-                  </div>
-                  <div className="order-body">
-                    <div className="order-product">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="product_img"
-                      />
-                      <p className="o-description">
-                        <h3>{product.name}</h3>
-                        <br />
-                        <span>x{product.quantity}</span>
-                        <span className="o-price">${product.price}</span>
-                      </p>
+              {typeof order.products === 'string'
+                ? JSON.parse(order.products).map((product, index) => (
+                    <div key={index} className="order-item">
+                      <div className="head">
+                        <div className="">
+                          Order No: {order.id.split('-')[0]}
+                        </div>
+                        <div className="">Details</div>
+                        <div className="">Placed on</div>
+                        <div className="">Status: {order.status}</div>
+                      </div>
+                      <div className="order-body">
+                        <div className="order-product">
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="product_img"
+                          />
+                          <p className="o-description">
+                            <h3>{product.name}</h3>
+                            <br />
+                            <span>x{product.quantity}</span>
+                            <span className="o-price">${product.price}</span>
+                          </p>
+                        </div>
+                        <div className="order-details">
+                          <Link to={''}>View Order Details</Link>
+                        </div>
+                        <div className="date-placed">
+                          <span>
+                            {new Date(order.createdAt).toDateString()}
+                          </span>
+                        </div>
+                        <div className="track">
+                          <button
+                            className={
+                              order.status === 'Cancelled' ? 'disabled' : ''
+                            }
+                            onClick={() =>
+                              navigate(`/trackOrder/${order.id}/${product.id}`)
+                            }
+                            disabled={order.status === 'Cancelled'}
+                          >
+                            TRACK ORDER
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                    <div className="order-details">
-                      <Link to={''}>View Order Details</Link>
+                  ))
+                : order.products.map((product, index) => (
+                    <div key={index} className="order-item">
+                      <div className="head">
+                        <div className="">
+                          Order No: {order.id.split('-')[0]}
+                        </div>
+                        <div className="">Details</div>
+                        <div className="">Placed on</div>
+                        <div className="">Status: {order.status}</div>
+                      </div>
+                      <div className="order-body">
+                        <div className="order-product">
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="product_img"
+                          />
+                          <p className="o-description">
+                            <h3>{product.name}</h3>
+                            <br />
+                            <span>x{product.quantity}</span>
+                            <span className="o-price">${product.price}</span>
+                          </p>
+                        </div>
+                        <div className="order-details">
+                          <Link to={''}>View Order Details</Link>
+                        </div>
+                        <div className="date-placed">
+                          <span>
+                            {new Date(order.createdAt).toDateString()}
+                          </span>
+                        </div>
+                        <div className="track">
+                          <button
+                            className={
+                              order.status === 'Cancelled' ? 'disabled' : ''
+                            }
+                            onClick={() =>
+                              navigate(`/trackOrder/${order.id}/${product.id}`)
+                            }
+                            disabled={order.status === 'Cancelled'}
+                          >
+                            TRACK ORDER
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                    <div className="date-placed">
-                      <span>{new Date(order.createdAt).toDateString()}</span>
-                    </div>
-                    <div className="track">
-                      <button
-                        className={
-                          order.status === 'Cancelled' ? 'disabled' : ''
-                        }
-                        onClick={() =>
-                          navigate(`/trackOrder/${order.id}/${product.id}`)
-                        }
-                        disabled={order.status === 'Cancelled'}
-                      >
-                        TRACK ORDER
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                  ))}
             </React.Fragment>
           ))}
         </div>

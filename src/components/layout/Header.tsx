@@ -18,10 +18,12 @@ import Notifications from './notification';
 import SearchInput from '../inputs/SearchInput';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { fetchNotifications } from '../../store/features/notifications/notificationSlice';
-import { getUserDetails } from '../../store/features/auth/authSlice';
+import { change2FAStatus, getUserDetails } from '../../store/features/auth/authSlice';
 import { useLocation, Link } from 'react-router-dom';
 import logo from "../../../public/assets/images/logo.png";
 import useSocket from '../../hooks/useSocket';
+import { toast } from 'react-toastify';
+import { PulseLoader } from 'react-spinners';
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -37,6 +39,8 @@ const Header: React.FC = () => {
   } = useAppSelector((state) => state.auth);
   const { notifications } = useAppSelector((state) => state.notification);
   const [token, setToken] = useState('');
+  const [is2FAEnabled, setIs2FAEnabled] = useState(false);
+  const [is2FALoading, setIs2FALoading] = useState(false);
   const navEl = useRef<HTMLDivElement | null>(null);
 
   const User: any = { ...user };
@@ -92,12 +96,28 @@ const Header: React.FC = () => {
   const unreadCount = notifications
     ? notifications.filter((notification) => !notification.isRead).length
     : 0;
-  
-    function formatName(name: string) {
-      const trimmedName = name.trim();
-      const formattedName = trimmedName.replace(/\s+/g, '.');
-      return formattedName.length > 5 ? formattedName.substring(0, 5) + '...' : formattedName;
+
+  function formatName(name: string) {
+    const trimmedName = name.trim();
+    const formattedName = trimmedName.replace(/\s+/g, '.');
+    return formattedName.length > 5 ? formattedName.substring(0, 5) + '...' : formattedName;
+  }
+
+  const switch2FA = async () => {
+    const successMessage = `2FA ${is2FAEnabled ? "Disabled" : "Enabled"}`;
+    setIs2FALoading(true);
+    const res = await dispatch(change2FAStatus({ newStatus: !is2FAEnabled }))
+    setIs2FALoading(false);
+    if (res.type === "auth/change-2fa-status/fulfilled") {
+      toast.success(res.payload.message || successMessage)
+      setIs2FAEnabled(res.payload.data.user.is2FAEnabled || !is2FAEnabled)
     }
+    else {
+      toast.error(res.payload)
+    }
+  }
+
+  useEffect(() => { if (user) setIs2FAEnabled(user.is2FAEnabled) }, [user])
 
   return (
     <header className="header">
@@ -228,7 +248,7 @@ const Header: React.FC = () => {
 
               <span className="cart__text">{user ? 'Hi, ' : 'User'}</span>
               <span className="cart__description">
-              {user
+                {user
                   ? formatName(User?.firstName || User?.email?.split('@')[0])
                   : "Account"}
               </span>
@@ -259,7 +279,20 @@ const Header: React.FC = () => {
                         <span className="order__text">Logout</span>
                       </NavLink>
                     </li>
+
                   </ul>
+                  <button
+                    type="button"
+                    className="order__2fa_btn"
+                    onClick={switch2FA}
+                    disabled={is2FALoading}
+                  >
+                    {is2FALoading
+                      ? (is2FAEnabled
+                        ? <>Disabling 2FA <PulseLoader size={3} color="#ffe2d1" loading={is2FAEnabled} /></>
+                        : <>Enabling 2FA <PulseLoader size={3} color="#ffe2d1" loading={is2FAEnabled} /></>)
+                      : (is2FAEnabled ? "Disable 2FA" : "Enable 2FA")}
+                  </button>
                 </div>
               )}
             </div>
@@ -276,7 +309,7 @@ const Header: React.FC = () => {
           <div className="header__nav" ref={navEl}>
             <nav>
               <ul className="header__list">
-              {isAuthenticated && (
+                {isAuthenticated && (
                   <li className="nav__item" onClick={handleSetIsMenuOpen}>
                     <NavLink
                       to="/home"

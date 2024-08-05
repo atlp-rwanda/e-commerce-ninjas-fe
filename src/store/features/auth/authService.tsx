@@ -16,7 +16,7 @@ const login = async (userData: IUser) => {
   return response.data;
 };
 
-const logout = async() => {
+const logout = async () => {
   const response = await axiosInstance.post("/api/auth/logout");
   return response.data;
 }
@@ -77,6 +77,11 @@ const verifyOTP = async (userId: string, otp: string) => {
   return response.data;
 };
 
+const change2FAStatus = async (newStatus: boolean) => {
+  const response = await axiosInstance.put("/api/auth/enable-2f", { is2FAEnabled: newStatus });
+  return response.data;
+}
+
 const authService = {
   register,
   login,
@@ -89,6 +94,7 @@ const authService = {
   sendResetLink,
   resetPassword,
   verifyOTP,
+  change2FAStatus,
 };
 
 export default authService;

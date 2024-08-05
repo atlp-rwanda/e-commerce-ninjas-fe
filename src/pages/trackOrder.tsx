@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { PuffLoader } from 'react-spinners';
 import { fetchUserProfile } from '../store/features/user/userSlice';
 
-const TrackerOrder = () => {
+const TrackOrder = () => {
   const dispatch = useAppDispatch();
   const [orderResponseData, setOrderResponseData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,23 +22,23 @@ const TrackerOrder = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchTrackOrderStatus();
+    fetchTrackOrderStatus(orderId);
   }, [dispatch, orderId]);
 
-  const fetchTrackOrderStatus = async () => {
+  const fetchTrackOrderStatus = async (orderId) => {
     try {
       setIsLoading(true);
       const response = await dispatch(userTrackOrderStatus(orderId));
-      console.log('RRR', response.payload.data);
       const profile: any = await dispatch(fetchUserProfile());
       setShippingAddress(profile.payload.addresses);
-      console.log('User profile', profile);
+
       if (response.payload === 'Not authorized') {
         setIsLoggedOut(true);
         toast.error('Please login first');
         navigate('/login');
         return;
       }
+
       setOrderResponseData(response.payload.data);
       setIsLoading(false);
     } catch (error: any) {
@@ -48,10 +48,10 @@ const TrackerOrder = () => {
         navigate('/login');
         return;
       }
-      console.error('Error fetching carts:', error);
+      console.error('Error fetching orders:', error);
       setIsLoading(false);
       setIsError(true);
-      toast.error(error.message);
+      toast.error('Error getting orders, check your internet connection');
     } finally {
       setIsLoading(false);
     }
@@ -68,7 +68,7 @@ const TrackerOrder = () => {
   if (isError) {
     return (
       <div className="error-message">
-        <p>No cart found.</p>
+        <p>No orders found.</p>
       </div>
     );
   }
@@ -93,6 +93,14 @@ const TrackerOrder = () => {
   }
 
   const product = products.find((product) => product.id === productId);
+
+  if (!product) {
+    return (
+      <div className="error-message">
+        <p>Product not found.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="order-details-container">
@@ -121,7 +129,7 @@ const TrackerOrder = () => {
                 <br />
                 <br />
               </strong>
-              <b>${product ? product.quantity * product.price : 0}</b>
+              <b>${product.quantity * product.price}</b>
             </p>
             <p>
               <strong>
@@ -133,8 +141,8 @@ const TrackerOrder = () => {
             </p>
           </div>
         </div>
-        {product && <img src={product.image} alt={product.name} />}
-        {product && <p>{product.name}</p>}
+        <img src={product.image} alt={product.name} />
+        <p>{product.name}</p>
       </div>
       <div className="delivery-timeline">
         <div className="heading">
@@ -156,4 +164,4 @@ const TrackerOrder = () => {
   );
 };
 
-export default TrackerOrder;
+export default TrackOrder;

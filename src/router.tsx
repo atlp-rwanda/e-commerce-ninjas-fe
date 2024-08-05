@@ -29,7 +29,7 @@ import Logout from './components/layout/Logout';
 import UserProfile from './pages/UserEditProfile';
 import ProductsPage from './pages/Products';
 import UserVIewOrders from './pages/UserViewOrders';
-import TrackerOrder from "../src/pages/trackerOrder"
+import TrackOrder from './pages/trackOrder';
 const AppRouter: React.FC = () => {
   return (
     <div>
@@ -68,7 +68,7 @@ const AppRouter: React.FC = () => {
           <Route path="logout" element={<Logout />} />
           <Route path="shopping-cart" element={<UserViewCart />} />
           <Route path="my-orders" element={<UserVIewOrders />} />
-          <Route path="trackOrder/:orderId/:productId" element={<TrackerOrder/>} />
+          <Route path="trackOrder/:orderId/:productId" element={<TrackOrder/>} />
           <Route
             path="/profile-settings"
             element={

@@ -45,24 +45,10 @@ const UserVIewOrders: React.FC = () => {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const [cartData, setCartData] = useState<any>(null);
   const [orderResponseData, setOrderResponseData] = useState(null);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
-  const [checkoutData, setCheckoutData] = useState(null);
-  const [isCheckoutSuccess, setCheckoutSuccess] = useState(null);
   const [isPreloader, setIsPreloader] = useState(false);
-  const [discount, setDiscount] = useState(0);
-  const [totalProductPrice, setTotalProductPrice] = useState(0);
-  const [arrayOfProduct, setArrayOfProduct] = useState(null);
-  const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
-  const [open, setOpen] = useState(false);
-  const [cartToPay, setCartToPay] = useState<string | null>(null);
-  const [amountToPay, setAmountToPay] = useState<any>(null);
-  const [stripePrice, setStripePrice] = useState<string>('');
-  const [currentEndpoint, setCurrentEndpoint] = useState('');
-
   const navigate = useNavigate();
-  const location = useLocation();
 
   const cartState = useAppSelector((state) => state.cart);
 
@@ -88,7 +74,7 @@ const UserVIewOrders: React.FC = () => {
       console.error('Error fetching orders:', error);
       setIsLoading(false);
       setIsError(true);
-      toast.error(error.message);
+      toast.error("Error getting orders, check your internet");
     } finally {
       setIsLoading(false);
     }

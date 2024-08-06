@@ -10,14 +10,17 @@ import { logout } from "../../store/features/auth/authSlice";
 import { toast } from "react-toastify";
 import { Backdrop, Box, CircularProgress, Typography } from "@mui/material";
 import { Meta } from "../../components/Meta";
+import useAdminAuthCheck from "../../hooks/useAdminAuthCheck";
+import { disconnect } from "../../utils/socket/socket";
 
 
 export const AdminDashboard = () => {
   const dispatch = useAppDispatch();
+  // const isAuthorized = useAdminAuthCheck();
   const { isLoading, message, isError } = useAppSelector(
     (state) => state.admin
   );
-
+  
   const [isActive, setIsActive] = useState(() => {
     return parseInt(localStorage.getItem("activeTab")) || 1;
   });
@@ -33,6 +36,7 @@ export const AdminDashboard = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    disconnect();
     setTimeout(() => {
       navigate("/");
     }, 2000);
@@ -41,7 +45,7 @@ export const AdminDashboard = () => {
   useEffect(() => {
     if (isError && message === "Not authorized") {
       toast.info("You are not authorized to access this page");
-      navigate("/admin");
+      navigate("/login");
       return;
     }
   }, [isError, message, navigate]);
@@ -67,7 +71,7 @@ export const AdminDashboard = () => {
                     className={`text_content ${isActive === 1 ? "active" : ""}`}
                     onClick={() => handleClick(1, "/admin/dashboard")}
                   >
-                    Admin Dashboard
+                    Dashboard
                   </Link>
                 </div>
               </div>

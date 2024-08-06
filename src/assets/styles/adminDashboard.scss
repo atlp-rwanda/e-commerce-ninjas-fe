@@ -41,10 +41,21 @@
             cursor: pointer;
           }
 
+          .text_content:hover {
+            display: flex;
+            color: $white;
+            background-color: $menu-hover;
+            width: 15rem;
+            padding: 1rem;
+            border-radius: .5rem;
+        }
+
           .active {
             display: flex;
             background-color: $menu-hover;
+            color: $white !important;
             width: 15rem;
+            color:$white;
             padding: 1rem 1rem;
             transition: all 0.5s ease-in-out;
             align-items: center;

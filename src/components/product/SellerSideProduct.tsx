@@ -14,7 +14,7 @@ const SellerSideProduct: React.FC<ProductCardProps> = ({ number, image, title, a
       <div className="product-card__number">{number}</div>
       <img src={image} alt={title} className="product-card__image" />
       <div className="product-card__details">
-        <h3 className="product-card__title">{title}</h3>
+        <h3 className="product-card__details__title">{title}</h3>
       </div>
       <div className={`product-card__availability ${availability.toLowerCase()}`}>
         {availability}

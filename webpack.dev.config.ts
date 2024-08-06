@@ -97,7 +97,7 @@ const config: Configuration = {
     historyApiFallback: {
       disableDotRule: true,
     },
-    port: 9000,
+    port: 5000,
     open: true,
     hot: true,
   },

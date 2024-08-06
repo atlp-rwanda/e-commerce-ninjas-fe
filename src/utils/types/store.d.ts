@@ -78,6 +78,8 @@ export interface AuthService {
   token: string;
   userId?: any;
   fail:boolean;
+  isOtpFail:boolean;
+  isOtpSuccess:boolean;
 }
 
 export interface IEmail {
@@ -231,5 +233,6 @@ export interface ISellerCollectionProductInitialResponse {
   isError: boolean;
   isSuccess: boolean;
   isLoading: boolean;
-  message: string | null;
+  message: string;
+  OrderHistory: null
 }

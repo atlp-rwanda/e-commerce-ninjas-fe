@@ -5,6 +5,7 @@ import { ISellerCollectionProductInitialResponse, ISellerCollectionProductRespon
 import { getErrorMessage } from "../../../utils/axios/axiosInstance";
 
 const initialState: ISellerCollectionProductInitialResponse = {
+    message: "",
     data: {
         products: null,
         previousPage: 0,
@@ -15,7 +16,7 @@ const initialState: ISellerCollectionProductInitialResponse = {
     isLoading: false,
     isError: false,
     isSuccess: false,
-    message: ''
+    OrderHistory: null
 }
 
 export const fetchSellerCollectionProduct = createAsyncThunk<ISellerCollectionProductResponse>("products/fetchSellerCollectionProducts", async (_,thunkApi) => {
@@ -86,16 +87,16 @@ const sellerCollectionProductsSlice = createSlice({
                 state.isError = null;
                 state.isSuccess = false;
             })
-            .addCase(sellerGetOrderHistory.fulfilled, (state, action: PayloadAction<ISellerCollectionProductResponse>) => {
+            .addCase(sellerGetOrderHistory.fulfilled, (state, action: PayloadAction<any>) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.data = action.payload.data;
+                state.OrderHistory = action.payload.data;
             })
             .addCase(sellerGetOrderHistory.rejected, (state, action: PayloadAction<any>) => {
                 state.isLoading = false;
-                state.isError = false;
+                state.isError = true;
                 state.isSuccess = false;
-                state.message = action.payload.message || null
+                state.message = action.payload;
             });
     }
 })

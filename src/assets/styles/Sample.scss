@@ -169,7 +169,7 @@
 
 @media screen and (max-width: 900px) {
   .sampleImages1 {
-   height: 20rem;
+   height: 10rem;
     .sample2 {
       .arrow {
         .icon-arrow {
@@ -187,7 +187,7 @@
 
     .menShoe, .phones, .womenShoe, .accessories {
       img {
-       height: 9.5rem;
+       height: 8.5rem;
       }
       p {
         font-size: 1rem;
@@ -204,7 +204,8 @@
 
 @media screen and (max-width: 480px) {
   .sampleImages1 {
-   height: 15rem;
+    gap: 0.5rem;
+   height: 12rem;
     .sample2 {
       .arrow {
         .icon-arrow {
@@ -221,8 +222,10 @@
     }
 
     .menShoe, .phones, .womenShoe, .accessories {
+      height: 5.5rem;
+      padding: 0;
       img {
-       height: 7rem;
+       height: 100%;
       }
       p {
         font-size: 0.8rem;

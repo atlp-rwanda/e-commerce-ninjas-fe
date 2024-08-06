@@ -1,8 +1,7 @@
 /* eslint-disable */
 import React, { useState, useEffect } from "react";
 import { AiFillDashboard } from "react-icons/ai";
-import { FaPlusCircle, FaProductHunt } from "react-icons/fa";
-import { FaRegUser } from 'react-icons/fa';
+import {  FaProductHunt, FaRegUser } from "react-icons/fa";
 import { IoLogOutSharp } from "react-icons/io5";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import SellerHeader from "./SellerHeader";
@@ -15,6 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import SellerSideProduct from "../product/SellerSideProduct";
 import { fetchSellerCollectionProduct } from "../../store/features/product/sellerCollectionProductsSlice";
+import { Empty } from "antd";
 
 export const SellerLayout = () => {
   const dispatch = useAppDispatch();
@@ -22,19 +22,29 @@ export const SellerLayout = () => {
   const { pathname } = useLocation();
   const isAuthorized = useSellerAuthCheck();
   const { user } = useAppSelector((state) => state.auth);
-  const User: any = { ...user };
-  const { data, isLoading, isError } = useAppSelector(state => state.sellerCollectionProducts);
-  
+  const { data, isLoading, isError, OrderHistory } = useAppSelector(
+    (state) => state.sellerCollectionProducts
+  );
+  const [completedOrder, setCompletedOrder] = useState(0);
+
   useEffect(() => {
     dispatch(fetchSellerCollectionProduct());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (OrderHistory !==null) {
+      setCompletedOrder(80);
+    } else {
+      setCompletedOrder(0);
+    }
+  }, [OrderHistory]);
 
   const handleLogout = () => {
     dispatch(logout());
     disconnect();
     setTimeout(() => {
       navigate("/");
-    }, 1000);
+    }, 3000);
   };
 
   if (!isAuthorized) {
@@ -46,25 +56,28 @@ export const SellerLayout = () => {
   }
 
   function formatName(name: string) {
-    const trimmedName = name.trim();
-    const formattedName = trimmedName.replace(/\s+/g, '.');
-    return formattedName.length > 8 ? formattedName.substring(0, 8) + '...' : formattedName;
+    const trimmedName = name?.trim();
+    const formattedName = trimmedName?.replace(/\s+/g, ".");
+    return formattedName?.length > 8
+      ? formattedName?.substring(0, 8) + "..."
+      : formattedName;
   }
 
   const availableProducts = data.products
-    ?.filter(product => product.status === 'available')
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    ?.filter((product) => product?.status === "available")
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
     .slice(0, 5);
 
-  const completionPercentage = 80; 
-
   const getCompletionColor = (percentage) => {
-    if (percentage >= 80) return "#00FF00";
+    if (percentage >= 80) return "#57ce57";
     if (percentage >= 50) return "#FFFF00";
     return "#FF0000"; // Red
   };
 
-  const progressBarColor = getCompletionColor(completionPercentage);
+  const progressBarColor = getCompletionColor(completedOrder);
 
   return (
     <div className="seller__wrapper">
@@ -98,7 +111,9 @@ export const SellerLayout = () => {
               <div>
                 <Link
                   to={"/seller/dashboard"}
-                  className={`text_content ${pathname === "/seller/dashboard" ? "active" : ""}`}
+                  className={`text_content ${
+                    pathname === "/seller/dashboard" ? "active" : ""
+                  }`}
                 >
                   Dashboard
                 </Link>
@@ -106,7 +121,9 @@ export const SellerLayout = () => {
               <div>
                 <Link
                   to={"/seller/products"}
-                  className={`text_content ${pathname.startsWith("/seller/product") ? "active" : ""}`}
+                  className={`text_content ${
+                    pathname.startsWith("/seller/product") ? "active" : ""
+                  }`}
                 >
                   Products
                 </Link>
@@ -128,27 +145,32 @@ export const SellerLayout = () => {
           </div>
           <section className="right__side">
             <div className="right-profile">
-              {user && User.profilePicture ? (
-                <img src={User.profilePicture} alt="Profile" className="profile-image" />
+              {user && user?.profilePicture ? (
+                <img
+                  src={user?.profilePicture}
+                  alt="Profile"
+                  className="profile-image"
+                />
               ) : (
                 <FaRegUser className="profile-image" />
               )}
               <span className="profile-name">
-                {user ? formatName(User?.firstName || User?.email?.split('@')[0]) : "Account"}
+                {user
+                  ? formatName(user?.firstName || user?.email.split("@")[0])
+                  : "Account"}
               </span>
               <IconButton className="profile-edit">
                 Edit Profile
                 <EditIcon className="icon-edit" />
               </IconButton>
               <div className="progress-bar-container">
-                Order Completed: <span className="order-progress">{completionPercentage}%</span>
-                <div
-                  className="progress-bar"
-                >
+                Order Completed:{" "}
+                <span className="order-progress" style={{color:`${getCompletionColor(completedOrder)}`}}>{completedOrder}%</span>
+                <div className="progress-bar">
                   <div
                     className="progress-bar-fill"
                     style={{
-                      width: `${completionPercentage}%`,
+                      width: `${completedOrder}%`,
                       backgroundColor: progressBarColor,
                     }}
                   ></div>
@@ -167,8 +189,10 @@ export const SellerLayout = () => {
                   <PuffLoader color="#ff6d18" size={25} loading={isLoading} />
                 </div>
               ) : isError ? (
-                <div>Error loading products.</div>
-              ) : (
+                <div>
+                 <p>something went wrong</p>
+                </div>
+              ) : availableProducts?.length > 0 ? (
                 availableProducts?.map((product, index) => (
                   <SellerSideProduct
                     key={product.id}
@@ -178,6 +202,13 @@ export const SellerLayout = () => {
                     availability="available"
                   />
                 ))
+              ) : (
+                <div>
+                  <Empty
+                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                    description={"NO Products"}
+                  />
+                </div>
               )}
             </div>
           </section>

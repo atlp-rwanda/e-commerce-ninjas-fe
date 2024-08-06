@@ -97,6 +97,15 @@ const sellerGetOrderHistory = async () => {
   return response.data;
 }
 
+const SellerDeleteItem = async(id: string)=>{
+  try{
+    const response = await axiosInstance.delete(`api/shop/seller-delete-product/${id}`);
+    return response.data
+  }catch(error){
+    throw new Error("failed to delete product")
+  }
+}
+
 const productService = {
   fetchProducts,
   fetchSingleProduct,
@@ -109,6 +118,7 @@ const productService = {
   addSellerProduct,
   updateSellerProductStatus,
   sellerGetAllProducts,
- sellerGetOrderHistory
+ sellerGetOrderHistory,
+ SellerDeleteItem
 }
 export default productService;

@@ -43,10 +43,24 @@ export const sellerGetOrderHistory = createAsyncThunk('seller/seller-get-orderHi
     }
 })
 
+export const deleteItem = createAsyncThunk<ISellerCollectionProductInitialResponse, string>("product/deleteProduct", async (id, thunkApi) => {
+    try {
+        const response = await productService.SellerDeleteItem(id)
+        return response
+    } catch (error) {
+        return thunkApi.rejectWithValue(error)
+    }
+})
+
 const sellerCollectionProductsSlice = createSlice({
     name: "sellerCollectionProducts",
     initialState,
-    reducers: {},
+    reducers: {
+        removeItem: (state, action: any) => {
+            const itemId = action.payload
+            state.data.products = state.data?.products.filter((item) =>item.id !== itemId)
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchSellerCollectionProduct.pending, (state) => {
@@ -96,8 +110,24 @@ const sellerCollectionProductsSlice = createSlice({
                 state.isError = false;
                 state.isSuccess = false;
                 state.message = action.payload.message || null
-            });
+            })
+            .addCase(deleteItem.pending, (state) => {
+                state.isError = false,
+                    state.isSuccess = false
+            })
+            .addCase(deleteItem.fulfilled, (state, action: PayloadAction<any>) => {
+                state.isLoading = false,
+                state.isError = false,
+                state.isSuccess = true
+                state.message = action.payload.message
+            })
+            .addCase(deleteItem.rejected, (state, action: PayloadAction<any>) => {
+                state.isLoading = false,
+                    state.isError = true,
+                    state.message = action.payload,
+                    state.isSuccess = false
+            });;
     }
 })
-
+export const {removeItem} = sellerCollectionProductsSlice.actions
 export default sellerCollectionProductsSlice.reducer;

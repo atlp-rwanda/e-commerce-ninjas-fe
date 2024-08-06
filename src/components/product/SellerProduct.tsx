@@ -12,6 +12,8 @@ import { PuffLoader } from 'react-spinners';
 import { Meta } from '../Meta';
 import { toast } from 'react-toastify';
 import { getErrorMessage } from '../../utils/axios/axiosInstance';
+import { deleteItem } from '../../store/features/product/sellerCollectionProductsSlice';
+import ConfirmModal from './ConfirmModal';
 
 const initialProductState: ISingleProduct = {
     id: "",
@@ -43,6 +45,8 @@ const SellerProduct = ({ productId }: { productId: string }) => {
     const [isThereAnyUpdate, setIsThereAnyUpdate] = useState<boolean>(false);
 
     const [updateLoading, setUpdateLoading] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState<string | null>(null);
 
     useEffect(() => {
         if (!isAdd) {
@@ -123,6 +127,14 @@ const SellerProduct = ({ productId }: { productId: string }) => {
         }
     };
 
+    const handleDelete = async () => {
+        if (updatedProduct) {
+            await dispatch(deleteItem(itemToDelete)); 
+            setShowConfirm(false);
+            navigate('/seller/products'); 
+        }
+    };
+
     if (isLoading) {
         return (
             <div className="loader">
@@ -150,7 +162,7 @@ const SellerProduct = ({ productId }: { productId: string }) => {
                         <button disabled={(!isThereAnyUpdate && !isImagesUpdated) || updateLoading} className={`edit-btn ${!isThereAnyUpdate && !isImagesUpdated && 'disabled'}`} onClick={handleSaveOrAdd}>
                             <FaSave /> {isAdd ? "ADD" : "UPDATE"}{updateLoading && "ING..."}
                         </button>
-                        {!isAdd && <button className='delete-btn'><FaTrash /> Delete</button>}
+                        {!isAdd && <button className='delete-btn' onClick={() => { setShowConfirm(true); setItemToDelete(productId); }}><FaTrash /> Delete</button>}
                     </div>
                 </div>
 
@@ -233,6 +245,14 @@ const SellerProduct = ({ productId }: { productId: string }) => {
                             </ContentCard>
                         </ContentCard>
                     </div>
+
+                    <ConfirmModal
+                isOpen={showConfirm}
+                title="Are you sure"
+                message={`Deleting this product <i>${product?.name}</i> will be permanently removed from the system. This can't be undone!`}
+                onConfirm={handleDelete}
+                onCancel={() => setShowConfirm(false)}
+            />
                 </div>
             </div>
         </>

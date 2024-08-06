@@ -44,6 +44,7 @@
           .active {
             display: flex;
             background-color: $menu-hover;
+            color: $white !important;
             width: 15rem;
             padding: 1rem 1rem;
             transition: all 0.5s ease-in-out;

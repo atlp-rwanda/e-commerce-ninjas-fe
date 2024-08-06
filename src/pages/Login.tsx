@@ -39,7 +39,7 @@ function Login() {
   const [isVisible, setIsVisible] = useState(false);
   const [openOTPDialog, setOpenOTPDialog] = useState(false);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [otpError, setOtpError] = useState("");
+  const [otpError, setOtpError] = useState<any>(null);
   const [otpLoading, setOtpLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -64,6 +64,7 @@ function Login() {
       const { email } = values;
       localStorage.setItem("loggedEmail", email);
       await dispatch(loginUser(values)).then((res: any) => {
+        setOtpError(null)
         toast.success(res.payload.message);
       });
     },
@@ -121,9 +122,12 @@ function Login() {
       setOtpError("");
       const res = await dispatch(verifyOTP({ userId, otp: otpString }));
       setOtpLoading(false);
+    
       if ((res.type = "auth/verify-otp/rejected")) {
         setOtpError(res.payload);
+        
       } else {
+        setOtpError(null)
         setOpenOTPDialog(false);
       }
       setOtp(["", "", "", "", "", ""]);
@@ -304,7 +308,7 @@ function Login() {
                 justifyContent: "center",
               }}
             >
-              {otpError}
+              {typeof(otpError) === "string" ? otpError : null}
             </DialogContentText>
           )}
         </DialogContent>

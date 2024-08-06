@@ -15,7 +15,7 @@ import useAdminAuthCheck from "../../hooks/useAdminAuthCheck";
 
 export const AdminDashboard = () => {
   const dispatch = useAppDispatch();
-  const isAuthorized = useAdminAuthCheck();
+  // const isAuthorized = useAdminAuthCheck();
   const { isLoading, message, isError } = useAppSelector(
     (state) => state.admin
   );

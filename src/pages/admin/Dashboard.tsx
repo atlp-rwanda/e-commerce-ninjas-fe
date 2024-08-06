@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { Backdrop, Box, CircularProgress, Typography } from "@mui/material";
 import { Meta } from "../../components/Meta";
 import useAdminAuthCheck from "../../hooks/useAdminAuthCheck";
+import { disconnect } from "../../utils/socket/socket";
 
 
 export const AdminDashboard = () => {
@@ -35,6 +36,7 @@ export const AdminDashboard = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    disconnect();
     setTimeout(() => {
       navigate("/");
     }, 2000);

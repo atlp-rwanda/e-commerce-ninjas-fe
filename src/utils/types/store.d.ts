@@ -233,5 +233,6 @@ export interface ISellerCollectionProductInitialResponse {
   isError: boolean;
   isSuccess: boolean;
   isLoading: boolean;
-  message: string | null;
+  message: string;
+  OrderHistory: null
 }

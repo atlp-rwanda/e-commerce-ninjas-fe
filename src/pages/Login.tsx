@@ -7,7 +7,6 @@ import {
   loginUser,
   verifyOTP,
   getUserDetails,
-  resetAuth,
 } from "../store/features/auth/authSlice";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
@@ -40,7 +39,7 @@ function Login() {
   const [isVisible, setIsVisible] = useState(false);
   const [openOTPDialog, setOpenOTPDialog] = useState(false);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [otpError, setOtpError] = useState("");
+  const [otpError, setOtpError] = useState<any>(null);
   const [otpLoading, setOtpLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -53,9 +52,8 @@ function Login() {
     error,
     message,
     userId,
-    isOtpFail
   } = useAppSelector((state) => state?.auth);
-  const [user, setUser] = useState(null);
+  const [user,setUser] = useState(null);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -66,30 +64,42 @@ function Login() {
       const { email } = values;
       localStorage.setItem("loggedEmail", email);
       await dispatch(loginUser(values)).then((res: any) => {
+        setOtpError(null)
         toast.success(res.payload.message);
+      }).catch((err) => {
+        console.error("Error fetching user details:", err);
       });
     },
   });
   useEffect(() => {
     if (isSuccess && token && isAuthenticated) {
       localStorage.setItem("token", token);
-      dispatch(getUserDetails(token)).then((res) => {
-        const userData = res.payload.data.user;
-
-        if (userData?.role === "admin") {
-          navigate("/admin/dashboard");
-        } else if (userData?.role === "seller") {
-          navigate("/seller/dashboard");
-        } else {
-          navigate("/home");
-        }
-        setUser(userData);
-      });
+      dispatch(getUserDetails(token))
+        .then((res) => {
+          const userData = res.payload.data.user;
+          setUser(userData);
+        })
+        .catch((err) => {
+          console.error("Error fetching user details:", err);
+        });
       formik.resetForm();
+      
+    }
+  }, [isSuccess, token, isAuthenticated, dispatch]);
+  
+  useEffect(() => {
+    if (user) {
+      if (user?.role === 'admin') {
+        navigate('/admin/dashboard');
+      } else if (user?.role === 'seller') {
+        navigate('/seller/dashboard');
+      } else {
+        navigate('/home');
+      }
       joinRoom(token);
     }
-  }, [isSuccess, token, isAuthenticated, user, navigate, message]);
-
+  }, [user, navigate,token]);
+  
   function handleIsFocused() {
     setIsFocused(true);
     setIsClicked(false);
@@ -118,19 +128,20 @@ function Login() {
 
   const handleVerifyOTP = async () => {
     const otpString = otp.join("");
-    dispatch(resetAuth)
     if (otpString.length === 6) {
       setOtpLoading(true);
       setOtpError("");
-      await dispatch(verifyOTP({ userId, otp: otpString }))
-      if(isOtpFail){
-        setOtpError(message)
-        setOtpLoading(false);
-      }else if(!isOtpFail && isSuccess) {
+      const res = await dispatch(verifyOTP({ userId, otp: otpString }));
+      setOtpLoading(false);
+    
+      if ((res.type = "auth/verify-otp/rejected")) {
+        setOtpError(res.payload);
+        
+      } else {
+        setOtpError(null)
         setOpenOTPDialog(false);
-        setOtp(["", "", "", "", "", ""]);
-        toast.success(message);
       }
+      setOtp(["", "", "", "", "", ""]);
     } else {
       setOtpError("Please enter a valid 6-digit OTP");
     }
@@ -308,7 +319,7 @@ function Login() {
                 justifyContent: "center",
               }}
             >
-              {otpError}
+              {typeof(otpError) === "string" ? otpError : null}
             </DialogContentText>
           )}
         </DialogContent>

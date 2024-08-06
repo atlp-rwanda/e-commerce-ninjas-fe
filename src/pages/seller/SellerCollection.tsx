@@ -53,16 +53,18 @@ export default function SellerCollection() {
             setItemToDelete(null)
         } catch (error) {
             console.error('Error deleting item:', error);
-        }finally{
-            if(isSuccess)
-            toast.success(message)
+        }
+        finally{
+            if(isSuccess){
+            // toast.success(message)
+        }
         }
     };
 
 
     useEffect(() => {
         if (isUpdate && isUpdateSuccess) {
-            toast.success(updateMessage);
+            // toast.success(updateMessage);
             dispatch(fetchSellerCollectionProduct());
         }
         else if (updateError && !isUpdateSuccess) toast.error(updateError)

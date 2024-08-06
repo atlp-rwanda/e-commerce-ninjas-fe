@@ -8,7 +8,7 @@ const Card = ({ title, value, percentage, isPositive, onClick }) => {
       <div className="card" onClick={onClick ? onClick : undefined}>
         <div className="card-content">
           <h3>{title}</h3>
-          <h1>{value}</h1>
+          <p style={{fontSize:"1.9rem", padding:"1rem 0"}}>{value}</p>
           <p className={isPositive ? 'positive' : 'negative'}>
             {isPositive ? '+' : '-'}{percentage}%
           </p>

@@ -53,6 +53,7 @@
           .active {
             display: flex;
             background-color: $menu-hover;
+            color: $white !important;
             width: 15rem;
             color:$white;
             padding: 1rem 1rem;

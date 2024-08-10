@@ -129,7 +129,7 @@ const TrackOrder = () => {
                 <br />
                 <br />
               </strong>
-              <b>${product.quantity * product.price}</b>
+              <b>{product.quantity * product.price} RWF</b>
             </p>
             <p>
               <strong>

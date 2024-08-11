@@ -42,6 +42,7 @@ const exportToCSV = (orderHistory) => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        
     }
 };
 

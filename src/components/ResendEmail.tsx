@@ -14,7 +14,7 @@ const validationSchema = yup.object({
 })
 export const ResendEmail = () => {
   const dispatch = useAppDispatch();
-  const { isSuccess, isError, isLoading, message } = useAppSelector((state) => state.auth)
+  const { isSuccess, isEmailResend, isLoading, message } = useAppSelector((state) => state?.auth)
   const initialValues = {
     email: "",
   };
@@ -22,20 +22,18 @@ export const ResendEmail = () => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(resendVerificationEmail(values)).then(() => {
-        if(isSuccess) {
-        toast.success(message);
-        }
-        if (isError) {
-          toast.error(message)
-        }
-      })
+      dispatch(resendVerificationEmail(values))
     },
   })
   useEffect(() => {
-    dispatch(resetAuth());
-  }, [dispatch]);
-  
+     dispatch(resetAuth());
+    if(isSuccess) {
+      toast.success(message);
+      }
+      if (isEmailResend) {
+        toast.error(message)
+      }
+  }, [dispatch,isSuccess,isEmailResend,message]);
   return (
     <>
       <Meta title="Resend Email - E-Commerce Ninjas" />

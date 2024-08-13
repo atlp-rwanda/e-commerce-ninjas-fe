@@ -22,7 +22,7 @@ const Table = ({ headers, rows, title, tableButton }) => {
   };
   return (
     <>
-      <div className="table__header__">
+      {rows.length > 0 && <div className="table__header__">
         <h2 className="table__title">{title}</h2>
         {tableButton && 
         <div className="table_button">
@@ -58,12 +58,13 @@ const Table = ({ headers, rows, title, tableButton }) => {
           </button>
         </div>
       </div>
+      }
       <div className="table__container">
         {rows.length <= 0 ? (
              <div className="empty-container">
              <Empty
                image={Empty.PRESENTED_IMAGE_SIMPLE}
-               description={"No Data"}
+               description={`No ${title}`}
              />
            </div>
         ): <table className="dynamic__table">

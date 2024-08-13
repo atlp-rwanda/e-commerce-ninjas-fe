@@ -30,8 +30,15 @@ const getAllShops = async () => {
     return response.data;
 }
 
+const getAllRequests = async () => {
+    const response = await axiosInstance.get(`/api/user/admin-get-users-request`);
+    return response.data;
+}
 
-
+const deleteUserRequest = async (userRequestId:string, requestId:string) =>{
+    const response = await axiosInstance.delete(`/api/user/admin-delete-user-request/${userRequestId}/${requestId}`);
+    return response.data;
+};
 
 const adminService = {
     getAllUsers,
@@ -39,7 +46,9 @@ const adminService = {
     updateUserRole,
     updateUserStatus,
     getOrderHistory,
-    getAllShops
+    getAllShops,
+    getAllRequests,
+    deleteUserRequest
 }
 
 export default adminService;

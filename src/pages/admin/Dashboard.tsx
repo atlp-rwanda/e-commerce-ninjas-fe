@@ -12,6 +12,7 @@ import { Backdrop, Box, CircularProgress, Typography } from "@mui/material";
 import { Meta } from "../../components/Meta";
 import useAdminAuthCheck from "../../hooks/useAdminAuthCheck";
 import { disconnect } from "../../utils/socket/socket";
+import { RiUserSettingsLine } from "react-icons/ri";
 
 
 export const AdminDashboard = () => {
@@ -80,7 +81,7 @@ export const AdminDashboard = () => {
                   <FaUsers
                     size={32}
                     className="icon"
-                    onClick={() => handleClick(2, "/admin/users")}
+                    onClick={() => handleClick(2, "/admin/dashboard/users")}
                   />
                 </div>
                 <div className="icons__title__link">
@@ -90,6 +91,24 @@ export const AdminDashboard = () => {
                     onClick={() => handleClick(2, "/admin/dashboard/users")}
                   >
                     Users
+                  </Link>
+                </div>
+              </div>
+              <div className="users">
+                <div className="icon">
+                  <RiUserSettingsLine
+                    size={32}
+                    className="icon"
+                    onClick={() => handleClick(3, "/admin/dashboard/requests")}
+                  />
+                </div>
+                <div className="icons__title__link">
+                  <Link
+                    to="users"
+                    className={`text_content ${isActive === 3 ? "active" : ""}`}
+                    onClick={() => handleClick(3, "/admin/dashboard/requests")}
+                  >
+                    Requests
                   </Link>
                 </div>
               </div>
@@ -104,7 +123,7 @@ export const AdminDashboard = () => {
               </div>
               <div className="icons__title__link">
                 <h2
-                  className={`text_content ${isActive === 3 ? "active" : ""}`}
+                  className={`text_content ${isActive === 4 ? "active" : ""}`}
                   onClick={handleLogout}
                 >
                   Logout

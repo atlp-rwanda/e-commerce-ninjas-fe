@@ -26,6 +26,9 @@ import Users from "./pages/admin/Users";
 import Logout from './components/layout/Logout';
 import UserProfile from './pages/UserEditProfile';
 import ProductsPage from './pages/Products';
+import { SellerOnboarding } from './pages/SellerOnboarding';
+import { Requests } from './pages/admin/Requests';
+import { ViewRequest } from './pages/admin/VewRequest';
 const AppRouter: React.FC = () => {
   return (
     <div>
@@ -47,14 +50,9 @@ const AppRouter: React.FC = () => {
           <Route path="logout" element={<Logout />} />
           <Route path="shopping-cart" element={<UserViewCart />} />
           <Route path="/profile-settings" element={<ProtectedRoute redirectPath="/login"><UserProfile /></ProtectedRoute>}/>
+          <Route path="/become-seller" element={<SellerOnboarding />}/>
           <Route path="*" element={<NotFound />} />
         
-        </Route>
-        <Route path="/seller" element={<SellerLayout />}>
-          <Route index element={<Navigate to="dashboard" replace />} />
-          <Route path="dashboard" element={<SellerDashboard />} />
-          <Route path="product/:id" element={<SellerViewProduct />} />
-          <Route path="products" element={<SellerCollection />} />
         </Route>
         <Route path="/seller" element={<SellerLayout />}>
           <Route index element={<Navigate to="dashboard" replace />} />
@@ -67,6 +65,8 @@ const AppRouter: React.FC = () => {
           <Route path="dashboard" element={<ProtectedRoute redirectPath="/login"><AdminDashboard /></ProtectedRoute>}>
             <Route index element={<OverViewDashboard />} />
             <Route path="users" element={<Users />} />
+            <Route path="requests" element={<Requests />} />
+            <Route path="request/:id" element={<ViewRequest />} />
           </Route>
         </Route>
       </Routes>

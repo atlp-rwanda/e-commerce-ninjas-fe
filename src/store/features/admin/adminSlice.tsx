@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 const initialState: IAdminInitialResponse = {
     message: "",
     users: null,
+    requests: null,
     isError: false,
     isLoading: false,
     isSuccess: false,
@@ -38,7 +39,7 @@ export const updateUserRole = createAsyncThunk('admin/updateUser', async ({ user
     } catch (error) {
         return thunkApi.rejectWithValue(getErrorMessage(error));
     }
-})
+});
 
 export const updateUserStatus = createAsyncThunk('admin/updateUserStatus',async({ userId, status }: { userId: string, status: string}, thunkApi) => {
     try {
@@ -63,7 +64,25 @@ export const getAllShops = createAsyncThunk('admin/admin-get-shops', async (_, t
     } catch (error) {
         return thunkApi.rejectWithValue(getErrorMessage(error));
     }
-})
+});
+
+export const getAllRequests = createAsyncThunk('admin/admin-get-requests', async (_,thunkApi)=>{
+    try {
+        const response = await adminService.getAllRequests();
+        return response;
+    } catch (error) {
+        return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+});
+
+export const deleteUserRequest = createAsyncThunk('admin/admin-delete-request', async ({userRequestId,requestId}:{userRequestId:string,requestId:string},thunkApi) => {
+    try {
+        const response = await adminService.deleteUserRequest(userRequestId,requestId);
+        return response;
+    } catch (error) {
+        return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+});
 
 const adminSlice = createSlice({
     name: 'admin',
@@ -162,6 +181,43 @@ const adminSlice = createSlice({
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload  || action.payload.message;
+            })
+            .addCase(getAllRequests.pending, (state) => {
+                state.isLoading = true;
+                state.isError = false;
+                state.isSuccess = false;
+            })
+            .addCase(getAllRequests.fulfilled, (state, action:PayloadAction<AdminReponse>) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.requests = action.payload.data.sellerRequests;
+                state.message = action.payload.message;
+                console.log(state.requests)
+
+            })
+            .addCase(getAllRequests.rejected, (state, action:PayloadAction<any>) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            .addCase(deleteUserRequest.pending, (state) => {
+                state.isLoading = true;
+                state.isError = false;
+                state.isSuccess = false;
+            })
+            .addCase(deleteUserRequest.fulfilled, (state, action:PayloadAction<AdminReponse>) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.message = action.payload.message;
+                toast.success(state.message);
+
+            })
+            .addCase(deleteUserRequest.rejected, (state, action:PayloadAction<any>) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
             })
 },
 });

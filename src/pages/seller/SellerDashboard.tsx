@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import productSlice from "../../store/features/product/productSlice";
 import { FaFileExcel } from "react-icons/fa";
 import exportToCSV from "../../utils/excel/exportToCSV";
+import exportToExcel from "../../utils/excel/exportToExcel";
 
 const SellerDashboard = () => {
   const { OrderHistory, message, data, isError } = useAppSelector(
@@ -164,7 +165,7 @@ const SellerDashboard = () => {
       );
 
   const exportStats = () => {
-    exportToCSV(OrderHistory)
+    exportToExcel(OrderHistory)
   }
 
   return (

@@ -2,41 +2,46 @@
 import * as XLSX from 'xlsx';
 
 const exportToExcel = (orderHistory) => {
-  const orderData = orderHistory.order.map(order => {
-    // Parse the products string to JSON
-    const products = JSON.parse(order.products);
-    
-    return products.map(product => ({
-      orderId: order.id,
-      cartId: order.cartId,
-      shopId: order.shopId,
-      orderDate: order.orderDate,
-      paymentMethodId: order.paymentMethodId,
-      status: order.status,
-      shippingProcess: order.shippingProcess,
-      expectedDeliveryDate: order.expectedDeliveryDate,
-      createdAt: order.createdAt,
-      updatedAt: order.updatedAt,
-      productId: product.id,
-      productName: product.name,
-      productPrice: product.price,
-      productDiscount: product.discount,
-      productQuantity: product.quantity,
-      productTotalPrice: product.totalPrice,
-      productDescription: product.description,
-      productImage: product.image,
-    }));
-  }).flat(); // Flatten the array of arrays
+  const orders = orderHistory.order;
+  const rows = [
+    [
+      'Order ID',
+      'Order Date',
+      'Expected Delivery Date',
+      'Order Status',
+      'Payment Method',
+      'Products',
+      'Shipping Status'
+    ]
+  ];
 
-  // Convert the JSON data to a worksheet
-  const worksheet = XLSX.utils.json_to_sheet(orderData);
+  orders.forEach(order => {
+    let productsInfo = '';
+    
+    if (Array.isArray(order.products)) {
+      productsInfo = order.products.map(p => `${p.productId}(${p.status})`).join(', ');
+    }
+
+    rows.push([
+      order.id,
+      new Date(order.orderDate).toLocaleString(),
+      new Date(order.expectedDeliveryDate).toLocaleString(),
+      order.status,
+      order.paymentMethodId,
+      productsInfo,
+      order.shippingProcess
+    ]);
+  });
+
+  // Create a worksheet from the rows
+  const worksheet = XLSX.utils.aoa_to_sheet(rows);
 
   // Create a new workbook and append the worksheet
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, worksheet, 'OrderHistory');
 
   // Export the workbook to an Excel file
-  XLSX.writeFile(workbook, 'OrderHistory.xlsx');
+  XLSX.writeFile(workbook, 'seller_orders.xlsx');
 };
 
 export default exportToExcel;

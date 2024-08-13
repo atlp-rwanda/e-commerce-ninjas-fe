@@ -1,0 +1,167 @@
+.user-details {
+    height: 50rem;
+    width: 74vw;
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+    border-radius: 10px;
+  
+    .user-image {
+        width: 40%;
+      img {
+        width: 100%;
+        border-radius: 10px;
+        object-fit: cover;
+        margin-bottom: 4rem;
+      }
+      .payment-info {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        // align-items: center;
+        background-color: #efefef;
+        padding: 2rem;
+        border-radius: 10px;
+        
+        h4 {
+          font-size: 16px;
+          margin-bottom: 8px;
+          color: $primary-color;
+        }
+        strong{
+          font-size: 1.4rem;
+          font-weight: 500;
+        }
+        p{
+            font-size: 1.4rem;
+        }
+        table{
+          width: 100%;
+          height: 100%;
+          border-collapse: collapse;
+
+          th:first-child{
+            text-align: left;
+          }
+        }
+    
+        .pdf-icon {
+          display: flex;
+          flex-direction: column;
+          font-size: 16px;
+          color: $primary-color;
+          margin-top: -1.5rem;
+          align-items: center;
+          .pdf{
+            margin-top: 1rem;
+            font-size: 50px;
+            margin-left: -1rem;
+          }
+        }
+
+      }
+    }
+  
+    .user-info {
+      width: 50%;
+      background-color: #efefef;
+      padding: 2rem;
+      border-radius: 1rem;
+      position: relative;
+      strong{
+        font-size: 1.4rem;
+        font-weight: 500;
+        padding-bottom: 1rem;
+      }
+      p{
+        font-size: 1.4rem;
+      }
+      h2{
+        font-size: 2rem;
+        color: $primary-color;
+        margin-bottom: 1rem;
+        text-align: left;
+      }
+      table{
+        width: 100%;
+        border-collapse: collapse;
+        th:first-child{
+          width: 30%;
+        }
+        td{
+          padding: .5rem 0;
+        }
+      }
+      &__table{
+        margin-bottom: 1rem;
+      }
+      .shop__info{
+        margin-bottom: 1rem;
+      }
+      .contact-info {
+        margin-bottom: 1rem;
+      }
+      .buttons{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 1.5rem 0 1.5rem 0;
+
+        button{
+          background-color: #fff;
+          color: $primary-color;
+          padding: 1rem 2rem;
+          border: none;
+          border-radius: 5px;
+          font-size: 1.4rem;
+          cursor: pointer;
+          transform: none;
+          box-shadow: .3rem .3rem .3rem rgba(0, 0, 0, 0.217);
+          transition: all 0.5s ease-in-out;
+
+        }
+        .btn-delete:hover{
+          background-color: $red-color;
+          color: $white-color;
+          box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.3);
+          transform: scale(1.1);
+          transition: all 0.5s ease-in-out;
+        }
+        div{
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 50%;
+          .btn-cancel:hover{
+            background-color: $fifth-color;
+            color: $white-color;
+            box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.3);
+            transform: scale(1.1);
+            transition: all 0.5s ease-in-out;
+          }
+          .btn-approve:hover{
+            background-color: $green-color;
+            color: $white-color;
+            box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.3);
+            transform: scale(1.1);
+            transition: all 0.5s ease-in-out;
+          }
+        }
+      }
+      .approval__badge{
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        font-size: 8rem;
+      }
+      .reject-badge{
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        width: 8rem;
+        height: 8rem;
+      }
+    }
+  }
+  

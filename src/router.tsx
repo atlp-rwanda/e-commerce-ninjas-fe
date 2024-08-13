@@ -11,24 +11,27 @@ import { ResendEmail } from './components/ResendEmail';
 import GoogleCallback from './components/GoogleCallback';
 import SendResetPasswordLink from './pages/SendResetPasswordLink';
 import ResetPassword from './pages/ResetPassword';
-import { ProtectedRoute } from "./utils/protectRoute/ProtectedRoute";
+import { ProtectedRoute } from './utils/protectRoute/ProtectedRoute';
 import ViewProduct from './pages/ViewProduct';
 import Login from './pages/Login';
 import UserViewCart from './pages/UserViewCart';
-import Search from "./pages/Search";
-import SellerViewProduct from "./pages/seller/SellerViewProduct";
-import SellerCollection from "./pages/seller/SellerCollection";
-import { SellerLayout } from "./components/layout/SellerLayout";
-import SellerDashboard from "./pages/seller/SellerDashboard";
-import { AdminDashboard } from "./pages/admin/Dashboard";
-import { OverViewDashboard } from "./pages/admin/OverView";
-import Users from "./pages/admin/Users";
+import Search from './pages/Search';
+import SellerViewProduct from './pages/seller/SellerViewProduct';
+import SellerCollection from './pages/seller/SellerCollection';
+import { SellerLayout } from './components/layout/SellerLayout';
+import SellerDashboard from './pages/seller/SellerDashboard';
+import { AdminDashboard } from './pages/admin/Dashboard';
+import { OverViewDashboard } from './pages/admin/OverView';
+import Users from './pages/admin/Users';
 import Logout from './components/layout/Logout';
 import UserProfile from './pages/UserEditProfile';
 import ProductsPage from './pages/Products';
+import TrackOrder from './pages/trackOrder';
+import UserVIewOrders from './pages/UserViewOrders';
 import { SellerOnboarding } from './pages/SellerOnboarding';
 import { Requests } from './pages/admin/Requests';
 import { ViewRequest } from './pages/admin/VewRequest';
+import { AboutUs } from './pages/AboutUs';
 const AppRouter: React.FC = () => {
   return (
     <div>
@@ -41,17 +44,39 @@ const AppRouter: React.FC = () => {
           <Route path="login" element={<Login />} />
           <Route path="verify-email" element={<EmailVerifying />} />
           <Route path="resend-email" element={<ResendEmail />} />
-          <Route path="/api/auth/verify-email/:token" element={<VerifyEmail />} />
-          <Route path="/api/auth/google/callback" element={<GoogleCallback />} />
+          <Route
+            path="/api/auth/verify-email/:token"
+            element={<VerifyEmail />}
+          />
+          <Route
+            path="/api/auth/google/callback"
+            element={<GoogleCallback />}
+          />
           <Route path="/reset-password" element={<SendResetPasswordLink />} />
-          <Route path="/api/auth/reset-password/:token" element={<ResetPassword />} />
+          <Route
+            path="/api/auth/reset-password/:token"
+            element={<ResetPassword />}
+          />
           <Route path="product/:id" element={<ViewProduct />} />
           <Route path="search" element={<Search />} />
           <Route path="logout" element={<Logout />} />
           <Route path="shopping-cart" element={<UserViewCart />} />
-          <Route path="/profile-settings" element={<ProtectedRoute redirectPath="/login"><UserProfile /></ProtectedRoute>}/>
+          <Route path="my-orders" element={<UserVIewOrders />} />
+          <Route
+            path="trackOrder/:orderId/:productId"
+            element={<TrackOrder />}
+          />
+          <Route
+            path="/profile-settings"
+            element={
+              <ProtectedRoute redirectPath="/login">
+                <UserProfile />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/become-seller" element={<SellerOnboarding />}/>
-          <Route path="*" element={<NotFound />} />
+          <Route path="/about-us" element={<AboutUs />}/>
+          <Route path="*" element={<NotFound redirectPath="/"/>} />
         
         </Route>
         <Route path="/seller" element={<SellerLayout />}>
@@ -61,8 +86,16 @@ const AppRouter: React.FC = () => {
           <Route path="products" element={<SellerCollection />} />
         </Route>
         <Route path="/admin">
-         <Route index element={<Navigate to="dashboard" replace />} />
-          <Route path="dashboard" element={<ProtectedRoute redirectPath="/login"><AdminDashboard /></ProtectedRoute>}>
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="*" element={<NotFound redirectPath="/admin"/>} />
+          <Route
+            path="dashboard"
+            element={
+              <ProtectedRoute redirectPath="/login">
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<OverViewDashboard />} />
             <Route path="users" element={<Users />} />
             <Route path="requests" element={<Requests />} />

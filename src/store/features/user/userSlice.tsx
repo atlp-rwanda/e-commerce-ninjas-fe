@@ -141,7 +141,7 @@ const userSlice = createSlice({
             .addCase(userSubmitSellerRequest.fulfilled, (state, action: PayloadAction<any>)=>{
                 state.isLoading = false,
                 state.isError = false,
-                state.user = action.payload,
+                state.user = action.payload.data.sellerRequests,
                 state.isSuccess = true
                 state.message = action.payload.message
                 console.log(state.user)

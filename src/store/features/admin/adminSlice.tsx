@@ -9,6 +9,7 @@ const initialState: IAdminInitialResponse = {
     message: "",
     users: null,
     requests: null,
+    request:null,
     isError: false,
     isLoading: false,
     isSuccess: false,
@@ -83,6 +84,24 @@ export const deleteUserRequest = createAsyncThunk('admin/admin-delete-request', 
         return thunkApi.rejectWithValue(getErrorMessage(error));
     }
 });
+
+export const getRequest = createAsyncThunk('admin/admin-get-request', async(userRequestId:string ,thunkApi)=>{
+    try {
+        const response = await adminService.getRequest(userRequestId);
+        return response
+    } catch (error) {
+        return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+});
+
+export const acceptOrRejectRequest = createAsyncThunk('admin/admin-accept-or-reject-request', async({userRequestId, requestStatus}:{userRequestId:string, requestStatus:string},thunkApi)=>{
+    try {
+        const response = await adminService.acceptOrRejectRequest(userRequestId, requestStatus);
+        return response;
+    } catch (error) {
+        return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+})
 
 const adminSlice = createSlice({
     name: 'admin',
@@ -218,6 +237,46 @@ const adminSlice = createSlice({
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;
+            })
+            .addCase(getRequest.pending, (state) => {
+                state.isLoading = true;
+                state.isError = false;
+                state.isSuccess = false;
+            })
+            .addCase(getRequest.fulfilled, (state, action:PayloadAction<AdminReponse>) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.request = action.payload.data.sellerRequest;
+                state.message = action.payload.message;
+                toast.success(state.message);
+
+            })
+            .addCase(getRequest.rejected, (state, action:PayloadAction<any>) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
+            })
+            .addCase(acceptOrRejectRequest.pending, (state) => {
+                state.isLoading = true;
+                state.isError = false;
+                state.isSuccess = false;
+            })
+            .addCase(acceptOrRejectRequest.fulfilled, (state, action:PayloadAction<AdminReponse>) => {
+                state.isLoading = false;
+                state.isError = false;
+                state.isSuccess = true;
+                state.request = action.payload.data.sellerRequest;
+                state.message = action.payload.message;
+                toast.success(state.message);
+                console.log(state.request);
+
+            })
+            .addCase(acceptOrRejectRequest.rejected, (state, action:PayloadAction<any>) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
+                toast.error(state.message);
             })
 },
 });

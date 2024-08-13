@@ -104,7 +104,7 @@ export const AdminDashboard = () => {
                 </div>
                 <div className="icons__title__link">
                   <Link
-                    to="users"
+                    to="requests"
                     className={`text_content ${isActive === 3 ? "active" : ""}`}
                     onClick={() => handleClick(3, "/admin/dashboard/requests")}
                   >

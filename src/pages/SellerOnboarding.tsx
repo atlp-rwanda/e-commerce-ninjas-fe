@@ -10,7 +10,6 @@ export const SellerOnboarding = () => {
     const {isSuccess,isError,message} = useAppSelector((state) => state.user)
     useEffect(() => {
         dispatch(resetAuth)
-        dispatch(resetUser())
         if(isSuccess){
             toast.success(message)
         }

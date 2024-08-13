@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "module": "esnext",
     "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -14,7 +15,6 @@
     "noEmit": true,
     "jsx": "react",
     "types": ["react", "jest", "@testing-library/jest-dom","node"],
-    "target": "es2015",
     "downlevelIteration": true
   },
   "include": ["src", "src/utils/types/custom.d.ts", "**/*.ts","**/*.tsx","jest.config.ts"]

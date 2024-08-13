@@ -67,13 +67,13 @@ export interface IRequest {
   userId?: string;
   paymentMethodId?: string;
   businessName?: string;
-  tin: number;
-  rdbDocument:string;
-  terms:boolean;
-  requestStatus:string;
+  tin?: number;
+  rdbDocument?:string;
+  terms?:boolean;
+  requestStatus?:string;
   user:IUser;
-  shop: IShop;
-  paymentMethod: IPaymentMethod;
+  shop?: IShop;
+  paymentMethod?: IPaymentMethod;
 }
 
 export interface IUserData {
@@ -202,14 +202,15 @@ export interface UserService {
 
 export interface AdminReponse {
   message?: string;
-  data?: { sellerRequests?: IRequest; user?: IUser };
+  data?: { sellerRequests?: IRequest; user?: IUser ;sellerRequest?: IRequest};
   error?: string;
   status?: number;
 }
 
 export interface IAdminInitialResponse {
   users: IUser;
-  requests
+  requests: IRequest,
+  request: IRequest,
   isError: boolean | null;
   isSuccess: boolean;
   isLoading: boolean;

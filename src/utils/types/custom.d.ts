@@ -24,3 +24,4 @@ declare module '*.mp3' {
     const value: string;
     export default value;
 }
+declare module 'pdfjs-dist/legacy/build/pdf.worker.entry';

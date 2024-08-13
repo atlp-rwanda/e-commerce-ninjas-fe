@@ -35,10 +35,20 @@ const getAllRequests = async () => {
     return response.data;
 }
 
+const getRequest = async (userRequestId:string) => {
+    const response = await axiosInstance.get(`/api/user/admin-get-user-request/${userRequestId}`);
+    return response.data;
+}
+
 const deleteUserRequest = async (userRequestId:string, requestId:string) =>{
     const response = await axiosInstance.delete(`/api/user/admin-delete-user-request/${userRequestId}/${requestId}`);
     return response.data;
 };
+
+const acceptOrRejectRequest = async (userRequestId:string , requestStatus:string) =>{
+    const response = await axiosInstance.put(`/api/user/admin-accept-or-reject-request/${userRequestId}`, {requestStatus});
+    return response.data;
+}
 
 const adminService = {
     getAllUsers,
@@ -48,7 +58,9 @@ const adminService = {
     getOrderHistory,
     getAllShops,
     getAllRequests,
-    deleteUserRequest
+    deleteUserRequest,
+    getRequest,
+    acceptOrRejectRequest
 }
 
 export default adminService;

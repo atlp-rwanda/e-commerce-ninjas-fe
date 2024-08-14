@@ -187,6 +187,7 @@ export interface IAdminInitialResponse {
   isSuccess: boolean;
   isLoading: boolean;
   message: string | null;
+  passwordExpiration:null;
 }
 
 export interface ISingleProductResponse {

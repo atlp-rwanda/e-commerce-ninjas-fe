@@ -1,0 +1,99 @@
+.settings {
+    border: 1px solid $border-color;
+    width: 100%;
+    height: 100%;
+    background-color: $white-color;
+
+    h2 {
+        margin: 0;
+        padding: 2%;
+        font-size: 2.5rem;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .menu-bar {
+        display: flex;
+        margin: 0 2.5rem;
+        border-bottom: 1px solid #ddd;
+
+
+        .menu-item {
+            cursor: pointer;
+            font-size: 1.3rem;
+            p{
+                margin-right: 1rem;
+                padding: 1rem;
+                &.active {
+                    background-color: $primary-color-light;
+                    color: $primary-color;
+                    padding: 1rem;
+                    border-bottom: 1px solid $primary-color;
+                    transition: padding .2s ease-in-out;
+                }
+            }
+
+        }
+    }
+
+
+    .section_container {
+        flex-grow: 1;
+        padding: 0 2.5rem;
+        .loading__spinner{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 50rem;
+
+        }
+
+        .section-content {
+            background-color: white;
+            padding: 20px;
+
+            .password_exp{
+                background-color: $border-color;
+                padding: 2rem 5rem;
+                border-radius: .5rem;
+
+                .form-group{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 20px;
+                    label{
+                        font-size: 2.5rem;
+                        font-weight: bold;
+                    }
+                    input{
+                        padding: 10px;
+                        border: 1px solid #ddd;
+                        border-radius: 5px;
+                        font-size: 1.4rem;
+                        width: 30%;
+                    }
+                }
+                .btn{
+                    padding: 10px 20px;
+                    background-color: $primary-color;
+                    color: $white-color;
+                    border: none;
+                    border-radius: 5px;
+                    font-size: 1.6rem;
+                    width: 8rem;
+                    cursor: pointer;
+                    transition: width 0.5s linear;
+
+                    &:hover{
+                        background-color: $primary-color-dark;
+                        width: 10rem;
+                        transition: width 0.5s linear;
+                    }
+                }
+            }
+        }
+    }
+
+}

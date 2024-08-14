@@ -341,21 +341,37 @@
           }
         }
 
-        .monthDropDown {
-          .dropdown-button {
-            background-color: #ff7300;
-            color: #fff;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-
-            .arrow-down {
-              margin-left: 5px;
+        .export-section{
+          display: flex;
+          gap: 10px;
+          .monthDropDown {
+            .dropdown-button {
+              background-color: #ff7300;
+              color: #fff;
+              border: none;
+              padding: 5px 10px;
+              border-radius: 5px;
+              cursor: pointer;
+              font-size: 14px;
+  
+              .arrow-down {
+                margin-left: 5px;
+              }
             }
           }
+          .export-btn{
+            background-color: #0f8615;
+              color: #fff;
+              border: none;
+              padding: 5px 10px;
+              border-radius: 5px;
+              cursor: pointer;
+              font-size: 14px;
+              display: flex;
+              gap: 4px;
+          }
         }
+
       }
     }
 }

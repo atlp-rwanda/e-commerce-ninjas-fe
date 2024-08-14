@@ -19,9 +19,7 @@
       flex-direction: column;
       height: 100%;
       width: 100%;
-      .dashboard,
-      .users,
-      .logout {
+      .menu__item,.logout {
         display: flex;
         align-items: center;
         padding-left: 1rem;
@@ -214,5 +212,17 @@
 .dropdown-item:hover {
   background-color: #f1f1f1;
 }
-@media only screen and (min-width: 76.8rem) {
+
+.password-expiration-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.password-expiration-input {
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }

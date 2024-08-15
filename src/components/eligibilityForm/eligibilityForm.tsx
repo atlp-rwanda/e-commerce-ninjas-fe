@@ -71,6 +71,7 @@ const EligibilityForm: React.FC<EligibilityFormProps> = ({ onNext }) => {
               value={formData.businessName}
               onChange={handleChange}
               placeholder="Business Name"
+              required
             />
           </div>
           <div className="eligibility-class-div">
@@ -82,6 +83,7 @@ const EligibilityForm: React.FC<EligibilityFormProps> = ({ onNext }) => {
               value={formData.Tin}
               onChange={handleChange}
               placeholder="TIN"
+              required
             />
           </div>
           <div className="eligibility-class-div">
@@ -93,6 +95,7 @@ const EligibilityForm: React.FC<EligibilityFormProps> = ({ onNext }) => {
               onChange={handleChange}
               placeholder="Business Description"
               className="desc"
+              required
             />
           </div>
           <div className="eligibility-class-div">

@@ -12,6 +12,7 @@ import {
   styled,
   stepConnectorClasses,
   StepIconProps,
+  LinearProgress,
 } from "@mui/material";
 import EligibilityForm from "../eligibilityForm/eligibilityForm";
 import PaymentMethods from "../paymentMethods/PaymentMethods";
@@ -23,7 +24,7 @@ import {
   IPaymentData,
   ITermsData,
 } from "../../utils/types/store";
-import { useAppDispatch } from "../../store/store";
+import { useAppDispatch,useAppSelector } from "../../store/store";
 import { userSubmitSellerRequest } from "../../store/features/user/userSlice";
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
@@ -106,6 +107,7 @@ const steps = [
 
 const HorizontalStepper = () => {
   const dispatch = useAppDispatch();
+  const {isLoading} = useAppSelector((state)=>state.user)
   const [activeStep, setActiveStep] = useState<number>(0);
   const [collectedData, setCollectedData] = useState<ICollectedData>({
     eligibility: {
@@ -183,6 +185,20 @@ const HorizontalStepper = () => {
   },[sendData])
   return (
     <div className="horizontalStepper">
+      {isLoading && (
+          <div className="table__spinner">
+            <Box sx={{ width: "100%" }}>
+              <LinearProgress
+                sx={{
+                  backgroundColor: "#fff",
+                  "& .MuiLinearProgress-bar": {
+                    backgroundColor: "#ff8a46",
+                  },
+                }}
+              />
+            </Box>
+          </div>
+        )}
       <Stepper
         activeStep={activeStep}
         alternativeLabel

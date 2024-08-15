@@ -1,30 +1,38 @@
 /* eslint-disable */
-import { IconButton, Tooltip } from "@mui/material";
-import React from "react";
+import { CircularProgress, IconButton, Tooltip } from "@mui/material";
+import React, { useState } from "react";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { IRequest } from "../utils/types/store";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { acceptOrRejectRequest, deleteUserRequest } from "../store/features/admin/adminSlice";
 import { FcApproval } from "react-icons/fc";
 import rejected from "../../public/assets/images/rejected.png";
+import { IoCloseCircleOutline } from "react-icons/io5";
+
 import { useNavigate } from "react-router-dom";
+import { FullScreenPdfView } from "./FullScreenPdfView/FullScreenPdfView";
 const UserDetails: React.FC<any> = ({ Request }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false)
   const { request } = useAppSelector((state) => state.admin)
   const UserRequest = Request ? Request : request;
-  const handleOpenDocument = (pdfBuffer: { type: string, data: number[] }) => {
-    const byteArray = new Uint8Array(pdfBuffer.data);
-    const blob = new Blob([byteArray], { type: "application/pdf" });
-    const url = URL.createObjectURL(blob);
+  const handleOpenDocument = (url: string) => {
     window.open(url, "_blank", "noopener,noreferrer");
   };
-  const handleDeleteRequest = async(UserRequest: IRequest) => {
-   const userRequestId = UserRequest.userId as string;
-    const requestId = UserRequest.requestId as string;
-    await dispatch(deleteUserRequest({userRequestId, requestId}));
-    navigate('/admin/dashboard/requests')
-    console.log("Delete request for user ID:", UserRequest.userId);
+  const handleClose = () => {
+    setOpen(false);
+  }
+  const handleOpen = () => {
+    setOpen(true);
+  }
+  const handleDeleteRequest = async (UserRequest: IRequest) => {
+    const userRequestId = UserRequest.userId as string;
+    const requestId = UserRequest.id as string;
+    await dispatch(deleteUserRequest({ userRequestId, requestId }));
+    setTimeout(() => {
+      navigate('/admin/dashboard/requests')
+    }, 5000)
   };
   const handleCancelOrApproveRequest = (UserRequest: IRequest, action: string) => {
     const userRequestId = UserRequest.userId as string;
@@ -55,10 +63,18 @@ const UserDetails: React.FC<any> = ({ Request }) => {
                 <td><p>{UserRequest?.tin}</p></td>
                 <td rowSpan={3}>
                   <Tooltip title="Open PDF">
-                    <IconButton onClick={() => handleOpenDocument(UserRequest?.rdbDocument)}>
+                    <IconButton onClick={handleOpen}>
                       <PictureAsPdfIcon sx={{ fontSize: "4rem", color: "#ff6d18" }} />
                     </IconButton>
                   </Tooltip>
+                  {
+                    open && (
+                      <div className="view__pdf">
+                        <FullScreenPdfView pdfUrl={UserRequest?.rdbDocument}/>
+                        <IoCloseCircleOutline onClick={handleClose} className="close__icon"/>
+                      </div>
+                    )
+                  }
                 </td>
               </tr>
               <tr>
@@ -106,7 +122,7 @@ const UserDetails: React.FC<any> = ({ Request }) => {
                   <strong>Terms:</strong>
                 </td>
                 <td>
-                  <p style={{color:`${UserRequest?.terms === true ? "green" : "red"}`}}>{UserRequest?.terms === true ? "Accepted" : "Not Accepted"}</p>
+                  <p style={{ color: `${UserRequest?.terms === true ? "green" : "red"}` }}>{UserRequest?.terms === true ? "Accepted" : "Not Accepted"}</p>
                 </td>
               </tr>
             </tbody>
@@ -277,7 +293,6 @@ const UserDetails: React.FC<any> = ({ Request }) => {
           </div>
         </div>
         {UserRequest.requestStatus === "Accepted" ? <FcApproval className="approval__badge" /> : UserRequest.requestStatus === "Rejected" ? <img src={rejected} alt="rejected" className="reject-badge" /> : null}
-
 
       </div>
     </div>

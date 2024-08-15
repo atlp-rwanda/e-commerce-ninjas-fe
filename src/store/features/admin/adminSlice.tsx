@@ -210,15 +210,16 @@ const adminSlice = createSlice({
                 state.isLoading = false;
                 state.isError = false;
                 state.isSuccess = true;
-                state.requests = action.payload.data.sellerRequests;
+                state.requests = action.payload.data.sellerProfiles;
                 state.message = action.payload.message;
-                console.log(state.requests)
+                toast.success(state.message);
 
             })
             .addCase(getAllRequests.rejected, (state, action:PayloadAction<any>) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;
+                toast.error(state.message)
             })
             .addCase(deleteUserRequest.pending, (state) => {
                 state.isLoading = true;

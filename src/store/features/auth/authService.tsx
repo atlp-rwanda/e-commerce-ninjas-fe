@@ -19,7 +19,7 @@ const login = async (userData: IUser) => {
 const logout = async () => {
   const response = await axiosInstance.post("/api/auth/logout");
   return response.data;
-}
+};
 
 const fetchUserDetails = async (token: string) => {
   const response = await axiosInstance.get("/api/user/user-get-profile", {
@@ -70,17 +70,23 @@ const resetPassword = async (token: string, password: string) => {
 };
 
 const verifyOTP = async (userId: string, otp: string) => {
-  const response = await axiosInstance.post(
-    `/api/auth/verify-otp/${userId}`,
-    { otp }
-  );
+  const response = await axiosInstance.post(`/api/auth/verify-otp/${userId}`, {
+    otp,
+  });
   return response.data;
 };
 
 const change2FAStatus = async (newStatus: boolean) => {
-  const response = await axiosInstance.put("/api/auth/enable-2f", { is2FAEnabled: newStatus });
+  const response = await axiosInstance.put("/api/auth/enable-2f", {
+    is2FAEnabled: newStatus,
+  });
   return response.data;
-}
+};
+
+const registerAsSeller = async(sellerData: any) => {
+  const response = await axiosInstance.post(`/api/auth/register-seller`, sellerData);
+  return response.data;
+};
 
 const authService = {
   register,
@@ -95,6 +101,7 @@ const authService = {
   resetPassword,
   verifyOTP,
   change2FAStatus,
+  registerAsSeller
 };
 
 export default authService;

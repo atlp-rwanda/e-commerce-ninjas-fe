@@ -1,12 +1,17 @@
-/* eslint-disable */
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const ESLintPlugin = require('eslint-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const { HotModuleReplacementPlugin } = require('webpack');
+/* eslint-disable import/no-extraneous-dependencies */
+import path from 'path';
+import { Configuration as WebpackConfiguration, HotModuleReplacementPlugin } from 'webpack';
+import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import ESLintPlugin from 'eslint-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 
-module.exports = {
+interface Configuration extends WebpackConfiguration {
+  devServer?: WebpackDevServerConfiguration;
+}
+
+const config: Configuration = {
   mode: 'development',
   output: {
     publicPath: '/',
@@ -114,3 +119,5 @@ module.exports = {
     poll: 1000,
   }
 };
+
+export default config;

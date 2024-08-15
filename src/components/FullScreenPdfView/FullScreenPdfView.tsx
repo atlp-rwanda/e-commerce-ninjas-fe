@@ -1,47 +1,53 @@
 /* eslint-disable */
-import React, { useEffect, useRef } from "react";
-import { Document, Page,pdfjs } from "react-pdf";
-import { FaExpand } from "react-icons/fa"; 
+
+import React, { useRef, useState } from "react";
+import { Document, Page, pdfjs } from "react-pdf";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import 'react-pdf/dist/Page/TextLayer.css';
+import 'react-pdf/dist/Page/AnnotationLayer.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-export const FullScreenPdfView = ({ pdfUrl,onClose }) => {
+
+export const FullScreenPdfView = ({ pdfUrl }) => {
   const pdfContainerRef = useRef(null);
 
-  useEffect(()=>{
+  const [numPages, setNumPages] = useState<number>(0);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [scale, setScale] = useState<number>(1);
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        if (document.fullscreenElement) {
-          document.exitFullscreen().finally(onClose);
-          console.log("Escape")
-        }
-      }
-    };
+  function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
+    setNumPages(numPages);
+    // adjustScale();
+  }
 
-    document.addEventListener("keydown", handleKeyDown);
+  const adjustScale = () => {
+    if (pdfContainerRef.current) {
+      const containerWidth = pdfContainerRef.current.clientWidth;
+      setScale(containerWidth / 600);
+    }
+  };
 
-      if (pdfContainerRef.current) {
-        const element = pdfContainerRef.current;
-        if (element.requestFullscreen) {
-          element.requestFullscreen();
-        } else if (element.mozRequestFullScreen) { 
-          element.mozRequestFullScreen();
-        } else if (element.webkitRequestFullscreen) { 
-          element.webkitRequestFullscreen();
-        } else if (element.msRequestFullscreen) { 
-          element.msRequestFullscreen();
-        }
-      };
-      return () => {
-        document.removeEventListener("keydown", handleKeyDown);
-      };
-  },[onClose])
+  const goToPrevPage = () => {
+    setPageNumber((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const goToNextPage = () => {
+    setPageNumber((prevPage) => Math.min(prevPage + 1, numPages));
+  };
 
   return (
-    <div  ref={pdfContainerRef}>
-      <Document file={pdfUrl}>
-        <Page pageNumber={1} />
-      </Document>
+    <div ref={pdfContainerRef} style={{width:'100%', height: '100%', overflow: 'auto' }}>
+      <div className="pageNumber">
+        <button onClick={goToPrevPage} disabled={pageNumber <= 1}>
+          <IoIosArrowBack className="pageNumber__icon"/>
+        </button>
+        <Document file={pdfUrl} onLoadSuccess={onDocumentLoadSuccess}>
+          <Page pageNumber={pageNumber}  />
+        </Document>
+        <button onClick={goToNextPage} disabled={pageNumber >= numPages}>
+          <IoIosArrowForward className="pageNumber__icon"/>
+        </button>
+      </div>
     </div>
   );
 };

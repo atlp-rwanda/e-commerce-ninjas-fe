@@ -202,7 +202,7 @@ export interface UserService {
 
 export interface AdminReponse {
   message?: string;
-  data?: { sellerRequests?: IRequest; user?: IUser ;sellerRequest?: IRequest};
+  data?: { sellerProfiles?: IRequest; user?: IUser ;sellerRequest?: IRequest};
   error?: string;
   status?: number;
 }

@@ -176,6 +176,15 @@ export const change2FAStatus = createAsyncThunk(
   }
 );
 
+export const registerAsSeller = createAsyncThunk("auth/register-seller", async(sellerData:any,thunkApi) => {
+  try {
+    const response = await authService.registerAsSeller(sellerData);
+    return response;
+  } catch (error) {
+    return thunkApi.rejectWithValue(getErrorMessage(error));
+  }
+});
+
 const userSlice = createSlice({
   name: "auth",
   initialState,
@@ -213,6 +222,23 @@ const userSlice = createSlice({
         state.message = action.payload.message;
       })
       .addCase(registerUser.rejected, (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(registerAsSeller.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.isSuccess = false;
+      })
+      .addCase(registerAsSeller.fulfilled, (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.message = action.payload.message;
+        console.log(action.payload);
+      })
+      .addCase(registerAsSeller.rejected, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;

@@ -18,6 +18,9 @@ import {
 } from "../../store/features/product/sellerCollectionProductsSlice";
 import { useNavigate } from "react-router-dom";
 import productSlice from "../../store/features/product/productSlice";
+import { FaFileExcel } from "react-icons/fa";
+import exportToCSV from "../../utils/excel/exportToCSV";
+import exportToExcel from "../../utils/excel/exportToExcel";
 
 const SellerDashboard = () => {
   const { OrderHistory, message, data, isError } = useAppSelector(
@@ -52,7 +55,7 @@ const SellerDashboard = () => {
   const [revenue, setRevenue] = useState(0);
   const [percentage, setPercentage] = useState(0);
   const [orderPercentage, setOrderPercentage] = useState(0);
-  const [productPercentage,SetProductPercentage] = useState(0);
+  const [productPercentage, SetProductPercentage] = useState(0);
 
   useEffect(() => {
     dispatch(sellerGetOrderHistory());
@@ -88,7 +91,7 @@ const SellerDashboard = () => {
           setOrderPercentage(80)
           SetProductPercentage(76)
         }
-        if ( isError && OrderHistory == null && message === "No shop found"){
+        if (isError && OrderHistory == null && message === "No shop found") {
           setNumberOfOrders(0);
           setNumberOfProducts(0);
           setOrderStats(predefinedMonths);
@@ -103,7 +106,7 @@ const SellerDashboard = () => {
     } catch (error) {
       console.error("Failed to fetch data:", error);
     }
-  }, [OrderHistory,isError,message]);
+  }, [OrderHistory, isError, message]);
 
   const MonthDropDown = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -158,8 +161,12 @@ const SellerDashboard = () => {
     selectedMonth === "All"
       ? orderStats
       : orderStats.filter(
-          (stat) => stat.name === selectedMonth.substring(0, 3)
-        );
+        (stat) => stat.name === selectedMonth.substring(0, 3)
+      );
+
+  const exportStats = () => {
+    exportToExcel(OrderHistory)
+  }
 
   return (
     <>
@@ -174,7 +181,7 @@ const SellerDashboard = () => {
           <Card
             title="Total Revenue"
             value={`${revenue} RWF`}
-            percentage= {`${percentage}`}
+            percentage={`${percentage}`}
             isPositive={false}
           />
           <Card
@@ -194,7 +201,10 @@ const SellerDashboard = () => {
                 <span className="dot cancelled"></span> Cancelled
               </div>
             </div>
-            <MonthDropDown />
+            <div className="export-section">
+              <MonthDropDown />
+              <button type="button" className="export-btn" onClick={exportStats}><FaFileExcel /> EXPORT</button>
+            </div>
           </div>
           <ResponsiveContainer width="99%" height={250}>
             <BarChart

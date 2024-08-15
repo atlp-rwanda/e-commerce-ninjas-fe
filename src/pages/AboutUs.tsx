@@ -8,7 +8,7 @@ export const AboutUs = () => {
   const teamMembers = [
     {
       name: "Aime Patrick",
-      image: "https://via.placeholder.com/150",
+      image: "https://photos.google.com/photo/AF1QipNiI33eOdRoks7ddEFU9Rp4XoV3sIUBxS5RCXCG",
       position: "Full Stack Developer",
       linkedIn: "www.linkedin.com/in/aime-patrick-393ba5226",
       github: "https://github.com/Aime-Patrick",

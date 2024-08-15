@@ -32,6 +32,8 @@ import { SellerOnboarding } from './pages/SellerOnboarding';
 import { Requests } from './pages/admin/Requests';
 import { ViewRequest } from './pages/admin/VewRequest';
 import { AboutUs } from './pages/AboutUs';
+import { SellerRegistrationPage } from './pages/seller/SellerRegistrationPage';
+
 const AppRouter: React.FC = () => {
   return (
     <div>
@@ -74,10 +76,11 @@ const AppRouter: React.FC = () => {
               </ProtectedRoute>
             }
           />
-          <Route path="/become-seller" element={<SellerOnboarding />}/>
-          <Route path="/about-us" element={<AboutUs />}/>
-          <Route path="*" element={<NotFound redirectPath="/"/>} />
-        
+          <Route path="/become-seller" element={<SellerOnboarding />} />
+          <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/register/seller" element={<SellerRegistrationPage />} />
+          <Route path="*" element={<NotFound redirectPath="/" />} />
+
         </Route>
         <Route path="/seller" element={<SellerLayout />}>
           <Route index element={<Navigate to="dashboard" replace />} />
@@ -87,7 +90,7 @@ const AppRouter: React.FC = () => {
         </Route>
         <Route path="/admin">
           <Route index element={<Navigate to="dashboard" replace />} />
-          <Route path="*" element={<NotFound redirectPath="/admin"/>} />
+          <Route path="*" element={<NotFound redirectPath="/admin" />} />
           <Route
             path="dashboard"
             element={

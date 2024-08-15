@@ -3,11 +3,12 @@ import React, { useEffect, useState } from "react";
 import { Checkbox, FormControlLabel, Box } from "@mui/material";
 
 interface PaymentMethodsProps {
-  onNext: (data :{
+  onNext: (data: {
     mobilePayment: boolean;
     bankPayment: boolean;
     mobileNumber: string;
     bankAccount: string;
+    bankName:string;
   }) => void;
 }
 
@@ -19,6 +20,7 @@ interface PaymentMethodsState {
 interface PaymentDetailsState {
   mobileNumber: string;
   bankAccount: string;
+  bankName: string;
 }
 
 const PaymentMethods: React.FC<PaymentMethodsProps> = ({ onNext }) => {
@@ -29,6 +31,7 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({ onNext }) => {
 
   const [paymentDetails, setPaymentDetails] = useState<PaymentDetailsState>({
     mobileNumber: "",
+    bankName: "",
     bankAccount: "",
   });
 
@@ -98,24 +101,46 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({ onNext }) => {
         label="Bank Payment"
       />
       {paymentMethods.bankPayment && (
-        <input
-          type="text"
-          id="bankAccount"
-          name="bankAccount"
-          placeholder="Bank Account Number"
-          value={paymentDetails.bankAccount}
-          onChange={handleInputChange}
-          style={{
-            marginTop: 10,
-            marginBottom: 10,
-            width: "100%",
-            border: "1px solid #ff6d18",
-            padding: "1rem",
-            borderRadius: "8px",
-            fontSize: "1.2rem",
-            fontWeight: "bold",
-          }}
-        />
+        <div>
+          <input
+            type="text"
+            id="bankName"
+            name="bankName"
+            placeholder="Bank Name"
+            value={paymentDetails.bankName}
+            onChange={handleInputChange}
+            style={{
+              marginTop: 10,
+              marginBottom: 10,
+              width: "100%",
+              border: "1px solid #ff6d18",
+              padding: "1rem",
+              borderRadius: "8px",
+              fontSize: "1.2rem",
+              fontWeight: "bold",
+            }}
+            required
+          />
+          <input
+            type="text"
+            id="bankAccount"
+            name="bankAccount"
+            placeholder="Bank Account Number"
+            value={paymentDetails.bankAccount}
+            onChange={handleInputChange}
+            style={{
+              marginTop: 10,
+              marginBottom: 10,
+              width: "100%",
+              border: "1px solid #ff6d18",
+              padding: "1rem",
+              borderRadius: "8px",
+              fontSize: "1.2rem",
+              fontWeight: "bold",
+            }}
+            required
+          />
+        </div>
       )}
     </Box>
   );

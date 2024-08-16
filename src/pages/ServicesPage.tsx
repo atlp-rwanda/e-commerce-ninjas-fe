@@ -21,7 +21,7 @@ const ServicesPage: React.FC = () => {
           <div className="cards">
             <div className="icon">
               <img
-                src="https://res.cloudinary.com/djrmfg6k9/image/upload/v1723659555/Process_cmd1aq.png"
+                src="https://res.cloudinary.com/djrmfg6k9/image/upload/v1723834911/Process_1_uqwerq.png"
                 alt=""
               />
             </div>
@@ -34,7 +34,7 @@ const ServicesPage: React.FC = () => {
           <div className="cards">
             <div className="icon">
               <img
-                src="https://res.cloudinary.com/djrmfg6k9/image/upload/v1723659555/Hangar_sbn3d5.png"
+                src="https://res.cloudinary.com/djrmfg6k9/image/upload/v1723834911/Hangar_1_tzoydr.png"
                 alt=""
               />
             </div>
@@ -47,7 +47,7 @@ const ServicesPage: React.FC = () => {
           <div className="cards">
             <div className="icon">
               <img
-                src="https://res.cloudinary.com/djrmfg6k9/image/upload/v1723659124/Transaction_yjiemm.png"
+                src="https://res.cloudinary.com/djrmfg6k9/image/upload/v1723834911/Transaction_1_mkwskd.png"
                 alt=""
               />
             </div>
@@ -60,7 +60,7 @@ const ServicesPage: React.FC = () => {
           <div className="cards">
             <div className="icon">
               <img
-                src="https://res.cloudinary.com/djrmfg6k9/image/upload/v1723659812/Coin_in_Hand_tbnsa1.png"
+                src="https://res.cloudinary.com/djrmfg6k9/image/upload/v1723834910/Coin_in_Hand_1_gno7gh.png"
                 alt=""
               />
             </div>
@@ -70,7 +70,7 @@ const ServicesPage: React.FC = () => {
           <div className="cards">
             <div className="icon">
               <img
-                src="https://res.cloudinary.com/djrmfg6k9/image/upload/v1723659811/Earth_Planet_yuirf3.png"
+                src="https://res.cloudinary.com/djrmfg6k9/image/upload/v1723834910/Earth_Planet_1_uzxsfr.png"
                 alt=""
               />
             </div>
@@ -83,7 +83,7 @@ const ServicesPage: React.FC = () => {
           <div className="cards">
             <div className="icon">
               <img
-                src="https://res.cloudinary.com/djrmfg6k9/image/upload/v1723659811/Financial_Success_oispws.png"
+                src="https://res.cloudinary.com/djrmfg6k9/image/upload/v1723834910/Financial_Success_1_qb4kuu.png"
                 alt=""
               />
             </div>
@@ -96,7 +96,7 @@ const ServicesPage: React.FC = () => {
           <div className="cards">
             <div className="icon">
               <img
-                src="https://res.cloudinary.com/djrmfg6k9/image/upload/v1723660145/Security_Shield_qj1uzr.png"
+                src="https://res.cloudinary.com/djrmfg6k9/image/upload/v1723834910/Security_Shield_1_gxwapg.png"
                 alt=""
               />
             </div>
@@ -109,7 +109,7 @@ const ServicesPage: React.FC = () => {
           <div className="cards">
             <div className="icon">
               <img
-                src="https://res.cloudinary.com/djrmfg6k9/image/upload/v1723660145/Web_Accessibility_jr5ecm.png"
+                src="https://res.cloudinary.com/djrmfg6k9/image/upload/v1723834910/Web_Accessibility_1_n8fof9.png"
                 alt=""
               />
             </div>
@@ -122,7 +122,7 @@ const ServicesPage: React.FC = () => {
           <div className="cards">
             <div className="icon">
               <img
-                src="https://res.cloudinary.com/djrmfg6k9/image/upload/v1723660145/Customer_Support_prgt0m.png"
+                src="https://res.cloudinary.com/djrmfg6k9/image/upload/v1723834910/Customer_Support_1_gott5j.png"
                 alt=""
               />
             </div>

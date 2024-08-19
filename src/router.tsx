@@ -28,6 +28,7 @@ import UserProfile from './pages/UserEditProfile';
 import ProductsPage from './pages/Products';
 import TrackOrder from './pages/trackOrder';
 import UserVIewOrders from './pages/UserViewOrders';
+import ServicesPage from './pages/ServicesPage';
 import { SellerOnboarding } from './pages/SellerOnboarding';
 import { Requests } from './pages/admin/Requests';
 import { ViewRequest } from './pages/admin/VewRequest';
@@ -42,6 +43,7 @@ const AppRouter: React.FC = () => {
           <Route index element={<LandingPage />} />
           <Route path="/home" element={<LandingPage />} />
           <Route path="/products" element={<ProductsPage />} />
+          <Route path="/services" element={<ServicesPage />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="login" element={<Login />} />
           <Route path="verify-email" element={<EmailVerifying />} />

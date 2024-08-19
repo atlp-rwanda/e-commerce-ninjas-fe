@@ -16,7 +16,7 @@ interface ProductProps {
   price: string;
   stock: number;
   description: string;
-  discount: number;
+  discount?: number;
 }
 
 const Product: React.FC<ProductProps> = ({
@@ -66,7 +66,7 @@ const Product: React.FC<ProductProps> = ({
   };
 
   const truncateDescription = (desc: string, length: number) => {
-    return desc.length > length ? `${desc.substring(0, length)}...` : desc;
+    return desc?.length > length ? `${desc.substring(0, length)}...` : desc;
   };
 
   const handleAddProductToCart = async (productId: string, quantity = 1) => {

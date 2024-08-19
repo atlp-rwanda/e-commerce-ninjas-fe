@@ -28,6 +28,7 @@ import UserProfile from './pages/UserEditProfile';
 import ProductsPage from './pages/Products';
 import TrackOrder from './pages/trackOrder';
 import UserVIewOrders from './pages/UserViewOrders';
+import WishList  from './pages/wishList';
 const AppRouter: React.FC = () => {
   return (
     <div>
@@ -58,6 +59,7 @@ const AppRouter: React.FC = () => {
           <Route path="logout" element={<Logout />} />
           <Route path="shopping-cart" element={<UserViewCart />} />
           <Route path="my-orders" element={<UserVIewOrders />} />
+
           <Route
             path="trackOrder/:orderId/:productId"
             element={<TrackOrder />}
@@ -70,6 +72,7 @@ const AppRouter: React.FC = () => {
               </ProtectedRoute>
             }
           />
+          <Route path="wishList" element={<WishList />}/>
           <Route path="*" element={<NotFound />} />
         </Route>
         <Route path="/seller" element={<SellerLayout />}>
@@ -98,6 +101,7 @@ const AppRouter: React.FC = () => {
             <Route path="users" element={<Users />} />
           </Route>
         </Route>
+        
       </Routes>
     </div>
   );

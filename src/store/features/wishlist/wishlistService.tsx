@@ -15,3 +15,4 @@ export const fetchWishlist = async () => {
   const response = await axiosInstance.get('/api/shop/buyer-view-wishlist-products');
   return response.data.data.WishList.wishListProducts.map((item: any) => item.products);
 };
+

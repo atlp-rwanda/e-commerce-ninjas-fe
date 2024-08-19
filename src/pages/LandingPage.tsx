@@ -93,16 +93,9 @@ const LandingPage: React.FC = () => {
                 products
                 .slice(0,visibleProducts)
                 .map((product: any) => (
-                  <Product
-                    key={product.id}
-                    id={product.id}
-                    images={product.images}
-                    name={product.name}
-                    price={product.price}
-                    stock={Number(product.quantity)}
-                    description={product.description}
-                    discount={Number(product.discount.replace("%", ""))}
-                  />
+                  <div>
+                    
+                  </div>
                 ))}
             </div>
             {visibleProducts < products.length && ( <div className="load-more">

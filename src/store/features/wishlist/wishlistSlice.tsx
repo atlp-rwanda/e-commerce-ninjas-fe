@@ -9,6 +9,7 @@ interface WishlistState {
   isSuccess: boolean;
   isError: boolean;
   message: string;
+
 }
 
 const initialState: WishlistState = {
@@ -60,9 +61,12 @@ const wishlistSlice = createSlice({
     builder
       .addCase(fetchWishlistProducts.pending, (state) => {
         state.isLoading = true;
+        state.isError = null;
+        state.isSuccess = false;
       })
       .addCase(fetchWishlistProducts.fulfilled, (state, action) => {
         state.isLoading = false;
+        state.isError = false;
         state.isSuccess = true;
         state.items = action.payload;
       })
@@ -92,7 +96,6 @@ const wishlistSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.items = state.items.filter(item => item.id !== action.meta.arg);
-        state.message = action.payload.message;
       })
       .addCase(removeProductFromWishlist.rejected, (state, action) => {
         state.isLoading = false;

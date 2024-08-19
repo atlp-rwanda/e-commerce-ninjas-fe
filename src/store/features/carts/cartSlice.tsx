@@ -243,7 +243,7 @@ const cartSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.carts = action.payload.data.carts;
-        console.log(state.carts);
+        // console.log(state.carts);
         let cartProductsTotal = 0;
         let cartTotalAmount = 0;
         let cartsProductsList = [];

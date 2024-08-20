@@ -29,6 +29,7 @@ import ProductsPage from './pages/Products';
 import TrackOrder from './pages/trackOrder';
 import UserVIewOrders from './pages/UserViewOrders';
 import ServicesPage from './pages/ServicesPage';
+import { Settings } from './pages/admin/Settings';
 const AppRouter: React.FC = () => {
   return (
     <div>
@@ -98,6 +99,7 @@ const AppRouter: React.FC = () => {
           >
             <Route index element={<OverViewDashboard />} />
             <Route path="users" element={<Users />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
         </Route>
       </Routes>

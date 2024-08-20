@@ -11,6 +11,7 @@ const initialState: IAdminInitialResponse = {
     isError: false,
     isLoading: false,
     isSuccess: false,
+    passwordExpiration:null
 };
 
 export const getAllUsers = createAsyncThunk('admin/getAllUsers', async (_, thunkApi) => {
@@ -64,6 +65,27 @@ export const getAllShops = createAsyncThunk('admin/admin-get-shops', async (_, t
         return thunkApi.rejectWithValue(getErrorMessage(error));
     }
 })
+
+export const updateUserPasswordExpiration = createAsyncThunk(
+    'admin/updateUserPasswordExpiration',
+    async ({ minutes }: { minutes: number }, thunkApi) => {
+        try {
+            const response = await adminService.updatePasswordExpiration(minutes);
+            return response;
+        } catch (error) {
+            return thunkApi.rejectWithValue(getErrorMessage(error));
+        }
+    }
+);
+
+export const fetchPasswordExpiration = createAsyncThunk('admin/fetchPasswordExpiration', async (_, thunkApi) => {
+    try {
+        const response = await adminService.getPasswordExpiration();
+        return response.minutes;
+    } catch (error) {
+        return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+});
 
 const adminSlice = createSlice({
     name: 'admin',
@@ -162,6 +184,36 @@ const adminSlice = createSlice({
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload  || action.payload.message;
+            })
+            .addCase(updateUserPasswordExpiration.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateUserPasswordExpiration.fulfilled, (state, action: PayloadAction<AdminReponse>) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.isError = false;
+                state.message = action.payload.message;
+                toast.success(state.message);
+            })
+            .addCase(updateUserPasswordExpiration.rejected, (state, action: PayloadAction<any>) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload || action.payload.message;
+                toast.error(state.message);
+            })
+            .addCase(fetchPasswordExpiration.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(fetchPasswordExpiration.fulfilled, (state, action: PayloadAction<any>) => {
+                state.isLoading = false;
+                state.passwordExpiration = action.payload;
+            })
+           
+            .addCase(fetchPasswordExpiration.rejected, (state, action: PayloadAction<any>) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload;
+                toast.error(state.message);
             })
 },
 });

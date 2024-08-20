@@ -30,8 +30,15 @@ const getAllShops = async () => {
     return response.data;
 }
 
+const updatePasswordExpiration = async (minutes: number) => {
+    const response = await axiosInstance.put('/api/user/admin-update-password-expiration', { minutes });
+    return response.data;
+};
 
-
+const getPasswordExpiration = async () => {
+    const response = await axiosInstance.get('/api/user/admin-get-password-expiration');
+    return response.data;
+};
 
 const adminService = {
     getAllUsers,
@@ -39,7 +46,9 @@ const adminService = {
     updateUserRole,
     updateUserStatus,
     getOrderHistory,
-    getAllShops
+    getAllShops,
+    updatePasswordExpiration,
+    getPasswordExpiration,
 }
 
 export default adminService;

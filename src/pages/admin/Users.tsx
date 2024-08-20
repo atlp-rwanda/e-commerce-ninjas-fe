@@ -4,7 +4,9 @@ import Switch from "@mui/material/Switch";
 import Table from "../../components/table/Table";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import {
+  fetchPasswordExpiration,
   getAllUsers,
+  updateUserPasswordExpiration,
   updateUserRole,
   updateUserStatus,
 } from "../../store/features/admin/adminSlice";
@@ -30,6 +32,7 @@ export default function Users() {
   const [localUserState, setLocalUserState] = useState([]);
   const [open, setOpen] = useState(false);
   const [pendingRoleChange, setPendingRoleChange] = useState(null);
+
   const headers = [
     "N0",
     "Profile",

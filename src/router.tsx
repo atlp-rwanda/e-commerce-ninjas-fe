@@ -28,6 +28,7 @@ import UserProfile from './pages/UserEditProfile';
 import ProductsPage from './pages/Products';
 import TrackOrder from './pages/trackOrder';
 import UserVIewOrders from './pages/UserViewOrders';
+import ServicesPage from './pages/ServicesPage';
 import { Settings } from './pages/admin/Settings';
 const AppRouter: React.FC = () => {
   return (
@@ -37,6 +38,7 @@ const AppRouter: React.FC = () => {
           <Route index element={<LandingPage />} />
           <Route path="/home" element={<LandingPage />} />
           <Route path="/products" element={<ProductsPage />} />
+          <Route path="/services" element={<ServicesPage />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="login" element={<Login />} />
           <Route path="verify-email" element={<EmailVerifying />} />

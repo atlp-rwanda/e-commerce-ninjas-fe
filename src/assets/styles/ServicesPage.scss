@@ -1,0 +1,64 @@
+.services-container {
+  .image-container {
+    width: 100vw;
+    height: 33rem;
+    color: $white;
+    background-image: url(https://res.cloudinary.com/djrmfg6k9/image/upload/v1723647815/Rectangle_168_ztbooe.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    .service-header {
+      color: $primary-color;
+      font-size: 4rem;
+      padding: 5rem;
+    }
+    p {
+      font-size: 2.5rem;
+      padding: 1rem 5rem;
+    }
+  }
+  .services-cards {
+    display: grid;
+    justify-items: center;
+    grid-template-columns: repeat(auto-fill, minmax(35rem, 1fr));
+    gap: 3rem;
+    padding: 2rem;
+    .cards {
+      display: block;
+      width: 30rem;
+      text-align: left !important;
+      padding: 4rem;
+      margin: 3rem;
+      border-radius: 2rem;
+      border: 3px solid $third-color;
+      transition: all 0.3s ease;
+
+      &:hover {
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        border-color: $primary-color;
+        transform: translateY(-10px);
+      }
+      .icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: $primary-color;
+        width: 9rem;
+        height: 9rem;
+        border-radius: 50%;
+        color: $black;
+        img {
+          z-index: 100;
+        }
+      }
+      .card-header {
+        font-size: 2.5rem;
+        margin: 2rem 0;
+        color: $black;
+      }
+      p {
+        font-size: 1.9rem;
+        color: $secondary-color;
+      }
+    }
+  }
+}

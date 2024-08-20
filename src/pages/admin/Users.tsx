@@ -4,7 +4,9 @@ import Switch from "@mui/material/Switch";
 import Table from "../../components/table/Table";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import {
+  fetchPasswordExpiration,
   getAllUsers,
+  updateUserPasswordExpiration,
   updateUserRole,
   updateUserStatus,
 } from "../../store/features/admin/adminSlice";
@@ -21,7 +23,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
-import truncateString from "../../utils/text/truncateString";
+import {truncateString} from "../../utils/text/truncateString";
 import { Meta } from "../../components/Meta";
 
 export default function Users() {
@@ -30,6 +32,7 @@ export default function Users() {
   const [localUserState, setLocalUserState] = useState([]);
   const [open, setOpen] = useState(false);
   const [pendingRoleChange, setPendingRoleChange] = useState(null);
+
   const headers = [
     "N0",
     "Profile",

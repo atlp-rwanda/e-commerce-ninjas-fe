@@ -12,15 +12,18 @@ import {
   Box,
   Typography,
 } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { getAllTerms } from "../../store/features/admin/adminSlice";
 interface TermsProps {
-    onNext: (data:{
-        terms: boolean;
-    }) => void;
+  onNext: (data: { terms: boolean }) => void;
 }
-const TermsAndConditionsForm: React.FC<TermsProps> = ({onNext}) => {
+const TermsAndConditionsForm: React.FC<TermsProps> = ({ onNext }) => {
   const [agreed, setAgreed] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
-
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
+  const { terms } = useAppSelector((state) => state.admin);
+  const [term, setTerm] = useState<any>();
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAgreed(event.target.checked);
   };
@@ -32,13 +35,29 @@ const TermsAndConditionsForm: React.FC<TermsProps> = ({onNext}) => {
   const handleClose = () => {
     setOpen(false);
   };
-  useEffect(()=>{
-    onNext({terms:agreed});
-  },[agreed,onNext])
+  useEffect(() => {
+    onNext({ terms: agreed });
+  }, [agreed, onNext]);
+  useEffect(() => {
+    dispatch(getAllTerms());
+  }, [dispatch]);
 
+  useEffect(() => {
+    if (terms && user) {
+      const userTerms = terms.find(
+        (term) => term.type === "buyer" && user.role === "buyer"
+      );
+      if (userTerms) {
+        setTerm(userTerms);
+      }
+    }
+  }, [user, terms]);
+  
+  console.log(term);
   return (
     <Box>
-      <FormControlLabel
+      {term ? (
+        <FormControlLabel
         control={
           <Checkbox
             checked={agreed}
@@ -59,7 +78,32 @@ const TermsAndConditionsForm: React.FC<TermsProps> = ({onNext}) => {
             </Button>
           </Typography>
         }
+      />) : (
+        <FormControlLabel
+        control={
+          <Checkbox
+            checked={agreed}
+            onChange={handleCheckboxChange}
+            name="terms"
+            color="primary"
+            disabled
+          />
+        }
+        label={
+          <Typography variant="body1" sx={{ fontSize: "1.2rem" }}>
+            I agree to the{" "}
+            <Button
+              variant="text"
+              onClick={handleClickOpen}
+              sx={{ textTransform: "none", padding: 0, fontSize: "1.2rem" }}
+            >
+              Terms and Conditions
+            </Button>
+          </Typography>
+        }
       />
+      )}
+      
 
       <Dialog
         open={open}
@@ -71,23 +115,16 @@ const TermsAndConditionsForm: React.FC<TermsProps> = ({onNext}) => {
           Terms and Conditions
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="terms-and-conditions-description">
-            {/* Insert your Terms and Conditions content here */}
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-              rhoncus, arcu id consectetur scelerisque, justo urna vehicula
-              eros, at laoreet elit nulla non ligula. Fusce bibendum sem vel
-              magna blandit volutpat. Ut feugiat lobortis neque at bibendum.
-              Pellentesque habitant morbi tristique senectus et netus et
-              malesuada fames ac turpis egestas.
-            </p>
-            <p>
-              Quisque id lectus at dolor facilisis bibendum. Ut consequat velit
-              ac felis blandit, at tristique risus tempor. Nam id felis at odio
-              congue malesuada. Integer facilisis quam eu facilisis ullamcorper.
-              Praesent vitae diam nisl.
-            </p>
-          </DialogContentText>
+          {term ? (
+            <DialogContentText id="terms-and-conditions-description">
+              {/* Display the term content */}
+              {term.content}
+            </DialogContentText>
+          ) : (
+            <Typography variant="body2">
+              No terms available for your role.
+            </Typography>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

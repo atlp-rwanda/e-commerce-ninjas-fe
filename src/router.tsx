@@ -35,6 +35,7 @@ import { ViewRequest } from './pages/admin/VewRequest';
 import { AboutUs } from './pages/AboutUs';
 import { SellerRegistrationPage } from './pages/seller/SellerRegistrationPage';
 
+import { Settings } from './pages/admin/Settings';
 const AppRouter: React.FC = () => {
   return (
     <div>
@@ -105,6 +106,7 @@ const AppRouter: React.FC = () => {
             <Route path="users" element={<Users />} />
             <Route path="requests" element={<Requests />} />
             <Route path="request/:id" element={<ViewRequest />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
         </Route>
       </Routes>

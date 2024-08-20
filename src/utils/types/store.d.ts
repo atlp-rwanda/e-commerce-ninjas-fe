@@ -215,6 +215,9 @@ export interface IAdminInitialResponse {
   isSuccess: boolean;
   isLoading: boolean;
   message: string | null;
+  passwordExpiration:null;
+  terms:null;
+  term:null;
 }
 
 export interface ISingleProductResponse {

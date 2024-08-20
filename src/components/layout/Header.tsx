@@ -27,6 +27,7 @@ import logo from "../../../public/assets/images/logo.png";
 import useSocket from "../../hooks/useSocket";
 import { toast } from "react-toastify";
 import { PulseLoader } from "react-spinners";
+import HomePage from "./HomePage";
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -131,6 +132,8 @@ const Header: React.FC = () => {
   }, [user]);
 
   return (
+    <>
+    <HomePage isAuthenticated={isAuthenticated} userRole={user?.role}/>
     <header className="header">
       <div className="header__top">
         <Link className="header__logo" to="/">
@@ -390,6 +393,7 @@ const Header: React.FC = () => {
         </div>
       </div>
     </header>
+    </>
   );
 };
 

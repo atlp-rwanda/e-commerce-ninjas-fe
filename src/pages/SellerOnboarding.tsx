@@ -2,14 +2,12 @@
 import React, { useEffect } from "react";
 import VerticalStepper from "../components/vertical stepper/VerticalStepper";
 import { useAppSelector,useAppDispatch } from "../store/store";
-import { resetAuth } from "../store/features/auth/authSlice";
 import { toast } from "react-toastify";
-import { resetUser } from "../store/features/user/userSlice";
+
 export const SellerOnboarding = () => {
     const dispatch = useAppDispatch();
     const {isSuccess,isError,message} = useAppSelector((state) => state.user)
     useEffect(() => {
-        dispatch(resetAuth)
         if(isSuccess){
             toast.success(message)
         }

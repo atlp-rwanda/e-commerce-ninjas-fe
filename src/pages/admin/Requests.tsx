@@ -4,7 +4,7 @@ import { Meta } from "../../components/Meta";
 import Table from "../../components/table/Table";
 import { useAppDispatch,useAppSelector } from "../../store/store";
 import { deleteUserRequest, getAllRequests } from "../../store/features/admin/adminSlice";
-import truncateString from "../../utils/text/truncateString";
+import {truncateString} from "../../utils/text/truncateString";
 import { FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { FaDeleteLeft } from "react-icons/fa6";

@@ -7,8 +7,8 @@ import { Empty } from "antd";
 const Table = ({ headers, rows, title, tableButton }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const rowsPerPage = 10;
-  const totalPages = Math.ceil(rows.length / rowsPerPage);
-  const currentRows = rows.slice(
+  const totalPages = Math.ceil(rows?.length / rowsPerPage);
+  const currentRows = rows?.slice(
     (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage
   );
@@ -22,7 +22,7 @@ const Table = ({ headers, rows, title, tableButton }) => {
   };
   return (
     <>
-      {rows.length > 0 && <div className="table__header__">
+      {rows?.length > 0 && <div className="table__header__">
         <h2 className="table__title">{title}</h2>
         {tableButton && 
         <div className="table_button">
@@ -60,7 +60,7 @@ const Table = ({ headers, rows, title, tableButton }) => {
       </div>
       }
       <div className="table__container">
-        {rows.length <= 0 ? (
+        {rows?.length <= 0 ? (
              <div className="empty-container">
              <Empty
                image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -70,14 +70,14 @@ const Table = ({ headers, rows, title, tableButton }) => {
         ): <table className="dynamic__table">
         <thead>
           <tr className="table__header">
-            {headers.map((header, index) => (
+            {headers?.map((header, index) => (
               <th key={index}>{header}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {
-            currentRows.map((row, rowIndex) => (
+            currentRows?.map((row, rowIndex) => (
               <tr key={rowIndex} className="table__body">
                 {row.map((cell, cellIndex) => (
                   <td key={cellIndex}>{cell}</td>

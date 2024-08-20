@@ -16,7 +16,7 @@ function useAdminAuthCheck() {
 
     const checkAuth = useCallback(async () => {
         if (token) {
-            await dispatch(getUserDetails(token));
+            await dispatch(getUserDetails());
         }
         setIsChecking(false);
     }, [dispatch, token]);

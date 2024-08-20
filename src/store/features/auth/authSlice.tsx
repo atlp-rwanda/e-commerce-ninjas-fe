@@ -6,6 +6,7 @@ import { getErrorMessage } from "../../../utils/axios/axiosInstance";
 import { toast } from "react-toastify";
 
 import { resetState, RESET_STATE } from "../../actions/resetAction";
+import { storeTokenWithExpiration } from "../../../utils/protectRoute/ProtectedRoute";
 const initialState: AuthService = {
   user: null,
   isError: false,
@@ -52,9 +53,9 @@ export const loginUser = createAsyncThunk(
 
 export const getUserDetails = createAsyncThunk(
   "auth/getUserDetails",
-  async (token: string, thunkApi) => {
+  async (_, thunkApi) => {
     try {
-      const response = await authService.fetchUserDetails(token);
+      const response = await authService.fetchUserDetails();
       return response;
     } catch (error) {
       return thunkApi.rejectWithValue(getErrorMessage(error));
@@ -196,7 +197,6 @@ const userSlice = createSlice({
       state.isSuccess = false;
       state.isVerified = false;
       state.message = "";
-      state.token = "";
       state.isAuthenticated = false;
       state.error = "";
       state.fail= false;
@@ -236,13 +236,14 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.message = action.payload.message;
-        console.log(action.payload);
+        toast.success(state.message)
       })
       .addCase(registerAsSeller.rejected, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
         state.message = action.payload;
+        toast.error(state.message)
       })
       .addCase(verifyEmail.pending, (state) => {
         state.isLoading = true;
@@ -302,8 +303,8 @@ const userSlice = createSlice({
           state.isLoading = false;
           state.isSuccess = true;
           state.isAuthenticated = true;
-          state.token = action.payload.data.token;
           state.message = action.payload.message;
+          storeTokenWithExpiration(action.payload.data.token)
           toast.success(state.message)
         })
       .addCase( googleAuthCallback.rejected,(state, action: PayloadAction<any>) => {
@@ -357,7 +358,6 @@ const userSlice = createSlice({
         state.userId = action.payload.data.userId || "";
         if(state.message !== "Check your Email for OTP Confirmation"){
           state.isAuthenticated = true;
-          state.token = action.payload.data.token;
           state.user = action.payload.data.user;
         }
       })
@@ -378,7 +378,7 @@ const userSlice = createSlice({
         state.isAuthenticated = false;
         state.isSuccess = true;
         state.message = action.payload.message;
-        localStorage.clear();
+        sessionStorage.clear();
         toast.success(action.payload.message);
 
       })

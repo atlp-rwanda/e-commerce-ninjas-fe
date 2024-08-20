@@ -8,16 +8,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 const useSocket = () => {
   const dispatch = useAppDispatch();
-  const { token } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    if (!token) return;
 
     if (socket.disconnected) {
       socket.connect();
     }
 
-    joinRoom(token);
+    joinRoom();
 
     const handleNotification = (event: string) => {
       toast.success(`${event}`, {
@@ -51,7 +49,7 @@ const useSocket = () => {
       });
       disconnect();
     };
-  }, [dispatch, token]);
+  }, [dispatch]);
 
   return null;
 };

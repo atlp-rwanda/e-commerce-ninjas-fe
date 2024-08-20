@@ -21,12 +21,11 @@ const logout = async () => {
   return response.data;
 };
 
-const fetchUserDetails = async (token: string) => {
-  const response = await axiosInstance.get("/api/user/user-get-profile", {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+const fetchUserDetails = async () => {
+  const response = await axiosInstance.get("/api/user/user-get-profile");
   return response.data;
 };
+
 
 const verify = async (token: string) => {
   const response = await axiosInstance.get<IVerification>(

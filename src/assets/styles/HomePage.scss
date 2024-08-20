@@ -1,0 +1,28 @@
+.banner {
+    background-color: $primary-color;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    color: $white;
+    font-size: 2rem;
+    padding: 1rem;
+
+    .btn-link {
+        background-color: $primary-color-light;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 5px;
+        cursor: pointer;
+        color: $white;
+        transition: all 0.5s ease-in-out;
+
+        &:hover {
+            background-color: $menu-hover;
+            transition: all 0.5s ease-in-out;
+            color: $text2-color;
+
+        }
+    }
+
+}

@@ -12,7 +12,7 @@ function AdminHeader() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   useEffect(()=>{
-    dispatch(getUserDetails(localStorage.getItem('token')));
+    dispatch(getUserDetails());
     dispatch(fetchNotifications());
 },[dispatch,getUserDetails]);
 const User:any = {...user}

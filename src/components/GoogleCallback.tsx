@@ -32,7 +32,6 @@ const GoogleCallback = () => {
 
   useEffect(() => {
     if (isSuccess && isAuthenticated) {
-      localStorage.setItem("token", token);
       navigate("/home");
     }
     if (isError) {

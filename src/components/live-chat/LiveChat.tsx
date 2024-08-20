@@ -62,9 +62,8 @@ const LiveChat = () => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
     setTimeout(() => {
-      dispatch(getUserDetails(token));
+      dispatch(getUserDetails());
     }, 100);
   }, [dispatch]);
 
@@ -89,9 +88,7 @@ const LiveChat = () => {
   useEffect(() => {
     if (isLoggedIn) {
       const newSocket = io(`${URL}/chats`, {
-        auth: {
-          token: localStorage.getItem("token"),
-        },
+        withCredentials: true, // This ensures that cookies, including HTTP-only cookies, are sent
       });
 
       setSocket(newSocket);

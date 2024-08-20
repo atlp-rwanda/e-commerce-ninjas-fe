@@ -15,14 +15,11 @@ function useSellerAuthCheck() {
     const [isAuthorized, setIsAuthorized] = useState(false);
 
     const callbackUrl = useMemo(() => encodeURIComponent(pathname), [pathname]);
-    const token = localStorage.getItem('token')
 
     const checkAuth = useCallback(async () => {
-        if (token) {
-            await dispatch(getUserDetails(token));
-        }
+            await dispatch(getUserDetails());
         setIsChecking(false);
-    }, [dispatch, token]);
+    }, [dispatch, ]);
 
     useEffect(() => {
         checkAuth();
@@ -30,10 +27,10 @@ function useSellerAuthCheck() {
 
     useEffect(() => {
         if (!isChecking) {
-            if (!isAuthenticated || !token || !user || (user as any).role !== "seller") {
+            if (!isAuthenticated || !user || (user as any).role !== "seller") {
                 const message = !isAuthenticated ? 'You must login first' : 'You must login as a seller';
                 // toast.info(message);
-                navigate(`/login?callbackUrl=${callbackUrl}`);
+                window.location.href =`/login?callbackUrl=${callbackUrl}`;
                 setIsAuthorized(false);
             } else {
                 setIsAuthorized(true);

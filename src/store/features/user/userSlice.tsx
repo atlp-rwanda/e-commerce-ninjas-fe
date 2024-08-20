@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import userService from "./userService";
 import {  ICollectedData, IPassword, IProfile, UserService } from "../../../utils/types/store";
 import { getErrorMessage } from "../../../utils/axios/axiosInstance";
+import { toast } from "react-toastify";
 
 const initialState: UserService = {
     user: null,
@@ -144,7 +145,7 @@ const userSlice = createSlice({
                 state.user = action.payload.data.sellerRequests,
                 state.isSuccess = true
                 state.message = action.payload.message
-                console.log(state.user)
+                toast.success(state.message)
             })
             .addCase(userSubmitSellerRequest.rejected, (state, action: PayloadAction<any>)=>{
                 state.isLoading= false,

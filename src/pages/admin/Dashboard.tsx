@@ -2,18 +2,17 @@
 import React, { useEffect, useState } from "react";
 import { AiFillDashboard } from "react-icons/ai";
 import { FaUsers } from "react-icons/fa";
-import { IoLogOutSharp } from "react-icons/io5";
+import { IoLogOutSharp, IoSettingsSharp } from "react-icons/io5";
 import Header from "../../components/layout/AdminHeader";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import { logout } from "../../store/features/auth/authSlice";
+import { logout, resetAuth } from "../../store/features/auth/authSlice";
 import { toast } from "react-toastify";
 import { Backdrop, Box, CircularProgress, Typography } from "@mui/material";
 import { Meta } from "../../components/Meta";
 import useAdminAuthCheck from "../../hooks/useAdminAuthCheck";
 import { disconnect } from "../../utils/socket/socket";
-import { RiUserSettingsLine } from "react-icons/ri";
-
+import { RiFileList3Fill } from "react-icons/ri";
 
 export const AdminDashboard = () => {
   const dispatch = useAppDispatch();
@@ -21,7 +20,7 @@ export const AdminDashboard = () => {
   const { isLoading, message, isError } = useAppSelector(
     (state) => state.admin
   );
-  
+
   const [isActive, setIsActive] = useState(() => {
     return parseInt(localStorage.getItem("activeTab")) || 1;
   });
@@ -35,22 +34,41 @@ export const AdminDashboard = () => {
     }, 1000);
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
-    disconnect();
-    setTimeout(() => {
-      navigate("/");
-    }, 2000);
+  const handleLogout = async() => {
+    await dispatch(logout());
+    await disconnect();
+    await dispatch(resetAuth())
+    window.location.href ="/"
   };
 
-  useEffect(() => {
-    if (isError && message === "Not authorized") {
-      toast.info("You are not authorized to access this page");
-      navigate("/login");
-      return;
-    }
-  }, [isError, message, navigate]);
- 
+
+
+  const menuItems = [
+    {
+      icon: <AiFillDashboard size={32} />,
+      title: "Dashboard",
+      path: "/admin/dashboard",
+      index: 1,
+    },
+    {
+      icon: <FaUsers size={32} />,
+      title: "Users",
+      path: "/admin/dashboard/users",
+      index: 2,
+    },
+    {
+      icon: <RiFileList3Fill size={32} />,
+      title: "Requests",
+      path: "/admin/dashboard/Requests",
+      index: 3,
+    }, {
+      icon: <IoSettingsSharp size={32} />,
+      title: "Settings",
+      path: "/admin/dashboard/settings",
+      index: 4,
+    },
+  ];
+
   return (
     <>
       <Meta title="Admin - Dashboard" />
@@ -58,60 +76,22 @@ export const AdminDashboard = () => {
         <section className="left__side">
           <div className="icons">
             <div className="upper">
-              <div className="dashboard">
-                <div className="icon">
-                  <AiFillDashboard
-                    size={32}
-                    className="icon"
-                    onClick={() => handleClick(1, "/admin/dashboard")}
-                  />
+              {menuItems.map((item) => (
+                <div key={item.index} className="menu__item">
+                  <div className="icon" onClick={() => handleClick(item.index, item.path)}>
+                    {item.icon}
+                  </div>
+                  <div className="icons__title__link">
+                    <Link
+                      to={item.path}
+                      className={`text_content ${isActive === item.index ? "active" : ""}`}
+                      onClick={() => handleClick(item.index, item.path)}
+                    >
+                      {item.title}
+                    </Link>
+                  </div>
                 </div>
-                <div className="icons__title__link">
-                  <Link
-                    to="/admin/dashboard"
-                    className={`text_content ${isActive === 1 ? "active" : ""}`}
-                    onClick={() => handleClick(1, "/admin/dashboard")}
-                  >
-                    Dashboard
-                  </Link>
-                </div>
-              </div>
-              <div className="users">
-                <div className="icon">
-                  <FaUsers
-                    size={32}
-                    className="icon"
-                    onClick={() => handleClick(2, "/admin/dashboard/users")}
-                  />
-                </div>
-                <div className="icons__title__link">
-                  <Link
-                    to="users"
-                    className={`text_content ${isActive === 2 ? "active" : ""}`}
-                    onClick={() => handleClick(2, "/admin/dashboard/users")}
-                  >
-                    Users
-                  </Link>
-                </div>
-              </div>
-              <div className="users">
-                <div className="icon">
-                  <RiUserSettingsLine
-                    size={32}
-                    className="icon"
-                    onClick={() => handleClick(3, "/admin/dashboard/requests")}
-                  />
-                </div>
-                <div className="icons__title__link">
-                  <Link
-                    to="requests"
-                    className={`text_content ${isActive === 3 ? "active" : ""}`}
-                    onClick={() => handleClick(3, "/admin/dashboard/requests")}
-                  >
-                    Requests
-                  </Link>
-                </div>
-              </div>
+              ))}
             </div>
             <div className="logout">
               <div className="icon">
@@ -123,20 +103,19 @@ export const AdminDashboard = () => {
               </div>
               <div className="icons__title__link">
                 <h2
-                  className={`text_content ${isActive === 4 ? "active" : ""}`}
+                  className={`text_content ${isActive === 5 ? "active" : ""}`}
                   onClick={handleLogout}
                 >
                   Logout
                 </h2>
               </div>
-            </div>
+          </div>
           </div>
         </section>
         <section className="main__content__dashboard">
           <Header />
           <main className="main__dashboard">
-          
-           <Outlet />
+            <Outlet />
           </main>
         </section>
       </div>

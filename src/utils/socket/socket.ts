@@ -1,10 +1,17 @@
 /* eslint-disable */
 import { io } from 'socket.io-client';
+import { getToken } from '../protectRoute/ProtectedRoute';
 
 const socket = io('https://e-commerce-ninjas-platform-backend.onrender.com');
 
-export const joinRoom = (token: any) => {
-  socket.emit('join', token);
+export const joinRoom = () => {
+  const token = getToken();
+  console.log(token)
+  if (token) {
+    socket.emit('join', token);
+  } else {
+    console.error("Token not found.");
+  }
 };
 
 export const disconnect = () => {

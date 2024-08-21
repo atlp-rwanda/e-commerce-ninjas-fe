@@ -1,0 +1,54 @@
+.requests {
+    &__user{
+        &__role{
+            color: $green-color;
+            background-color: $green-color-light;
+            padding: .5rem 1rem;
+            border-radius: 2rem;
+        }
+    }
+    &__status {
+        padding: .5rem 1rem;
+        background-color: $primary-color-light;
+        border-radius: 2rem;
+        color: $primary-color;
+
+        &__rejected {
+            padding: .5rem 1rem;
+            border-radius: 2rem;
+            background-color: $red-color-light;
+            color: $red-color;
+        }
+
+        &__accepted {
+            padding: .5rem 1rem;
+            border-radius: 2rem;
+            background-color: $green-color-light;
+            color: $green-color;
+        }
+    }
+    &__view{
+        display: flex;
+        gap: 1rem;
+        &__icon{
+            padding: .5rem;
+            border-radius: 2rem;
+            color: $primary-color;
+            cursor: pointer;
+        }
+        &__icon:nth-child(2){
+            color: $red-color;
+            &:hover{
+                cursor: pointer;
+                background-color: $red-color-light;
+            }
+        }
+    }
+}
+.main{
+    &__request{
+        background-color: $white-color;
+        border-radius: 2rem;
+        width: 90%;
+    }
+}

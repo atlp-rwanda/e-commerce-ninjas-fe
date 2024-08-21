@@ -12,6 +12,7 @@ import { Backdrop, Box, CircularProgress, Typography } from "@mui/material";
 import { Meta } from "../../components/Meta";
 import useAdminAuthCheck from "../../hooks/useAdminAuthCheck";
 import { disconnect } from "../../utils/socket/socket";
+import { RiFileList3Fill } from "react-icons/ri";
 
 export const AdminDashboard = () => {
   const dispatch = useAppDispatch();
@@ -63,10 +64,15 @@ export const AdminDashboard = () => {
       index: 2,
     },
     {
+      icon: <RiFileList3Fill size={32} />,
+      title: "Requests",
+      path: "/admin/dashboard/Requests",
+      index: 3,
+    }, {
       icon: <IoSettingsSharp size={32} />,
       title: "Settings",
       path: "/admin/dashboard/settings",
-      index: 3,
+      index: 4,
     },
   ];
 
@@ -104,7 +110,7 @@ export const AdminDashboard = () => {
               </div>
               <div className="icons__title__link">
                 <h2
-                  className={`text_content ${isActive === 4 ? "active" : ""}`}
+                  className={`text_content ${isActive === 5 ? "active" : ""}`}
                   onClick={handleLogout}
                 >
                   Logout

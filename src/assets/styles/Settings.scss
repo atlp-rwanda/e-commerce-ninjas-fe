@@ -21,9 +21,11 @@
         .menu-item {
             cursor: pointer;
             font-size: 1.3rem;
-            p{
+
+            p {
                 margin-right: 1rem;
                 padding: 1rem;
+
                 &.active {
                     background-color: $primary-color-light;
                     color: $primary-color;
@@ -40,7 +42,8 @@
     .section_container {
         flex-grow: 1;
         padding: 0 2.5rem;
-        .loading__spinner{
+
+        .loading__spinner {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -51,23 +54,29 @@
 
         .section-content {
             background-color: white;
-            padding: 20px;
+            overflow-y: auto;
+            padding: 10px;
+            height: 70vh;
 
-            .password_exp{
-                background-color: $border-color;
+
+            label {
+                font-size: 2.5rem;
+                font-weight: bold;
+            }
+
+            .password_exp {
+                background-color: $secondary-color-light;
                 padding: 2rem 5rem;
                 border-radius: .5rem;
+                margin-bottom: 2rem;
 
-                .form-group{
+                .form-group {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                     margin-bottom: 20px;
-                    label{
-                        font-size: 2.5rem;
-                        font-weight: bold;
-                    }
-                    input{
+
+                    input {
                         padding: 10px;
                         border: 1px solid #ddd;
                         border-radius: 5px;
@@ -75,7 +84,8 @@
                         width: 30%;
                     }
                 }
-                .btn{
+
+                .btn {
                     padding: 10px 20px;
                     background-color: $primary-color;
                     color: $white-color;
@@ -86,10 +96,102 @@
                     cursor: pointer;
                     transition: width 0.5s linear;
 
-                    &:hover{
+                    &:hover {
                         background-color: $primary-color-dark;
                         width: 10rem;
                         transition: width 0.5s linear;
+                    }
+                }
+            }
+
+            .terms {
+                background-color: $secondary-color-light;
+                padding: 2rem 5rem;
+                border-radius: .5rem;
+                margin-bottom: 2rem;
+
+                .nav__terms {
+                    padding-bottom: 1rem;
+
+                    .terms__link {
+                        padding: 1rem;
+
+                        &.active {
+                            background-color: $primary-color-light;
+                            border-bottom: 1px solid $primary-color;
+                            color: $primary-color;
+                        }
+                    }
+
+                    ul {
+                        display: flex;
+                        list-style: none;
+                        margin: 0;
+                        padding: 0;
+                        cursor: pointer;
+                        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+                        li {
+                            font-size: 1.5rem;
+                        }
+                    }
+                }
+
+                form {
+                    padding: 0;
+                    margin: 2rem 0;
+
+                    div:first-child {
+                        margin: 20px 0;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+
+                        textarea {
+                            padding: 10px;
+                            border: 1px solid #ddd;
+                            border-radius: 5px;
+                            font-size: 1.4rem;
+                            width: 50%;
+                            height: 100px;
+
+                            &:hover {
+                                border-color: $primary-color;
+                            }
+                        }
+
+                        select {
+                            border: 1px solid #ddd;
+                            border-radius: 5px;
+                            font-size: 1.4rem;
+                            height: 30%;
+                            width: 20%;
+                            margin: 2rem 0;
+
+                            &:hover {
+                                border-color: $primary-color;
+                            }
+                        }
+                    }
+
+                    .form-group {
+                        .btn {
+                            padding: 10px 20px;
+                            background-color: $primary-color;
+                            color: $white-color;
+                            border: none;
+                            border-radius: 5px;
+                            font-size: 1.6rem;
+                            width: 8rem;
+                            cursor: pointer;
+                            transition: width 0.5s linear;
+
+                            &:hover {
+                                background-color: $primary-color-dark;
+                                width: 10rem;
+                                transition: width 0.5s linear;
+                            }
+                        }
                     }
                 }
             }

@@ -52,7 +52,7 @@ export const OverViewDashboard = () => {
       const countUsers = async () => {
         const usersResponse = await dispatch(getAllUsers());
         const shopResponse = await dispatch(getAllShops());
-        const shopNumber = shopResponse.payload.data.shops.length;
+        const shopNumber = shopResponse.payload?.data?.shops?.length;
         const users = usersResponse.payload.data.user;
         let buyerCount = 0;
         let sellerCount = 0;

@@ -20,6 +20,8 @@ const initialState: AuthService = {
   fail: false,
   isOtpFail:false,
   isOtpSuccess:false,
+  isEmailResend:false,
+  isNotVerified:false,
 };
 
 type IUserEmailAndPassword = Pick<IUser, 'email' | 'password'>;
@@ -174,12 +176,21 @@ export const change2FAStatus = createAsyncThunk(
   }
 );
 
+export const registerAsSeller = createAsyncThunk("auth/register-seller", async(sellerData:any,thunkApi) => {
+  try {
+    const response = await authService.registerAsSeller(sellerData);
+    return response;
+  } catch (error) {
+    return thunkApi.rejectWithValue(getErrorMessage(error));
+  }
+});
+
 const userSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
     resetAuth: (state) => {
-      state.user = undefined;
+      state.user = null;
       state.isError = false;
       state.isLoading = false;
       state.isSuccess = false;
@@ -191,6 +202,8 @@ const userSlice = createSlice({
       state.fail= false;
       state.isOtpFail = false;
       state.isOtpSuccess = false;
+      state.isEmailResend = false
+      state.isNotVerified = false;
     },
     changingProfile: (state, action: any)=>{
       (state.user as any).profilePicture = action.payload
@@ -214,31 +227,49 @@ const userSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(verifyEmail.pending, (state) => {
+      .addCase(registerAsSeller.pending, (state) => {
         state.isLoading = true;
         state.isError = false;
         state.isSuccess = false;
       })
-      .addCase(verifyEmail.fulfilled, (state, action: PayloadAction<any>) => {
+      .addCase(registerAsSeller.fulfilled, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.message = action.payload.message;
+        console.log(action.payload);
+      })
+      .addCase(registerAsSeller.rejected, (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(verifyEmail.pending, (state) => {
+        state.isLoading = true;
+        state.isVerified = false;
+        state.isSuccess = false;
+      })
+      .addCase(verifyEmail.fulfilled, (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.isVerified = true;
         state.message = action.payload.message;
         toast.success(state.message)
       })
       .addCase(verifyEmail.rejected, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
-        state.isError = true;
+        state.isNotVerified = true;
         state.message = action.payload;
         toast.error(state.message)
       })
       .addCase(resendVerificationEmail.pending, (state) => {
         state.isLoading = true;
-        state.isError = false;
+        state.isEmailResend = false;
         state.isSuccess = false;
       })
       .addCase(
         resendVerificationEmail.fulfilled,
         (state, action: PayloadAction<any>) => {
+          state.isEmailResend = false;
           state.isLoading = false;
           state.isSuccess = true;
           state.message = action.payload.message;
@@ -248,7 +279,7 @@ const userSlice = createSlice({
         resendVerificationEmail.rejected,
         (state, action: PayloadAction<any>) => {
           state.isLoading = false;
-          state.isError = true;
+          state.isEmailResend = true;
           state.message = action.payload;
         }
       )

@@ -52,6 +52,30 @@ export interface IUser {
   passwordUpdatedAt?: Date;
 }
 
+export interface IPaymentMethod{
+  id?: string;
+  bankPayment: boolean;
+  mobilePayment: boolean;
+  bankAccount: number;
+  mobileNumber: number;
+}
+
+export interface IRequest {
+  [x: string]: any;
+  id?: string;
+  shopId?: string;
+  userId?: string;
+  paymentMethodId?: string;
+  businessName?: string;
+  tin?: number;
+  rdbDocument?:string;
+  terms?:boolean;
+  requestStatus?:string;
+  user:IUser;
+  shop?: IShop;
+  paymentMethod?: IPaymentMethod;
+}
+
 export interface IUserData {
   data: {user:IUser};
   message: string;
@@ -80,6 +104,8 @@ export interface AuthService {
   fail:boolean;
   isOtpFail:boolean;
   isOtpSuccess:boolean;
+  isEmailResend:boolean;
+  isNotVerified:boolean
 }
 
 export interface IEmail {
@@ -168,7 +194,7 @@ export interface ILocation {
 export interface UserService {
   user: IProfile | null,
   isLoading: boolean,
-  isError: string,
+  isError: boolean,
   isSuccess: boolean,
   message: string
 }
@@ -176,18 +202,22 @@ export interface UserService {
 
 export interface AdminReponse {
   message?: string;
-  data?: { user: IUser };
+  data?: { sellerProfiles?: IRequest; user?: IUser ;sellerRequest?: IRequest};
   error?: string;
   status?: number;
 }
 
 export interface IAdminInitialResponse {
   users: IUser;
+  requests: IRequest,
+  request: IRequest,
   isError: boolean | null;
   isSuccess: boolean;
   isLoading: boolean;
   message: string | null;
   passwordExpiration:null;
+  terms:null;
+  term:null;
 }
 
 export interface ISingleProductResponse {
@@ -236,4 +266,28 @@ export interface ISellerCollectionProductInitialResponse {
   isLoading: boolean;
   message: string;
   OrderHistory: null
+}
+
+export interface IEligibilityData {
+  businessName: string;
+  Tin: string;
+  rdbDocument: File | null;
+  businessDescription: string;
+}
+
+export interface IPaymentData {
+  mobilePayment?: string;
+  bankPayment?: string;
+  bankAccount?:string | null;
+  mobileNumber?: string | null;
+}
+
+export interface ITermsData {
+  terms: boolean | null;
+}
+
+export interface ICollectedData {
+  eligibility: IEligibilityData;
+  paymentMethods: IPaymentData;
+  termsAndConditions: ITermsData;
 }

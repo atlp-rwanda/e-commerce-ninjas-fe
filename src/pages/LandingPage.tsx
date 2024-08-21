@@ -20,7 +20,7 @@ const LandingPage: React.FC = () => {
   );
   const [visibleProducts, setVisibleProducts] = useState<number>(20);
   useEffect(()=>{
-    dispatch(resetAuth)
+    dispatch(resetAuth())
   },[dispatch])
   useEffect(() => {
     dispatch(fetchProducts());

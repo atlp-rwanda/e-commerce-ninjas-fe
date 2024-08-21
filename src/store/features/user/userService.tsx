@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { axiosInstance } from "../../../utils/axios/axiosInstance";
-import { IProfile } from "../../../utils/types/store";
+import { ICollectedData, IProfile } from "../../../utils/types/store";
 
 const fetchUserProfile = async () => {
     try {
@@ -30,15 +30,9 @@ const changePassword = async (oldPassword: string, newPassword: string, confirmP
     );
     return response.data;
 };
-const userRequest = async(data)=>{
-    try {
+const userRequest = async(data:ICollectedData)=>{
         const response = await axiosInstance.post('/api/user/user-submit-seller-request',data);
-        return response.data.data.user;
-    }
-    catch (error) {
-        console.log(error)
-        throw new Error('Failed to update User')
-    }
+        return response;
 }
 
 const userAddress = async( data: any)=>{

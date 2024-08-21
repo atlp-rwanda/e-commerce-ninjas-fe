@@ -1,0 +1,104 @@
+
+.become-seller-container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    background-color: $container-color;
+    padding: 20px;
+
+    .horizontalStepper{
+        padding: 1.5rem 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background-color: $white-color;
+        border-radius: 1rem;
+        border: 1px solid $white-color;
+        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+        transition: height 0.5s ease-in-out;
+        .MuiStepIcon-root.Mui-active{
+            color: $primary-color;
+        }
+        .MuiStepIcon-root.Mui-completed{
+            color: $primary-color;
+        }
+        .MuiButton-containedPrimary{
+            background-color: $primary-color;
+            font-size: 1.5rem;
+        }
+        .MuiButton-textPrimary{
+            color: $primary-color;
+            &:hover{
+                background-color: $secondary-color-light;
+            }
+        }
+        .MuiStepLabel-label{
+            font-size: 1.8rem;
+            color: $text-color;
+            margin-bottom: 1rem;
+            font-weight: bold;
+
+            &.Mui-active{
+                color: $primary-color;
+            }
+            &.Mui-completed{
+                color: $primary-color;
+            }
+        }
+        .MuiFormControlLabel-label{
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .MuiSvgIcon-root{
+            color: $primary-color;
+        }
+        .MuiDialogTitle-root{
+            font-size: 2.4rem !important;
+            font-weight: bold;
+        }
+    }
+
+    .eligibility-form{
+        padding-left: 0;
+        padding-right: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        // flex: 1;
+        // flex-wrap: wrap;
+    
+        .eligibility-class-div{
+            width: 100%;
+            display: flex;
+            gap: .5rem;
+            flex-direction: column;
+            label{
+                font-size: 1.6rem;
+                color: $text-color;
+            }
+            input{
+                width: 100%;
+                height: 3rem;
+                border: 1px solid $primary-color;
+                border-radius: 5px;
+                padding-left: 1rem;
+                font-size: 1.5rem;
+                color: $text-color;
+            }
+            
+        }
+        .desc{
+            font-size: 1.5rem;
+            color: $text-color;
+            border: 1px solid $primary-color;
+            width: 100%;
+            height: 100%;
+            padding-left: 1rem;
+            border-radius: .5rem;
+        }
+    }
+
+}

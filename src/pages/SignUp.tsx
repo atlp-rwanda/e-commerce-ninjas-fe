@@ -5,7 +5,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 import { FcGoogle } from "react-icons/fc";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/buttons/Button";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { registerUser, resetAuth } from "../store/features/auth/authSlice";
@@ -147,7 +147,18 @@ export const SignUp = () => {
                   </div>
                 </div>
                 {showError ? (
-                  <p className="error2">{message}</p>
+                  <p className="error2">
+                    {message ===
+                    "Account already exists. Please verify your account" ? (
+                      <>
+                      {message}
+                      {" or "}
+                      <Link to={'/resend-email'} className="error2" style={{textDecoration:"underline"}}>resend verification email</Link>
+                      </>
+                    ) : (
+                      message
+                    )}
+                  </p>
                 ) : null}
                 {isLoading ? (
                   <div className="btn-loading">

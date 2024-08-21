@@ -1,0 +1,187 @@
+.about {
+    background-color: $container-color;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    &__container {
+        background-color: $white-color;
+        width: 80%;
+        padding: 4rem 0;
+
+        h1 {
+            color: $text-color;
+            font-family: $text-family;
+            font-size: 4rem;
+            text-align: center;
+            padding-bottom: 1.5rem;
+        }
+
+        .welcome {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            h2 {
+                color: $text2-color;
+                font-family: $text-family;
+                font-size: 2.4rem;
+                text-align: center;
+            }
+
+            .paragraph {
+                color: $text2-color;
+                font-family: $text-family;
+                font-size: 1.8rem;
+                text-align: center;
+                margin-top: 2rem;
+                line-height: 1.5;
+                margin-bottom: 4rem;
+                width: 50%;
+            }
+        }
+
+        .mission {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            h2 {
+                color: $text2-color;
+                font-family: $text-family;
+                font-size: 2.4rem;
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+
+            .paragraph {
+                color: $text2-color;
+                font-family: $text-family;
+                font-size: 1.8rem;
+                text-align: center;
+                margin-top: 2rem;
+                line-height: 1.5;
+                margin-bottom: 4rem;
+                width: 50%;
+            }
+        }
+
+        .team {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            h2 {
+                color: $text2-color;
+                font-family: $text-family;
+                font-size: 2.4rem;
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+
+            .team__members {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 2rem;
+                overflow: hidden; 
+                gap: 2rem;
+                // position: absolute;
+
+                .team__member {
+                    position: relative;
+                    overflow: hidden;
+                    img {
+                        width: 25rem;
+                        height: 25rem;
+                        object-fit: cover;
+                        display: block;
+                    }
+
+                    &__desc {
+                        position: absolute;
+                        bottom: -100%;
+                        left: 0;
+                        width: 100%;
+                        background-color: rgba(0, 0, 0, 0.7);
+                        padding: 10px;
+                        box-sizing: border-box;
+                        transition: bottom 0.3s ease-in-out; 
+
+                        h3 {
+                            color: $white-color;
+                            font-family: $text-family;
+                            font-size: 1.8rem;
+                            text-align: center;
+                            margin-bottom: 0.5rem;
+                        }
+
+                        p {
+                            color: $white-color;
+                            font-family: $text-family;
+                            font-size: 1.6rem;
+                            text-align: center;
+                            margin-top: 1rem;
+                        }
+
+                        &__icon {
+                            font-size: 3rem;
+                            display: flex;
+                            justify-content: center;
+                            gap: 1rem;
+
+                            a {
+                                color: $primary-color;
+
+                                &:hover {
+                                    transition: all 0.5s ease-in-out;
+                                    animation: bounce 1s backwards;
+                                }
+                            }
+
+                            @keyframes bounce {
+
+                                0%,
+                                100% {
+                                    transform: translateY(0);
+                                }
+
+                                50% {
+                                    transform: translateY(-10px);
+                                }
+                            }
+                        }
+                    }
+
+                }
+                .team__member:hover .team__member__desc{
+                    bottom: 0;
+                }
+            }
+        }
+
+        .get-in-touch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 4rem;
+
+            button {
+                padding: 2rem;
+                background-color: $primary-color;
+                color: $white-color;
+                border: none;
+                border-radius: 1rem;
+                font-size: 2rem;
+                cursor: pointer;
+                transition: all 0.3s ease-in-out;
+
+                &:hover {
+                    background-color: $primary-color-dark;
+                }
+            }
+        }
+    }
+
+}

@@ -17,10 +17,11 @@ import {
   sellerGetOrderHistory,
 } from "../../store/features/product/sellerCollectionProductsSlice";
 import { useNavigate } from "react-router-dom";
-import productSlice from "../../store/features/product/productSlice";
-import { FaFileExcel } from "react-icons/fa";
-import exportToCSV from "../../utils/excel/exportToCSV";
-import exportToExcel from "../../utils/excel/exportToExcel";
+import { FaFileExcel, FaFileCsv, FaFilePdf, FaFileWord } from "react-icons/fa";
+import exportToExcel from "../../utils/export/exportToExcel";
+import exportToCSV from "../../utils/export/exportToCSV";
+import exportToPDF from "../../utils/export/exportToPDF";
+import exportToWord from "../../utils/export/exportToWord";
 
 const SellerDashboard = () => {
   const { OrderHistory, message, data, isError } = useAppSelector(
@@ -60,6 +61,7 @@ const SellerDashboard = () => {
   useEffect(() => {
     dispatch(sellerGetOrderHistory());
     dispatch(fetchSellerCollectionProduct());
+    dispatch(sellerGetAllProducts());
   }, [dispatch]);
   useEffect(() => {
     try {
@@ -107,6 +109,32 @@ const SellerDashboard = () => {
       console.error("Failed to fetch data:", error);
     }
   }, [OrderHistory, isError, message]);
+
+  const [isExportOpen, setIsExportOpen] = useState(false);
+
+  const toggleExportDropdown = () => {
+    setIsExportOpen(!isExportOpen);
+  };
+
+  const handleExport = (exportType) => {
+    switch (exportType) {
+      case 'excel':
+        exportToExcel(OrderHistory);
+        break;
+      case 'csv':
+        exportToCSV(OrderHistory);
+        break;
+      case 'pdf':
+        exportToPDF(OrderHistory);
+        break;
+      case 'word':
+        exportToWord(OrderHistory);
+        break;
+      default:
+        console.error('Invalid export type');
+    }
+    setIsExportOpen(false);
+  };
 
   const MonthDropDown = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -164,10 +192,6 @@ const SellerDashboard = () => {
         (stat) => stat.name === selectedMonth.substring(0, 3)
       );
 
-  const exportStats = () => {
-    exportToExcel(OrderHistory)
-  }
-
   return (
     <>
       <div className="seller-dashboard-container">
@@ -203,7 +227,19 @@ const SellerDashboard = () => {
             </div>
             <div className="export-section">
               <MonthDropDown />
-              <button type="button" className="export-btn" onClick={exportStats}><FaFileExcel /> EXPORT</button>
+              <div className="export-dropdown">
+                <button type="button" className="export-btn" onClick={toggleExportDropdown}>
+                  Export <span className="arrow-down">▼</span>
+                </button>
+                {isExportOpen && (
+                  <ul className="export-menu">
+                    <li onClick={() => handleExport('excel')}><FaFileExcel color="green" /> Excel</li>
+                    <li onClick={() => handleExport('csv')}><FaFileCsv /> CSV</li>
+                    <li onClick={() => handleExport('pdf')}><FaFilePdf color='red' /> PDF</li>
+                    <li onClick={() => handleExport('word')}><FaFileWord color='blue' /> Word</li>
+                  </ul>
+                )}
+              </div>
             </div>
           </div>
           <ResponsiveContainer width="99%" height={250}>

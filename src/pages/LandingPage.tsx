@@ -9,6 +9,7 @@ import { Meta } from "../components/Meta";
 import { toast } from "react-toastify";
 import { Navigate, useNavigate } from "react-router-dom";
 import { createCart, getUserCarts } from "../store/features/carts/cartSlice";
+import { resetAuth } from "../store/features/auth/authSlice";
 
 
 const LandingPage: React.FC = () => {

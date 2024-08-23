@@ -4,6 +4,7 @@ import { useAppSelector, useAppDispatch } from "../store/store";
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { toast } from "react-toastify";
 import { getUserDetails } from "../store/features/auth/authSlice";
+import { getToken } from "../utils/protectRoute/ProtectedRoute";
 
 function useSellerAuthCheck() {
     const navigate = useNavigate();
@@ -15,11 +16,13 @@ function useSellerAuthCheck() {
     const [isAuthorized, setIsAuthorized] = useState(false);
 
     const callbackUrl = useMemo(() => encodeURIComponent(pathname), [pathname]);
-
+    const token = getToken()
     const checkAuth = useCallback(async () => {
-            await dispatch(getUserDetails());
+        if (token) {
+            await dispatch(getUserDetails(token));
+        }
         setIsChecking(false);
-    }, [dispatch, ]);
+    }, [dispatch, token]);
 
     useEffect(() => {
         checkAuth();

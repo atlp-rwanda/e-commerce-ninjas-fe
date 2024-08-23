@@ -28,6 +28,7 @@ import useSocket from "../../hooks/useSocket";
 import { toast } from "react-toastify";
 import { PulseLoader } from "react-spinners";
 import HomePage from "./HomePage";
+import { getToken } from "../../utils/protectRoute/ProtectedRoute";
 
 const Header: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -43,7 +44,6 @@ const Header: React.FC = () => {
     token: tokenLogin,
   } = useAppSelector((state) => state.auth);
   const { notifications } = useAppSelector((state) => state.notification);
-  const [token, setToken] = useState("");
   const [is2FAEnabled, setIs2FAEnabled] = useState(false);
   const [is2FALoading, setIs2FALoading] = useState(false);
   const navEl = useRef<HTMLDivElement | null>(null);
@@ -51,11 +51,12 @@ const Header: React.FC = () => {
   useSocket();
   const categories = Array.from({ length: 5 }, (_, i) => i + 1);
 
+  const token = getToken();
   useEffect(() => {
       if (token?.trim()) {
-        dispatch(getUserDetails());
+        dispatch(getUserDetails(token));
       }
-  }, [token, dispatch]);
+  }, [dispatch,token]);
 
   useEffect(() => {
     if (isAuthenticated) {

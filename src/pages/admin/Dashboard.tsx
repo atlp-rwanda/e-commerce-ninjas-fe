@@ -38,7 +38,7 @@ export const AdminDashboard = () => {
     await dispatch(logout());
     await disconnect();
     await dispatch(resetAuth())
-    window.location.href ="/"
+    navigate("/")
   };
 
 

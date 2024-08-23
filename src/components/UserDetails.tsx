@@ -17,9 +17,7 @@ const UserDetails: React.FC<any> = ({ Request }) => {
   const [open, setOpen] = useState(false)
   const { request } = useAppSelector((state) => state.admin)
   const UserRequest = Request ? Request : request;
-  const handleOpenDocument = (url: string) => {
-    window.open(url, "_blank", "noopener,noreferrer");
-  };
+  
   const handleClose = () => {
     setOpen(false);
   }

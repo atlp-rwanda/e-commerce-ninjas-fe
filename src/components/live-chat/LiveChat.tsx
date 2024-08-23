@@ -28,6 +28,7 @@ import { clearImages } from "../../store/actions/resetAction";
 import { IoIosCloseCircle } from "react-icons/io";
 import EmojiPicker, { EmojiStyle, Theme } from "emoji-picker-react";
 import { Empty } from "antd";
+import { getToken } from "../../utils/protectRoute/ProtectedRoute";
 
 const LiveChat = () => {
   const [messages, setMessages] = useState([]);
@@ -62,8 +63,9 @@ const LiveChat = () => {
   };
 
   useEffect(() => {
+    const token = getToken();
     setTimeout(() => {
-      dispatch(getUserDetails());
+      dispatch(getUserDetails(token));
     }, 100);
   }, [dispatch]);
 

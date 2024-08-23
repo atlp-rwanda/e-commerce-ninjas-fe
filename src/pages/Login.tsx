@@ -25,7 +25,7 @@ import {
 } from "@mui/material";
 import authService from "../store/features/auth/authService";
 import { joinRoom } from "../utils/socket/socket";
-import { storeTokenWithExpiration } from "../utils/protectRoute/ProtectedRoute";
+import { getToken, storeTokenWithExpiration } from "../utils/protectRoute/ProtectedRoute";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -73,8 +73,9 @@ function Login() {
     },
   });
   useEffect(() => {
+    const token = getToken();
     if (isSuccess && isAuthenticated) {
-      dispatch(getUserDetails())
+      dispatch(getUserDetails(token))
         .then((res) => {
           const userData = res.payload.data.user;
           setUser(userData);
@@ -93,12 +94,12 @@ function Login() {
         navigate('/admin/dashboard');
       } else if (user.role === 'seller') {
         navigate('/seller/dashboard');
-      } else {
-        navigate('/');
+      } else if(user.role === 'buyer') {
+        navigate( "/");
       }
       joinRoom();
     }
-  }, [user, navigate]);
+  }, [user]);
   
   
   function handleIsFocused() {

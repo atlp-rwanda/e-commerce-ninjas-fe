@@ -106,7 +106,7 @@ const AppRouter: React.FC = () => {
             }
           />
           <Route path="search" element={<Search />} />
-          <Route path="logout" element={<Logout />} />
+          <Route path="/logout" element={<Logout />} />
           <Route
             path="shopping-cart"
             element={
@@ -160,6 +160,7 @@ const AppRouter: React.FC = () => {
         <Route path="/admin">
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="*" element={<NotFound redirectPath="/admin" />} />
+          <Route path="*" element={<NotFound redirectPath="/admin" />} />
           <Route
             path="dashboard"
             element={
@@ -170,6 +171,8 @@ const AppRouter: React.FC = () => {
           >
             <Route index element={<OverViewDashboard />} />
             <Route path="users" element={<Users />} />
+            <Route path="requests" element={<Requests />} />
+            <Route path="request/:id" element={<ViewRequest />} />
             <Route path="requests" element={<Requests />} />
             <Route path="request/:id" element={<ViewRequest />} />
             <Route path="settings" element={<Settings />} />

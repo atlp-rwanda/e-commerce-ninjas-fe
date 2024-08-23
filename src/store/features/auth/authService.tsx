@@ -21,8 +21,10 @@ const logout = async () => {
   return response.data;
 };
 
-const fetchUserDetails = async () => {
-  const response = await axiosInstance.get("/api/user/user-get-profile");
+const fetchUserDetails = async (token: string) => {
+  const response = await axiosInstance.get("/api/user/user-get-profile", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
   return response.data;
 };
 

@@ -7,12 +7,14 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import Notifications from './notification';
 import { fetchNotifications } from '../../store/features/notifications/notificationSlice';
 import useSocket from '../../hooks/useSocket';
+import { getToken } from "../../utils/protectRoute/ProtectedRoute";
 
 function AdminHeader() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   useEffect(()=>{
-    dispatch(getUserDetails());
+    const token = getToken();
+    dispatch(getUserDetails(token));
     dispatch(fetchNotifications());
 },[dispatch,getUserDetails]);
 const User:any = {...user}

@@ -53,9 +53,9 @@ export const loginUser = createAsyncThunk(
 
 export const getUserDetails = createAsyncThunk(
   "auth/getUserDetails",
-  async (_, thunkApi) => {
+  async (token: string, thunkApi) => {
     try {
-      const response = await authService.fetchUserDetails();
+      const response = await authService.fetchUserDetails(token);
       return response;
     } catch (error) {
       return thunkApi.rejectWithValue(getErrorMessage(error));
@@ -379,6 +379,7 @@ const userSlice = createSlice({
         state.isSuccess = true;
         state.message = action.payload.message;
         sessionStorage.clear();
+        localStorage.clear();
         toast.success(action.payload.message);
 
       })

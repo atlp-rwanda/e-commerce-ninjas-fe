@@ -6,7 +6,7 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { useAppDispatch } from '../../store/store';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 import { getUserDetails, logout } from '../../store/features/auth/authSlice';
 
 const ProtectedRoute = ({ redirectPath = '/', allowedRoles = [], children }) => {
@@ -15,13 +15,13 @@ const ProtectedRoute = ({ redirectPath = '/', allowedRoles = [], children }) => 
   const [userRole, setUserRole] = useState(null);
   const location = useLocation();
   const dispatch = useAppDispatch();
-
+  const {user} = useAppSelector((state)=>state.auth)
   useEffect(() => {
     const authenticateUser = async () => {
       const token = getToken();
       if (token) {
         try {
-          const res = await dispatch(getUserDetails());
+          const res = await dispatch(getUserDetails(token));
           if (res) {
             setUserRole(res.payload.data.user.role);
             setIsAuthenticated(true);

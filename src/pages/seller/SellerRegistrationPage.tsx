@@ -79,26 +79,26 @@ export const SellerRegistrationPage = () => {
   useEffect(() => {
     if (data) dispatch(registerAsSeller(data));
   }, [data]);
-const {isLoading} = useAppSelector((state)=> state.auth)
+  const { isLoading } = useAppSelector((state) => state.auth);
   return (
     <div className="wrapper">
-      {isLoading && (
-        <div className="table__spinner">
-          <Box sx={{ width: "100%" }}>
-            <LinearProgress
-              sx={{
-                backgroundColor: "#fff",
-                "& .MuiLinearProgress-bar": {
-                  backgroundColor: "#ff8a46",
-                },
-              }}
-            />
-          </Box>
-        </div>
-      )}
       <div className="seller-registration">
         <Sidebar />
         <div className="registration-container">
+          {isLoading && (
+            <div className="table__spinner">
+              <Box sx={{ width: "100%" }}>
+                <LinearProgress
+                  sx={{
+                    backgroundColor: "#fff",
+                    "& .MuiLinearProgress-bar": {
+                      backgroundColor: "#ff8a46",
+                    },
+                  }}
+                />
+              </Box>
+            </div>
+          )}
           <h2>Merchant Registration</h2>
           <div className="step-indicators">
             <span className={step === 1 ? "active" : ""}>Business Details</span>

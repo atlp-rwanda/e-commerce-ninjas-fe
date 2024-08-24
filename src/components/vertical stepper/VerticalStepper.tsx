@@ -125,7 +125,7 @@ const HorizontalStepper = () => {
   const [stepData, setStepData] = useState<any>(null);
   const handleNext = () => {
     const updateData = { ...collectedData };
-  
+
     switch (activeStep) {
       case 0:
         updateData.termsAndConditions = stepData as ITermsData;
@@ -143,7 +143,6 @@ const HorizontalStepper = () => {
     setCollectedData(updateData);
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
-  
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -255,14 +254,16 @@ const HorizontalStepper = () => {
         ))}
 
         {activeStep === steps.length && (
-          <Paper square elevation={0} sx={{ p: 3 }}>
-            <Typography>
-              All steps completed - you&apos;re now a seller!
-            </Typography>
-            <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-              Reset
-            </Button>
-          </Paper>
+          <div style={{display:"flex", justifyContent:"center",alignItems:"center"}}>
+            <Paper square elevation={0} sx={{ p: 3 }}>
+              <Typography>
+                All steps completed - we will get to you shortly!
+              </Typography>
+              <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+                Reset
+              </Button>
+            </Paper>
+          </div>
         )}
       </Box>
     </div>

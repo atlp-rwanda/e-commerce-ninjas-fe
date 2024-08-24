@@ -92,7 +92,7 @@ export const addSellerProduct = createAsyncThunk<
   }
 });
 
-export const DeleteProduct = createAsyncThunk<ISingleProductResponse>("products/deleteSellerProduct", async (productId, thunkApi) =>{
+export const DeleteProduct = createAsyncThunk("products/delete-Seller-Product", async (productId:string, thunkApi) => {
     try {
       const response = await productService.deleteProduct(productId);
       return response

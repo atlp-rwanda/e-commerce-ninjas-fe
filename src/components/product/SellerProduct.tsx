@@ -122,22 +122,24 @@ const SellerProduct = ({ productId }: { productId: string }) => {
             setUpdateLoading(false);
         }
     };
-    // const handleDelete = async (productId: string) => {
-    //     try {
-    //         setUpdateLoading(true);
-    //         const res = await dispatch(DeleteProduct(productId));
-    
-    //         if (res.type === 'products/deleteSellerProduct/fulfilled') {
-    //             navigate('/seller/products');
-    //         } else if (res.type === 'products/deleteSellerProduct/rejected') {
-    //             toast.error(res.payload as string || "Failed to delete product, please try again");
-    //         }
-    //     } catch (error) {
-    //         toast.error(`Error deleting product: ${getErrorMessage(error)}`);
-    //     } finally {
-    //         setUpdateLoading(false);
-    //     }
-    // };
+    const handleDelete = async (productId: string) => {
+        try {
+            setUpdateLoading(true);
+            const res = await dispatch(DeleteProduct(productId));
+            if (res.type === 'products/delete-Seller-Product/fulfilled') {
+                setTimeout(() => {
+                    toast.success("Product deleted successfully")
+                    navigate('/seller/products');
+                },500)
+            } else if (res.type === 'products/delete-Seller-Product/rejected') {
+                toast.error(res.payload.message as string || "Failed to delete product, please try again");
+            }
+        } catch (error) {
+            toast.error(`Error deleting product: ${getErrorMessage(error)}`);
+        } finally {
+            setUpdateLoading(false);
+        }
+    };
     
 
     if (isLoading) {
@@ -167,7 +169,7 @@ const SellerProduct = ({ productId }: { productId: string }) => {
                         <button disabled={(!isThereAnyUpdate && !isImagesUpdated) || updateLoading} className={`edit-btn ${!isThereAnyUpdate && !isImagesUpdated && 'disabled'}`} onClick={handleSaveOrAdd}>
                             <FaSave /> {isAdd ? "ADD" : "UPDATE"}{updateLoading && "ING..."}
                         </button>
-                        {!isAdd && <button className='delete-btn'><FaTrash /> Delete</button>}
+                        {!isAdd && <button className='delete-btn' onClick={()=>handleDelete(productId)}><FaTrash /> Delete</button>}
                     </div>
                 </div>
 

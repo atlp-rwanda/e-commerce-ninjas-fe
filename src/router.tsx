@@ -11,7 +11,7 @@ import { ResendEmail } from "./components/ResendEmail";
 import GoogleCallback from "./components/GoogleCallback";
 import SendResetPasswordLink from "./pages/SendResetPasswordLink";
 import ResetPassword from "./pages/ResetPassword";
-import { ProtectedRoute } from "./utils/protectRoute/ProtectedRoute";
+import { GuestRoute, ProtectedRoute } from "./utils/protectRoute/ProtectedRoute";
 import ViewProduct from "./pages/ViewProduct";
 import Login from "./pages/Login";
 import UserViewCart from "./pages/UserViewCart";
@@ -44,17 +44,17 @@ const AppRouter: React.FC = () => {
           <Route
             index
             element={
-              <ProtectedRoute allowedRoles={["buyer"]} redirectPath="/login">
+
                 <LandingPage />
-              </ProtectedRoute>
+              
             }
           />
           <Route
             path="/home"
             element={
-              <ProtectedRoute allowedRoles={["buyer"]} redirectPath="/login">
+
                 <LandingPage />
-              </ProtectedRoute>
+              
             }
           />
           <Route
@@ -69,17 +69,13 @@ const AppRouter: React.FC = () => {
           <Route
             path="signup"
             element={
-              <ProtectedRoute allowedRoles={["buyer"]} redirectPath="/">
                 <SignUp />
-              </ProtectedRoute>
             }
           />
           <Route
             path="login"
             element={
-              <ProtectedRoute allowedRoles={["buyer"]} redirectPath="/">
                 <Login />
-              </ProtectedRoute>
             }
           />
           <Route path="verify-email" element={<EmailVerifying />} />
@@ -151,7 +147,8 @@ const AppRouter: React.FC = () => {
           <Route path="/register/seller" element={<SellerRegistrationPage />} />
           <Route path="*" element={<NotFound redirectPath="/" />} />
         </Route>
-        <Route path="/seller" element={<SellerLayout />}>
+        <Route path="/seller" element={
+          <ProtectedRoute redirectPath="/login" allowedRoles={["seller"]}><SellerLayout /></ProtectedRoute>}>
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<SellerDashboard />} />
           <Route path="product/:id" element={<SellerViewProduct />} />

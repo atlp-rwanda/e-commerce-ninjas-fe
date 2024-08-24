@@ -133,7 +133,6 @@ export const GeneralSettings = () => {
       setEditorContent("");
       setPdfFile(null);
     } catch (error) {
-      console.error("Error saving terms:", error);
       toast.error("An error occurred while saving terms. Please try again.");
     } finally {
       setIsDisabled(true);
@@ -204,7 +203,7 @@ export const GeneralSettings = () => {
 
   const renderPdfUrl = (url: string) => {
     const handleClickOpen = () => {
-      setPdfOpen(true);
+      setPdfOpen(true)
     };
   
     const handleClose = () => {
@@ -222,10 +221,7 @@ export const GeneralSettings = () => {
         <Button onClick={handleClickOpen}>View PDF</Button>
         {
           pdfOpen && (
-            <div className="view__pdf">
-              <FullScreenPdfView pdfUrl={url} />
-              <IoCloseCircleOutline onClick={handleClose} className="close__icon" />
-            </div>
+              <FullScreenPdfView pdfUrl={url} open={pdfOpen} onClose={handleClose}/>
           )
         }
       </div>
@@ -292,7 +288,7 @@ export const GeneralSettings = () => {
                   id="alert-dialog-description"
                   sx={{ fontSize: "1.6rem" }}
                 >
-                  Are you sure you want to change this user's role to Admin?
+                  Are you sure you want to delete Terms and Conditions?
                 </DialogContentText>
               </DialogContent>
               <DialogActions>

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { getAllTerms } from "../../store/features/admin/adminSlice";
+import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 
 interface Props {
   nextStep: () => void;
@@ -16,18 +17,26 @@ export const SellerDetails: React.FC<Props> = ({
   formData,
   updateFormData,
 }) => {
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [show,setShow] = useState(false);
   const [localData, setLocalData] = useState(formData);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setShow(true);
     const { name, value } = e.target;
     setLocalData({ ...localData, [name]: value });
   };
+ const handleShow = ()=>{
+   setShow(false);
+ }
 
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     updateFormData(localData);
     nextStep();
   };
-
 
   return (
     <div className="seller-details">
@@ -88,14 +97,23 @@ export const SellerDetails: React.FC<Props> = ({
           <label htmlFor="password">
             Password <span>*</span>
           </label>
-          <input
-            type="password"
-            name="password"
-            value={localData.password}
-            onChange={handleChange}
-            placeholder="Password"
-            required
-          />
+          <div className="pass-hide">
+            <input
+              type={passwordVisible ? "text" : "password"}
+              name="password"
+              value={localData.password}
+              onChange={handleChange}
+              placeholder="Password"
+              required
+            />
+            {
+              show && (
+                <span className="hide" onClick={togglePasswordVisibility}>
+                  {passwordVisible? <BiSolidHide /> : <BiSolidShow />}
+                </span>
+              )
+            }
+          </div>
         </div>
         <div className="groupe-form">
           <button type="button" onClick={prevStep}>

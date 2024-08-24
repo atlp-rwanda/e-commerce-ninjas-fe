@@ -32,6 +32,7 @@ const SearchBar: React.FC = () => {
   const [discountOptions, setDiscountOptions] = useState<Option[]>([]);
   const [minPriceOptions, setMinPriceOptions] = useState<Option[]>([]);
   const [maxPriceOptions, setMaxPriceOptions] = useState<Option[]>([]);
+  const [categoryOptions, setCategoryOptions] = useState<any[]>([]);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -41,10 +42,10 @@ const SearchBar: React.FC = () => {
         category: category || undefined,
         maxPrice: maxPrice ? parseInt(maxPrice) : undefined,
         minPrice: minPrice ? parseInt(minPrice) : undefined,
-        discount: discount ? parseInt(discount) : undefined,
+        // Removed discount filter
       })
     );
-  }, [dispatch, name, category, maxPrice, minPrice, discount]);
+  }, [dispatch, name, category, maxPrice, minPrice]);
 
   const { isSuccess, isError, isLoading, products } = useAppSelector(
     (state) => state.products
@@ -54,24 +55,34 @@ const SearchBar: React.FC = () => {
     if (products && products.length > 0) {
       const sortedPrices = Array.from(
         new Set(products.map((product: any) => product.price))
-      ).sort((a:number, b:number) => a - b) as number[];
+      ).sort((a: number, b: number) => a - b) as number[];
       setSelectPrice(sortedPrices);
-  
-      const priceOptions = sortedPrices.map(price => ({ label: `$${price}`, value: price.toString() }));
-      setMinPriceOptions([{ label: 'Min', value: '' }, ...priceOptions]);
-  
+
+      const priceOptions = sortedPrices.map((price) => ({
+        label: `$${price}`,
+        value: price.toString(),
+      }));
+      setMinPriceOptions([{ label: "Min", value: "" }, ...priceOptions]);
+
       if (sortedPrices.length > 1) {
-        setMaxPriceOptions([{ label: 'Max', value: '' }, ...priceOptions.slice(1)]);
+        setMaxPriceOptions([
+          { label: "Max", value: "" },
+          ...priceOptions.slice(1),
+        ]);
       } else {
-        setMaxPriceOptions([{ label: 'Max', value: '' }, ...priceOptions]);
+        setMaxPriceOptions([{ label: "Max", value: "" }, ...priceOptions]);
       }
-  
-      const sortedDiscounts: any = Array.from(
-        new Set(products.map((product: any) => product.discount))
+
+      const sortedCategories: any = Array.from(
+        new Set(products.map((product: any) => product.category))
       )
-        .sort((a:string, b:string) => parseInt(a) - parseInt(b))
-        .map((discount) => ({ label: `${discount}`, value: discount }));
-        setDiscountOptions([{ label: 'Discount', value: '' },...sortedDiscounts]);
+        .sort()
+        .map((category) => ({ label: category, value: category }));
+
+      setCategoryOptions([
+        { label: "Category", value: "" },
+        ...sortedCategories,
+      ]);
     }
   }, [products]);
 
@@ -103,7 +114,7 @@ const SearchBar: React.FC = () => {
     ?.filter(
       (product: any) =>
         product.name.toLowerCase().includes(name.toLowerCase()) &&
-        (!category || product.category === category) &&
+      (!category || product.category.toLowerCase() === category.toLowerCase()) &&
         (!maxPrice || product.price <= parseInt(maxPrice)) &&
         (!minPrice || product.price >= parseInt(minPrice)) &&
         (!discount || parseInt(product.discount) >= parseInt(discount))
@@ -113,26 +124,42 @@ const SearchBar: React.FC = () => {
   useEffect(() => {
     if (filteredProducts && filteredProducts.length > 0) {
       const uniquePrice = Array.from(
-        new Set(filteredProducts.map((product: any) =>{ return typeof product.price === 'string' ? Number(product.price) : product.price;}))
+        new Set(
+          filteredProducts.map((product: any) => {
+            return typeof product.price === "string"
+              ? Number(product.price)
+              : product.price;
+          })
+        )
       );
-      const sortedPrices: any[] = uniquePrice
-      .sort((a:number, b:number) => a - b);
+      const sortedPrices: any[] = uniquePrice.sort(
+        (a: number, b: number) => a - b
+      );
       setSelectPrice(sortedPrices);
-  
-      const priceOptions = sortedPrices.map(price => ({ label: `${price} RWF`, value: price.toString() }));
-      setMinPriceOptions([{ label: 'Min', value: '' }, ...priceOptions]);
-  
+
+      const priceOptions = sortedPrices.map((price) => ({
+        label: `${price} RWF`,
+        value: price.toString(),
+      }));
+      setMinPriceOptions([{ label: "Min", value: "" }, ...priceOptions]);
+
       if (sortedPrices.length > 1) {
-        setMaxPriceOptions([{ label: 'Max', value: '' }, ...priceOptions.slice(1)]);
+        setMaxPriceOptions([
+          { label: "Max", value: "" },
+          ...priceOptions.slice(1),
+        ]);
       } else {
-        setMaxPriceOptions([{ label: 'Max', value: '' }, ...priceOptions]);
+        setMaxPriceOptions([{ label: "Max", value: "" }, ...priceOptions]);
       }
       const sortedDiscounts: any = Array.from(
         new Set(products.map((product: any) => product.discount))
       )
-        .sort((a:string, b:string) => parseInt(a) - parseInt(b))
+        .sort((a: string, b: string) => parseInt(a) - parseInt(b))
         .map((discount) => ({ label: `${discount}`, value: discount }));
-        setDiscountOptions([{ label: 'Discount', value: '' },...sortedDiscounts]);
+      setDiscountOptions([
+        { label: "Discount", value: "" },
+        ...sortedDiscounts,
+      ]);
     }
   }, [filteredProducts]);
 
@@ -145,6 +172,17 @@ const SearchBar: React.FC = () => {
               <span className="product-name">{name}:</span>
               <div className="filter-option">
                 <div className="selection-part">
+                  <span className="searchSpan-category">Category:</span>
+                  <CustomSelect
+                    options={categoryOptions}
+                    onSelect={(selected) => {
+                      setCategory(selected);
+                      handleFilterChange("category", selected);
+                    }}
+                    value={category}
+                  />
+                </div>
+                <div className="selection-part">
                   <span className="searchSpan-price">Price:</span>
                   <CustomSelect
                     options={minPriceOptions}
@@ -154,7 +192,6 @@ const SearchBar: React.FC = () => {
                     }}
                     value={minPrice}
                   />
-                 
                   <CustomSelect
                     options={maxPriceOptions}
                     onSelect={(selected) => {
@@ -162,18 +199,6 @@ const SearchBar: React.FC = () => {
                       handleFilterChange("maxPrice", selected);
                     }}
                     value={maxPrice}
-                  />
-              
-                </div>
-                <div className="discount-display">
-                  <span className="search-Span-price">Discount:</span>
-                  <CustomSelect
-                    options={discountOptions}
-                    onSelect={(selected) => {
-                      setDiscount(selected);
-                      handleFilterChange("discount", selected);
-                    }}
-                    value={discount}
                   />
                 </div>
               </div>
@@ -187,7 +212,7 @@ const SearchBar: React.FC = () => {
                 filteredProducts &&
                 filteredProducts.length > 0 ? (
                 <div className="product-list">
-                  {filteredProducts.map((product:any) => (
+                  {filteredProducts.map((product: any) => (
                     <Product
                       key={product.id}
                       id={product.id}

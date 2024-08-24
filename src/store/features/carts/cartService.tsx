@@ -52,7 +52,6 @@ const clearCartProduct = async (cartId: string, productId: string) => {
 const clearCarts = async () => {
   try {
     const response = await axiosInstance.delete('/api/cart/buyer-clear-carts');
-    console.log('MRR', response);
     return response;
   } catch (error) {
     console.error('Error clear carts', error);

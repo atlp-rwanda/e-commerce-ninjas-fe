@@ -5,7 +5,6 @@ import axios from 'axios';
 export const uploadImage = createAsyncThunk(
   'chat/uploadImage',
   async (file:File, thunkAPI) => {
-    console.log(file)
     const formData = new FormData();
     formData.append("file",file);
     formData.append("upload_preset", "pbyvho95");

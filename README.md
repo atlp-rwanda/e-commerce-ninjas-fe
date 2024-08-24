@@ -5,7 +5,7 @@ Our e-commerce web application server, developed by Team Ninjas, facilitates smo
 
 ## Hosted Application URL
 
-[https://e-commerce-ninja-fn-staging.netlify.app/](https://e-commerce-ninja-fn-staging.netlify.app/)
+[https://e-commerce-ninjas.netlify.app/](https://e-commerce-ninjas.netlify.app/)
 
 ## Github repository
 
@@ -18,6 +18,7 @@ Our e-commerce web application server, developed by Team Ninjas, facilitates smo
 [![Coverage Status](https://coveralls.io/repos/github/atlp-rwanda/e-commerce-ninjas-fe/badge.svg)](https://coveralls.io/github/atlp-rwanda/e-commerce-ninjas-fe)
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/atlp-rwanda/e-commerce-ninjas-fe/tree/develop.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/atlp-rwanda/e-commerce-ninjas-fe/tree/develop)
 [![CI](https://github.com/atlp-rwanda/e-commerce-ninjas-fe/actions/workflows/ci.yml/badge.svg)](https://github.com/atlp-rwanda/e-commerce-ninjas-fe/actions/workflows/ci.yml)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/ec14a22a-2d7e-4892-9ff4-9203cd3e8ac3/deploy-status)](https://app.netlify.com/sites/e-commerce-ninjas/deploys)
 
 ## Completed features
 - Setup empty react

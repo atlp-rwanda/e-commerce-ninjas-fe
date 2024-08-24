@@ -6,7 +6,6 @@ const socket = io('https://e-commerce-ninjas-platform-backend.onrender.com');
 
 export const joinRoom = () => {
   const token = getToken();
-  console.log(token)
   if (token) {
     socket.emit('join', token);
   } else {

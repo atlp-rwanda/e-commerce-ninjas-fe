@@ -113,10 +113,11 @@ const TermsAndConditionsForm: React.FC<TermsProps> = ({ onNext }) => {
       )}
 
       {fileUrl && open && (
-        <div className="view__pdf">
-          <FullScreenPdfView pdfUrl={fileUrl} />
-          <IoCloseCircleOutline onClick={handleClose} className="close__icon" />
-        </div>
+        <FullScreenPdfView
+          pdfUrl={fileUrl}
+          open={open}
+          onClose={handleClose}
+        />
       )}
 
       {content && open && (
@@ -142,6 +143,32 @@ const TermsAndConditionsForm: React.FC<TermsProps> = ({ onNext }) => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
+
+      {fileUrl == null && content == null && open && (
+        <Dialog
+          open={open}
+          onClose={() => setOpen(false)}
+          aria-labelledby="terms-and-conditions-title"
+          aria-describedby="terms-and-conditions-description"
+        >
+          <DialogTitle id="terms-and-conditions-title">
+            Terms and Conditions
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="terms-and-conditions-description">
+              <Typography variant="body1" sx={{ fontSize: "1.4rem" }}>
+                No Terms and Conditions found. Please contact the admin to
+                upload them.
+              </Typography>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpen(false)} color="primary">
               Close
             </Button>
           </DialogActions>

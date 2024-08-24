@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as XLSX from 'xlsx';
 
-const exportToExcel = (orderHistory) => {
+const exportToExcel = (orderHistory, docName = 'seller_orders') => {
   const orders = orderHistory.order;
   const rows = [
     [
@@ -41,7 +41,7 @@ const exportToExcel = (orderHistory) => {
   XLSX.utils.book_append_sheet(workbook, worksheet, 'OrderHistory');
 
   // Export the workbook to an Excel file
-  XLSX.writeFile(workbook, 'seller_orders.xlsx');
+  XLSX.writeFile(workbook, `${docName}.xlsx`);
 };
 
 export default exportToExcel;

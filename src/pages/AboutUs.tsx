@@ -8,7 +8,7 @@ export const AboutUs = () => {
   const teamMembers = [
     {
       name: "Aime Patrick",
-      image: "https://photos.google.com/photo/AF1QipNiI33eOdRoks7ddEFU9Rp4XoV3sIUBxS5RCXCG",
+      image: "https://res.cloudinary.com/dqugc36zh/image/upload/v1724652456/xrpxq1tvvzi4hza3ewjh.jpg",
       position: "Full Stack Developer",
       linkedIn: "www.linkedin.com/in/aime-patrick-393ba5226",
       github: "https://github.com/Aime-Patrick",
@@ -39,6 +39,13 @@ export const AboutUs = () => {
       name: "Ndahimana Bonheur",
       image: "https://res.cloudinary.com/dpu6ljn5c/image/upload/v1723665699/white_passport_ku69ot.jpg",
       position: "Junior Software Developer",
+      linkedIn: "https://www.linkedin.com/in/ndahimana154/",
+      github: "https://github.com/ndahimana154",
+    },
+    {
+      name: "Niyonshuti Jean De Dieu",
+      image: "https://res.cloudinary.com/dqugc36zh/image/upload/v1724653199/mkbxyo83gsbsm40dzpnc.jpg",
+      position: "Full Stack Developer",
       linkedIn: "https://www.linkedin.com/in/ndahimana154/",
       github: "https://github.com/ndahimana154",
     },
@@ -103,11 +110,11 @@ export const AboutUs = () => {
               ))}
             </div>
           </section>
-          <section className="get-in-touch">
+          {/* <section className="get-in-touch">
             <div className="in-touch">
               <button>Get In Touch</button>
             </div>
-          </section>
+          </section> */}
         </div>
       </div>
     </>

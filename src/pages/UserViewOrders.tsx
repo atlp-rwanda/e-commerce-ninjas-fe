@@ -91,9 +91,7 @@ const UserVIewOrders: React.FC = () => {
       if (response.payload === 'orders not found') {
         setIsError(true);
       }
-      console.log('Response', response);
       setOrderResponseData(response.payload.data.orders);
-      console.log('Response', response.payload.data);
     } catch (error: any) {
       if (error === 'Not authorized') {
         setIsLoggedOut(true);

@@ -18,6 +18,12 @@ import {
 } from "../../store/features/admin/adminSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { useNavigate } from 'react-router-dom';
+import { FaFileExcel, FaFileCsv, FaFilePdf, FaFileWord } from "react-icons/fa";
+import exportToExcel from "../../utils/export/exportToExcel";
+import exportToCSV from "../../utils/export/exportToCSV";
+import exportToPDF from "../../utils/export/exportToPDF";
+import exportToWord from "../../utils/export/exportToWord";
+
 export const OverViewDashboard = () => {
   const getMonthName = (dateString) => {
     const date = new Date(dateString);
@@ -44,40 +50,42 @@ export const OverViewDashboard = () => {
   const [numberOfSellers, setNumberOfSellers] = useState(null);
   const [numberOfShops, setNumberOfShops] = useState(null);
   const [selectedMonth, setSelectedMonth] = useState("All");
+  const [orderHistory, setOrderHistory] = useState({ order: [] })
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
+useEffect(() => {
+  const countUsers = async () => {
     try {
-      const countUsers = async () => {
-        const usersResponse = await dispatch(getAllUsers());
-        const shopResponse = await dispatch(getAllShops());
-        const shopNumber = shopResponse.payload?.data?.shops?.length;
-        const users = usersResponse.payload.data.user;
-        let buyerCount = 0;
-        let sellerCount = 0;
+      const [usersResponse, shopResponse] = await Promise.all([
+        dispatch(getAllUsers()),
+        dispatch(getAllShops()),
+      ]);
 
-        users.forEach((user) => {
-          if (user.role === "buyer") {
-            buyerCount++;
-          } else if (user.role === "seller") {
-            sellerCount++;
-          }
-        });
-        setNumberOfBuyers(buyerCount);
-        setNumberOfSellers(sellerCount);
-        setNumberOfShops(shopNumber);
-      };
-      countUsers();
+      const shops = shopResponse?.payload?.data?.shops ?? [];
+      const users = usersResponse?.payload?.data?.user ?? [];
+
+      const buyerCount = users.filter((user) => user.role === "buyer").length;
+      const sellerCount = users.filter((user) => user.role === "seller").length;
+      const shopNumber = shops.length;
+
+      setNumberOfBuyers(buyerCount);
+      setNumberOfSellers(sellerCount);
+      setNumberOfShops(shopNumber);
     } catch (error) {
-      console.error("Failed to fetch Users:", error);
+      console.error("Failed to fetch users or shops:", error);
     }
-  }, [dispatch, getAllUsers]);
+  };
+
+  countUsers();
+}, [dispatch, getAllUsers, getAllShops]);
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await dispatch(getOrderHistory()).unwrap();
+        setOrderHistory({ order: response.data.OrderHistory })
         const aggregatedData = response.data.OrderHistory.reduce(
           (acc, order) => {
             const monthName = getMonthName(order.orderDate);
@@ -100,6 +108,33 @@ export const OverViewDashboard = () => {
     };
     fetchData();
   }, [dispatch]);
+  const [isExportOpen, setIsExportOpen] = useState(false);
+
+  const toggleExportDropdown = () => {
+    setIsExportOpen(!isExportOpen);
+  };
+
+  const handleExport = (exportType) => {
+    console.dir(orderHistory)
+    switch (exportType) {
+      case 'excel':
+        exportToExcel(orderHistory, "admin_orders_report");
+        break;
+      case 'csv':
+        exportToCSV(orderHistory, "admin_orders_report");
+        break;
+      case 'pdf':
+        exportToPDF(orderHistory, "admin_orders_report");
+        break;
+      case 'word':
+        exportToWord(orderHistory, "admin_orders_report");
+        break;
+      default:
+        console.error('Invalid export type');
+    }
+    setIsExportOpen(false);
+  };
+
 
   const MonthDropDown = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -154,8 +189,8 @@ export const OverViewDashboard = () => {
     selectedMonth === "All"
       ? orderStats
       : orderStats.filter(
-          (stat) => stat.name === selectedMonth.substring(0, 3)
-        );
+        (stat) => stat.name === selectedMonth.substring(0, 3)
+      );
 
   return (
     <>
@@ -201,7 +236,22 @@ export const OverViewDashboard = () => {
               </div>
             </div>
 
-            <MonthDropDown />
+            <div className="export-section">
+              <MonthDropDown />
+              <div className="export-dropdown">
+                <button type="button" className="export-btn" onClick={toggleExportDropdown}>
+                  Export <span className="arrow-down">▼</span>
+                </button>
+                {isExportOpen && (
+                  <ul className="export-menu">
+                    <li onClick={() => handleExport('excel')}><FaFileExcel color="green" /> Excel</li>
+                    <li onClick={() => handleExport('csv')}><FaFileCsv /> CSV</li>
+                    <li onClick={() => handleExport('pdf')}><FaFilePdf color='red' /> PDF</li>
+                    <li onClick={() => handleExport('word')}><FaFileWord color='blue' /> Word</li>
+                  </ul>
+                )}
+              </div>
+            </div>
           </div>
 
           <ResponsiveContainer width="99%" height={250}>

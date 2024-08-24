@@ -16,7 +16,8 @@ function useSellerAuthCheck() {
     const [isAuthorized, setIsAuthorized] = useState(false);
 
     const callbackUrl = useMemo(() => encodeURIComponent(pathname), [pathname]);
-    const token = getToken()
+    const token = getToken();
+
     const checkAuth = useCallback(async () => {
         if (token) {
             await dispatch(getUserDetails(token));
@@ -25,21 +26,24 @@ function useSellerAuthCheck() {
     }, [dispatch, token]);
 
     useEffect(() => {
+        console.log("Checking authentication...");
         checkAuth();
     }, [checkAuth]);
-
+    
     useEffect(() => {
+        console.log("Authorization check - isChecking:", isChecking);
+        console.log("Authorization check - isAuthenticated:", isAuthenticated);
         if (!isChecking) {
-            if (!isAuthenticated || !user || (user as any).role !== "seller") {
-                const message = !isAuthenticated ? 'You must login first' : 'You must login as a seller';
-                // toast.info(message);
-                window.location.href =`/login?callbackUrl=${callbackUrl}`;
+            if (!isAuthenticated || !token || !user || (user as any).role !== "seller") {
+                console.log("Redirecting to login...");
+                navigate(`/login?callbackUrl=${callbackUrl}`);
                 setIsAuthorized(false);
             } else {
                 setIsAuthorized(true);
             }
         }
-    }, [isChecking, isAuthenticated, user, navigate, callbackUrl]);
+    }, [isChecking, isAuthenticated, user, navigate, callbackUrl, token]);
+    
 
     return isAuthorized;
 }

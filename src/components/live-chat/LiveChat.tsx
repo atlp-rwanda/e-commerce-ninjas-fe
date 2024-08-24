@@ -88,9 +88,12 @@ const LiveChat = () => {
   }, [images]);
 
   useEffect(() => {
+    const token = getToken();
     if (isLoggedIn) {
       const newSocket = io(`${URL}/chats`, {
-        withCredentials: true, // This ensures that cookies, including HTTP-only cookies, are sent
+        auth:{
+          token: token
+        }
       });
 
       setSocket(newSocket);

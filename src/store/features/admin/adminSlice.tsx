@@ -473,7 +473,6 @@ const adminSlice = createSlice({
           state.request = action.payload.data.sellerRequest;
           state.message = action.payload.message;
           toast.success(state.message);
-          console.log(state.request);
         }
       )
       .addCase(

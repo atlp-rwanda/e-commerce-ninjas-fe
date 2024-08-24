@@ -142,6 +142,8 @@
             .check-group{
                 display: flex;
                 flex-direction: row;
+                gap: 1rem;
+                align-items: center;
 
                 input[type="checkbox"] {
                     appearance: none;
@@ -173,8 +175,13 @@
                     }
                 }
                 label {
-                    margin-left: .2rem;
+                    margin: 0;
                     font-size: 1.5rem;
+                    .btn-link{
+                        color: $primary-color;
+                        cursor: pointer;
+                        
+                    }
                 }
             }
             .form-control {
@@ -202,7 +209,7 @@
 
                 label {
                     font-size: 14px;
-                    margin-bottom: 8px;
+                    margin-bottom: .5rem;
                     display: block;
 
                     span {
@@ -215,11 +222,19 @@
                     padding: 10px 0;
                     font-size: 1.4rem;
                     border-bottom: 2px solid $border-color;
-                    margin-bottom: 15px;
+                    margin-bottom: 1rem;
                     box-sizing: border-box;
 
                     &:focus {
                         border-bottom: 2px solid $primary-color;
+                    }
+                }
+                .pass-hide{
+                    position: relative;
+                    .hide{
+                        position: absolute;
+                        right: 20rem;
+                        font-size: 2.5rem;
                     }
                 }
             }

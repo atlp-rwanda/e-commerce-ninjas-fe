@@ -23,6 +23,7 @@ const initialState: AuthService = {
   isOtpSuccess:false,
   isEmailResend:false,
   isNotVerified:false,
+  isRegister: false,
 };
 
 type IUserEmailAndPassword = Pick<IUser, 'email' | 'password'>;
@@ -204,6 +205,7 @@ const userSlice = createSlice({
       state.isOtpSuccess = false;
       state.isEmailResend = false
       state.isNotVerified = false;
+      state.isRegister = false;
     },
     changingProfile: (state, action: any)=>{
       (state.user as any).profilePicture = action.payload
@@ -219,6 +221,7 @@ const userSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.isRegister = true;
         state.message = action.payload.message;
       })
       .addCase(registerUser.rejected, (state, action: PayloadAction<any>) => {
@@ -417,7 +420,6 @@ const userSlice = createSlice({
         state.isOtpSuccess = true;
         state.message = action.payload.message;
         state.token = action.payload.data.token;
-        console.log(action.payload)
       })
       .addCase(verifyOTP.rejected, (state, action: PayloadAction<any>) => {
         state.isOtpFail = true;

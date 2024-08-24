@@ -1,45 +1,42 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useAppDispatch, useAppSelector } from '../../store/store';
+import { toast } from 'react-toastify';
 import { getUserDetails, logout } from '../../store/features/auth/authSlice';
 
-const ProtectedRoute = ({ redirectPath = '/', allowedRoles = [], children }) => {
+const ProtectedRoute = ({ redirectPath = '/',allowedRoles = [] ,children }) => {
+  const [userRole, setUserRole] = useState(null);
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userRole, setUserRole] = useState(null);
-  const location = useLocation();
-  const dispatch = useAppDispatch();
-  const {user} = useAppSelector((state)=>state.auth)
+  const { message, isError } = useAppSelector((state) => state.admin);
   useEffect(() => {
-    const authenticateUser = async () => {
+    setTimeout(() => {
+    const checkToken = async () => {
       const token = getToken();
-      if (token) {
-        try {
-          const res = await dispatch(getUserDetails(token));
+      if(token) {
+        const res =  await dispatch(getUserDetails(token));
           if (res) {
             setUserRole(res.payload.data.user.role);
-            setIsAuthenticated(true);
-          } else {
+            setIsAuthenticated(!!token);
+            setLoading(false);
+          }else {
             setIsAuthenticated(false);
           }
-        } catch (error) {
-          console.error("Failed to decode token:", error);
+        }else {
           setIsAuthenticated(false);
+          setLoading(false);
         }
-      } else {
-        setIsAuthenticated(false);
-      }
-      setLoading(false);
-    };
+        };
+        checkToken();
+      }, 1000);
 
-    authenticateUser();
-  }, [dispatch]);
+  }, []);
 
   if (loading) {
     return (
@@ -65,23 +62,14 @@ const ProtectedRoute = ({ redirectPath = '/', allowedRoles = [], children }) => 
     );
   }
 
-  // Allow guests to access home, login, and signup pages
-  if (isAuthenticated === false) {
-    if (location.pathname === '/' || location.pathname === '/login' || location.pathname === '/signup') {
-      return children ? children : <Outlet />;
-    } else {
-      toast.info('Please log in to access this page.');
-      return <Navigate to={redirectPath} replace />;
-    }
+  if (!isAuthenticated) {
+    toast.info('Please log in to access this page.');
+    return <Navigate to={redirectPath} replace />;
   }
-
-  // Prevent authenticated users from accessing login and signup pages
-  if (isAuthenticated && (location.pathname === '/login' || location.pathname === '/signup')) {
-    toast.info('You are already logged in.');
-    return <Navigate to="/" replace />;
+  if (isError && message === 'Not authorized') {
+    toast.info('You are not authorized to access this page');
+    return <Navigate to={redirectPath} replace />;
   }
-
-  // Check if the authenticated user has the allowed role
   if (allowedRoles.length && !allowedRoles.includes(userRole)) {
     if (isAuthenticated && (userRole === 'admin' || userRole === 'seller')) {
       dispatch(logout());
@@ -92,8 +80,53 @@ const ProtectedRoute = ({ redirectPath = '/', allowedRoles = [], children }) => 
       return <Navigate to={redirectPath} replace />;
     }
   }
-
   return children ? children : <Outlet />;
+};
+
+const GuestRoute = () => {
+  const navigate = useNavigate();
+  const [userRole, setUserRole] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const dispatch = useAppDispatch();
+
+  useEffect(() =>{
+    const checkToken = async () => {
+      const token = getToken();
+      if (token) {
+        try {
+          const resultAction = await dispatch(getUserDetails(token));
+          
+          if (getUserDetails.fulfilled.match(resultAction)) {
+            const userRole = resultAction.payload.user.role;
+            setUserRole(userRole);
+            setIsAuthenticated(true);
+          } else {
+            navigate('/login'); 
+          }
+        } catch (error) {
+          navigate('/login');
+        }
+      } else {
+        navigate('/login');
+      }
+    };
+  
+    checkToken();
+  },[dispatch,navigate])
+
+  useEffect(() => {
+    if (isAuthenticated && userRole) {
+      if (userRole === 'admin') {
+        navigate('/admin');
+      } else if (userRole === 'seller') {
+        navigate('/seller');
+      } else {
+        navigate('/');
+      }
+    }
+  }, [isAuthenticated, userRole, navigate]);
+
+  return <Outlet />;
 };
 
 const storeTokenWithExpiration = (token) => {
@@ -122,4 +155,4 @@ const getToken = () => {
   return null;
 };
 
-export { ProtectedRoute, storeTokenWithExpiration, getToken };
+export { ProtectedRoute, storeTokenWithExpiration, getToken,GuestRoute };

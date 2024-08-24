@@ -24,7 +24,7 @@ const SignUpSchema = Yup.object().shape({
 export const SignUp = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { user, isError, isSuccess, isLoading, message } = useAppSelector(
+  const { user, isError, isRegister, isLoading, message } = useAppSelector(
     (state) => state?.auth
   );
 
@@ -52,12 +52,12 @@ export const SignUp = () => {
   const [showError, setShowError] = useState(isError);
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isRegister) {
       toast.success(message);
       navigate("/verify-email");
       formik.resetForm();
     }
-  }, [user, isError, isSuccess, isLoading, message, navigate]);
+  }, [user, isError, isRegister, isLoading, message, navigate]);
 
   useEffect(() => {
     setShowError(isError);
@@ -79,9 +79,7 @@ export const SignUp = () => {
     setIsFocused(true);
   };
 
-  useEffect(() => {
-    dispatch(resetAuth());
-  }, [dispatch]);
+
 
   return (
     <>

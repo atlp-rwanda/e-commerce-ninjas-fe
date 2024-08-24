@@ -156,21 +156,112 @@
         }
       }
 
-      .monthDropDown {
-        .dropdown-button {
-          background-color: #ff7300;
-          color: #fff;
-          border: none;
-          padding: 5px 10px;
-          border-radius: 5px;
-          cursor: pointer;
-          font-size: 14px;
+      // .monthDropDown {
+      //   .dropdown-button {
+      //     background-color: #ff7300;
+      //     color: #fff;
+      //     border: none;
+      //     padding: 5px 10px;
+      //     border-radius: 5px;
+      //     cursor: pointer;
+      //     font-size: 14px;
 
-          .arrow-down {
-            margin-left: 5px;
+      //     .arrow-down {
+      //       margin-left: 5px;
+      //     }
+      //   }
+      // }
+
+      .export-section {
+        display: flex;
+        gap: 10px;
+
+        .monthDropDown {
+          .dropdown-button {
+            background-color: #ff7300;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+
+            .arrow-down {
+              margin-left: 5px;
+            }
+          }
+        }
+
+        .export-dropdown {
+          position: relative;
+
+          .export-btn {
+            background-color: #0f8615;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+
+            .arrow-down {
+              margin-left: 5px;
+            }
+          }
+
+          .export-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            list-style-type: none;
+            padding: 0;
+            margin: 5px 0 0;
+            z-index: 1000;
+
+            li {
+              padding: 8px 15px;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              font-size: 14px;
+              color: #333;
+
+              &:hover {
+                background-color: #f5f5f5;
+              }
+
+              svg {
+                font-size: 16px;
+              }
+
+              &:nth-child(1) svg {
+                color: #217346; // Excel green
+              }
+
+              &:nth-child(2) svg {
+                color: #888888; // CSV gray
+              }
+
+              &:nth-child(3) svg {
+                color: #F40F02; // PDF red
+              }
+
+              &:nth-child(4) svg {
+                color: #2B579A; // Word blue
+              }
+            }
           }
         }
       }
+
     }
   }
 }

@@ -44,7 +44,6 @@ export const EditTerms = ({ id }) => {
       await dispatch(updateTerm({formData, id}));
     } else if (localState.content) {
       const content = localState.content;
-      console.log(content)
       await dispatch(updateTerm({id,content}));
     }
 

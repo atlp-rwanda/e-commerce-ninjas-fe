@@ -105,7 +105,8 @@ export interface AuthService {
   isOtpFail:boolean;
   isOtpSuccess:boolean;
   isEmailResend:boolean;
-  isNotVerified:boolean
+  isNotVerified:boolean;
+  isRegister:boolean;
 }
 
 export interface IEmail {

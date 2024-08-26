@@ -6,13 +6,30 @@ import {
   fetchPasswordExpiration,
   getAllTerms,
   setTerms,
+  setTermsWithPdf,
   updateUserPasswordExpiration,
 } from "../../store/features/admin/adminSlice";
 import Box from "@mui/material/Box";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, LinearProgress, Tooltip, Zoom } from "@mui/material";
+import "react-quill/dist/quill.snow.css";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+  LinearProgress,
+  Tooltip,
+  Zoom,
+} from "@mui/material";
 import Table from "../table/Table";
 import { Delete, Edit } from "@mui/icons-material";
 import { EditTerms } from "../TermsAndCondition/EditTerms";
+import ReactQuill from "react-quill";
+import { toast } from "react-toastify";
+import { FullScreenPdfView } from "../FullScreenPdfView/FullScreenPdfView";
+import { IoCloseCircleOutline } from "react-icons/io5";
 
 export const GeneralSettings = () => {
   const dispatch = useAppDispatch();
@@ -29,7 +46,24 @@ export const GeneralSettings = () => {
   const [termToDelete, setTermToDelete] = useState<string | null>(null);
   const [id, setId] = useState();
   const [open, setOpen] = useState(false);
-  const [localState, setLocalState] = useState<any[]>([])
+  const [pdfOpen, setPdfOpen] = useState(false);
+  const [localState, setLocalState] = useState<any[]>([]);
+  const [editorContent, setEditorContent] = useState("");
+  const [pdfFile, setPdfFile] = useState(null);
+  const [uploadMethod, setUploadMethod] = useState("");
+  const [openDialog, setOpenDialog] = useState(false);
+  const handleEditorChange = (value) => {
+    setEditorContent(value);
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file && file.type !== "application/pdf") {
+      toast.error("Please upload a valid PDF document.");
+      return;
+    }
+    setPdfFile(file);
+  };
 
   useEffect(() => {
     const fun = async () => {
@@ -73,7 +107,7 @@ export const GeneralSettings = () => {
   const handleConfirmDelete = async () => {
     if (termToDelete) {
       await dispatch(deleteTerm(termToDelete));
-    setLocalState(localState?.filter((item) => item.id!== termToDelete));
+      setLocalState(localState?.filter((item) => item.id !== termToDelete));
       setOpen(false);
       setTermToDelete(null);
     }
@@ -81,24 +115,124 @@ export const GeneralSettings = () => {
 
   const handleSaveTerms = async (e) => {
     e.preventDefault();
-    const termData = {
-      termType,
-      termContent,
-    };
-    await dispatch(setTerms(termData));
-    setIsDisabled(true);
-    setIsEdit(true);
-    setTermType("");
-    setTermContent("");
+    try {
+      if (uploadMethod === "editor") {
+        const termData = {
+          termType,
+          termContent: editorContent,
+        };
+        await dispatch(setTerms(termData));
+      } else if (uploadMethod === "pdf" && pdfFile) {
+        const formData = new FormData();
+        formData.append("pdf", pdfFile);
+        formData.append("type", termType);
+        await dispatch(setTermsWithPdf(formData));
+      }
+      // Reset form fields after success
+      setTermType("");
+      setEditorContent("");
+      setPdfFile(null);
+    } catch (error) {
+      toast.error("An error occurred while saving terms. Please try again.");
+    } finally {
+      setIsDisabled(true);
+      setIsEdit(true);
+    }
+  };
+
+  const handleChoosePdf = (e) => {
+    e.preventDefault();
+    setUploadMethod("pdf");
+  };
+  const handleChooseEditor = (e) => {
+    e.preventDefault();
+    setUploadMethod("editor");
   };
 
   const headers = ["N0", "type", "content", "createdAt", "action"];
+
+  const handleDialogOpen = () => setOpenDialog(true);
+  const handleDialogClose = () => setOpenDialog(false);
+
+  const truncateText = (text, length = 80) => {
+    return text.length > length ? text.substring(0, length) + "..." : text;
+  };
+
+  const renderContent = (item) => {
+    return (
+      <>
+        <div className="display-content">
+          <span
+            dangerouslySetInnerHTML={{ __html: truncateText(item.content) }}
+          ></span>
+          {item.content.length > 80 && (
+            <Button color="primary" onClick={handleDialogOpen}>
+              Read More
+            </Button>
+          )}
+        </div>
+        <Dialog
+          open={openDialog}
+          onClose={handleDialogClose}
+          maxWidth="md"
+          fullWidth
+          PaperProps={{
+            style: { height: "80vh", borderRadius: "10px" },
+          }}
+        >
+          <DialogTitle style={{ textAlign: "center", fontWeight: "bold" }}>
+            Terms and Conditions
+          </DialogTitle>
+          <DialogContent
+            dividers
+            style={{
+              padding: "20px",
+              overflowY: "auto",
+              maxHeight: "60vh",
+            }}
+          >
+            <div
+              dangerouslySetInnerHTML={{ __html: item.content }}
+              style={{ fontSize: "1.8rem", padding: "0 2rem" }}
+            />
+          </DialogContent>
+        </Dialog>
+      </>
+    );
+  };
+
+  const renderPdfUrl = (url: string) => {
+    const handleClickOpen = () => {
+      setPdfOpen(true)
+    };
+  
+    const handleClose = () => {
+      setPdfOpen(false);
+    };
+    return (
+      <div className="viewer">
+        <a
+          href={`https://docs.google.com/viewer?url=${encodeURIComponent(url)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+         <Button> View PDF vie Google</Button>
+        </a>
+        <Button onClick={handleClickOpen}>View PDF</Button>
+        {
+          pdfOpen && (
+              <FullScreenPdfView pdfUrl={url} open={pdfOpen} onClose={handleClose}/>
+          )
+        }
+      </div>
+    );
+  };
 
   const rows = localState?.map((item, index) => {
     return [
       index + 1,
       item.type,
-      item.content,
+      item.content !== null ? renderContent(item) : renderPdfUrl(item.pdfUrl),
       new Date(item.createdAt).toLocaleDateString(),
       <div className="action__icons">
         <Tooltip TransitionComponent={Zoom} title="Edit" arrow>
@@ -113,7 +247,11 @@ export const GeneralSettings = () => {
           </IconButton>
         </Tooltip>
         <Tooltip TransitionComponent={Zoom} title="Delete" arrow>
-          <IconButton onClick={()=> {handleDeleteTerm(item.id)}}>
+          <IconButton
+            onClick={() => {
+              handleDeleteTerm(item.id);
+            }}
+          >
             <Delete className="icon__delete" />
           </IconButton>
         </Tooltip>
@@ -150,7 +288,7 @@ export const GeneralSettings = () => {
                   id="alert-dialog-description"
                   sx={{ fontSize: "1.6rem" }}
                 >
-                  Are you sure you want to change this user's role to Admin?
+                  Are you sure you want to delete Terms and Conditions?
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
@@ -205,17 +343,43 @@ export const GeneralSettings = () => {
                     <option value="seller">Seller</option>
                     <option value="buyer">Buyer</option>
                   </select>
-                  <textarea
-                    className="form-control"
-                    placeholder="Terms and Conditions"
-                    disabled={isDisabled}
-                    value={termContent}
-                    onFocus={() => setIsEdit(false)}
-                    onChange={(e) => setTermContent(e.target.value)}
-                  />
+                  <div className="uploadMethod">
+                    <button onClick={(e) => handleChooseEditor(e)}>
+                      Write Terms and Conditions
+                    </button>
+                    <button onClick={(e) => handleChoosePdf(e)}>
+                      Upload PDF Document
+                    </button>
+                  </div>
+                  {uploadMethod === "editor" ? (
+                    <div className="quill">
+                      <ReactQuill
+                        value={editorContent}
+                        onChange={handleEditorChange}
+                        placeholder="Write your terms and conditions here..."
+                        theme="snow"
+                        className="quill"
+                        readOnly={isDisabled}
+                        onFocus={() => setIsEdit(false)}
+                      />
+                    </div>
+                  ) : uploadMethod === "pdf" ? (
+                    <>
+                      <div className="upload-file">
+                        <input
+                          type="file"
+                          onChange={handleFileChange}
+                          accept=".pdf"
+                          disabled={isDisabled}
+                          onFocus={() => setIsEdit(false)}
+                        />
+                      </div>
+                    </>
+                  ) : null}
                 </div>
-
-                <div className="form-group">
+                <div
+                  className={`form-group ${uploadMethod === "editor" ? "margin" : ""}`}
+                >
                   {isEdit ? (
                     <button
                       className="btn"

@@ -24,7 +24,7 @@ import {
   IPaymentData,
   ITermsData,
 } from "../../utils/types/store";
-import { useAppDispatch,useAppSelector } from "../../store/store";
+import { useAppDispatch, useAppSelector } from "../../store/store";
 import { userSubmitSellerRequest } from "../../store/features/user/userSlice";
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
@@ -90,6 +90,11 @@ function QontoStepIcon(props: StepIconProps) {
 
 const steps = [
   {
+    label: "Terms & Conditions",
+    description:
+      "Review and agree to the terms and conditions to start selling on our platform.",
+  },
+  {
     label: "Eligibility Requirements",
     description:
       "Ensure you meet all the eligibility criteria to become a seller on our platform.",
@@ -98,18 +103,16 @@ const steps = [
     label: "Payment methods",
     description: "Provide a payment method",
   },
-  {
-    label: "Terms & Conditions",
-    description:
-      "Review and agree to the terms and conditions to start selling on our platform.",
-  },
 ];
 
 const HorizontalStepper = () => {
   const dispatch = useAppDispatch();
-  const {isLoading} = useAppSelector((state)=>state.user)
+  const { isLoading } = useAppSelector((state) => state.user);
   const [activeStep, setActiveStep] = useState<number>(0);
   const [collectedData, setCollectedData] = useState<ICollectedData>({
+    termsAndConditions: {
+      terms: false,
+    },
     eligibility: {
       businessName: "",
       Tin: "",
@@ -117,29 +120,28 @@ const HorizontalStepper = () => {
       businessDescription: "",
     },
     paymentMethods: {},
-    termsAndConditions: {
-      terms: false,
-    },
   });
-  const [sendData, setSendData] = useState<any>()
+  const [sendData, setSendData] = useState<any>();
   const [stepData, setStepData] = useState<any>(null);
   const handleNext = () => {
     const updateData = { ...collectedData };
-      switch (activeStep) {
-        case 0:
-            updateData.eligibility = stepData as IEligibilityData;
-        case 1:
-          updateData.paymentMethods = stepData as IPaymentData;
-          break;
-        case 2:
-          updateData.termsAndConditions = stepData as ITermsData;
-          handleCollectedData(updateData);
-          break;
-        default:
-          break;
-      }
-      setCollectedData(updateData);
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
+    switch (activeStep) {
+      case 0:
+        updateData.termsAndConditions = stepData as ITermsData;
+        break;
+      case 1:
+        updateData.eligibility = stepData as IEligibilityData;
+        break;
+      case 2:
+        updateData.paymentMethods = stepData as IPaymentData;
+        handleCollectedData(updateData);
+        break;
+      default:
+        break;
+    }
+    setCollectedData(updateData);
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   const handleBack = () => {
@@ -151,11 +153,14 @@ const HorizontalStepper = () => {
   };
 
   const handleCollectedData = async (data: ICollectedData) => {
-    const formData =  new FormData();
+    const formData = new FormData();
     formData.append("businessName", data.eligibility.businessName);
     formData.append("Tin", data.eligibility.Tin);
     formData.append("file", data.eligibility.rdbDocument);
-    formData.append("businessDescription", data.eligibility.businessDescription);
+    formData.append(
+      "businessDescription",
+      data.eligibility.businessDescription
+    );
     formData.append("bankAccount", data.paymentMethods.bankAccount);
     formData.append("bankPayment", data.paymentMethods.bankPayment);
     formData.append("mobilePayment", data.paymentMethods.mobilePayment);
@@ -177,28 +182,27 @@ const HorizontalStepper = () => {
     }
   };
 
-  
-  useEffect(()=>{
-    if(sendData){
-    dispatch(userSubmitSellerRequest(sendData))
+  useEffect(() => {
+    if (sendData) {
+      dispatch(userSubmitSellerRequest(sendData));
     }
-  },[sendData])
+  }, [sendData]);
   return (
     <div className="horizontalStepper">
       {isLoading && (
-          <div className="table__spinner">
-            <Box sx={{ width: "100%" }}>
-              <LinearProgress
-                sx={{
-                  backgroundColor: "#fff",
-                  "& .MuiLinearProgress-bar": {
-                    backgroundColor: "#ff8a46",
-                  },
-                }}
-              />
-            </Box>
-          </div>
-        )}
+        <div className="table__spinner">
+          <Box sx={{ width: "100%" }}>
+            <LinearProgress
+              sx={{
+                backgroundColor: "#fff",
+                "& .MuiLinearProgress-bar": {
+                  backgroundColor: "#ff8a46",
+                },
+              }}
+            />
+          </Box>
+        </div>
+      )}
       <Stepper
         activeStep={activeStep}
         alternativeLabel
@@ -250,14 +254,16 @@ const HorizontalStepper = () => {
         ))}
 
         {activeStep === steps.length && (
-          <Paper square elevation={0} sx={{ p: 3 }}>
-            <Typography>
-              All steps completed - you&apos;re now a seller!
-            </Typography>
-            <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-              Reset
-            </Button>
-          </Paper>
+          <div style={{display:"flex", justifyContent:"center",alignItems:"center"}}>
+            <Paper square elevation={0} sx={{ p: 3 }}>
+              <Typography>
+                All steps completed - we will get to you shortly!
+              </Typography>
+              <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+                Reset
+              </Button>
+            </Paper>
+          </div>
         )}
       </Box>
     </div>

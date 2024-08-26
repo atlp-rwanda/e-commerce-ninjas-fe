@@ -4,16 +4,18 @@ import { useAppSelector, useAppDispatch } from "../store/store";
 import { useEffect, useState, useCallback } from "react";
 import { toast } from "react-toastify";
 import { getUserDetails } from "../store/features/auth/authSlice";
+import { getToken } from "../utils/protectRoute/ProtectedRoute";
 
 function useAdminAuthCheck() {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const location = useLocation();
     const { pathname } = location;
-    const { user, isAuthenticated, token } = useAppSelector((state) => state.auth);
+    const { user, isAuthenticated } = useAppSelector((state) => state.auth);
     const [isChecking, setIsChecking] = useState(true);
     const [isAuthorized, setIsAuthorized] = useState(false);
 
+    const token = getToken()
     const checkAuth = useCallback(async () => {
         if (token) {
             await dispatch(getUserDetails(token));

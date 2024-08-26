@@ -14,6 +14,8 @@ import {
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import { getAllTerms } from "../../store/features/admin/adminSlice";
+import { FullScreenPdfView } from "../FullScreenPdfView/FullScreenPdfView";
+import { IoCloseCircleOutline } from "react-icons/io5";
 interface TermsProps {
   onNext: (data: { terms: boolean }) => void;
 }
@@ -23,7 +25,8 @@ const TermsAndConditionsForm: React.FC<TermsProps> = ({ onNext }) => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const { terms } = useAppSelector((state) => state.admin);
-  const [term, setTerm] = useState<any>();
+  const [content, setContent] = useState(null);
+  const [fileUrl, setFileUrl] = useState(null);
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAgreed(event.target.checked);
   };
@@ -48,90 +51,129 @@ const TermsAndConditionsForm: React.FC<TermsProps> = ({ onNext }) => {
         (term) => term.type === "buyer" && user.role === "buyer"
       );
       if (userTerms) {
-        setTerm(userTerms);
+        if (userTerms.content === null) {
+          setFileUrl(userTerms.pdfUrl);
+        } else if (userTerms.pdfUrl === null) {
+          setContent(userTerms.content);
+        }
       }
     }
   }, [user, terms]);
-  
-  console.log(term);
   return (
     <Box>
-      {term ? (
-        <FormControlLabel
-        control={
-          <Checkbox
-            checked={agreed}
-            onChange={handleCheckboxChange}
-            name="terms"
-            color="primary"
+      {fileUrl || content ? (
+        <>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={agreed}
+                onChange={handleCheckboxChange}
+                name="terms"
+                color="primary"
+              />
+            }
+            label={
+              <Typography variant="body1" sx={{ fontSize: "1.2rem" }}>
+                I agree to the{" "}
+                <Button
+                  variant="text"
+                  onClick={handleClickOpen}
+                  sx={{ textTransform: "none", padding: 0, fontSize: "1.2rem" }}
+                >
+                  Terms and Conditions
+                </Button>
+              </Typography>
+            }
           />
-        }
-        label={
-          <Typography variant="body1" sx={{ fontSize: "1.2rem" }}>
-            I agree to the{" "}
-            <Button
-              variant="text"
-              onClick={handleClickOpen}
-              sx={{ textTransform: "none", padding: 0, fontSize: "1.2rem" }}
-            >
-              Terms and Conditions
-            </Button>
-          </Typography>
-        }
-      />) : (
+        </>
+      ) : (
         <FormControlLabel
-        control={
-          <Checkbox
-            checked={agreed}
-            onChange={handleCheckboxChange}
-            name="terms"
-            color="primary"
-            disabled
-          />
-        }
-        label={
-          <Typography variant="body1" sx={{ fontSize: "1.2rem" }}>
-            I agree to the{" "}
-            <Button
-              variant="text"
-              onClick={handleClickOpen}
-              sx={{ textTransform: "none", padding: 0, fontSize: "1.2rem" }}
-            >
-              Terms and Conditions
-            </Button>
-          </Typography>
-        }
-      />
-      )}
-      
-
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="terms-and-conditions-title"
-        aria-describedby="terms-and-conditions-description"
-      >
-        <DialogTitle id="terms-and-conditions-title">
-          Terms and Conditions
-        </DialogTitle>
-        <DialogContent>
-          {term ? (
-            <DialogContentText id="terms-and-conditions-description">
-              {/* Display the term content */}
-              {term.content}
-            </DialogContentText>
-          ) : (
-            <Typography variant="body2">
-              No terms available for your role.
+          control={
+            <Checkbox
+              checked={agreed}
+              onChange={handleCheckboxChange}
+              name="terms"
+              color="primary"
+              disabled
+            />
+          }
+          label={
+            <Typography variant="body1" sx={{ fontSize: "1.2rem" }}>
+              I agree to the{" "}
+              <Button
+                variant="text"
+                onClick={handleClickOpen}
+                sx={{ textTransform: "none", padding: 0, fontSize: "1.2rem" }}
+              >
+                Terms and Conditions
+              </Button>
             </Typography>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
+          }
+        />
+      )}
+
+      {fileUrl && open && (
+        <FullScreenPdfView
+          pdfUrl={fileUrl}
+          open={open}
+          onClose={setOpen(false)}
+        />
+      )}
+
+      {content && open && (
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="terms-and-conditions-title"
+          aria-describedby="terms-and-conditions-description"
+        >
+          <DialogTitle id="terms-and-conditions-title">
+            Terms and Conditions
+          </DialogTitle>
+          <DialogContent>
+            {content ? (
+              <DialogContentText id="terms-and-conditions-description">
+                <div dangerouslySetInnerHTML={{ __html: content }} />
+              </DialogContentText>
+            ) : (
+              <Typography variant="body1" sx={{ fontSize: "1.2rem" }}>
+                No terms available for your role.
+              </Typography>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
+
+      {fileUrl == null && content == null && open && (
+        <Dialog
+          open={open}
+          onClose={() => setOpen(false)}
+          aria-labelledby="terms-and-conditions-title"
+          aria-describedby="terms-and-conditions-description"
+        >
+          <DialogTitle id="terms-and-conditions-title">
+            Terms and Conditions
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="terms-and-conditions-description">
+              <Typography variant="body1" sx={{ fontSize: "1.4rem" }}>
+                No Terms and Conditions found. Please contact the admin to
+                upload them.
+              </Typography>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpen(false)} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </Box>
   );
 };

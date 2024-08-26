@@ -14,6 +14,8 @@ const Logout: React.FC = () => {
   useEffect(() => {
     const performLogout = async () => {
       await dispatch(logout());
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("tokenExpiration")
       disconnect();
       setLoading(false);
       navigate("/");

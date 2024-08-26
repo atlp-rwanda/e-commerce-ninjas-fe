@@ -11,6 +11,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { createCart, getUserCarts } from "../store/features/carts/cartSlice";
 import { resetAuth } from "../store/features/auth/authSlice";
 
+
 const LandingPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate()
@@ -19,9 +20,6 @@ const LandingPage: React.FC = () => {
     (state: any) => state.products
   );
   const [visibleProducts, setVisibleProducts] = useState<number>(20);
-  useEffect(()=>{
-    dispatch(resetAuth())
-  },[dispatch])
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);

@@ -66,11 +66,10 @@ const SellerDashboard = () => {
   useEffect(() => {
     try {
       const countData = async () => {
-        console.log(OrderHistory);
         if (OrderHistory) {
           const orderNumber = OrderHistory.order.length;
           setNumberOfOrders(orderNumber);
-          const numberOfProduct = data.products.length;
+          const numberOfProduct = data?.products?.length;
           setNumberOfProducts(numberOfProduct);
           const aggregatedData = OrderHistory.order.reduce(
             (acc, order) => {
@@ -88,7 +87,7 @@ const SellerDashboard = () => {
             [...predefinedMonths]
           );
           setOrderStats(aggregatedData);
-          setRevenue(20000)
+          setRevenue(0)
           setPercentage(10)
           setOrderPercentage(80)
           SetProductPercentage(76)

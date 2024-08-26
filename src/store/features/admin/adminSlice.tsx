@@ -204,6 +204,15 @@ export const setTerms = createAsyncThunk(
   }
 );
 
+export const setTermsWithPdf = createAsyncThunk("admin/setTermsWithPdf", async(formData:any,thunkApi) => {
+  try {
+    const response = await adminService.setTermsWithPdf(formData);
+    return response;
+  } catch (error) {
+    return thunkApi.rejectWithValue(getErrorMessage(error));
+  }
+})
+
 export const getTerm = createAsyncThunk(
   "admin/get-single-term",
   async (id: string, thunkApi) => {
@@ -218,26 +227,46 @@ export const getTerm = createAsyncThunk(
 export const updateTerm = createAsyncThunk(
   "admin/update-term",
   async (
-    {
-      id,
-      termType,
-      termContent,
-    }: { id: string; termType: string; termContent: string },
+    payload:
+    | { formData: any; id: string }
+    | { id: string; content: string; },
     thunkApi
   ) => {
     try {
-      const response = await adminService.updateTerm(id, termType, termContent);
+     let response;
+     if("formData" in payload) {
+       response = await adminService.updateTerm(payload.id,payload.formData);
+     }
+    else{
+      const { id, content} = payload;
+       response = await adminService.updateTerm(id, {content});
+    }
       return response;
     } catch (error) {
       return thunkApi.rejectWithValue(getErrorMessage(error));
     }
   }
 );
+
+
+
 export const deleteTerm = createAsyncThunk(
   "admin/delete-term",
   async (id: string, thunkApi) => {
     try {
       const response = await adminService.deleteTerm(id);
+      return response;
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
+export const deleteUser = createAsyncThunk(
+  "admin/delete-user",
+  async (id: string, thunkApi) => {
+    try {
+      const response = await adminService.deleteUser(id);
       return response;
     } catch (error) {
       return thunkApi.rejectWithValue(getErrorMessage(error));
@@ -444,7 +473,6 @@ const adminSlice = createSlice({
           state.request = action.payload.data.sellerRequest;
           state.message = action.payload.message;
           toast.success(state.message);
-          console.log(state.request);
         }
       )
       .addCase(
@@ -533,6 +561,25 @@ const adminSlice = createSlice({
         state.message = action.payload;
         toast.error(state.message);
       })
+
+      .addCase(setTermsWithPdf.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(setTermsWithPdf.fulfilled, (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.message = action.payload.message;
+        state.terms = action.payload.data.termsAndCondition;
+        state.isError = false;
+        toast.success(state.message);
+      })
+
+      .addCase(setTermsWithPdf.rejected, (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(state.message);
+      })
       .addCase(getTerm.pending, (state) => {
         state.isLoading = true;
       })
@@ -581,6 +628,23 @@ const adminSlice = createSlice({
       })
 
       .addCase(deleteTerm.rejected, (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        toast.error(state.message);
+      })
+      .addCase(deleteUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteUser.fulfilled, (state, action: PayloadAction<any>) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.message = action.payload.message;
+        state.isError = false;
+        toast.success(state.message);
+      })
+
+      .addCase(deleteUser.rejected, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

@@ -54,32 +54,32 @@ export const OverViewDashboard = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
+useEffect(() => {
+  const countUsers = async () => {
     try {
-      const countUsers = async () => {
-        const usersResponse = await dispatch(getAllUsers());
-        const shopResponse = await dispatch(getAllShops());
-        const shopNumber = shopResponse.payload?.data?.shops?.length;
-        const users = usersResponse.payload.data.user;
-        let buyerCount = 0;
-        let sellerCount = 0;
+      const [usersResponse, shopResponse] = await Promise.all([
+        dispatch(getAllUsers()),
+        dispatch(getAllShops()),
+      ]);
 
-        users.forEach((user) => {
-          if (user.role === "buyer") {
-            buyerCount++;
-          } else if (user.role === "seller") {
-            sellerCount++;
-          }
-        });
-        setNumberOfBuyers(buyerCount);
-        setNumberOfSellers(sellerCount);
-        setNumberOfShops(shopNumber);
-      };
-      countUsers();
+      const shops = shopResponse?.payload?.data?.shops ?? [];
+      const users = usersResponse?.payload?.data?.user ?? [];
+
+      const buyerCount = users.filter((user) => user.role === "buyer").length;
+      const sellerCount = users.filter((user) => user.role === "seller").length;
+      const shopNumber = shops.length;
+
+      setNumberOfBuyers(buyerCount);
+      setNumberOfSellers(sellerCount);
+      setNumberOfShops(shopNumber);
     } catch (error) {
-      console.error("Failed to fetch Users:", error);
+      console.error("Failed to fetch users or shops:", error);
     }
-  }, [dispatch, getAllUsers]);
+  };
+
+  countUsers();
+}, [dispatch, getAllUsers, getAllShops]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -108,7 +108,6 @@ export const OverViewDashboard = () => {
     };
     fetchData();
   }, [dispatch]);
-
   const [isExportOpen, setIsExportOpen] = useState(false);
 
   const toggleExportDropdown = () => {

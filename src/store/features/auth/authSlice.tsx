@@ -6,6 +6,7 @@ import { getErrorMessage } from "../../../utils/axios/axiosInstance";
 import { toast } from "react-toastify";
 
 import { resetState, RESET_STATE } from "../../actions/resetAction";
+import { storeTokenWithExpiration } from "../../../utils/protectRoute/ProtectedRoute";
 const initialState: AuthService = {
   user: null,
   isError: false,
@@ -22,6 +23,7 @@ const initialState: AuthService = {
   isOtpSuccess:false,
   isEmailResend:false,
   isNotVerified:false,
+  isRegister: false,
 };
 
 type IUserEmailAndPassword = Pick<IUser, 'email' | 'password'>;
@@ -196,7 +198,6 @@ const userSlice = createSlice({
       state.isSuccess = false;
       state.isVerified = false;
       state.message = "";
-      state.token = "";
       state.isAuthenticated = false;
       state.error = "";
       state.fail= false;
@@ -204,6 +205,7 @@ const userSlice = createSlice({
       state.isOtpSuccess = false;
       state.isEmailResend = false
       state.isNotVerified = false;
+      state.isRegister = false;
     },
     changingProfile: (state, action: any)=>{
       (state.user as any).profilePicture = action.payload
@@ -219,6 +221,7 @@ const userSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.isRegister = true;
         state.message = action.payload.message;
       })
       .addCase(registerUser.rejected, (state, action: PayloadAction<any>) => {
@@ -236,13 +239,14 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.message = action.payload.message;
-        console.log(action.payload);
+        toast.success(state.message)
       })
       .addCase(registerAsSeller.rejected, (state, action: PayloadAction<any>) => {
         state.isLoading = false;
         state.isSuccess = false;
         state.isError = true;
         state.message = action.payload;
+        toast.error(state.message)
       })
       .addCase(verifyEmail.pending, (state) => {
         state.isLoading = true;
@@ -302,8 +306,8 @@ const userSlice = createSlice({
           state.isLoading = false;
           state.isSuccess = true;
           state.isAuthenticated = true;
-          state.token = action.payload.data.token;
           state.message = action.payload.message;
+          storeTokenWithExpiration(action.payload.data.token)
           toast.success(state.message)
         })
       .addCase( googleAuthCallback.rejected,(state, action: PayloadAction<any>) => {
@@ -357,7 +361,6 @@ const userSlice = createSlice({
         state.userId = action.payload.data.userId || "";
         if(state.message !== "Check your Email for OTP Confirmation"){
           state.isAuthenticated = true;
-          state.token = action.payload.data.token;
           state.user = action.payload.data.user;
         }
       })
@@ -378,6 +381,7 @@ const userSlice = createSlice({
         state.isAuthenticated = false;
         state.isSuccess = true;
         state.message = action.payload.message;
+        sessionStorage.clear();
         localStorage.clear();
         toast.success(action.payload.message);
 
@@ -416,7 +420,6 @@ const userSlice = createSlice({
         state.isOtpSuccess = true;
         state.message = action.payload.message;
         state.token = action.payload.data.token;
-        console.log(action.payload)
       })
       .addCase(verifyOTP.rejected, (state, action: PayloadAction<any>) => {
         state.isOtpFail = true;

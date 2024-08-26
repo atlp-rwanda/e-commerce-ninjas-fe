@@ -105,7 +105,8 @@ export interface AuthService {
   isOtpFail:boolean;
   isOtpSuccess:boolean;
   isEmailResend:boolean;
-  isNotVerified:boolean
+  isNotVerified:boolean;
+  isRegister:boolean;
 }
 
 export interface IEmail {
@@ -238,6 +239,7 @@ export interface ISingleProductInitialResponse {
   isUpdate?: boolean;
   isUpdateSuccess?: boolean;
   updateError?: string;
+  isDeletedSuccess?: boolean;
 }
 
 export interface ISellerCollectionProductResponse {

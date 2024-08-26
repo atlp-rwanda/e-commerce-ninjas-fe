@@ -97,6 +97,11 @@ const sellerGetOrderHistory = async () => {
   return response.data;
 }
 
+const deleteProduct = async (productId) => {
+  const response = await axiosInstance.delete(`/api/shop/seller-delete-product/${productId}`);
+  return response.data;
+}
+
 const productService = {
   fetchProducts,
   fetchSingleProduct,
@@ -109,6 +114,7 @@ const productService = {
   addSellerProduct,
   updateSellerProductStatus,
   sellerGetAllProducts,
- sellerGetOrderHistory
+ sellerGetOrderHistory,
+ deleteProduct,
 }
 export default productService;

@@ -25,6 +25,7 @@ import {
 } from "@mui/material";
 import authService from "../store/features/auth/authService";
 import { joinRoom } from "../utils/socket/socket";
+import { getToken, storeTokenWithExpiration } from "../utils/protectRoute/ProtectedRoute";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -48,7 +49,6 @@ function Login() {
     isError,
     isSuccess,
     isAuthenticated,
-    token,
     error,
     message,
     userId,
@@ -66,14 +66,15 @@ function Login() {
       await dispatch(loginUser(values)).then((res: any) => {
         setOtpError(null)
         toast.success(res.payload.message);
+        storeTokenWithExpiration(res.payload.data.token)
       }).catch((err) => {
         console.error("Error fetching user details:", err);
       });
     },
   });
   useEffect(() => {
-    if (isSuccess && token && isAuthenticated) {
-      localStorage.setItem("token", token);
+    const token = getToken();
+    if (isSuccess && isAuthenticated) {
       dispatch(getUserDetails(token))
         .then((res) => {
           const userData = res.payload.data.user;
@@ -85,20 +86,21 @@ function Login() {
       formik.resetForm();
       
     }
-  }, [isSuccess, token, isAuthenticated, dispatch]);
+  }, [isSuccess, isAuthenticated, dispatch]);
   
   useEffect(() => {
     if (user) {
-      if (user?.role === 'admin') {
+      if (user.role === 'admin') {
         navigate('/admin/dashboard');
-      } else if (user?.role === 'seller') {
+      } else if (user.role === 'seller') {
         navigate('/seller/dashboard');
-      } else {
-        navigate('/home');
+      } else if(user.role === 'buyer') {
+        navigate( "/");
       }
-      joinRoom(token);
+      joinRoom();
     }
-  }, [user, navigate,token]);
+  }, [user]);
+  
   
   function handleIsFocused() {
     setIsFocused(true);

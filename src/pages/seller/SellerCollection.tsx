@@ -20,7 +20,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Meta } from '../../components/Meta';
 import { FaEye, FaPlusCircle } from 'react-icons/fa';
 import { ISingleProductInitialResponse } from '../../utils/types/store';
-import { resetUpdateState, updateSellerProductStatus } from '../../store/features/product/sellerProductSlice';
+import { DeleteProduct, resetUpdateState, updateSellerProductStatus } from '../../store/features/product/sellerProductSlice';
 import { toast } from 'react-toastify';
 import ConfirmModal from '../../components/product/ConfirmModal';
 
@@ -32,7 +32,8 @@ interface DeleteItemState {
 export default function SellerCollection() {
     const navigate = useNavigate()
     const dispatch = useAppDispatch();
-    const { data, isLoading, isError, isSuccess, message } = useAppSelector((state) => state.sellerCollectionProducts)
+    const { data, isLoading, isSuccess } = useAppSelector((state) => state.sellerCollectionProducts)
+    const {isDeletedSuccess,message,isError} = useAppSelector((state) => state.singleProduct)
     const { isLoading: isUpdateLoading, message: updateMessage, isUpdate, isUpdateSuccess, updateError }: ISingleProductInitialResponse = useAppSelector((state: any) => state.singleSellerProduct);
 
     const headers = ['#', 'Image', 'Name', 'Category', 'Price', 'Stock', 'Discount', 'Status', 'Actions'];
@@ -47,19 +48,20 @@ export default function SellerCollection() {
     const handleDelete = async () => {
         try {
             setShowConfirm(false)
-            // dispatch(removeItem(itemToDelete.id))
+           await dispatch(DeleteProduct(itemToDelete.id))
             // await dispatch(deleteItem(itemToDelete.id)).unwrap();
             dispatch(fetchSellerCollectionProduct());
             setItemToDelete(null)
         } catch (error) {
             console.error('Error deleting item:', error);
         }
-        finally{
-            if(isSuccess){
-            // toast.success(message)
-        }
-        }
     };
+
+    useEffect(()=>{
+        if(isError && message){
+            toast.error(message)
+        }
+    },[isError, message]);
 
 
     useEffect(() => {

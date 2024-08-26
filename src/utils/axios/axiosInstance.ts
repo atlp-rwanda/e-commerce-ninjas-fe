@@ -1,5 +1,6 @@
 /* eslint-disable */
 import axios from "axios";
+import { getToken } from "../protectRoute/ProtectedRoute";
 export const URL = "https://e-commerce-ninjas-platform-backend.onrender.com";
 // export const URL = "http://localhost:5001";
 const axiosInstance = axios.create({
@@ -11,7 +12,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

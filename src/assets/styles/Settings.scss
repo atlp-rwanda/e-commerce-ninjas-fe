@@ -83,6 +83,9 @@
                         font-size: 1.4rem;
                         width: 30%;
                     }
+                    &.margin{
+                        margin-top: 2rem !important;
+                    }
                 }
 
                 .btn {
@@ -141,59 +144,75 @@
                     padding: 0;
                     margin: 2rem 0;
 
-                    div:first-child {
-                        margin: 20px 0;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
 
-                        textarea {
-                            padding: 10px;
-                            border: 1px solid #ddd;
-                            border-radius: 5px;
-                            font-size: 1.4rem;
-                            width: 50%;
-                            height: 100px;
+                    select {
+                        border: 1px solid #ddd;
+                        border-radius: 5px;
+                        font-size: 1.4rem;
+                        height: 30%;
+                        width: 20%;
+                        margin: 2rem 0;
 
-                            &:hover {
-                                border-color: $primary-color;
-                            }
-                        }
-
-                        select {
-                            border: 1px solid #ddd;
-                            border-radius: 5px;
-                            font-size: 1.4rem;
-                            height: 30%;
-                            width: 20%;
-                            margin: 2rem 0;
-
-                            &:hover {
-                                border-color: $primary-color;
-                            }
+                        &:hover {
+                            border-color: $primary-color;
                         }
                     }
 
-                    .form-group {
-                        .btn {
+                    .uploadMethod {
+                        display: flex;
+                        gap: 2rem;
+                        margin: 1rem 0;
+
+                        button {
                             padding: 10px 20px;
                             background-color: $primary-color;
                             color: $white-color;
                             border: none;
                             border-radius: 5px;
                             font-size: 1.6rem;
-                            width: 8rem;
                             cursor: pointer;
-                            transition: width 0.5s linear;
+                        }
+                    }
+                    .quill{
+                        margin-bottom: 7rem;
+                        height: 30rem;
+                        width: 100%;
+                        font-size: 1.4rem;
+                        resize: vertical;
+                    }
 
-                            &:hover {
-                                background-color: $primary-color-dark;
-                                width: 10rem;
-                                transition: width 0.5s linear;
-                            }
+                    .upload-file {
+                        margin: 1rem;
+
+                    }
+                }
+
+                .form-group {
+                    .btn {
+                        padding: 10px 20px;
+                        background-color: $primary-color;
+                        color: $white-color;
+                        border: none;
+                        border-radius: 5px;
+                        font-size: 1.6rem;
+                        width: 8rem;
+                        cursor: pointer;
+                        transition: width 0.5s linear;
+
+                        &:hover {
+                            background-color: $primary-color-dark;
+                            width: 10rem;
+                            transition: width 0.5s linear;
                         }
                     }
                 }
+            }
+            .display-content{
+                display: flex;
+                align-items: center;
+            }
+            .viewer{
+                display: flex;
             }
         }
     }

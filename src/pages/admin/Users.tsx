@@ -4,6 +4,7 @@ import Switch from "@mui/material/Switch";
 import Table from "../../components/table/Table";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import {
+  deleteUser,
   fetchPasswordExpiration,
   getAllUsers,
   updateUserPasswordExpiration,
@@ -32,6 +33,7 @@ export default function Users() {
   const [localUserState, setLocalUserState] = useState([]);
   const [open, setOpen] = useState(false);
   const [pendingRoleChange, setPendingRoleChange] = useState(null);
+  const [pendingUser, setPendingUser] = useState(null);
 
   const headers = [
     "N0",
@@ -95,6 +97,11 @@ export default function Users() {
     }
   };
 
+  const handleDeleteUser = async(userId) => {
+    setPendingUser(userId);
+    setOpen(true);
+  };
+
   const handleConfirmRoleChange = () => {
     const { userId, newRole } = pendingRoleChange;
     setLocalUserState((prevState) =>
@@ -105,6 +112,16 @@ export default function Users() {
     setPendingRoleChange(null);
     setOpen(false);
   };
+
+  const handleConfirmDeleteUser = async() => {
+    const userId = pendingUser;
+    dispatch(deleteUser(userId));
+    setLocalUserState((prevState) =>
+      prevState.filter((user) => user.id!== userId)
+    );
+    setPendingUser(null);
+    setOpen(false);
+  }
 
   const handleClose = () => {
     setPendingRoleChange(null);
@@ -165,7 +182,7 @@ export default function Users() {
               </IconButton>
             </Tooltip>
             <Tooltip TransitionComponent={Zoom} title="Delete" arrow>
-              <IconButton>
+              <IconButton onClick={()=>handleDeleteUser(user.id)}>
                 <DeleteIcon className="icon__delete" />
               </IconButton>
             </Tooltip>
@@ -199,14 +216,20 @@ export default function Users() {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">
-            {"Confirm Role Change"}
+            {
+              pendingUser? "Confirm Delete User" : "Confirm Role change"
+            }
           </DialogTitle>
           <DialogContent>
             <DialogContentText
               id="alert-dialog-description"
               sx={{ fontSize: "1.6rem" }}
             >
-              Are you sure you want to change this user's role to Admin?
+              {
+                pendingUser
+                 ? `Are you sure you want to delete user this user this action can't be undone`
+                  : `Are you sure you want to change this user's role to Admin?`
+              }
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -225,7 +248,11 @@ export default function Users() {
               Cancel
             </Button>
             <Button
-              onClick={handleConfirmRoleChange}
+              onClick={
+                pendingUser
+                 ? () => handleConfirmDeleteUser()
+                  : () => handleConfirmRoleChange()
+              }
               sx={{
                 backgroundColor: "#ff6d18",
                 color: "#fff",

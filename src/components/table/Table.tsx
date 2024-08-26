@@ -61,11 +61,16 @@ const Table = ({ headers, rows, title, tableButton }) => {
       }
       <div className="table__container">
         {rows?.length <= 0 ? (
-             <div className="empty-container">
+             <div className={`empty-container ${tableButton === tableButton ? "flex" : ""}`}>
              <Empty
                image={Empty.PRESENTED_IMAGE_SIMPLE}
                description={`No ${title}`}
              />
+             {
+              tableButton &&( <div>
+                {tableButton}
+              </div>)
+             }
            </div>
         ): <table className="dynamic__table">
         <thead>

@@ -17,14 +17,12 @@ const UserDetails: React.FC<any> = ({ Request }) => {
   const [open, setOpen] = useState(false)
   const { request } = useAppSelector((state) => state.admin)
   const UserRequest = Request ? Request : request;
-  const handleOpenDocument = (url: string) => {
-    window.open(url, "_blank", "noopener,noreferrer");
-  };
+  
   const handleClose = () => {
     setOpen(false);
   }
   const handleOpen = () => {
-    setOpen(true);
+    setOpen(!open);
   }
   const handleDeleteRequest = async (UserRequest: IRequest) => {
     const userRequestId = UserRequest.userId as string;
@@ -69,10 +67,7 @@ const UserDetails: React.FC<any> = ({ Request }) => {
                   </Tooltip>
                   {
                     open && (
-                      <div className="view__pdf">
-                        <FullScreenPdfView pdfUrl={UserRequest?.rdbDocument}/>
-                        <IoCloseCircleOutline onClick={handleClose} className="close__icon"/>
-                      </div>
+                        <FullScreenPdfView pdfUrl={UserRequest?.rdbDocument} open={open} onClose={handleClose}/>
                     )
                   }
                 </td>

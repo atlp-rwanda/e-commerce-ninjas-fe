@@ -28,6 +28,7 @@ const fetchUserDetails = async (token: string) => {
   return response.data;
 };
 
+
 const verify = async (token: string) => {
   const response = await axiosInstance.get<IVerification>(
     `/api/auth/verify-email/${token}`

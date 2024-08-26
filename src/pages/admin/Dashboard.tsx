@@ -6,13 +6,14 @@ import { IoLogOutSharp, IoSettingsSharp } from "react-icons/io5";
 import Header from "../../components/layout/AdminHeader";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import { logout } from "../../store/features/auth/authSlice";
+import { logout, resetAuth } from "../../store/features/auth/authSlice";
 import { toast } from "react-toastify";
 import { Backdrop, Box, CircularProgress, Typography } from "@mui/material";
 import { Meta } from "../../components/Meta";
 import useAdminAuthCheck from "../../hooks/useAdminAuthCheck";
 import { disconnect } from "../../utils/socket/socket";
 import { RiFileList3Fill } from "react-icons/ri";
+import LiveChat from "../../components/live-chat/LiveChat";
 
 export const AdminDashboard = () => {
   const dispatch = useAppDispatch();
@@ -34,21 +35,12 @@ export const AdminDashboard = () => {
     }, 1000);
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
-    disconnect();
-    setTimeout(() => {
-      navigate("/");
-    }, 2000);
+  const handleLogout = async () => {
+    await dispatch(logout());
+    await disconnect();
+    await dispatch(resetAuth());
+    navigate("/");
   };
-
-  useEffect(() => {
-    if (isError && message === "Not authorized") {
-      toast.info("You are not authorized to access this page");
-      navigate("/login");
-      return;
-    }
-  }, [isError, message, navigate]);
 
   const menuItems = [
     {
@@ -68,7 +60,8 @@ export const AdminDashboard = () => {
       title: "Requests",
       path: "/admin/dashboard/Requests",
       index: 3,
-    }, {
+    },
+    {
       icon: <IoSettingsSharp size={32} />,
       title: "Settings",
       path: "/admin/dashboard/settings",
@@ -85,7 +78,10 @@ export const AdminDashboard = () => {
             <div className="upper">
               {menuItems.map((item) => (
                 <div key={item.index} className="menu__item">
-                  <div className="icon" onClick={() => handleClick(item.index, item.path)}>
+                  <div
+                    className="icon"
+                    onClick={() => handleClick(item.index, item.path)}
+                  >
                     {item.icon}
                   </div>
                   <div className="icons__title__link">
@@ -116,13 +112,14 @@ export const AdminDashboard = () => {
                   Logout
                 </h2>
               </div>
-          </div>
+            </div>
           </div>
         </section>
         <section className="main__content__dashboard">
           <Header />
           <main className="main__dashboard">
             <Outlet />
+            <LiveChat />
           </main>
         </section>
       </div>

@@ -14,7 +14,7 @@ const validationSchema = yup.object({
 })
 export const ResendEmail = () => {
   const dispatch = useAppDispatch();
-  const { isSuccess, isEmailResend, isLoading, message } = useAppSelector((state) => state?.auth)
+  const { isEmailSuccess, isEmailResend, isLoading, message } = useAppSelector((state) => state?.auth)
   const initialValues = {
     email: "",
   };
@@ -27,13 +27,13 @@ export const ResendEmail = () => {
   })
   useEffect(() => {
      dispatch(resetAuth());
-    if(isSuccess) {
+    if(isEmailSuccess) {
       toast.success(message);
       }
       if (isEmailResend) {
         toast.error(message)
       }
-  }, [dispatch,isSuccess,isEmailResend,message]);
+  }, [dispatch,isEmailSuccess,isEmailResend,message]);
   return (
     <>
       <Meta title="Resend Email - E-Commerce Ninjas" />

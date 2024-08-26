@@ -24,6 +24,7 @@ const initialState: AuthService = {
   isEmailResend:false,
   isNotVerified:false,
   isRegister: false,
+  isEmailSuccess:false,
 };
 
 type IUserEmailAndPassword = Pick<IUser, 'email' | 'password'>;
@@ -206,6 +207,7 @@ const userSlice = createSlice({
       state.isEmailResend = false
       state.isNotVerified = false;
       state.isRegister = false;
+      state.isEmailSuccess = false;
     },
     changingProfile: (state, action: any)=>{
       (state.user as any).profilePicture = action.payload
@@ -275,7 +277,7 @@ const userSlice = createSlice({
         (state, action: PayloadAction<any>) => {
           state.isEmailResend = false;
           state.isLoading = false;
-          state.isSuccess = true;
+          state.isEmailSuccess = true;
           state.message = action.payload.message;
         }
       )

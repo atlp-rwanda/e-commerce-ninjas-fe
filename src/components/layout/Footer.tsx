@@ -107,10 +107,10 @@ function Footer() {
                   </a>
                   <span className="footer__text">Email:</span>
                   <a
-                    href="mailto:ecommerceninjas@gmail.com"
+                    href="mailto:ecommerceninjas45@gmail.com"
                     className="footer__link"
                   >
-                    ecommerceninjas@gmail.com
+                    ecommerceninjas45@gmail.com
                   </a>
                 </li>
               </ul>

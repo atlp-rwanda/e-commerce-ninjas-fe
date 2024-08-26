@@ -116,7 +116,7 @@ const TermsAndConditionsForm: React.FC<TermsProps> = ({ onNext }) => {
         <FullScreenPdfView
           pdfUrl={fileUrl}
           open={open}
-          onClose={setOpen(false)}
+          onClose={handleClose}
         />
       )}
 

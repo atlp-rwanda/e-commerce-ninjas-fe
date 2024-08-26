@@ -37,6 +37,7 @@ const UserDetails: React.FC<any> = ({ Request }) => {
     const requestStatus = action === "Cancel" ? "Rejected" : "Accepted";
     dispatch(acceptOrRejectRequest({ userRequestId, requestStatus }));
   };
+  console.log(UserRequest?.user)
   return (
     <div className="user-details">
       <div className="user-image">

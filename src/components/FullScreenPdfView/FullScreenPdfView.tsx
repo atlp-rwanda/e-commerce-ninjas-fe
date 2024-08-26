@@ -31,7 +31,7 @@ export const FullScreenPdfView = ({ pdfUrl, open, onClose }) => {
   const adjustScale = () => {
     if (pdfContainerRef.current) {
       const containerWidth = pdfContainerRef.current.clientWidth;
-      setScale(containerWidth / 245);
+      setScale(containerWidth / 300);
     }
   };
 

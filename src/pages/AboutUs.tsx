@@ -25,7 +25,7 @@ export const AboutUs = () => {
       image:
         "https://res.cloudinary.com/djrmfg6k9/image/upload/v1723551875/SaddockAime1_bqtq7b.jpg",
       position: "Full Stack Developer",
-      linkedIn: "https://github.com/SaddockAime",
+      linkedIn: "https://www.linkedin.com/in/saddock-kabandana-89b914237/",
       github: "https://github.com/SaddockAime",
     },
     {

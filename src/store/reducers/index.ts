@@ -13,6 +13,7 @@ import cartReducer from "../features/carts/cartSlice";
 import chatReducer from '../features/chat/chatSlice';
 import userReducer from "../features/user/userSlice"
 import { CLEAR_IMAGES, RESET_STATE } from '../actions/resetAction';
+import shopReducer from "../features/product/shopSlice";
 
 const appReducer = combineReducers({
   initialMessage: welcomeReducer,
@@ -26,7 +27,8 @@ const appReducer = combineReducers({
   admin: adminReducer,
   cart: cartReducer,
   chat: chatReducer,
-  user: userReducer
+  user: userReducer,
+  shop: shopReducer
 });
 
 const rootReducer = (state, action) => {

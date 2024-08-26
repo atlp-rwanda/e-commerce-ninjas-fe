@@ -102,6 +102,16 @@ const deleteProduct = async (productId) => {
   return response.data;
 }
 
+const fetchAllShops = async () => {
+  const response = await axiosInstance.get(`/api/shop/get-all-shops`);
+  return response.data;
+};
+
+const fetchProductsByShopId = async (id: string) => {
+  const response = await axiosInstance.get(`/api/shop/get-products-by-shop/${id}`);
+  return response.data;
+};
+
 const productService = {
   fetchProducts,
   fetchSingleProduct,
@@ -116,5 +126,7 @@ const productService = {
   sellerGetAllProducts,
  sellerGetOrderHistory,
  deleteProduct,
+ fetchAllShops,
+ fetchProductsByShopId,
 }
 export default productService;

@@ -145,7 +145,7 @@ const Header: React.FC = () => {
               <IoMdMailUnread className="header__icon" />
             </div>
             <p className="header__text">Email us</p>
-            <p className="header__description">support@ecommerce-ninjas.com</p>
+            <p className="header__description">ecommerceninjas45@gmail.com</p>
           </div>
           <div className="header__box header__contact">
             <FaPhoneVolume className="header__icon" />

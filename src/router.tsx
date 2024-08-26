@@ -34,6 +34,8 @@ import { Requests } from "./pages/admin/Requests";
 import { ViewRequest } from "./pages/admin/VewRequest";
 import { AboutUs } from "./pages/AboutUs";
 import { SellerRegistrationPage } from "./pages/seller/SellerRegistrationPage";
+import ShopPage from './pages/ShopPage';
+import ProductsByShopPage from './pages/ProductsByShopPage';
 
 import { Settings } from "./pages/admin/Settings";
 const AppRouter: React.FC = () => {
@@ -60,12 +62,12 @@ const AppRouter: React.FC = () => {
           <Route
             path="/products"
             element={
-              <ProtectedRoute allowedRoles={["buyer"]} redirectPath="/login">
                 <ProductsPage />
-              </ProtectedRoute>
             }
           />
           <Route path="/services" element={<ServicesPage />} />
+          <Route path="/shops" element={<ShopPage />} />
+          <Route path="/shops/:shopId/products" element={<ProductsByShopPage />} />
           <Route
             path="signup"
             element={
@@ -96,9 +98,7 @@ const AppRouter: React.FC = () => {
           <Route
             path="product/:id"
             element={
-              <ProtectedRoute allowedRoles={["buyer"]} redirectPath="/login">
                 <ViewProduct />
-              </ProtectedRoute>
             }
           />
           <Route path="search" element={<Search />} />
